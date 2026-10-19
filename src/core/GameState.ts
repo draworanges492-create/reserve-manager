@@ -1,6 +1,7 @@
 // The single, plain, serializable game state (spec §4). Grows phase by phase.
 import { BALANCE, type PumpKind } from '../config/balance';
 import type { GameSpeed } from '../config/game';
+import { SPECIES } from './content';
 import waterholesData from '../data/waterholes.json';
 import zonesData from '../data/zones.json';
 import type { TileRect, WorldLayout } from './WorldLayout';
@@ -49,6 +50,8 @@ export interface GameState {
   chapter: { current: number };
   zones: Record<string, ZoneState>;
   waterholes: Record<string, WaterholeState>;
+  /** Animal counts per zone, then per species: populations[zoneId][speciesId]. */
+  populations: Record<string, Record<string, number>>;
   resources: { money: number };
   flags: Record<string, boolean>;
 }
@@ -94,7 +97,18 @@ export function createGameState({ seed, world, playerName = '' }: NewGameOptions
         return [w.id, hole];
       }),
     ),
+    populations: startingPopulations(),
     resources: { money: BALANCE.economy.startMoney },
     flags: {},
   };
+}
+
+function startingPopulations(): GameState['populations'] {
+  const populations: GameState['populations'] = {};
+  for (const species of SPECIES) {
+    for (const [zoneId, count] of Object.entries(species.startPopulation)) {
+      populations[zoneId] = { ...populations[zoneId], [species.id]: count };
+    }
+  }
+  return populations;
 }

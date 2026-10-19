@@ -25,6 +25,12 @@ export class EventBus<Events extends Record<string, unknown>> {
   }
 }
 
+/** Identifies one species' herd in one zone. */
+export interface AnimalGroupRef {
+  zoneId: string;
+  speciesId: string;
+}
+
 export type GameEvents = {
   /** Pointer moved onto a different zone (null = no zone). */
   zoneHover: { zoneId: string | null };
@@ -37,6 +43,10 @@ export type GameEvents = {
   waterholeRefilled: { id: string; level: number };
   /** Pointer moved onto / off a waterhole (null = none). */
   waterholeHover: { id: string | null };
+  /** Pointer moved onto / off an animal herd. */
+  animalHover: { group: AnimalGroupRef | null };
+  /** Player clicked a herd (or empty ground: null) to open / close its info panel. */
+  animalSelected: { group: AnimalGroupRef | null };
   /** A command failed; UI shows the reason near where the player acted. */
   commandFailed: { reason: StringKey; worldX?: number; worldY?: number };
 };

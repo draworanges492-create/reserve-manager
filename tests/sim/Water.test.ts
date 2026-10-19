@@ -110,10 +110,13 @@ describe('zoneHasWater (spec §6.1 range rule)', () => {
   });
 
   it('counts waterholes within 20 tiles of the zone edge only', () => {
-    // B is ~16.5 tiles below the Northern Reach; A is ~22.6 tiles from the Woodland.
-    const state = unlock(withLevel(newGame(), 'waterhole_a', 90), 'river');
+    // A starts at 5, so only B (80) counts. B is ~14.5 tiles below the Northern Reach.
+    const state = unlock(newGame(), 'river');
     expect(zoneHasWater(state, 'north')).toBe(true);
     expect(zoneHasWater(withLevel(state, 'waterhole_b', 0), 'north')).toBe(false);
-    expect(zoneHasWater(state, 'woodland')).toBe(false);
+    // A full Waterhole A is ~26 tiles from the Woodland and ~30 from the Eastern Border.
+    const fullA = withLevel(state, 'waterhole_a', 90);
+    expect(zoneHasWater(fullA, 'woodland')).toBe(false);
+    expect(zoneHasWater(fullA, 'east_border')).toBe(false);
   });
 });

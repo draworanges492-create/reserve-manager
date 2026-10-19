@@ -1,6 +1,7 @@
 // Hand-placed layout for the reserve map (spec §5), in tile coordinates.
-// About 40% of the map is unzoned buffer bush: the spec's zone sizes add up to
-// 5,800 of 9,600 tiles (DECISIONS D16).
+// Zones tile the whole map edge to edge, and every zone borders one that unlocks no
+// later than it does, so the playable area grows outward without gaps (DECISIONS D43).
+// That makes zones ~1.6× the spec's "approx." sizes (which only add up to 5,800 tiles).
 import type { TileName } from '../tileset';
 
 export const MAP_WIDTH = 120;
@@ -19,13 +20,13 @@ export interface Point {
 }
 
 export const ZONES: Record<string, Rect> = {
-  north: { x: 0, y: 0, w: 40, h: 30 },
-  outcrop: { x: 42, y: 2, w: 25, h: 20 },
-  woodland: { x: 70, y: 0, w: 35, h: 30 },
-  river: { x: 2, y: 34, w: 30, h: 25 },
-  plains: { x: 36, y: 30, w: 40, h: 30 },
-  east_border: { x: 100, y: 32, w: 20, h: 40 },
-  hq: { x: 46, y: 63, w: 20, h: 15 },
+  north: { x: 0, y: 0, w: 48, h: 32 },
+  outcrop: { x: 48, y: 0, w: 28, h: 32 },
+  woodland: { x: 76, y: 0, w: 44, h: 32 },
+  river: { x: 0, y: 32, w: 36, h: 48 },
+  plains: { x: 36, y: 32, w: 48, h: 36 },
+  hq: { x: 36, y: 68, w: 48, h: 12 },
+  east_border: { x: 84, y: 32, w: 36, h: 48 },
 };
 
 /** River centre line x for row y: a gentle meander down the west side. */
@@ -44,14 +45,14 @@ export const ROADS: Rect[] = [
   { x: 30, y: 49, w: 2, h: 7 }, // up to Waterhole B
   { x: 58, y: 62, w: 47, h: 2 }, // east to the border
 ];
-export const PARKING: Rect = { x: 60, y: 72, w: 5, h: 5 };
+export const PARKING: Rect = { x: 61, y: 74, w: 5, h: 4 };
 export const FARMLAND: Rect = { x: 113, y: 34, w: 6, h: 36 };
 
 export const OBJECT_TILES: { tile: TileName; at: Point; solid: boolean }[] = [
-  { tile: 'hq_office', at: { x: 51, y: 67 }, solid: true },
-  { tile: 'ranger_post_ruin', at: { x: 61, y: 66 }, solid: true },
-  { tile: 'gate', at: { x: 56, y: 77 }, solid: false },
-  { tile: 'gate', at: { x: 57, y: 77 }, solid: false },
+  { tile: 'hq_office', at: { x: 50, y: 72 }, solid: true },
+  { tile: 'ranger_post_ruin', at: { x: 61, y: 71 }, solid: true },
+  { tile: 'gate', at: { x: 56, y: 79 }, solid: false },
+  { tile: 'gate', at: { x: 57, y: 79 }, solid: false },
   { tile: 'pump_ruin', at: { x: 57, y: 42 }, solid: true },
   { tile: 'hut', at: { x: 119, y: 38 }, solid: true },
   { tile: 'hut', at: { x: 119, y: 47 }, solid: true },
@@ -64,10 +65,10 @@ export const BUILD_SLOTS: { id: string; slotType: string; zoneId: string; rect: 
   { id: 'pump_b', slotType: 'pump', zoneId: 'river', rect: { x: 30, y: 43, w: 2, h: 2 } },
   { id: 'tower_plains', slotType: 'tower', zoneId: 'plains', rect: { x: 44, y: 36, w: 2, h: 2 } },
   { id: 'tower_outcrop', slotType: 'tower', zoneId: 'outcrop', rect: { x: 54, y: 10, w: 2, h: 2 } },
-  { id: 'post_hq', slotType: 'post', zoneId: 'hq', rect: { x: 60, y: 66, w: 2, h: 2 } },
+  { id: 'post_hq', slotType: 'post', zoneId: 'hq', rect: { x: 60, y: 70, w: 2, h: 2 } },
   { id: 'post_woodland', slotType: 'post', zoneId: 'woodland', rect: { x: 86, y: 14, w: 2, h: 2 } },
   { id: 'post_east', slotType: 'post', zoneId: 'east_border', rect: { x: 104, y: 48, w: 2, h: 2 } },
-  { id: 'lodge_hq', slotType: 'lodge', zoneId: 'hq', rect: { x: 48, y: 72, w: 3, h: 3 } },
+  { id: 'lodge_hq', slotType: 'lodge', zoneId: 'hq', rect: { x: 42, y: 72, w: 3, h: 3 } },
 ];
 
 export const SPAWNS: { kind: string; at: Point; species?: string }[] = [
@@ -75,7 +76,7 @@ export const SPAWNS: { kind: string; at: Point; species?: string }[] = [
   { kind: 'animal', at: { x: 66, y: 52 }, species: 'zebra' },
   { kind: 'animal', at: { x: 70, y: 37 }, species: 'lion' },
   { kind: 'visitor', at: { x: 56, y: 79 } },
-  { kind: 'staff', at: { x: 52, y: 69 } },
+  { kind: 'staff', at: { x: 51, y: 74 } },
 ];
 
 export const POACHER_ENTRIES: Point[] = [

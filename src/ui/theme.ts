@@ -8,4 +8,13 @@ export const UI = {
   text: '#e8d9a8',
   textDim: '#e8d9a8aa',
   accent: 0xe8d9a8,
+  shadow: '#120d09',
+} as const;
+
+/** Text sizes in game pixels (×2 on screen on a MacBook). */
+export const TEXT_SIZE = {
+  small: '9px',
+  body: '10px',
+  label: '11px',
+  title: '18px',
 } as const;

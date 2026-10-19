@@ -40,6 +40,20 @@ export interface Balance {
     seasonTint: Record<Season, string>;
     seasonTintFadeMs: number;
     timeOfDay: TimeOfDayKey[];
+    /** Cosmetic animal movement (never affects the sim). Speeds in game px per second at 1×. */
+    animals: {
+      walkSpeed: { min: number; max: number };
+      /** How fast a herd's centre drifts across its zone. */
+      herdDriftSpeed: number;
+      /** Members graze within this many tiles of the herd centre. */
+      herdRadiusTiles: number;
+      grazePauseMs: { min: number; max: number };
+      /** Pause before the herd picks a new spot to drift to. */
+      herdRestMs: { min: number; max: number };
+      walkFrameMs: number;
+      /** A press that moves less than this is a click, not a drag. */
+      clickMaxMovePx: number;
+    };
   };
 }
 

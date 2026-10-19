@@ -1,20 +1,8 @@
 import Phaser from 'phaser';
-import zonesData from '../../data/zones.json';
-
-export interface ZoneDef {
-  id: string;
-  name: string;
-  unlockChapter: number;
-}
+import { type ZoneDef, zoneDef } from '../../core/content';
 
 export interface ZoneArea extends ZoneDef {
   rect: Phaser.Geom.Rectangle;
-}
-
-export const ZONE_DEFS: readonly ZoneDef[] = zonesData.zones;
-
-export function zoneDef(id: string): ZoneDef | undefined {
-  return ZONE_DEFS.find((z) => z.id === id);
 }
 
 /** Reads a Tiled custom property. */

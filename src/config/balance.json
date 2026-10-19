@@ -78,6 +78,24 @@
         "color": "#14204a",
         "alpha": 0.2
       }
-    ]
+    ],
+    "animals": {
+      "walkSpeed": {
+        "min": 3,
+        "max": 6
+      },
+      "herdDriftSpeed": 1.2,
+      "herdRadiusTiles": 3,
+      "grazePauseMs": {
+        "min": 2500,
+        "max": 8000
+      },
+      "herdRestMs": {
+        "min": 6000,
+        "max": 15000
+      },
+      "walkFrameMs": 320,
+      "clickMaxMovePx": 4
+    }
   }
 }

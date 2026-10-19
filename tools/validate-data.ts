@@ -33,13 +33,14 @@ const data = <T>(name: string, key: string): T | undefined =>
 const zones = data<ZoneDef[]>('zones.json', 'zones');
 const waterholes = data<Content['waterholes']>('waterholes.json', 'waterholes');
 const buildings = data<Content['buildings']>('buildings.json', 'buildings');
+const species = data<Content['species']>('species.json', 'species');
 const map = parsed.get(MAP_FILE) as TiledMap | undefined;
 
 if (zones && map) errors.push(...checkMap(map, zones));
-if (zones && waterholes && buildings && map) {
-  errors.push(...checkContent({ zones, waterholes, buildings }, map));
+if (zones && waterholes && buildings && species && map) {
+  errors.push(...checkContent({ zones, waterholes, buildings, species }, map));
 } else if (errors.length === 0) {
-  errors.push('zones.json, waterholes.json, buildings.json and reserve.tmj must all exist');
+  errors.push('zones, waterholes, buildings, species JSON and reserve.tmj must all exist');
 }
 
 if (errors.length > 0) {

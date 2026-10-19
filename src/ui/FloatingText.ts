@@ -1,5 +1,6 @@
 import type Phaser from 'phaser';
 import { crispText } from './crispText';
+import { TEXT_SIZE } from './theme';
 
 const RISE = 14;
 const DURATION_MS = 1400;
@@ -13,7 +14,7 @@ export function showFloatingText(
   depth: number,
 ): void {
   const label = crispText(scene, x, y, text, {
-    fontSize: '8px',
+    fontSize: TEXT_SIZE.body,
     backgroundColor: '#241c16dd',
     padding: { x: 3, y: 2 },
   })

@@ -1,5 +1,7 @@
 // Content checks for src/data JSON: ids, ranges and cross-references between files.
+import assets from '../../src/config/assets.json';
 import { BALANCE } from '../../src/config/balance';
+import type { SpeciesDef } from '../../src/core/content';
 import { prop, SLOT_TYPES, type TiledMap, type TiledObjectLayer } from '../../src/core/TiledFormat';
 
 export interface Content {
@@ -15,7 +17,10 @@ export interface Content {
     upgradeOf?: string;
     effects: { op: string; pumpKind?: string }[];
   }[];
+  species: SpeciesDef[];
 }
+
+const DIETS = ['grazer', 'browser', 'predator'];
 
 /** Effect ops buildings may use (grows with later phases). */
 const BUILDING_EFFECT_OPS = ['installPump'];
@@ -67,6 +72,28 @@ export function checkContent(content: Content, map: TiledMap): string[] {
       if (e.op === 'installPump' && !pumpKinds.includes(e.pumpKind ?? ''))
         fail('buildings.json', `"${b.id}" installs unknown pumpKind "${e.pumpKind}"`);
     }
+  }
+  // Species.
+  const speciesIds = content.species.map((sp) => sp.id);
+  const zoneIds = content.zones.map((z) => z.id);
+  for (const id of duplicates(speciesIds)) fail('species.json', `duplicate id "${id}"`);
+  for (const sp of content.species) {
+    const where = `"${sp.id}"`;
+    if (!DIETS.includes(sp.diet)) fail('species.json', `${where} has bad diet "${sp.diet}"`);
+    if (!(sp.r >= 0)) fail('species.json', `${where} needs r ≥ 0`);
+    if (!(sp.minViable >= 1)) fail('species.json', `${where} needs minViable ≥ 1`);
+    for (const zoneId of Object.keys(sp.startPopulation))
+      if (!zoneIds.includes(zoneId))
+        fail('species.json', `${where} starts in unknown zone "${zoneId}"`);
+    for (const other of [...sp.predators, ...sp.prey])
+      if (!speciesIds.includes(other))
+        fail('species.json', `${where} references unknown species "${other}"`);
+    if (!(sp.spriteKey in assets.spritesheets))
+      fail('species.json', `${where} spriteKey "${sp.spriteKey}" is not in assets.json`);
+    // Spec §0 rule 8: a fact may only be marked verified once real text replaces the TODO.
+    for (const fact of sp.facts)
+      if (fact.verified && fact.text.includes('TODO'))
+        fail('species.json', `${where} has a "verified" fact that still says TODO`);
   }
   return errors;
 }

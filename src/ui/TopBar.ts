@@ -5,9 +5,9 @@ import { t } from '../core/text';
 import { calendarOf } from '../sim/Seasons';
 import { Button } from './Button';
 import { crispText } from './crispText';
-import { UI } from './theme';
+import { TEXT_SIZE, UI } from './theme';
 
-export const TOP_BAR_HEIGHT = 18;
+export const TOP_BAR_HEIGHT = 20;
 const PAD = 4;
 const BUTTON_W = 20;
 const BUTTON_H = 13;
@@ -39,10 +39,9 @@ export class TopBar {
       .setInteractive();
     scene.add.rectangle(0, TOP_BAR_HEIGHT, 4000, 1, UI.border).setOrigin(0);
     this.seasonIcon = scene.add.image(PAD + 6, TOP_BAR_HEIGHT / 2, 'icon-dry');
-    this.date = crispText(scene, PAD + 16, TOP_BAR_HEIGHT / 2, '', { fontSize: '9px' }).setOrigin(
-      0,
-      0.5,
-    );
+    this.date = crispText(scene, PAD + 16, TOP_BAR_HEIGHT / 2, '', {
+      fontSize: TEXT_SIZE.label,
+    }).setOrigin(0, 0.5);
     this.progressTrack = scene.add
       .rectangle(0, TOP_BAR_HEIGHT / 2, PROGRESS_W, 3, UI.hover)
       .setOrigin(0, 0.5);

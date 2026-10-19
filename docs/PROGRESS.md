@@ -112,13 +112,38 @@ keys work; jumping to day 32 switched to "Wet season" with a greener map; 0 cons
 A and locked B, locked click shows "That area is still locked.", a day tick took A 5→0 and
 B 80→72; 0 console errors.
 
-**Next — Phase 4 (Vegetation & populations):** vegetation per zone, population model with
-carrying capacity, predation, Allee effect, wandering animal group sprites, "why" strings,
-zone info panel; check 1 in-game year produces plausible curves.
-
 **Known issues**
 
 - Open question D39 (pump unlock chapter / build days).
 - Hard tile edges between ground types; animals draw over trees; touch untested on a device.
 - The waterhole level changes once a day (spec's daily model), so the sprite jumps between
   states at day ticks rather than draining smoothly.
+
+## Adjustments after Phase 3 ✅ (2026-10-19, user feedback)
+
+**Done**
+
+- Map re-laid out so zones tile the whole map edge to edge; one fence per shared border
+  (owned by the zone that unlocks later); validate-data checks coverage and connectivity.
+- Camera bounded to the unlocked zones; zoom-out stops before locked land shows.
+- Alegreya font for all UI text, bigger sizes, shadow on on-map text.
+- `species.json` + starting populations in GameState.
+- Herds drawn from populations (≤ 12 sprites each), slowly wandering and grazing.
+- Hover a herd for its count; click for an info panel (population, diet, status, water).
+- Fixed: stale canvas offset after window resize.
+
+**Checks:** `build` ✅ · `test` ✅ (77) · `lint` ✅ · `validate-data` ✅ · browser at
+1512×865: camera clamped to tiles 36–84 × 32–80 and zoom-out held at 1×; all 27 animal
+sprites moved over 30 s of game time (avg ~2.7 tiles) and stayed in the plains; hover and
+panel text correct; drag from an animal pans, click opens, Esc / bare-ground click closes;
+resize fills the window at 900×700, 1512×865 and 1728×1000; 0 console errors.
+
+**Next — Phase 4 (Vegetation & populations):** vegetation per zone, population model with
+carrying capacity, predation, Allee effect, "why" strings in the animal panel, zone info
+panel; check 1 in-game year produces plausible curves.
+
+**Known issues**
+
+- Open question D39 (pump unlock chapter / build days).
+- Hard tile edges between ground types; animals draw over trees; touch untested on a device.
+- Waterhole level changes once a day, so its sprite jumps between states.

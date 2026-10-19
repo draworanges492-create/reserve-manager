@@ -1,9 +1,9 @@
 import type Phaser from 'phaser';
 import { crispText } from './crispText';
-import { UI } from './theme';
+import { TEXT_SIZE, UI } from './theme';
 
 const OFFSET = 10;
-const PAD = 4;
+const PAD = 5;
 
 /** Pointer-following tooltip with several lines; stays inside the screen. */
 export class Tooltip {
@@ -16,7 +16,7 @@ export class Tooltip {
       .rectangle(0, 0, 1, 1, UI.panel, UI.panelAlpha)
       .setOrigin(0)
       .setStrokeStyle(1, UI.border);
-    this.text = crispText(scene, 0, 0, '', { fontSize: '8px', lineSpacing: 2 });
+    this.text = crispText(scene, 0, 0, '', { fontSize: TEXT_SIZE.body, lineSpacing: 1 });
     this.hide();
   }
 

@@ -6,6 +6,7 @@ import type { TiledMap } from '../core/TiledFormat';
 import { readWorldLayout } from '../core/WorldLayout';
 import { GameSession } from '../core/GameSession';
 import { crispText } from '../ui/crispText';
+import { TEXT_SIZE } from '../ui/theme';
 import { setSession } from './session';
 
 const BAR_WIDTH = 200;
@@ -20,7 +21,10 @@ export class PreloadScene extends Phaser.Scene {
   preload(): void {
     const cx = this.scale.width / 2;
     const cy = this.scale.height / 2;
-    crispText(this, cx, cy - 12, GAME_TITLE, { fontSize: '16px' }).setOrigin(0.5);
+    crispText(this, cx, cy - 12, GAME_TITLE, {
+      fontSize: TEXT_SIZE.title,
+      fontStyle: 'bold',
+    }).setOrigin(0.5);
     this.add.rectangle(cx, cy + 12, BAR_WIDTH + 2, 6).setStrokeStyle(1, BAR_COLOR);
     const bar = this.add.rectangle(cx - BAR_WIDTH / 2, cy + 12, 0, 4, BAR_COLOR).setOrigin(0, 0.5);
     this.load.on(Phaser.Loader.Events.PROGRESS, (p: number) => (bar.width = BAR_WIDTH * p));

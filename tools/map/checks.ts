@@ -80,6 +80,44 @@ export function checkMap(map: TiledMap, zoneDefs: ZoneDef[]): string[] {
   for (const d of zoneDefs)
     if (!zoneBoxes.has(d.id)) fail(`zones.json zone "${d.id}" is not on the map`);
 
+  // Zones tile the whole map (no unzoned gaps), so a locked zone always borders open ground.
+  const covered = [...zoneBoxes.values()].reduce((sum, b) => sum + b.w * b.h, 0);
+  if (covered !== mapW * mapH) fail('zones must cover the whole map with no gaps');
+
+  // At every chapter, the open zones form one connected area (DECISIONS D43).
+  const touches = (a: Box, b: Box): boolean => {
+    const overlapX = Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x);
+    const overlapY = Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y);
+    const sideBySide = (a.x + a.w === b.x || b.x + b.w === a.x) && overlapY > 0;
+    const stacked = (a.y + a.h === b.y || b.y + b.h === a.y) && overlapX > 0;
+    return sideBySide || stacked;
+  };
+  const chapters = [...new Set(zoneDefs.map((d) => d.unlockChapter))].sort((a, b) => a - b);
+  for (const chapter of chapters) {
+    const open = zoneDefs.filter((d) => d.unlockChapter <= chapter && zoneBoxes.has(d.id));
+    const first = open[0];
+    if (!first) continue;
+    const reached = new Set([first.id]);
+    for (let grew = true; grew;) {
+      grew = false;
+      for (const z of open) {
+        const box = zoneBoxes.get(z.id);
+        if (reached.has(z.id) || !box) continue;
+        const linked = [...reached].some((id) => {
+          const other = zoneBoxes.get(id);
+          return other !== undefined && touches(box, other);
+        });
+        if (linked) {
+          reached.add(z.id);
+          grew = true;
+        }
+      }
+    }
+    const cut = open.filter((z) => !reached.has(z.id)).map((z) => z.id);
+    if (cut.length)
+      fail(`by chapter ${chapter}, zones ${cut.join(', ')} don't border the open area`);
+  }
+
   const zoneContaining = (x: number, y: number): string | null => {
     for (const [id, box] of zoneBoxes) if (contains(box, x, y)) return id;
     return null;

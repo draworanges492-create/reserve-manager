@@ -5,7 +5,8 @@ import { objectsIn, type ZoneArea } from './mapObjects';
 const FENCE_COLOR = 0x6a4a32;
 const POST_COLOR = 0x4a3222;
 const LOCK_TINT = 0x0d120c;
-const LOCK_ALPHA = 0.45;
+/** Heavy fog: a locked zone inside the camera's rectangle should read as off-limits. */
+const LOCK_ALPHA = 0.8;
 const HOVER_COLOR = 0xe8d9a8;
 const DASH = 8;
 const GAP = 5;

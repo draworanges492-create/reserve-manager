@@ -34,6 +34,8 @@ export class WaterholeSprite {
     const y = hole.y * tileSize;
 
     this.sprite = scene.add.sprite(x, y, 'waterhole', 0).setDepth(DEPTH.waterholes);
+    // Pressing here pumps water, so it must not start a camera drag.
+    this.sprite.setData('blocksDrag', true);
     this.sprite.setInteractive({
       hitArea: HIT_AREA,
       hitAreaCallback: Phaser.Geom.Ellipse.Contains,

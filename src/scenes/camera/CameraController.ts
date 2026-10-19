@@ -8,14 +8,15 @@ import {
   CAMERA_WHEEL_STEP,
   CAMERA_ZOOM_STEPS,
 } from '../../config/game';
-import { nextZoomIndex, scrollToKeepPoint } from './cameraMath';
+import { type Bounds, minZoomIndex, nextZoomIndex, scrollToKeepPoint } from './cameraMath';
 
 type Direction = 'up' | 'down' | 'left' | 'right';
 
 /**
  * Camera input (spec §5 + DECISIONS D4): drag-pan with mouse or one finger, WASD/arrows,
  * edge scroll (mouse only), wheel/trackpad zoom and two-finger pinch zoom, in integer-friendly
- * steps, clamped to the map.
+ * steps. The camera is clamped to the unlocked zones, and can't zoom out far enough to see
+ * past them (DECISIONS D44).
  */
 export class CameraController {
   private zoomIndex = CAMERA_DEFAULT_ZOOM_INDEX;
@@ -25,21 +26,27 @@ export class CameraController {
   private pointerInside = false;
   private dragging = false;
   private readonly keys: Record<Direction, Phaser.Input.Keyboard.Key[]>;
+  private bounds: Bounds;
 
   constructor(
     private readonly scene: Phaser.Scene,
-    worldWidth: number,
-    worldHeight: number,
+    /** Area the camera may show, in world pixels. */
+    bounds: Bounds,
     private readonly onChange: () => void,
     /** True when the pointer is over a HUD element; those clicks must not move the map. */
     private readonly isOverUI: (pointer: Phaser.Input.Pointer) => boolean,
-    /** True over clickable world objects (e.g. waterholes): a press there is an action, not a drag. */
+    /** True over world objects where a press is an action, not a drag (e.g. pumping a waterhole). */
     private readonly isOverInteractive: (pointer: Phaser.Input.Pointer) => boolean = () => false,
   ) {
+    this.bounds = bounds;
     const cam = scene.cameras.main;
-    cam.setBounds(0, 0, worldWidth, worldHeight);
-    cam.setZoom(this.zoom());
     cam.setRoundPixels(true);
+    this.setBounds(bounds);
+    // A bigger window shows more map at the same zoom, which may now see past the bounds.
+    scene.scale.on(Phaser.Scale.Events.RESIZE, this.enforceMinZoom, this);
+    scene.events.once(Phaser.Scenes.Events.SHUTDOWN, () =>
+      scene.scale.off(Phaser.Scale.Events.RESIZE, this.enforceMinZoom, this),
+    );
 
     const input = scene.input;
     const kb = input.keyboard;
@@ -85,12 +92,33 @@ export class CameraController {
     this.onChange();
   }
 
+  /** Change the area the camera may show (e.g. when a zone unlocks). */
+  setBounds(bounds: Bounds): void {
+    this.bounds = bounds;
+    this.scene.cameras.main.setBounds(bounds.x, bounds.y, bounds.w, bounds.h);
+    this.enforceMinZoom();
+  }
+
   private zoom(): number {
     return CAMERA_ZOOM_STEPS[this.zoomIndex] ?? 1;
   }
 
+  private minIndex(): number {
+    const cam = this.scene.cameras.main;
+    return minZoomIndex(CAMERA_ZOOM_STEPS, cam.width, cam.height, this.bounds);
+  }
+
+  private enforceMinZoom(): void {
+    this.zoomIndex = Math.max(this.zoomIndex, this.minIndex());
+    this.scene.cameras.main.setZoom(this.zoom());
+    this.onChange();
+  }
+
   private stepZoom(direction: 1 | -1, screenX: number, screenY: number): void {
-    const next = nextZoomIndex(this.zoomIndex, direction, CAMERA_ZOOM_STEPS.length);
+    const next = Math.max(
+      this.minIndex(),
+      nextZoomIndex(this.zoomIndex, direction, CAMERA_ZOOM_STEPS.length),
+    );
     if (next === this.zoomIndex) return;
     const cam = this.scene.cameras.main;
     const oldZoom = this.zoom();

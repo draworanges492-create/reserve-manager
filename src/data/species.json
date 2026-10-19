@@ -1,0 +1,58 @@
+{
+  "species": [
+    {
+      "id": "impala",
+      "name": "Impala",
+      "diet": "grazer",
+      "r": 0.03,
+      "habitatDensity": 0.12,
+      "grazeRate": 0.02,
+      "minViable": 6,
+      "sightingValue": 1.0,
+      "poachingValue": 0.2,
+      "charisma": 0.4,
+      "predators": ["lion"],
+      "prey": [],
+      "startPopulation": { "plains": 80 },
+      "targetN": 40,
+      "spriteKey": "impala",
+      "facts": [{ "text": "TODO: verify", "verified": false }]
+    },
+    {
+      "id": "zebra",
+      "name": "Zebra",
+      "diet": "grazer",
+      "r": 0.02,
+      "habitatDensity": 0.05,
+      "grazeRate": 0.04,
+      "minViable": 6,
+      "sightingValue": 1.5,
+      "poachingValue": 0.3,
+      "charisma": 0.6,
+      "predators": ["lion"],
+      "prey": [],
+      "startPopulation": { "plains": 24 },
+      "targetN": 20,
+      "spriteKey": "zebra",
+      "facts": [{ "text": "TODO: verify", "verified": false }]
+    },
+    {
+      "id": "lion",
+      "name": "Lion",
+      "diet": "predator",
+      "r": 0.01,
+      "habitatDensity": 0,
+      "grazeRate": 0,
+      "minViable": 4,
+      "sightingValue": 4.0,
+      "poachingValue": 0.6,
+      "charisma": 1.0,
+      "predators": [],
+      "prey": ["impala", "zebra"],
+      "startPopulation": { "plains": 3 },
+      "targetN": 6,
+      "spriteKey": "lion",
+      "facts": [{ "text": "TODO: verify", "verified": false }]
+    }
+  ]
+}

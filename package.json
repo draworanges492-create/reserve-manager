@@ -16,6 +16,7 @@
     "preview:art": "tsx tools/preview-art.ts"
   },
   "dependencies": {
+    "@fontsource/alegreya": "^5.3.0",
     "phaser": "^3.90.0"
   },
   "devDependencies": {

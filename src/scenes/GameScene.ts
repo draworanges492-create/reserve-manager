@@ -1,14 +1,16 @@
 import Phaser from 'phaser';
 import { ASSETS } from '../config/assets';
+import { BALANCE } from '../config/balance';
 import { eventBus } from '../core/EventBus';
 import { t } from '../core/text';
-import { AnimalGroupSprite } from '../entities/AnimalGroupSprite';
 import { WaterholeSprite } from '../entities/WaterholeSprite';
 import { showFloatingText } from '../ui/FloatingText';
 import { seasonOf } from '../sim/Seasons';
 import { CameraController } from './camera/CameraController';
+import { type Bounds, unionBounds } from './camera/cameraMath';
 import { DEPTH } from './depth';
-import { objectProp, objectsIn, readZones, type ZoneArea } from './map/mapObjects';
+import { HerdLayer } from './HerdLayer';
+import { readZones, type ZoneArea } from './map/mapObjects';
 import { SeasonTint } from './map/SeasonTint';
 import { ZoneOverlay } from './map/ZoneOverlay';
 import { getSession } from './session';
@@ -20,18 +22,17 @@ const TILE_LAYERS = [
   ['vegetation_deco', DEPTH.deco],
   ['objects', DEPTH.objects],
 ] as const;
-/** Sprites per preview group (until Phase 4 derives this from populations). */
-const PREVIEW_GROUP_SIZE = 5;
 /** Where the camera starts: between HQ and Waterhole A, in tiles. */
-const START_VIEW_TILE = { x: 56, y: 58 };
+const START_VIEW_TILE = { x: 56, y: 60 };
 
-/** The world view: tilemap, zones, fences and (for now) preview animals. Drives the sim clock. */
+/** The world view: tilemap, zones, fences, waterholes and herds. Drives the sim clock. */
 export class GameScene extends Phaser.Scene {
   private zones: ZoneArea[] = [];
   private hovered: ZoneArea | null = null;
   private overlay!: ZoneOverlay;
   private cameraController!: CameraController;
   private waterholes: WaterholeSprite[] = [];
+  private herds!: HerdLayer;
 
   constructor() {
     super('GameScene');
@@ -57,19 +58,18 @@ export class GameScene extends Phaser.Scene {
       this.zones,
       (id) => !!session.state.zones[id]?.unlocked,
     );
-    this.spawnPreviewAnimals(map);
+    this.herds = new HerdLayer(this, map, this.zones, session);
     this.waterholes = Object.keys(session.state.waterholes).map(
       (id) => new WaterholeSprite(this, session, id, map.tileWidth),
     );
 
     this.cameraController = new CameraController(
       this,
-      map.widthInPixels,
-      map.heightInPixels,
+      this.unlockedBounds(map.tileWidth),
       () => this.updateHover(),
       (pointer) => this.isOverUI(pointer),
       // Safe here (unlike isOverUI): it re-runs this scene's own hit test with identical results.
-      (pointer) => this.input.hitTestPointer(pointer).length > 0,
+      (pointer) => this.input.hitTestPointer(pointer).some((o) => o.getData('blocksDrag') === true),
     );
     this.cameras.main.centerOn(
       START_VIEW_TILE.x * map.tileWidth,
@@ -78,6 +78,16 @@ export class GameScene extends Phaser.Scene {
 
     this.input.on(Phaser.Input.Events.POINTER_MOVE, () => this.updateHover());
     this.input.on(Phaser.Input.Events.GAME_OUT, () => this.setHovered(null));
+    // A click on bare ground (not a drag) closes the animal info panel.
+    this.input.on(
+      Phaser.Input.Events.POINTER_UP,
+      (pointer: Phaser.Input.Pointer, over: Phaser.GameObjects.GameObject[]) => {
+        const click = pointer.getDistance() <= BALANCE.render.animals.clickMaxMovePx;
+        if (click && over.length === 0 && !this.isOverUI(pointer)) {
+          eventBus.emit('animalSelected', { group: null });
+        }
+      },
+    );
     const offSeason = eventBus.on('seasonChanged', ({ season }) => seasonTint.fadeTo(season));
     const offFail = eventBus.on('commandFailed', ({ reason, worldX, worldY }) => {
       if (worldX !== undefined && worldY !== undefined) {
@@ -93,20 +103,28 @@ export class GameScene extends Phaser.Scene {
   override update(_time: number, delta: number): void {
     getSession(this).update(delta);
     for (const w of this.waterholes) w.update();
+    this.herds.update(delta);
     this.cameraController.update(delta);
+  }
+
+  /** World-pixel rectangle around every unlocked zone: the camera stays inside it. */
+  private unlockedBounds(tileSize: number): Bounds {
+    const open = Object.values(getSession(this).state.zones)
+      .filter((z) => z.unlocked)
+      .map((z) => z.rect);
+    const tiles = unionBounds(open);
+    if (!tiles) throw new Error('No unlocked zones');
+    return {
+      x: tiles.x * tileSize,
+      y: tiles.y * tileSize,
+      w: tiles.w * tileSize,
+      h: tiles.h * tileSize,
+    };
   }
 
   private isOverUI(pointer: Phaser.Input.Pointer): boolean {
     if (!this.scene.isActive('UIScene')) return false;
     return (this.scene.get('UIScene') as UIScene).isPointerOverUI(pointer.x, pointer.y);
-  }
-
-  private spawnPreviewAnimals(map: Phaser.Tilemaps.Tilemap): void {
-    objectsIn(map, 'spawns').forEach((spawn, i) => {
-      const species = objectProp(spawn, 'species');
-      if (objectProp(spawn, 'kind') !== 'animal' || typeof species !== 'string') return;
-      new AnimalGroupSprite(this, spawn.x ?? 0, spawn.y ?? 0, species, PREVIEW_GROUP_SIZE, i + 1);
-    });
   }
 
   private updateHover(): void {

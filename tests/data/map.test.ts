@@ -37,4 +37,19 @@ describe('reserve.tmj', () => {
     );
     expect(errors.some((e) => e.includes('"north"'))).toBe(true);
   });
+
+  it('reports a zone that would open with a gap to the playable area', () => {
+    // Opening the outcrop in Chapter 1 while the plains wait until Chapter 2 leaves the
+    // outcrop cut off from the HQ, the only other Chapter 1 zone.
+    const defs = zonesData.zones.map((z) =>
+      z.id === 'outcrop'
+        ? { ...z, unlockChapter: 1 }
+        : z.id === 'plains'
+          ? { ...z, unlockChapter: 2 }
+          : z,
+    );
+    expect(checkMap(map, defs)).toContain(
+      "reserve.tmj: by chapter 1, zones outcrop don't border the open area",
+    );
+  });
 });

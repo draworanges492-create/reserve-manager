@@ -4,7 +4,6 @@ import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import {
   BUILD_SLOTS,
-  GATE_SPAN,
   MAP_HEIGHT,
   MAP_WIDTH,
   POACHER_ENTRIES,
@@ -13,6 +12,7 @@ import {
   ZONES,
   type Point,
 } from './map/layout';
+import { buildFences } from './map/fences';
 import { buildTerrain } from './map/terrain';
 import {
   OBJECT_LAYERS,
@@ -66,43 +66,19 @@ const point = (p: Point, name: string, type: string, values: Record<string, stri
   obj({ ...centerOf(p), name, type, point: true, properties: props(values) });
 
 function fenceSegments(): TiledObject[] {
-  const segments: TiledObject[] = [];
-  const line = (
-    id: string,
-    zoneId: string,
-    x0: number,
-    y0: number,
-    x1: number,
-    y1: number,
-  ): void => {
-    segments.push(
-      obj({
-        x: x0 * T,
-        y: y0 * T,
-        name: id,
-        type: 'fence',
-        polyline: [
-          { x: 0, y: 0 },
-          { x: (x1 - x0) * T, y: (y1 - y0) * T },
-        ],
-        properties: props({ segmentId: id, zoneId }),
-      }),
-    );
-  };
-  for (const [zoneId, r] of Object.entries(ZONES)) {
-    const [left, top, right, bottom] = [r.x, r.y, r.x + r.w, r.y + r.h];
-    line(`${zoneId}_n`, zoneId, left, top, right, top);
-    line(`${zoneId}_e`, zoneId, right, top, right, bottom);
-    line(`${zoneId}_w`, zoneId, left, top, left, bottom);
-    if (zoneId === 'hq') {
-      line('hq_s_w', zoneId, left, bottom, GATE_SPAN.from, bottom);
-      line('hq_gate', zoneId, GATE_SPAN.from, bottom, GATE_SPAN.to, bottom);
-      line('hq_s_e', zoneId, GATE_SPAN.to, bottom, right, bottom);
-    } else {
-      line(`${zoneId}_s`, zoneId, left, bottom, right, bottom);
-    }
-  }
-  return segments;
+  return buildFences().map((run) =>
+    obj({
+      x: run.from.x * T,
+      y: run.from.y * T,
+      name: run.id,
+      type: 'fence',
+      polyline: [
+        { x: 0, y: 0 },
+        { x: (run.to.x - run.from.x) * T, y: (run.to.y - run.from.y) * T },
+      ],
+      properties: props({ segmentId: run.id, zoneId: run.zoneId }),
+    }),
+  );
 }
 
 const terrain = buildTerrain();

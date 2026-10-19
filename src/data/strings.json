@@ -23,5 +23,17 @@
   "water.fillsIn": "Holding steady or rising",
   "water.hint.refill": "Click or hold to refill (+{amount} each)",
   "water.hint.locked": "Locked until its zone opens",
-  "water.hint.full": "Full"
+  "water.hint.full": "Full",
+  "animal.hover": "{name} · {count} in {zone}",
+  "animal.hoverHint": "Click for details",
+  "animal.population": "Population: {count}",
+  "animal.diet": "Diet: {diet}",
+  "animal.status.ok": "Status: Stable",
+  "animal.status.critical": "Status: Critical — fewer than {min}, too few to breed",
+  "animal.water.yes": "Water nearby: Yes",
+  "animal.water.no": "Water nearby: No — refill a waterhole",
+  "diet.grazer": "Grazer",
+  "diet.browser": "Browser",
+  "diet.predator": "Predator",
+  "panel.close": "×"
 }
