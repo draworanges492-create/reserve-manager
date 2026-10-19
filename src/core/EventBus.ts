@@ -1,3 +1,6 @@
+import type { Season } from '../config/balance';
+import type { GameSpeed } from '../config/game';
+
 type Handler<T> = (payload: T) => void;
 
 /** Typed pub/sub. Sim modules return events; scenes, UI and story subscribe here. */
@@ -24,6 +27,10 @@ export class EventBus<Events extends Record<string, unknown>> {
 export type GameEvents = {
   /** Pointer moved onto a different zone (null = no zone). */
   zoneHover: { zoneId: string | null };
+  /** A day tick finished; `day` is the new day number. */
+  dayTick: { day: number };
+  seasonChanged: { season: Season };
+  speedChanged: { speed: GameSpeed; paused: boolean };
 };
 
 export const eventBus = new EventBus<GameEvents>();

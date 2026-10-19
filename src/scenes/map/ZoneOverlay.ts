@@ -19,11 +19,11 @@ export class ZoneOverlay {
     scene: Phaser.Scene,
     map: Phaser.Tilemaps.Tilemap,
     zones: ZoneArea[],
-    chapter: number,
+    isUnlocked: (zoneId: string) => boolean,
   ) {
     const dim = scene.add.graphics().setDepth(DEPTH.zoneDim);
     dim.fillStyle(LOCK_TINT, LOCK_ALPHA);
-    for (const zone of zones) if (zone.unlockChapter > chapter) dim.fillRectShape(zone.rect);
+    for (const zone of zones) if (!isUnlocked(zone.id)) dim.fillRectShape(zone.rect);
 
     const fences = scene.add.graphics().setDepth(DEPTH.fences);
     for (const segment of objectsIn(map, 'fence_segments')) {

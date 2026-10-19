@@ -53,10 +53,6 @@
 **Checks:** `build` ✅ · `test` ✅ (17) · `lint` ✅ · `validate-data` ✅ · browser at
 1512×865: map renders, zones identifiable, 60 fps at the widest zoom, 0 console errors.
 
-**Next — Phase 2 (Core state, clock, seasons):** GameState + factory, Clock (pause / 1× / 2× /
-4×, 120 s days, 30-day seasons), Seasons sim, HUD date/season and speed controls, season
-visual change, tests.
-
 **Known issues**
 
 - Ground types meet with hard, blocky tile edges (no transition tiles yet; listed in ART_GUIDE).
@@ -64,3 +60,34 @@ visual change, tests.
   revisit when animals wander (Phase 4).
 - Touch pan/pinch is implemented but only tested with a mouse; needs a check on a real
   touch screen.
+
+## Phase 2 — Core state, clock, seasons ✅ (2026-10-19)
+
+**Done**
+
+- `core/GameState.ts`: serializable state + `createGameState` (seed, RNG state, clock,
+  chapter, zone locks, money, flags).
+- `config/balance.json` + typed `balance.ts`: time, start money, start chapter, render tunables.
+- `core/Clock.ts`: real time → day ticks (120 s/day at 1×; pause, 1×, 2×, 4×; capped per frame).
+- `sim/Seasons.ts` (calendar: year / season / day-of-season; 30-day seasons) and
+  `sim/tick.ts` (day tick in spec §4 order; only Seasons exists yet).
+- `core/Commands.ts`: `setSpeed`, `setPaused`, `togglePause`, validated with reasons.
+- `core/GameSession.ts`: ties clock, sim and commands to the EventBus.
+- HUD top bar: season icon, "Year 1 · Dry season · Day 1/30", day progress bar, pause and
+  1× / 2× / 4× buttons (Space, 1, 2, 3 on the keyboard), "Paused" label. Clicks on the HUD
+  never pan the map.
+- Seasons tint the terrain (fade); subtle cosmetic dawn/dusk/night wash.
+- `core/text.ts`: all new UI text in `src/data/strings.json`.
+
+**Checks:** `build` ✅ · `test` ✅ (37) · `lint` ✅ · `validate-data` ✅ · browser at
+1512×865: 4× speed measured 0.099 day / 3 s (expected 0.100); pause stops the clock;
+keys work; jumping to day 32 switched to "Wet season" with a greener map; 0 console errors.
+
+**Next — Phase 3 (Water & chore mechanic):** waterhole sim (decay, seasonal rain, pumps),
+visual states (clear / muddy / drying / dry), click and hold-to-refill on Waterhole A,
+tooltip explaining decay, pump building data stub, Water unit tests.
+
+**Known issues**
+
+- Ground types still meet with hard tile edges; animals still draw over trees (see Phase 1).
+- Touch controls still only tested with a mouse.

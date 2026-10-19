@@ -11,7 +11,9 @@ export const TILE_SIZE = 24;
 
 /** Real seconds per in-game day at 1× speed. */
 export const DAY_LENGTH_SECONDS = 120;
-export const SPEED_STEPS = [0, 1, 2, 4] as const;
+/** Running speeds; pause is a separate flag so un-pausing returns to the last speed. */
+export const GAME_SPEEDS = [1, 2, 4] as const;
+export type GameSpeed = (typeof GAME_SPEEDS)[number];
 
 /**
  * World camera zoom steps (on top of the whole-screen integer zoom). Spec §5 said 2×–4×,
@@ -29,6 +31,3 @@ export const CAMERA_WHEEL_STEP = 60;
 export const CAMERA_WHEEL_COOLDOWN_MS = 180;
 /** Finger-distance ratio that counts as one pinch zoom step. */
 export const CAMERA_PINCH_STEP = 1.25;
-
-/** Chapter shown before GameState exists (Phase 2); drives locked-zone dimming. */
-export const START_CHAPTER = 1;

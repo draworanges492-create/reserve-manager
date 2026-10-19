@@ -1,4 +1,10 @@
 {
   "camera.hint": "Drag or WASD to pan · Scroll or pinch to zoom",
-  "zone.locked": "{name} · Locked until Chapter {chapter}"
+  "zone.locked": "{name} · Locked until Chapter {chapter}",
+  "season.dry": "Dry season",
+  "season.wet": "Wet season",
+  "hud.date": "Year {year} · {season} · Day {day}/{days}",
+  "hud.paused": "Paused",
+  "hud.speedHint": "Space: pause · 1/2/3: speed",
+  "command.invalidSpeed": "That speed isn't available."
 }

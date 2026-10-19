@@ -2,15 +2,42 @@
   "images": {
     "tiles-terrain": "assets/tilesets/terrain.png",
     "shadow-sm": "assets/sprites/shadow-sm.png",
-    "shadow-lg": "assets/sprites/shadow-lg.png"
+    "shadow-lg": "assets/sprites/shadow-lg.png",
+    "icon-dry": "assets/ui/icon-dry.png",
+    "icon-wet": "assets/ui/icon-wet.png",
+    "icon-pause": "assets/ui/icon-pause.png"
   },
   "spritesheets": {
-    "impala": { "path": "assets/sprites/impala.png", "frameWidth": 24, "frameHeight": 24 },
-    "zebra": { "path": "assets/sprites/zebra.png", "frameWidth": 24, "frameHeight": 24 },
-    "lion": { "path": "assets/sprites/lion.png", "frameWidth": 24, "frameHeight": 24 },
-    "elephant": { "path": "assets/sprites/elephant.png", "frameWidth": 48, "frameHeight": 48 },
-    "ranger": { "path": "assets/sprites/ranger.png", "frameWidth": 24, "frameHeight": 24 },
-    "visitor": { "path": "assets/sprites/visitor.png", "frameWidth": 24, "frameHeight": 24 }
+    "impala": {
+      "path": "assets/sprites/impala.png",
+      "frameWidth": 24,
+      "frameHeight": 24
+    },
+    "zebra": {
+      "path": "assets/sprites/zebra.png",
+      "frameWidth": 24,
+      "frameHeight": 24
+    },
+    "lion": {
+      "path": "assets/sprites/lion.png",
+      "frameWidth": 24,
+      "frameHeight": 24
+    },
+    "elephant": {
+      "path": "assets/sprites/elephant.png",
+      "frameWidth": 48,
+      "frameHeight": 48
+    },
+    "ranger": {
+      "path": "assets/sprites/ranger.png",
+      "frameWidth": 24,
+      "frameHeight": 24
+    },
+    "visitor": {
+      "path": "assets/sprites/visitor.png",
+      "frameWidth": 24,
+      "frameHeight": 24
+    }
   },
   "tilemaps": {
     "reserve": "assets/maps/reserve.tmj"

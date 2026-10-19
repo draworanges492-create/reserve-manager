@@ -1,7 +1,10 @@
 import Phaser from 'phaser';
 import { ASSETS } from '../config/assets';
 import { GAME_TITLE } from '../config/game';
+import { createGameState } from '../core/GameState';
+import { GameSession } from '../core/GameSession';
 import { crispText } from '../ui/crispText';
+import { setSession } from './session';
 
 const BAR_WIDTH = 200;
 const BAR_COLOR = 0xe8d9a8;
@@ -29,6 +32,13 @@ export class PreloadScene extends Phaser.Scene {
   }
 
   create(): void {
+    // New game for now; MenuScene (Phase 8) will offer Continue / load a slot instead.
+    // Wall-clock seeding is fine here: only the sim must be deterministic, given its seed.
+    const seed = (Date.now() ^ Math.floor(Math.random() * 0xffffffff)) >>> 0;
+    const session = new GameSession(createGameState({ seed }));
+    setSession(this, session);
+    // Dev-only handle for debugging in the browser console; removed from production builds.
+    if (import.meta.env.DEV) Object.assign(window, { __session: session });
     this.scene.start('GameScene');
     this.scene.launch('UIScene');
   }

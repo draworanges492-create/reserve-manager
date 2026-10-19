@@ -1,5 +1,27 @@
 {
+  "time": {
+    "daysPerSeason": 30,
+    "seasonOrder": ["dry", "wet"],
+    "maxDayTicksPerUpdate": 4
+  },
+  "economy": {
+    "startMoney": 500
+  },
+  "story": {
+    "startChapter": 1
+  },
   "render": {
-    "maxAnimalSpritesPerZone": 12
+    "maxAnimalSpritesPerZone": 12,
+    "seasonTint": { "dry": "#ffe6bf", "wet": "#e4ffe2" },
+    "seasonTintFadeMs": 1500,
+    "timeOfDay": [
+      { "at": 0, "color": "#14204a", "alpha": 0.2 },
+      { "at": 0.08, "color": "#d9822b", "alpha": 0.1 },
+      { "at": 0.18, "color": "#d9822b", "alpha": 0 },
+      { "at": 0.72, "color": "#d9822b", "alpha": 0 },
+      { "at": 0.82, "color": "#d9822b", "alpha": 0.12 },
+      { "at": 0.9, "color": "#14204a", "alpha": 0.22 },
+      { "at": 1, "color": "#14204a", "alpha": 0.2 }
+    ]
   }
 }

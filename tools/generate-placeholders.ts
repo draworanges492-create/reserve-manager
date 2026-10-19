@@ -5,6 +5,7 @@ import { dirname, join, relative } from 'node:path';
 import { PixelCanvas } from './lib/canvas';
 import { encodePng, isPlaceholderFile, PLACEHOLDER_MARKER } from './lib/png';
 import { PAL } from './palette';
+import { drawIcons } from './placeholders/icons';
 import { drawSprites } from './placeholders/sprites';
 import { drawTile } from './placeholders/tiles';
 import {
@@ -69,5 +70,6 @@ function paletteGpl(): string {
 
 writePng('tilesets/terrain.png', buildTileset());
 for (const [name, canvas] of Object.entries(drawSprites())) writePng(`sprites/${name}.png`, canvas);
+for (const [name, canvas] of Object.entries(drawIcons())) writePng(`ui/${name}.png`, canvas);
 write('palette.gpl', Buffer.from(paletteGpl()));
 console.log(`palette: ${Object.keys(PAL).length} colours`);

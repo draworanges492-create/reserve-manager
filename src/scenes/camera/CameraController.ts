@@ -23,6 +23,7 @@ export class CameraController {
   private lastWheelStep = 0;
   private pinchStartDistance: number | null = null;
   private pointerInside = false;
+  private dragging = false;
   private readonly keys: Record<Direction, Phaser.Input.Keyboard.Key[]>;
 
   constructor(
@@ -30,6 +31,8 @@ export class CameraController {
     worldWidth: number,
     worldHeight: number,
     private readonly onChange: () => void,
+    /** True when the pointer is over a HUD element; those clicks must not move the map. */
+    private readonly isOverUI: (pointer: Phaser.Input.Pointer) => boolean,
   ) {
     const cam = scene.cameras.main;
     cam.setBounds(0, 0, worldWidth, worldHeight);
@@ -47,6 +50,10 @@ export class CameraController {
       right: keys('D', 'RIGHT'),
     };
 
+    input.on(
+      Phaser.Input.Events.POINTER_DOWN,
+      (p: Phaser.Input.Pointer) => (this.dragging = !this.isOverUI(p)),
+    );
     input.on(Phaser.Input.Events.POINTER_MOVE, this.onPointerMove, this);
     input.on(Phaser.Input.Events.POINTER_UP, this.onPointerUp, this);
     input.on(Phaser.Input.Events.POINTER_WHEEL, this.onWheel, this);
@@ -61,7 +68,7 @@ export class CameraController {
     let dy = (held('down') ? 1 : 0) - (held('up') ? 1 : 0);
 
     const p = this.scene.input.activePointer;
-    if (this.pointerInside && !p.wasTouch && !p.isDown) {
+    if (this.pointerInside && !p.wasTouch && !p.isDown && !this.isOverUI(p)) {
       const m = CAMERA_EDGE_SCROLL_MARGIN;
       if (p.x < m) dx = -1;
       else if (p.x > cam.width - m) dx = 1;
@@ -99,7 +106,7 @@ export class CameraController {
       this.handlePinch(pointer1, pointer2);
       return;
     }
-    if (!pointer.isDown || this.pinchStartDistance !== null) return;
+    if (!pointer.isDown || !this.dragging || this.pinchStartDistance !== null) return;
     const cam = this.scene.cameras.main;
     cam.setScroll(
       cam.scrollX - (pointer.x - pointer.prevPosition.x) / cam.zoom,
@@ -111,6 +118,7 @@ export class CameraController {
   private onPointerUp(): void {
     const { pointer1, pointer2 } = this.scene.input;
     if (!pointer1.isDown && !pointer2.isDown) this.pinchStartDistance = null;
+    if (!this.scene.input.activePointer.isDown) this.dragging = false;
   }
 
   private handlePinch(a: Phaser.Input.Pointer, b: Phaser.Input.Pointer): void {
@@ -132,6 +140,7 @@ export class CameraController {
   }
 
   private onWheel(pointer: Phaser.Input.Pointer, _over: unknown, _dx: number, dy: number): void {
+    if (this.isOverUI(pointer)) return;
     const now = this.scene.time.now;
     if (now - this.lastWheelStep < CAMERA_WHEEL_COOLDOWN_MS) {
       this.wheelAccum = 0; // swallow trackpad momentum right after a step
