@@ -58,7 +58,7 @@ Follow these rules for the entire project.
 
 Build scripts required: `npm run dev`, `npm run build`, `npm run test`, `npm run lint`, `npm run validate-data` (checks all JSON in `src/data` against schemas and cross-references, e.g. every dialogue `next` id exists).
 
-Display: internal resolution **480×270**, integer-scaled to fit window, `pixelArt: true`, no anti-aliasing. Tile size **16×16**.
+Display: minimum internal resolution **640×360**, integer-scaled; the canvas widens to fill the window at that zoom (no black bars), `pixelArt: true`, no anti-aliasing. Tile size **24×24**.
 
 ---
 
@@ -134,7 +134,7 @@ reserve-manager/
 
 ## 5. MAP SPECIFICATION
 
-**Tiled project**: `public/assets/maps/reserve.tmj`. Tile 16×16. Full map **120×80 tiles**.
+**Tiled project**: `public/assets/maps/reserve.tmj`. Tile 24×24. Full map **120×80 tiles**.
 
 **Layers (names must match exactly):**
 `ground`, `vegetation_deco`, `water`, `objects`, `collision` (boolean tiles), plus Tiled **object layers**: `zones` (rectangles with property `zoneId`), `waterholes` (points with `waterholeId`), `spawns` (points with `kind` = animal/visitor/staff), `build_slots` (rectangles with `slotType` = tower/post/pump/lodge), `fence_segments` (lines with `segmentId`, `zoneId`), `poacher_entries` (points).
@@ -298,7 +298,7 @@ Music/SFX volume, game speed default, colorblind-safe palette toggle (alternate 
 
 ## 8. CHARACTERS
 
-Portraits are 48×48 pixel art (4 expressions each: neutral, happy, worried, angry). Dialogue box shows portrait + name + text.
+Portraits are 72×72 pixel art (4 expressions each: neutral, happy, worried, angry). Dialogue box shows portrait + name + text.
 
 | ID | Name (placeholder) | Role | Arc |
 |---|---|---|---|
@@ -402,9 +402,9 @@ Pick sensible values for the others by following relative scale (large herbivore
 
 ## 12. ART PIPELINE
 
-1. **Phase 1 deliverable**: `tools/generate-placeholders.ts` produces labeled colored 16×16 tiles and 16×16/32×32 sprites into `public/assets/` so the game is fully playable with zero downloaded art.
+1. **Phase 1 deliverable**: `tools/generate-placeholders.ts` produces labeled colored 24×24 tiles and 24×24/48×48 sprites into `public/assets/` so the game is fully playable with zero downloaded art.
 2. All asset use goes through **texture keys in a manifest** (`assets.json`), so replacing placeholders with real pixel art needs no code changes.
-3. Final art spec for the user (artist): 16×16 tiles; limited palette (≤32 colors, saved as `palette.gpl`); animals 16×16 (small) or 32×32 (large) with 2–4 frame walk cycles; portraits 48×48; UI 9-slice panels. Provide `docs/ART_GUIDE.md` listing every required sprite with dimensions and frame counts.
+3. Final art spec for the user (artist): 24×24 tiles; limited palette (≤32 colors, saved as `palette.gpl`); animals 24×24 (small) or 48×48 (large), with a dark outline so they stand out from the map, and 2–4 frame walk cycles; portraits 72×72; UI 9-slice panels. Provide `docs/ART_GUIDE.md` listing every required sprite with dimensions and frame counts.
 4. Tools: Tiled (maps), LibreSprite/Piskel/Krita (sprites).
 
 ---
@@ -431,7 +431,7 @@ Complete in order. Stop after each phase.
 
 **Phase 0 — Scaffolding**
 Vite + Phaser + TS strict + ESLint/Prettier + Vitest; folder structure; `CLAUDE.md`, `PROGRESS.md`, `DECISIONS.md`; boot scene shows "Reserve Manager" text.
-*Accept:* `dev`, `build`, `test`, `lint` all pass; empty game runs at 480×270 integer-scaled.
+*Accept:* `dev`, `build`, `test`, `lint` all pass; empty game fills the window at integer zoom (min 640×360).
 
 **Phase 1 — Placeholders & map**
 Placeholder generator; Tiled map with all layers/zones; GameScene loads map; camera pan/zoom/clamp; zone hover labels.
@@ -455,7 +455,7 @@ Money, costs, build slots + construction, hire/assign staff, ranger coverage, to
 
 **Phase 6 — UI pass**
 Full HUD, context panels, alerts feed, tooltips, settings; keyboard shortcuts; colorblind toggle.
-*Accept:* everything reachable by mouse; no overlapping UI at 480×270 scaled.
+*Accept:* everything reachable by mouse; no overlapping UI at the 640×360 minimum.
 
 **Phase 7 — Dialogue & Chapters 1–2**
 DialogueRunner, DialogueScene, StoryManager, flags, goals, chapters.json, full Ch 1 & 2 content, journal, clue investigation.
