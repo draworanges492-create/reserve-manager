@@ -1,0 +1,35 @@
+GIMP Palette
+Name: Reserve Manager
+Columns: 8
+# reserve-manager-placeholder
+ 74  94  58	grassDark
+ 98 117  74	grass
+122 138  86	grassLight
+154 144  88	grassDry
+138 111  78	dirt
+107  84  64	dirtDark
+184 167 122	sand
+125 119 104	rock
+ 94  90  82	rockDark
+ 61  96 121	waterDeep
+ 86 128 154	water
+127 163 181	waterLight
+ 51  72  44	treeDark
+ 67  96  58	tree
+106  74  50	wood
+139  90  60	roof
+ 26  20  16	outline
+217 130  43	impala
+240 180 106	impalaLight
+242 240 230	white
+232 178  58	lionGold
+160  82  29	lionMane
+167 155 181	elephant
+199 189 210	elephantLight
+198 138  94	skin
+210  72  58	red
+ 58 142 230	blue
+  0   0   0	shadow
+ 36  28  22	uiPanel
+232 217 168	uiText
+255   0 255	debug

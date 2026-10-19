@@ -1,6 +1,9 @@
 import Phaser from 'phaser';
 import { computeViewport } from './config/scaling';
 import { BootScene } from './scenes/BootScene';
+import { GameScene } from './scenes/GameScene';
+import { PreloadScene } from './scenes/PreloadScene';
+import { UIScene } from './scenes/UIScene';
 
 const initial = computeViewport(window.innerWidth, window.innerHeight);
 
@@ -18,7 +21,9 @@ const game = new Phaser.Game({
     autoCenter: Phaser.Scale.CENTER_BOTH,
     zoom: initial.zoom,
   },
-  scene: [BootScene],
+  input: { activePointers: 2 }, // two fingers for pinch zoom
+  // UIScene last so it renders above the world.
+  scene: [BootScene, PreloadScene, GameScene, UIScene],
 });
 
 window.addEventListener('resize', () => {

@@ -28,3 +28,39 @@
 **Known issues**
 
 - None.
+
+## Phase 1 — Placeholders & map ✅ (2026-10-19)
+
+**Done**
+
+- `tools/generate-placeholders.ts` (`npm run gen:placeholders`): 26 terrain tiles, impala /
+  zebra / lion / elephant / ranger / visitor walk strips, shadows, 31-colour `palette.gpl`.
+  Pure Node, no image libraries; never overwrites non-placeholder art.
+- `tools/generate-map.ts` (`npm run gen:map -- --force`): 120×80 `reserve.tmj` with every
+  layer from spec §5 — tile layers `ground`, `vegetation_deco`, `water`, `objects`,
+  `collision`; object layers `zones` (7), `waterholes` (A dry, B pond), `spawns`,
+  `build_slots` (8), `fence_segments` (30, incl. `hq_gate`), `poacher_entries` (5).
+- `src/data/zones.json` (names, unlock chapters); `validate-data` now checks the map
+  against it (layers, ids, overlaps, objects inside their zones, unique ids).
+- Asset manifest `src/config/assets.json`; Boot → Preload (progress bar) → GameScene + UIScene.
+- GameScene: tilemap, run-down dashed fences, locked zones dimmed, hovered zone outlined,
+  preview animal groups (shadow + idle bob).
+- Camera: drag (mouse / one finger), WASD + arrows, edge scroll, wheel / trackpad zoom
+  around the cursor, two-finger pinch zoom; steps 0.5×–3×; clamped to the map.
+- UIScene: zone name on hover ("Locked until Chapter N" for locked zones), controls hint.
+- `docs/ART_GUIDE.md`, `public/assets/ASSETS.md` filled in.
+
+**Checks:** `build` ✅ · `test` ✅ (17) · `lint` ✅ · `validate-data` ✅ · browser at
+1512×865: map renders, zones identifiable, 60 fps at the widest zoom, 0 console errors.
+
+**Next — Phase 2 (Core state, clock, seasons):** GameState + factory, Clock (pause / 1× / 2× /
+4×, 120 s days, 30-day seasons), Seasons sim, HUD date/season and speed controls, season
+visual change, tests.
+
+**Known issues**
+
+- Ground types meet with hard, blocky tile edges (no transition tiles yet; listed in ART_GUIDE).
+- Animal sprites always draw in front of trees (tile layers can't depth-sort with sprites);
+  revisit when animals wander (Phase 4).
+- Touch pan/pinch is implemented but only tested with a mouse; needs a check on a real
+  touch screen.

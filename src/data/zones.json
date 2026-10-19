@@ -1,0 +1,11 @@
+{
+  "zones": [
+    { "id": "hq", "name": "HQ & Gate", "unlockChapter": 1 },
+    { "id": "plains", "name": "Central Plains", "unlockChapter": 1 },
+    { "id": "river", "name": "River & Wetland", "unlockChapter": 2 },
+    { "id": "woodland", "name": "Woodland", "unlockChapter": 3 },
+    { "id": "east_border", "name": "Eastern Border", "unlockChapter": 3 },
+    { "id": "outcrop", "name": "Rocky Outcrop", "unlockChapter": 4 },
+    { "id": "north", "name": "Northern Reach", "unlockChapter": 5 }
+  ]
+}

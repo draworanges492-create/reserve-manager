@@ -10,7 +10,10 @@
     "test": "vitest run",
     "lint": "eslint . && prettier --check .",
     "format": "prettier --write .",
-    "validate-data": "tsx tools/validate-data.ts"
+    "validate-data": "tsx tools/validate-data.ts",
+    "gen:placeholders": "tsx tools/generate-placeholders.ts",
+    "gen:map": "tsx tools/generate-map.ts",
+    "preview:art": "tsx tools/preview-art.ts"
   },
   "dependencies": {
     "phaser": "^3.90.0"
