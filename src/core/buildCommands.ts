@@ -1,5 +1,6 @@
 // Building and staff commands (spec §4 Commands; §7.2 building, §7.3 staff).
 import { BALANCE } from '../config/balance';
+import { adjustScore } from '../sim/Scores';
 import { buildingDef, staffRole } from './content';
 import type { CommandResult } from './Commands';
 import type { GameState, StaffMember } from './GameState';
@@ -87,11 +88,13 @@ export function hire(state: GameState, roleId: string): CommandResult {
   };
   return {
     ok: true,
-    state: {
-      ...state,
-      staff: [...state.staff, member],
-      nextStaffNumber: state.nextStaffNumber + 1,
-    },
+    // Spec §6.8: local jobs build community trust.
+    state: adjustScore(
+      { ...state, staff: [...state.staff, member], nextStaffNumber: state.nextStaffNumber + 1 },
+      'trust',
+      BALANCE.scores.trustPerHire,
+      'score.reason.hired',
+    ),
     events: [{ type: 'staffHired', payload: { staffId: member.id, role: roleId } }],
   };
 }
@@ -115,7 +118,12 @@ export function dismissStaff(state: GameState, staffId: string): CommandResult {
   if (!state.staff.some((s) => s.id === staffId)) return fail('command.unknownStaff');
   return {
     ok: true,
-    state: { ...state, staff: state.staff.filter((s) => s.id !== staffId) },
+    state: adjustScore(
+      { ...state, staff: state.staff.filter((s) => s.id !== staffId) },
+      'trust',
+      BALANCE.scores.trustPerDismissal,
+      'score.reason.dismissed',
+    ),
     events: [{ type: 'staffChanged', payload: { staffId } }],
   };
 }

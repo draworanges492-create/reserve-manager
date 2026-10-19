@@ -1,6 +1,7 @@
 // The single, plain, serializable game state (spec §4). Grows phase by phase.
 import { BALANCE, type PumpKind } from '../config/balance';
 import type { GameSpeed } from '../config/game';
+import { ecosystemBreakdown } from '../sim/Scores';
 import { SPECIES } from './content';
 import waterholesData from '../data/waterholes.json';
 import zonesData from '../data/zones.json';
@@ -67,6 +68,17 @@ export interface DayLedger {
   net: number;
 }
 
+export type ScoreId = 'ecosystem' | 'trust' | 'reputation';
+
+/** A recent change to a score, shown in its tooltip (spec §6.8). */
+export interface ScoreChange {
+  score: ScoreId;
+  day: number;
+  delta: number;
+  /** strings.json key describing the cause. */
+  reason: string;
+}
+
 /** What happened to one herd during the last day tick: the "why" behind its number. */
 export interface PopulationChange {
   births: number;
@@ -117,6 +129,9 @@ export interface GameState {
     inDebt: boolean;
   };
   flags: Record<string, boolean>;
+  /** Spec §6.8, each 0–100. */
+  scores: Record<ScoreId, number>;
+  scoreHistory: ScoreChange[];
 }
 
 export interface NewGameOptions {
@@ -124,9 +139,17 @@ export interface NewGameOptions {
   /** Geometry read from the map (core/WorldLayout). */
   world: WorldLayout;
   playerName?: string;
+  /** Speed the clock starts at (the player's "starting speed" setting). */
+  speed?: GameSpeed;
 }
 
-export function createGameState({ seed, world, playerName = '' }: NewGameOptions): GameState {
+export function createGameState(options: NewGameOptions): GameState {
+  const state = baseState(options);
+  // Score the starting reserve now, so the meter and its tooltip agree from the first frame.
+  return { ...state, scores: { ...state.scores, ecosystem: ecosystemBreakdown(state).score } };
+}
+
+function baseState({ seed, world, playerName = '', speed = 1 }: NewGameOptions): GameState {
   const chapter = BALANCE.story.startChapter;
   const rectOf = (id: string): TileRect => {
     const rect = world.zones[id];
@@ -138,7 +161,7 @@ export function createGameState({ seed, world, playerName = '' }: NewGameOptions
     seed,
     rngState: seed >>> 0,
     playerName,
-    clock: { day: 0, dayProgress: 0, speed: 1, paused: false },
+    clock: { day: 0, dayProgress: 0, speed, paused: false },
     chapter: { current: chapter },
     zones: Object.fromEntries(
       zonesData.zones.map((z) => {
@@ -176,6 +199,12 @@ export function createGameState({ seed, world, playerName = '' }: NewGameOptions
     resources: { money: BALANCE.economy.startMoney },
     economy: { lastDay: null, netHistory: [], inDebt: false },
     flags: {},
+    scores: {
+      ecosystem: 0, // filled in by createGameState
+      trust: BALANCE.scores.trustStart,
+      reputation: BALANCE.scores.reputationStart,
+    },
+    scoreHistory: [],
   };
 }
 

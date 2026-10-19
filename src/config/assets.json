@@ -15,7 +15,19 @@
     "building-solar_pump": "assets/sprites/building-solar_pump.png",
     "building-ranger_post": "assets/sprites/building-ranger_post.png",
     "building-observation_tower": "assets/sprites/building-observation_tower.png",
-    "building-scaffold": "assets/sprites/building-scaffold.png"
+    "building-scaffold": "assets/sprites/building-scaffold.png",
+    "icon-ecosystem": "assets/ui/icon-ecosystem.png",
+    "icon-trust": "assets/ui/icon-trust.png",
+    "icon-reputation": "assets/ui/icon-reputation.png",
+    "icon-alert-info": "assets/ui/icon-alert-info.png",
+    "icon-alert-warning": "assets/ui/icon-alert-warning.png",
+    "icon-alert-critical": "assets/ui/icon-alert-critical.png",
+    "icon-level-good": "assets/ui/icon-level-good.png",
+    "icon-level-fair": "assets/ui/icon-level-fair.png",
+    "icon-level-poor": "assets/ui/icon-level-poor.png",
+    "icon-species": "assets/ui/icon-species.png",
+    "icon-journal": "assets/ui/icon-journal.png",
+    "icon-settings": "assets/ui/icon-settings.png"
   },
   "spritesheets": {
     "impala": {

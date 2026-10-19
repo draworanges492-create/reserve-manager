@@ -66,6 +66,8 @@ export type GameEvents = {
   slotSelected: { slotId: string | null };
   slotHover: { slotId: string | null };
   staffHover: { staffId: string | null };
+  /** Pan the camera to a point (tiles), e.g. from an alert or the Species menu. */
+  focusRequested: { x: number; y: number };
   /** Pointer moved onto / off an animal herd. */
   animalHover: { group: AnimalGroupRef | null };
   /** Player clicked a herd to open its info panel (null closes it). */

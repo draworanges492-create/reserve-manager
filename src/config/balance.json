@@ -60,6 +60,19 @@
     "unpaidMoralePenalty": 15,
     "quitAfterUnpaidDays": 3
   },
+  "scores": {
+    "weights": {
+      "vegetation": 0.4,
+      "biodiversity": 0.4,
+      "water": 0.2
+    },
+    "trustStart": 50,
+    "reputationStart": 30,
+    "reputationDriftPerDay": 0.02,
+    "trustPerHire": 1,
+    "trustPerDismissal": -2,
+    "historyLength": 8
+  },
   "story": {
     "startChapter": 1
   },

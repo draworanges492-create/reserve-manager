@@ -65,6 +65,19 @@ export interface Balance {
     /** How many days of net income to remember (Ch 2 goal: positive 5 days running). */
     netHistoryDays: number;
   };
+  scores: {
+    /** Spec §6.8 Ecosystem Health weights. */
+    weights: { vegetation: number; biodiversity: number; water: number };
+    trustStart: number;
+    reputationStart: number;
+    /** Share of the gap to its target that Reputation closes each day (slow-moving). */
+    reputationDriftPerDay: number;
+    /** Spec §6.8 "jobs created" (DECISIONS D70). */
+    trustPerHire: number;
+    trustPerDismissal: number;
+    /** Recent score changes kept for tooltips. */
+    historyLength: number;
+  };
   staff: {
     /** Coverage one ranger adds to a zone (spec §6.5). */
     patrolStrength: number;

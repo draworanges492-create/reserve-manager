@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { ASSETS } from '../config/assets';
 import { GAME_TITLE } from '../config/game';
 import { createGameState } from '../core/GameState';
+import { getSettings } from '../core/Settings';
 import type { TiledMap } from '../core/TiledFormat';
 import { readWorldLayout } from '../core/WorldLayout';
 import { GameSession } from '../core/GameSession';
@@ -42,7 +43,9 @@ export class PreloadScene extends Phaser.Scene {
     // Wall-clock seeding is fine here: only the sim must be deterministic, given its seed.
     const seed = (Date.now() ^ Math.floor(Math.random() * 0xffffffff)) >>> 0;
     const tmj = (this.cache.tilemap.get('reserve') as { data: TiledMap }).data;
-    const session = new GameSession(createGameState({ seed, world: readWorldLayout(tmj) }));
+    const session = new GameSession(
+      createGameState({ seed, world: readWorldLayout(tmj), speed: getSettings().defaultSpeed }),
+    );
     setSession(this, session);
     // Dev-only handle for debugging in the browser console; removed from production builds.
     if (import.meta.env.DEV) Object.assign(window, { __session: session });

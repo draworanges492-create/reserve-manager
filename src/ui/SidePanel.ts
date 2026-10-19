@@ -30,14 +30,20 @@ const ACTION_W = 52;
 const ACTION_H = 13;
 
 /**
- * Right-hand list panel for the Build and Staff menus. Rebuilt only when its content
- * changes (compared by text), so live data stays cheap to show every frame.
+ * Right-hand list panel for the Build, Staff, Species, Journal and Settings menus. Rebuilt
+ * only when its content changes (compared by text), so live data stays cheap to show every
+ * frame. Taller than the screen allows? It scrolls with the mouse wheel.
  */
 export class SidePanel {
   private readonly root: Phaser.GameObjects.Container;
   private readonly bg: Phaser.GameObjects.Rectangle;
+  private readonly inner: Phaser.GameObjects.Container;
+  private readonly maskShape: Phaser.GameObjects.Graphics;
   private parts: Phaser.GameObjects.GameObject[] = [];
   private signature = '';
+  private contentHeight = 0;
+  private maxHeight = Number.MAX_SAFE_INTEGER;
+  private scroll = 0;
 
   constructor(private readonly scene: Phaser.Scene) {
     this.bg = scene.add
@@ -45,7 +51,20 @@ export class SidePanel {
       .setOrigin(0)
       .setStrokeStyle(1, UI.border)
       .setInteractive(); // swallow clicks
-    this.root = scene.add.container(0, 0, [this.bg]).setVisible(false);
+    this.inner = scene.add.container(0, 0);
+    // Clips rows to the panel when it scrolls (not on the display list itself).
+    this.maskShape = scene.make.graphics({}, false);
+    this.inner.setMask(this.maskShape.createGeometryMask());
+    this.root = scene.add.container(0, 0, [this.bg, this.inner]).setVisible(false);
+  }
+
+  /** Scroll by a wheel delta; returns true if the panel used it. */
+  scrollBy(delta: number): boolean {
+    const max = Math.max(0, this.contentHeight - this.maxHeight);
+    if (max === 0) return false;
+    this.scroll = Math.min(max, Math.max(0, this.scroll + delta * 0.5));
+    this.applyScroll();
+    return true;
   }
 
   get visible(): boolean {
@@ -55,6 +74,7 @@ export class SidePanel {
   hide(): void {
     this.root.setVisible(false);
     this.signature = '';
+    this.scroll = 0;
   }
 
   contains(x: number, y: number): boolean {
@@ -63,17 +83,24 @@ export class SidePanel {
     return x >= left && y >= top && x <= left + this.bg.width && y <= top + this.bg.height;
   }
 
-  /** Show `content` at the right edge, starting at `top`. */
-  show(content: SideContent, top: number): void {
+  /** Show `content` at the right edge, from `top`, at most `maxHeight` tall (then it scrolls). */
+  show(content: SideContent, top: number, maxHeight: number): void {
+    const wasHidden = !this.root.visible;
     this.root.setVisible(true).setPosition(this.scene.scale.width - WIDTH - PAD, top);
+    if (wasHidden || maxHeight !== this.maxHeight) {
+      this.maxHeight = maxHeight;
+      this.signature = ''; // re-layout for the new size
+    }
     const signature = JSON.stringify([
       content.title,
       content.intro,
       content.rows.map((r) => [r.lines, r.actions.map((a) => [a.label, a.enabled])]),
     ]);
-    if (signature === this.signature) return;
-    this.signature = signature;
-    this.rebuild(content);
+    if (signature !== this.signature) {
+      this.signature = signature;
+      this.rebuild(content);
+    }
+    this.applyScroll(); // keeps the clip mask on the panel if the window resized
   }
 
   private rebuild(content: SideContent): void {
@@ -81,7 +108,7 @@ export class SidePanel {
     this.parts = [];
     const add = <T extends Phaser.GameObjects.GameObject>(obj: T): T => {
       this.parts.push(obj);
-      this.root.add(obj);
+      this.inner.add(obj);
       return obj;
     };
     const textWidth = WIDTH - PAD * 2;
@@ -130,6 +157,21 @@ export class SidePanel {
         y = Math.max(y, rowTop + (i + 1) * (ACTION_H + 2));
       });
     }
-    this.bg.setSize(WIDTH, y + PAD);
+    this.contentHeight = y + PAD;
+    this.bg.setSize(WIDTH, Math.min(this.contentHeight, this.maxHeight));
+    this.scroll = Math.min(this.scroll, Math.max(0, this.contentHeight - this.maxHeight));
+    this.applyScroll();
+  }
+
+  private applyScroll(): void {
+    this.inner.setY(-this.scroll);
+    const { x, y } = this.root;
+    this.maskShape.clear().fillStyle(0xffffff).fillRect(x, y, WIDTH, this.bg.height);
+    // Masked-out buttons would still catch clicks, so hide the ones outside the window.
+    for (const part of this.parts) {
+      if (!(part instanceof Button)) continue;
+      const top = part.y - this.scroll;
+      part.setVisible(top >= 0 && top + 13 <= this.bg.height);
+    }
   }
 }

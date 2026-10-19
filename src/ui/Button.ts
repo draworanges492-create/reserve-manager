@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { crispText } from './crispText';
+import { clearHoverTip, setHoverTip } from './hoverTip';
 import { TEXT_SIZE, UI } from './theme';
 
 export interface ButtonOptions {
@@ -8,6 +9,8 @@ export interface ButtonOptions {
   label?: string;
   icon?: string;
   onClick: () => void;
+  /** Tooltip lines while hovered (spec §7.4: tooltips everywhere). */
+  tooltip?: () => string[];
 }
 
 const ICON_GAP = 3;
@@ -43,8 +46,16 @@ export class Button extends Phaser.GameObjects.Container {
     }
     if (label) this.add(label.setX(Math.round(x0)));
 
-    this.bg.on(Phaser.Input.Events.POINTER_OVER, () => this.setHovered(true));
-    this.bg.on(Phaser.Input.Events.POINTER_OUT, () => this.setHovered(false));
+    const tip = opts.tooltip;
+    this.bg.on(Phaser.Input.Events.POINTER_OVER, () => {
+      this.setHovered(true);
+      if (tip) setHoverTip(tip);
+    });
+    this.bg.on(Phaser.Input.Events.POINTER_OUT, () => {
+      this.setHovered(false);
+      if (tip) clearHoverTip(tip);
+    });
+    if (tip) this.once(Phaser.GameObjects.Events.DESTROY, () => clearHoverTip(tip));
     this.bg.on(Phaser.Input.Events.POINTER_DOWN, () => {
       if (this.enabled) opts.onClick();
     });

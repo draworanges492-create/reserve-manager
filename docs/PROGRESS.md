@@ -204,12 +204,41 @@ Place → spot A built a borehole pump over 3 days, Waterhole A switched to pump
 showed "Pumps +6/day into Waterhole A"; a ranger post was placed the same way; 0 console
 errors.
 
-**Next — Phase 6 (UI pass):** full HUD (score meters), context panels, alerts feed,
-tooltips everywhere, settings, keyboard shortcuts, colorblind toggle; no overlapping UI at
-640×360.
-
 **Known issues**
 
 - Open questions D39/D60 (unlock chapters, build times), D51/D57 (predation, neglect).
-- Long staff lists will overflow the Staff panel (no scrolling yet) — Phase 6.
+- Hard tile edges; animals draw over trees; touch untested on a device.
+
+## Phase 6 — UI pass ✅ (2026-10-19)
+
+**Done**
+
+- `sim/Scores.ts` (day-tick step 9): Ecosystem Health (spec formula), Community Trust
+  (jobs for now), Reputation (slow drift); recent changes kept for tooltips.
+- Top bar: date (auto-compact), day progress / "Paused", money, Ecosystem / Trust /
+  Reputation meters, speed buttons — every part has a tooltip explaining its number.
+- Alerts feed (right): colour-coded cards with shape badges; click pans to the cause and
+  opens its panel; × dismisses.
+- Toolbar: Build, Staff, Species, Journal, Settings (each with tooltip + shortcut).
+- Species menu (counts, where, critical flag, Show → pans + opens the herd).
+- Settings: music / effects volume (stored), starting speed, colourblind colours, text
+  size (rebuilds HUD), day/night tint, edge scrolling, controls list, new game.
+- Side menus scroll with the mouse wheel when taller than the screen.
+- Settings saved per browser; HUD avoids overlaps down to 640×360.
+
+**Checks:** `build` ✅ · `test` ✅ (140) · `lint` ✅ · `validate-data` ✅ · browser:
+measured every HUD element at 640×360 (normal and large text) and 1512×865 — no overlaps,
+nothing off-screen; colourblind toggle switched colours + icons; Species → Show and an
+alert click both panned the camera; tooltips correct; real alerts appeared from the sim
+(season, critical lions); 0 console errors.
+
+**Next — Phase 7 (Dialogue & Chapters 1–2):** DialogueRunner + DialogueScene,
+StoryManager (flags, goals, chapters.json), full Chapter 1 and 2 content (~150–250 lines),
+journal, the 3-clue pump investigation; playable start to end of Chapter 2.
+
+**Known issues**
+
+- Waterhole A starts the game already dry, so it never triggers a "drying up" alert —
+  Chapter 1's tutorial will point the player at it.
+- Open questions D39/D60 (unlock chapters, build times), D51/D57 (predation, neglect).
 - Hard tile edges; animals draw over trees; touch untested on a device.

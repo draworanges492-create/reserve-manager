@@ -11,7 +11,9 @@ export class TimeOfDayOverlay {
     this.rect = scene.add.rectangle(0, 0, 1, 1, 0x000000, 0).setOrigin(0).setDepth(-1);
   }
 
-  update(dayProgress: number): void {
+  update(dayProgress: number, enabled = true): void {
+    this.rect.setVisible(enabled);
+    if (!enabled) return;
     this.rect.setSize(this.scene.scale.width, this.scene.scale.height);
     const next = KEYS.findIndex((k) => k.at > dayProgress);
     const b = KEYS[next === -1 ? KEYS.length - 1 : next];

@@ -8,6 +8,7 @@ import {
   CAMERA_WHEEL_STEP,
   CAMERA_ZOOM_STEPS,
 } from '../../config/game';
+import { getSettings } from '../../core/Settings';
 import { type Bounds, minZoomIndex, nextZoomIndex, scrollToKeepPoint } from './cameraMath';
 
 type Direction = 'up' | 'down' | 'left' | 'right';
@@ -78,7 +79,8 @@ export class CameraController {
     let dy = (held('down') ? 1 : 0) - (held('up') ? 1 : 0);
 
     const p = this.scene.input.activePointer;
-    if (this.pointerInside && !p.wasTouch && !p.isDown && !this.isOverUI(p)) {
+    const edgeScroll = getSettings().edgeScroll;
+    if (edgeScroll && this.pointerInside && !p.wasTouch && !p.isDown && !this.isOverUI(p)) {
       const m = CAMERA_EDGE_SCROLL_MARGIN;
       if (p.x < m) dx = -1;
       else if (p.x > cam.width - m) dx = 1;

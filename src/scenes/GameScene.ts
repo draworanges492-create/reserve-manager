@@ -26,6 +26,7 @@ const TILE_LAYERS = [
 ] as const;
 /** Where the camera starts: between HQ and Waterhole A, in tiles. */
 const START_VIEW_TILE = { x: 56, y: 60 };
+const FOCUS_PAN_MS = 500;
 
 /** The world view: tilemap, zones, fences, waterholes and herds. Drives the sim clock. */
 export class GameScene extends Phaser.Scene {
@@ -110,6 +111,10 @@ export class GameScene extends Phaser.Scene {
       this.placing = buildingId !== null;
     });
     // Story progress (or the dev chapter jump) opened zones: widen the camera, lift the fog.
+    // Alerts and the Species menu ask the camera to go somewhere (spec §7.4).
+    const offFocus = eventBus.on('focusRequested', ({ x, y }) => {
+      this.cameras.main.pan(x * map.tileWidth, y * map.tileHeight, FOCUS_PAN_MS, 'Sine.easeInOut');
+    });
     const offZones = eventBus.on('zonesChanged', () => {
       this.overlay.refreshLocks((id) => !!session.state.zones[id]?.unlocked);
       this.cameraController.setBounds(this.unlockedBounds(map.tileWidth));
@@ -130,6 +135,7 @@ export class GameScene extends Phaser.Scene {
       offAnimalSelect();
       offDegraded();
       offZones();
+      offFocus();
       offSlotSelect();
       offBuildMode();
     });

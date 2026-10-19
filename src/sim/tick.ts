@@ -4,6 +4,7 @@ import { Rng } from '../core/Rng';
 import { runConstruction } from './Construction';
 import { runEconomy } from './Economy';
 import { runPopulation } from './Population';
+import { runScores } from './Scores';
 import { runSeasons } from './Seasons';
 import { runVegetation } from './Vegetation';
 import { runWater } from './Water';
@@ -22,6 +23,7 @@ const STEPS: readonly SimStep[] = [
   runPopulation,
   runConstruction,
   runEconomy,
+  runScores,
 ];
 
 export function runDayTick(state: GameState): StepResult {

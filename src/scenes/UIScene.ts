@@ -1,24 +1,28 @@
 import Phaser from 'phaser';
 import { GAME_SPEEDS } from '../config/game';
 import { zoneDef } from '../core/content';
-import { type AnimalGroupRef, eventBus } from '../core/EventBus';
+import { type AnimalGroupRef, eventBus, type GameEvents } from '../core/EventBus';
 import type { GameSession } from '../core/GameSession';
+import { getSettings, onSettingsChanged, updateSettings } from '../core/Settings';
 import { t } from '../core/text';
 import { isDegraded } from '../sim/Vegetation';
+import { AlertFeed } from '../ui/AlertFeed';
+import { type Alert, type AlertEvent, AlertList, alertFor } from '../ui/alerts';
 import { animalHoverLines, animalPanelContent, zonePanelContent } from '../ui/animalInfo';
 import { Button } from '../ui/Button';
-import { crispText, withShadow } from '../ui/crispText';
+import { crispText } from '../ui/crispText';
 import {
   buildingHover,
   buildingPanelContent,
   buildMenu,
-  moneyTooltip,
   staffHover,
   staffMenu,
 } from '../ui/economyInfo';
+import { hoverTipLines } from '../ui/hoverTip';
 import { InfoPanel } from '../ui/InfoPanel';
+import { journalMenu, settingsMenu, speciesMenu } from '../ui/menus';
 import { SidePanel } from '../ui/SidePanel';
-import { TEXT_SIZE, UI } from '../ui/theme';
+import { TEXT_SIZE } from '../ui/theme';
 import { TimeOfDayOverlay } from '../ui/TimeOfDayOverlay';
 import { Tooltip } from '../ui/Tooltip';
 import { TOP_BAR_HEIGHT, TopBar } from '../ui/TopBar';
@@ -27,16 +31,26 @@ import { placingText } from './BuildingLayer';
 import { getSession } from './session';
 
 const MARGIN = 6;
-const SPEED_KEYS = ['ONE', 'TWO', 'THREE'] as const;
-const TOOL_W = 58;
+const TOOL_W = 62;
 const TOOL_H = 16;
+/** Events that can become alerts (spec §7.4). */
+const ALERT_EVENTS: AlertEvent['type'][] = [
+  'waterholeStateChanged',
+  'populationCritical',
+  'zoneDegradedChanged',
+  'staffQuit',
+  'debtChanged',
+  'buildingCompleted',
+  'seasonChanged',
+];
 
+type Menu = 'build' | 'staff' | 'species' | 'journal' | 'settings';
 type Selection =
   | { kind: 'animal'; group: AnimalGroupRef }
   | { kind: 'zone'; zoneId: string }
   | { kind: 'slot'; slotId: string };
 
-/** HUD overlay, running in parallel with GameScene. */
+/** HUD overlay, running in parallel with GameScene (spec §7.4). */
 export class UIScene extends Phaser.Scene {
   private session!: GameSession;
   private topBar!: TopBar;
@@ -44,9 +58,10 @@ export class UIScene extends Phaser.Scene {
   private tooltip!: Tooltip;
   private infoPanel!: InfoPanel;
   private sidePanel!: SidePanel;
+  private alertFeed!: AlertFeed;
+  private readonly alerts = new AlertList();
   private toolbar: Button[] = [];
   private banner!: Phaser.GameObjects.Text;
-  private hintHeight = 0;
 
   private hover: {
     waterhole: string | null;
@@ -55,8 +70,11 @@ export class UIScene extends Phaser.Scene {
     staff: string | null;
   } = { waterhole: null, animal: null, slot: null, staff: null };
   private selection: Selection | null = null;
-  private menu: 'build' | 'staff' | null = null;
+  private menu: Menu | null = null;
   private placing: string | null = null;
+  private confirmNewGame = false;
+  /** Text size the HUD was built with; a different setting rebuilds it. */
+  private builtTextSize = getSettings().textSize;
 
   constructor() {
     super('UIScene');
@@ -64,10 +82,19 @@ export class UIScene extends Phaser.Scene {
 
   create(): void {
     this.session = getSession(this);
+    // Phaser reuses this object on restart, so record the size we're building with now.
+    this.builtTextSize = getSettings().textSize;
+    this.hover = { waterhole: null, animal: null, slot: null, staff: null };
+    this.selection = null;
     this.timeOfDay = new TimeOfDayOverlay(this);
     this.topBar = new TopBar(this, this.session);
-    this.infoPanel = new InfoPanel(this, () => this.select(null));
+    this.infoPanel = new InfoPanel(this, () => this.closeSelection());
     this.sidePanel = new SidePanel(this);
+    this.alertFeed = new AlertFeed(
+      this,
+      (alert) => this.openAlert(alert),
+      (alert) => this.alerts.remove(alert.key),
+    );
     this.tooltip = new Tooltip(this);
 
     const zoneLabel = crispText(this, 0, TOP_BAR_HEIGHT + MARGIN, '', {
@@ -84,44 +111,12 @@ export class UIScene extends Phaser.Scene {
     })
       .setOrigin(0.5, 0)
       .setVisible(false);
-    const hint = withShadow(
-      crispText(
-        this,
-        MARGIN,
-        0,
-        `${t('camera.hint')} · ${t('hud.speedHint')} · ${t('hud.menuHint')}`,
-        {
-          fontSize: TEXT_SIZE.small,
-          color: UI.text,
-        },
-      ),
-    )
-      .setAlpha(0.85)
-      .setOrigin(0, 1);
-    this.hintHeight = hint.height + MARGIN;
-
-    this.toolbar = [
-      new Button(this, 0, 0, {
-        width: TOOL_W,
-        height: TOOL_H,
-        icon: 'icon-build',
-        label: t('hud.build'),
-        onClick: () => this.toggleMenu('build'),
-      }),
-      new Button(this, 0, 0, {
-        width: TOOL_W,
-        height: TOOL_H,
-        icon: 'icon-staff',
-        label: t('hud.staff'),
-        onClick: () => this.toggleMenu('staff'),
-      }),
-    ];
+    this.createToolbar();
 
     const layout = (): void => {
       const w = this.scale.width;
       zoneLabel.setX(Math.round(w / 2));
       this.banner.setX(Math.round(w / 2));
-      hint.setY(this.scale.height - MARGIN);
       this.toolbar.forEach((b, i) =>
         b.setPosition(
           w - MARGIN - (this.toolbar.length - i) * (TOOL_W + 3) + 3,
@@ -132,8 +127,16 @@ export class UIScene extends Phaser.Scene {
     };
     layout();
     this.scale.on(Phaser.Scale.Events.RESIZE, layout);
-
     this.bindKeys();
+
+    // Wheel over a menu scrolls it (the camera ignores wheel events over the HUD).
+    this.input.on(
+      Phaser.Input.Events.POINTER_WHEEL,
+      (p: Phaser.Input.Pointer, _o: unknown, _dx: number, dy: number) => {
+        if (this.sidePanel.contains(p.x, p.y)) this.sidePanel.scrollBy(dy);
+      },
+    );
+
     const offs = [
       eventBus.on('animalHover', ({ group }) => (this.hover.animal = group)),
       eventBus.on('waterholeHover', ({ id }) => (this.hover.waterhole = id)),
@@ -166,6 +169,15 @@ export class UIScene extends Phaser.Scene {
             : def.name;
         zoneLabel.setText(label).setVisible(true);
       }),
+      ...ALERT_EVENTS.map((type) =>
+        eventBus.on(type, (payload: GameEvents[typeof type]) =>
+          this.alerts.apply(alertFor(this.session.state, { type, payload } as AlertEvent)),
+        ),
+      ),
+      // Bigger or smaller text needs the HUD rebuilt; everything else applies live.
+      onSettingsChanged((s) => {
+        if (s.textSize !== this.builtTextSize) this.scene.restart();
+      }),
     ];
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
       offs.forEach((off) => off());
@@ -187,6 +199,7 @@ export class UIScene extends Phaser.Scene {
       this.topBar.contains(x, y) ||
       this.infoPanel.contains(x, y) ||
       this.sidePanel.contains(x, y) ||
+      this.alertFeed.contains(x, y) ||
       onToolbar
     );
   }
@@ -194,55 +207,117 @@ export class UIScene extends Phaser.Scene {
   override update(): void {
     const { state } = this.session;
     this.topBar.update();
-    this.timeOfDay.update(state.clock.dayProgress);
+    this.timeOfDay.update(state.clock.dayProgress, getSettings().timeOfDay);
     this.updateTooltip();
-    this.infoPanel.update(state, this.scale.height - this.hintHeight);
+    this.infoPanel.update(state, this.scale.height);
 
+    const top = TOP_BAR_HEIGHT + MARGIN;
+    const maxHeight = this.scale.height - top - TOOL_H - MARGIN * 3;
+    const content = this.menuContent();
+    if (content) this.sidePanel.show(content, top, maxHeight);
+    else if (this.sidePanel.visible) this.sidePanel.hide();
+
+    this.alerts.expire(state.clock.day);
+    this.alertFeed.render(this.alerts.all, top, !this.menu);
+
+    const menus: Menu[] = ['build', 'staff', 'species', 'journal', 'settings'];
+    this.toolbar.forEach((b, i) =>
+      b.setSelected(this.menu === menus[i] || (i === 0 && !!this.placing)),
+    );
+    this.banner.setVisible(!!this.placing);
+    if (this.placing) this.banner.setText(placingText(this.placing));
+  }
+
+  private createToolbar(): void {
+    const tools: { menu: Menu; icon: string; label: string; tip: string }[] = [
+      { menu: 'build', icon: 'icon-build', label: t('hud.build'), tip: t('tool.build') },
+      { menu: 'staff', icon: 'icon-staff', label: t('hud.staff'), tip: t('tool.staff') },
+      { menu: 'species', icon: 'icon-species', label: t('hud.species'), tip: t('tool.species') },
+      { menu: 'journal', icon: 'icon-journal', label: t('hud.journal'), tip: t('tool.journal') },
+      {
+        menu: 'settings',
+        icon: 'icon-settings',
+        label: t('hud.settings'),
+        tip: t('tool.settings'),
+      },
+    ];
+    this.toolbar = tools.map(
+      (tool) =>
+        new Button(this, 0, 0, {
+          width: TOOL_W,
+          height: TOOL_H,
+          icon: tool.icon,
+          label: tool.label,
+          onClick: () => this.toggleMenu(tool.menu),
+          tooltip: () => [tool.tip],
+        }),
+    );
+  }
+
+  private menuContent(): ReturnType<typeof buildMenu> | null {
+    const state = this.session.state;
     const dispatch = (c: Parameters<GameSession['dispatch']>[0]): void => {
       this.session.dispatch(c);
     };
-    if (this.menu === 'build') {
-      this.sidePanel.show(
-        buildMenu(state, (buildingId) => eventBus.emit('buildModeChanged', { buildingId })),
-        TOP_BAR_HEIGHT + MARGIN,
-      );
-    } else if (this.menu === 'staff') {
-      this.sidePanel.show(staffMenu(state, dispatch), TOP_BAR_HEIGHT + MARGIN);
-    } else if (this.sidePanel.visible) {
-      this.sidePanel.hide();
+    switch (this.menu) {
+      case 'build':
+        return buildMenu(state, (buildingId) => eventBus.emit('buildModeChanged', { buildingId }));
+      case 'staff':
+        return staffMenu(state, dispatch);
+      case 'species':
+        return speciesMenu(state, (zoneId, speciesId) => {
+          const r = state.zones[zoneId]?.rect;
+          if (r) eventBus.emit('focusRequested', { x: r.x + r.w / 2, y: r.y + r.h / 2 });
+          eventBus.emit('animalSelected', { group: { zoneId, speciesId } });
+        });
+      case 'journal':
+        return journalMenu();
+      case 'settings':
+        return settingsMenu(getSettings(), updateSettings, {
+          confirming: this.confirmNewGame,
+          onClick: () => {
+            // Two clicks, so a stray click can't throw a game away. Saves come in Phase 8.
+            if (this.confirmNewGame) window.location.reload();
+            this.confirmNewGame = true;
+          },
+        });
+      default:
+        return null;
     }
-    this.toolbar[0]?.setSelected(this.menu === 'build' || !!this.placing);
-    this.toolbar[1]?.setSelected(this.menu === 'staff');
-    this.banner.setVisible(!!this.placing);
-    if (this.placing) this.banner.setText(placingText(this.placing));
   }
 
   private bindKeys(): void {
     const kb = this.input.keyboard;
     kb?.on('keydown-SPACE', () => this.session.dispatch({ type: 'togglePause' }));
-    SPEED_KEYS.forEach((key, i) =>
+    (['ONE', 'TWO', 'THREE'] as const).forEach((key, i) =>
       kb?.on(`keydown-${key}`, () =>
         this.session.dispatch({ type: 'setSpeed', speed: GAME_SPEEDS[i] ?? 1 }),
       ),
     );
-    kb?.on('keydown-B', () => this.toggleMenu('build'));
-    kb?.on('keydown-H', () => this.toggleMenu('staff'));
+    const menuKeys: [string, Menu][] = [
+      ['B', 'build'],
+      ['H', 'staff'],
+      ['K', 'species'],
+      ['J', 'journal'],
+      ['O', 'settings'],
+    ];
+    for (const [key, menu] of menuKeys) kb?.on(`keydown-${key}`, () => this.toggleMenu(menu));
     // Esc backs out one step: build mode, then a menu, then the info panel.
     kb?.on('keydown-ESC', () => {
       if (this.placing) eventBus.emit('buildModeChanged', { buildingId: null });
       else if (this.menu) this.menu = null;
-      else this.select(null);
+      else this.closeSelection();
     });
   }
 
-  private toggleMenu(menu: 'build' | 'staff'): void {
+  private toggleMenu(menu: Menu): void {
     if (this.placing) eventBus.emit('buildModeChanged', { buildingId: null });
     this.menu = this.menu === menu ? null : menu;
+    this.confirmNewGame = false;
   }
 
   /** Close the current selection (each layer clears its own highlight). */
-  private select(selection: Selection | null): void {
-    if (selection) return;
+  private closeSelection(): void {
     const current = this.selection;
     if (current?.kind === 'animal') eventBus.emit('animalSelected', { group: null });
     if (current?.kind === 'zone') eventBus.emit('zoneSelected', { zoneId: null });
@@ -271,21 +346,36 @@ export class UIScene extends Phaser.Scene {
     }
   }
 
+  /** Clicking an alert pans to its cause and opens what it's about (spec §7.4). */
+  private openAlert(alert: Alert): void {
+    if (alert.focus) eventBus.emit('focusRequested', alert.focus);
+    const target = alert.target;
+    if (target?.kind === 'zone') eventBus.emit('zoneSelected', { zoneId: target.zoneId });
+    if (target?.kind === 'animal') {
+      eventBus.emit('animalSelected', {
+        group: { zoneId: target.zoneId, speciesId: target.speciesId },
+      });
+    }
+    if (target?.kind === 'slot') eventBus.emit('slotSelected', { slotId: target.slotId });
+    if (alert.severity === 'info') this.alerts.remove(alert.key);
+  }
+
   private updateTooltip(): void {
     const { state } = this.session;
     const p = this.input.activePointer;
     const h = this.hover;
-    const lines = h.waterhole
-      ? waterholeTooltip(state, h.waterhole)
-      : h.staff
-        ? staffHover(state, h.staff)
-        : h.animal
-          ? animalHoverLines(state, h.animal.zoneId, h.animal.speciesId)
-          : h.slot
-            ? buildingHover(state, h.slot)
-            : this.topBar.overMoney(p.x, p.y)
-              ? moneyTooltip(state)
-              : [];
+    let lines = hoverTipLines();
+    if (!lines.length) {
+      lines = h.waterhole
+        ? waterholeTooltip(state, h.waterhole)
+        : h.staff
+          ? staffHover(state, h.staff)
+          : h.animal
+            ? animalHoverLines(state, h.animal.zoneId, h.animal.speciesId)
+            : h.slot
+              ? buildingHover(state, h.slot)
+              : this.topBar.tooltipAt(p.x, p.y);
+    }
     if (lines.length) this.tooltip.show(lines, p.x, p.y);
     else this.tooltip.hide();
   }
