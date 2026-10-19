@@ -4,8 +4,11 @@ export const DEPTH = {
   water: 1,
   deco: 2,
   objects: 3,
+  waterholes: 4,
   actors: 10,
   fences: 20,
   zoneDim: 21,
   hover: 22,
+  effects: 30,
+  floatingText: 40,
 } as const;

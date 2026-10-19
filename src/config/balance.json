@@ -4,6 +4,31 @@
     "seasonOrder": ["dry", "wet"],
     "maxDayTicksPerUpdate": 4
   },
+  "water": {
+    "maxLevel": 100,
+    "decayPerDay": 4,
+    "seasonDecayMult": {
+      "dry": 2,
+      "wet": 0.5
+    },
+    "rainPerDay": {
+      "dry": 0,
+      "wet": 3
+    },
+    "pumpRefillPerDay": {
+      "borehole": 6,
+      "solar": 8
+    },
+    "manualRefillAmount": 5,
+    "refillHoldIntervalMs": 300,
+    "rangeTiles": 20,
+    "availableMinLevel": 30,
+    "stateThresholds": {
+      "clear": 60,
+      "muddy": 30,
+      "drying": 10
+    }
+  },
   "economy": {
     "startMoney": 500
   },
@@ -12,16 +37,47 @@
   },
   "render": {
     "maxAnimalSpritesPerZone": 12,
-    "seasonTint": { "dry": "#ffe6bf", "wet": "#e4ffe2" },
+    "seasonTint": {
+      "dry": "#ffe6bf",
+      "wet": "#e4ffe2"
+    },
     "seasonTintFadeMs": 1500,
     "timeOfDay": [
-      { "at": 0, "color": "#14204a", "alpha": 0.2 },
-      { "at": 0.08, "color": "#d9822b", "alpha": 0.1 },
-      { "at": 0.18, "color": "#d9822b", "alpha": 0 },
-      { "at": 0.72, "color": "#d9822b", "alpha": 0 },
-      { "at": 0.82, "color": "#d9822b", "alpha": 0.12 },
-      { "at": 0.9, "color": "#14204a", "alpha": 0.22 },
-      { "at": 1, "color": "#14204a", "alpha": 0.2 }
+      {
+        "at": 0,
+        "color": "#14204a",
+        "alpha": 0.2
+      },
+      {
+        "at": 0.08,
+        "color": "#d9822b",
+        "alpha": 0.1
+      },
+      {
+        "at": 0.18,
+        "color": "#d9822b",
+        "alpha": 0
+      },
+      {
+        "at": 0.72,
+        "color": "#d9822b",
+        "alpha": 0
+      },
+      {
+        "at": 0.82,
+        "color": "#d9822b",
+        "alpha": 0.12
+      },
+      {
+        "at": 0.9,
+        "color": "#14204a",
+        "alpha": 0.22
+      },
+      {
+        "at": 1,
+        "color": "#14204a",
+        "alpha": 0.2
+      }
     ]
   }
 }

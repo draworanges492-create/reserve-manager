@@ -10,7 +10,7 @@ replaced one file at a time. Sizes follow DECISIONS D12 (24 px tiles).
 - `npm run gen:placeholders` regenerates placeholders but **skips any PNG that is not a
   placeholder**, so your finished art is never overwritten.
 - `npm run preview:art -- out.png` writes an enlarged contact sheet of all placeholder art.
-- Palette: `public/assets/palette.gpl` (31 colours; spec limit 32). Load it in
+- Palette: `public/assets/palette.gpl` (32 colours; spec limit 32 — full). Load it in
   LibreSprite / Aseprite / Krita.
 
 ## Readability rules (DECISIONS D13)
@@ -76,6 +76,6 @@ All face **right** (the game mirrors them). Frames sit side by side in one strip
 | shadow-lg | 40×10      | 1        | under 48 px sprites                    |
 
 Still to come (later phases): wildebeest 24, giraffe 48, leopard 24, rhino 48; fence
-crew / tracker / vet / culling team; waterhole states (clear, muddy, drying, dry);
+crew / tracker / vet / culling team;
 buildings (pump, solar pump, ranger post, tower, lodge); portraits 72×72 with 4
 expressions each; 9-slice UI panels.

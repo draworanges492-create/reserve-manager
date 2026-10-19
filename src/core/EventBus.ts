@@ -1,5 +1,6 @@
 import type { Season } from '../config/balance';
 import type { GameSpeed } from '../config/game';
+import type { StringKey } from './text';
 
 type Handler<T> = (payload: T) => void;
 
@@ -31,6 +32,13 @@ export type GameEvents = {
   dayTick: { day: number };
   seasonChanged: { season: Season };
   speedChanged: { speed: GameSpeed; paused: boolean };
+  waterholeStateChanged: { id: string; state: 'clear' | 'muddy' | 'drying' | 'dry' };
+  /** Player hand-refilled a waterhole (drives the bucket/splash animation). */
+  waterholeRefilled: { id: string; level: number };
+  /** Pointer moved onto / off a waterhole (null = none). */
+  waterholeHover: { id: string | null };
+  /** A command failed; UI shows the reason near where the player acted. */
+  commandFailed: { reason: StringKey; worldX?: number; worldY?: number };
 };
 
 export const eventBus = new EventBus<GameEvents>();

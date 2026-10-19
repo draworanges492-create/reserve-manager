@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { createGameState } from '../../src/core/GameState';
+import { newGame } from '../helpers/newGame';
 
 describe('createGameState', () => {
-  const state = createGameState({ seed: 123, playerName: 'Sam' });
+  const state = newGame(123, 'Sam');
 
   it('starts at day 0, chapter 1, with the starting money', () => {
     expect(state.clock).toEqual({ day: 0, dayProgress: 0, speed: 1, paused: false });

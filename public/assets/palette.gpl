@@ -14,6 +14,7 @@ Columns: 8
  61  96 121	waterDeep
  86 128 154	water
 127 163 181	waterLight
+111 102  80	mud
  51  72  44	treeDark
  67  96  58	tree
 106  74  50	wood

@@ -2,6 +2,7 @@
 import type { GameState } from '../core/GameState';
 import { Rng } from '../core/Rng';
 import { runSeasons } from './Seasons';
+import { runWater } from './Water';
 import type { SimEvent, SimStep, StepResult } from './types';
 
 /**
@@ -9,7 +10,7 @@ import type { SimEvent, SimStep, StepResult } from './types';
  * 6 Poaching → 7 Tourism → 8 Economy → 9 Scores → 10 Events → 11 Story → 12 Autosave.
  * Steps are added here as their phases land.
  */
-const STEPS: readonly SimStep[] = [runSeasons];
+const STEPS: readonly SimStep[] = [runSeasons, runWater];
 
 export function runDayTick(state: GameState): StepResult {
   const rng = Rng.fromState(state.rngState);

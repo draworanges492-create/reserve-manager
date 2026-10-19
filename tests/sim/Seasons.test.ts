@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createGameState } from '../../src/core/GameState';
+import { newGame } from '../helpers/newGame';
 import { Rng } from '../../src/core/Rng';
 import { calendarOf, runSeasons } from '../../src/sim/Seasons';
 
@@ -28,14 +28,14 @@ describe('calendarOf', () => {
 
 describe('runSeasons', () => {
   it('advances the day without mutating the input', () => {
-    const state = createGameState({ seed: 1 });
+    const state = newGame(1);
     const { state: next } = runSeasons(state, new Rng(1));
     expect(next.clock.day).toBe(1);
     expect(state.clock.day).toBe(0);
   });
 
   it('reports a season change only on the boundary day', () => {
-    const base = createGameState({ seed: 1 });
+    const base = newGame(1);
     const at = (day: number) =>
       runSeasons({ ...base, clock: { ...base.clock, day } }, new Rng(1)).events;
     expect(at(28)).toEqual([]);

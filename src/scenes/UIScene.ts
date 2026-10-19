@@ -4,6 +4,8 @@ import { eventBus } from '../core/EventBus';
 import { t } from '../core/text';
 import { crispText } from '../ui/crispText';
 import { TimeOfDayOverlay } from '../ui/TimeOfDayOverlay';
+import { Tooltip } from '../ui/Tooltip';
+import { waterholeTooltip } from '../ui/waterholeTooltip';
 import { TOP_BAR_HEIGHT, TopBar } from '../ui/TopBar';
 import { UI } from '../ui/theme';
 import { zoneDef } from './map/mapObjects';
@@ -16,6 +18,8 @@ const SPEED_KEYS = ['ONE', 'TWO', 'THREE'] as const;
 export class UIScene extends Phaser.Scene {
   private topBar!: TopBar;
   private timeOfDay!: TimeOfDayOverlay;
+  private tooltip!: Tooltip;
+  private hoveredWaterhole: string | null = null;
 
   constructor() {
     super('UIScene');
@@ -53,6 +57,10 @@ export class UIScene extends Phaser.Scene {
       ),
     );
 
+    const offWater = eventBus.on('waterholeHover', ({ id }) => {
+      this.hoveredWaterhole = id;
+      if (!id) this.tooltip.hide();
+    });
     const off = eventBus.on('zoneHover', ({ zoneId }) => {
       const def = zoneId ? zoneDef(zoneId) : undefined;
       if (!def) {
@@ -66,14 +74,31 @@ export class UIScene extends Phaser.Scene {
         )
         .setVisible(true);
     });
+    this.tooltip = new Tooltip(this);
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
       off();
+      offWater();
       this.scale.off(Phaser.Scale.Events.RESIZE, layout);
     });
   }
 
+  /**
+   * Whether a screen point is over HUD chrome. Computed from our own panel bounds, NOT
+   * with `input.hitTestPointer`: Phaser's hit test reuses one shared array, so calling it
+   * while GameScene is processing a pointer event wipes GameScene's hits and its
+   * hover (over/out) events silently stop working.
+   */
+  isPointerOverUI(x: number, y: number): boolean {
+    return this.topBar.contains(x, y);
+  }
+
   override update(): void {
     this.topBar.update();
-    this.timeOfDay.update(getSession(this).state.clock.dayProgress);
+    const { state } = getSession(this);
+    this.timeOfDay.update(state.clock.dayProgress);
+    if (this.hoveredWaterhole) {
+      const p = this.input.activePointer;
+      this.tooltip.show(waterholeTooltip(state, this.hoveredWaterhole), p.x, p.y);
+    }
   }
 }

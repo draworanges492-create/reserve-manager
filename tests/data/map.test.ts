@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { checkMap } from '../../tools/map/checks';
-import type { TiledMap, TiledObjectLayer } from '../../tools/map/tiled';
+import type { TiledMap, TiledObjectLayer } from '../../src/core/TiledFormat';
 import zonesData from '../../src/data/zones.json';
 
 const map = JSON.parse(

@@ -1,7 +1,10 @@
 import Phaser from 'phaser';
 import { ASSETS } from '../config/assets';
 import { eventBus } from '../core/EventBus';
+import { t } from '../core/text';
 import { AnimalGroupSprite } from '../entities/AnimalGroupSprite';
+import { WaterholeSprite } from '../entities/WaterholeSprite';
+import { showFloatingText } from '../ui/FloatingText';
 import { seasonOf } from '../sim/Seasons';
 import { CameraController } from './camera/CameraController';
 import { DEPTH } from './depth';
@@ -9,6 +12,7 @@ import { objectProp, objectsIn, readZones, type ZoneArea } from './map/mapObject
 import { SeasonTint } from './map/SeasonTint';
 import { ZoneOverlay } from './map/ZoneOverlay';
 import { getSession } from './session';
+import type { UIScene } from './UIScene';
 
 const TILE_LAYERS = [
   ['ground', DEPTH.ground],
@@ -27,6 +31,7 @@ export class GameScene extends Phaser.Scene {
   private hovered: ZoneArea | null = null;
   private overlay!: ZoneOverlay;
   private cameraController!: CameraController;
+  private waterholes: WaterholeSprite[] = [];
 
   constructor() {
     super('GameScene');
@@ -53,6 +58,9 @@ export class GameScene extends Phaser.Scene {
       (id) => !!session.state.zones[id]?.unlocked,
     );
     this.spawnPreviewAnimals(map);
+    this.waterholes = Object.keys(session.state.waterholes).map(
+      (id) => new WaterholeSprite(this, session, id, map.tileWidth),
+    );
 
     this.cameraController = new CameraController(
       this,
@@ -60,6 +68,8 @@ export class GameScene extends Phaser.Scene {
       map.heightInPixels,
       () => this.updateHover(),
       (pointer) => this.isOverUI(pointer),
+      // Safe here (unlike isOverUI): it re-runs this scene's own hit test with identical results.
+      (pointer) => this.input.hitTestPointer(pointer).length > 0,
     );
     this.cameras.main.centerOn(
       START_VIEW_TILE.x * map.tileWidth,
@@ -69,17 +79,26 @@ export class GameScene extends Phaser.Scene {
     this.input.on(Phaser.Input.Events.POINTER_MOVE, () => this.updateHover());
     this.input.on(Phaser.Input.Events.GAME_OUT, () => this.setHovered(null));
     const offSeason = eventBus.on('seasonChanged', ({ season }) => seasonTint.fadeTo(season));
-    this.events.once(Phaser.Scenes.Events.SHUTDOWN, offSeason);
+    const offFail = eventBus.on('commandFailed', ({ reason, worldX, worldY }) => {
+      if (worldX !== undefined && worldY !== undefined) {
+        showFloatingText(this, worldX, worldY, t(reason), DEPTH.floatingText);
+      }
+    });
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+      offSeason();
+      offFail();
+    });
   }
 
   override update(_time: number, delta: number): void {
     getSession(this).update(delta);
+    for (const w of this.waterholes) w.update();
     this.cameraController.update(delta);
   }
 
   private isOverUI(pointer: Phaser.Input.Pointer): boolean {
     if (!this.scene.isActive('UIScene')) return false;
-    return this.scene.get('UIScene').input.hitTestPointer(pointer).length > 0;
+    return (this.scene.get('UIScene') as UIScene).isPointerOverUI(pointer.x, pointer.y);
   }
 
   private spawnPreviewAnimals(map: Phaser.Tilemaps.Tilemap): void {

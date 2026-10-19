@@ -70,6 +70,11 @@ export class TopBar {
     this.layout();
   }
 
+  /** True if a screen point (game pixels) is on the bar. */
+  contains(x: number, y: number): boolean {
+    return x >= 0 && x <= this.scene.scale.width && y >= 0 && y <= TOP_BAR_HEIGHT;
+  }
+
   /** Re-position for the current canvas width. */
   layout(): void {
     const width = this.scene.scale.width;

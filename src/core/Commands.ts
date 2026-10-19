@@ -1,14 +1,18 @@
 // Player actions (spec §4): the only way the player changes state. Each is validated
 // and returns success with the new state, or a reason the UI can show.
+import { BALANCE } from '../config/balance';
 import { GAME_SPEEDS, type GameSpeed } from '../config/game';
 import type { SimEvent } from '../sim/types';
+import { clampLevel, waterVisualState } from '../sim/Water';
 import type { GameState } from './GameState';
 import type { StringKey } from './text';
 
 export type Command =
   | { type: 'setSpeed'; speed: number }
   | { type: 'setPaused'; paused: boolean }
-  | { type: 'togglePause' };
+  | { type: 'togglePause' }
+  /** Spec §6.1 manual chore: +5 per click / per hold interval, free, capped at 100. */
+  | { type: 'refillWaterhole'; id: string };
 
 export type CommandResult =
   { ok: true; state: GameState; events: SimEvent[] } | { ok: false; reason: StringKey };
@@ -23,6 +27,24 @@ function withClock(state: GameState, speed: GameSpeed, paused: boolean): Command
   };
 }
 
+function refillWaterhole(state: GameState, id: string): CommandResult {
+  const hole = state.waterholes[id];
+  if (!hole) return { ok: false, reason: 'command.unknownWaterhole' };
+  if (!state.zones[hole.zoneId]?.unlocked) return { ok: false, reason: 'command.zoneLocked' };
+  if (hole.level >= BALANCE.water.maxLevel) return { ok: false, reason: 'command.waterholeFull' };
+  const level = clampLevel(hole.level + BALANCE.water.manualRefillAmount);
+  const events: SimEvent[] = [{ type: 'waterholeRefilled', payload: { id, level } }];
+  const after = waterVisualState(level);
+  if (after !== waterVisualState(hole.level)) {
+    events.push({ type: 'waterholeStateChanged', payload: { id, state: after } });
+  }
+  return {
+    ok: true,
+    state: { ...state, waterholes: { ...state.waterholes, [id]: { ...hole, level } } },
+    events,
+  };
+}
+
 export function applyCommand(state: GameState, command: Command): CommandResult {
   const { speed, paused } = state.clock;
   switch (command.type) {
@@ -34,5 +56,7 @@ export function applyCommand(state: GameState, command: Command): CommandResult 
       return withClock(state, speed, command.paused);
     case 'togglePause':
       return withClock(state, speed, !paused);
+    case 'refillWaterhole':
+      return refillWaterhole(state, command.id);
   }
 }

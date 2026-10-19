@@ -108,27 +108,13 @@ export function buildTerrain(): TileLayers {
     }
   }
 
-  // Waterholes: A starts as a dry bed (filled in Phase 3); B is a small pond.
-  const [holeA, holeB] = WATERHOLES;
-  if (holeA) {
-    const { x, y } = holeA.at;
-    fillRect({ x: x - 1, y: y - 1, w: 3, h: 3 }, 'dry_bed');
-    for (const [dx, dy] of [
-      [-2, 0],
-      [2, 0],
-      [0, -2],
-      [0, 2],
-    ] as const)
-      setGround(x + dx, y + dy, 'dry_bed');
-  }
-  if (holeB) {
-    const { x, y } = holeB.at;
+  // Waterhole beds: the water itself is a sprite whose look follows the level (Phase 3).
+  for (const { at } of WATERHOLES) {
     for (let dy = -3; dy <= 3; dy++) {
       for (let dx = -3; dx <= 3; dx++) {
         const d2 = dx * dx + dy * dy;
-        if (d2 <= 1) setWater(x + dx, y + dy, true);
-        else if (d2 <= 5) setWater(x + dx, y + dy, false);
-        else if (d2 <= 8) setGround(x + dx, y + dy, 'sand');
+        if (d2 <= 5) setGround(at.x + dx, at.y + dy, 'dry_bed');
+        else if (d2 <= 8) setGround(at.x + dx, at.y + dy, 'sand');
       }
     }
   }

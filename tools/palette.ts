@@ -15,6 +15,7 @@ export const PAL = {
   waterDeep: hex('#3d6079'),
   water: hex('#56809a'),
   waterLight: hex('#7fa3b5'),
+  mud: hex('#6f6650'),
   treeDark: hex('#33482c'),
   tree: hex('#43603a'),
   wood: hex('#6a4a32'),

@@ -34,7 +34,7 @@ export function riverCenter(y: number): number {
 }
 
 export const WATERHOLES: { id: string; zoneId: string; at: Point }[] = [
-  { id: 'waterhole_a', zoneId: 'plains', at: { x: 54, y: 44 } }, // dry at start
+  { id: 'waterhole_a', zoneId: 'plains', at: { x: 53, y: 45 } }, // nearly dry at start
   { id: 'waterhole_b', zoneId: 'river', at: { x: 27, y: 46 } },
 ];
 
@@ -52,7 +52,7 @@ export const OBJECT_TILES: { tile: TileName; at: Point; solid: boolean }[] = [
   { tile: 'ranger_post_ruin', at: { x: 61, y: 66 }, solid: true },
   { tile: 'gate', at: { x: 56, y: 77 }, solid: false },
   { tile: 'gate', at: { x: 57, y: 77 }, solid: false },
-  { tile: 'pump_ruin', at: { x: 57, y: 43 }, solid: true },
+  { tile: 'pump_ruin', at: { x: 57, y: 42 }, solid: true },
   { tile: 'hut', at: { x: 119, y: 38 }, solid: true },
   { tile: 'hut', at: { x: 119, y: 47 }, solid: true },
   { tile: 'hut', at: { x: 119, y: 56 }, solid: true },
@@ -60,8 +60,8 @@ export const OBJECT_TILES: { tile: TileName; at: Point; solid: boolean }[] = [
 ];
 
 export const BUILD_SLOTS: { id: string; slotType: string; zoneId: string; rect: Rect }[] = [
-  { id: 'pump_a', slotType: 'pump', zoneId: 'plains', rect: { x: 57, y: 43, w: 2, h: 2 } },
-  { id: 'pump_b', slotType: 'pump', zoneId: 'river', rect: { x: 29, y: 44, w: 2, h: 2 } },
+  { id: 'pump_a', slotType: 'pump', zoneId: 'plains', rect: { x: 57, y: 42, w: 2, h: 2 } },
+  { id: 'pump_b', slotType: 'pump', zoneId: 'river', rect: { x: 30, y: 43, w: 2, h: 2 } },
   { id: 'tower_plains', slotType: 'tower', zoneId: 'plains', rect: { x: 44, y: 36, w: 2, h: 2 } },
   { id: 'tower_outcrop', slotType: 'tower', zoneId: 'outcrop', rect: { x: 54, y: 10, w: 2, h: 2 } },
   { id: 'post_hq', slotType: 'post', zoneId: 'hq', rect: { x: 60, y: 66, w: 2, h: 2 } },

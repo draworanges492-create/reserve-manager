@@ -22,7 +22,7 @@ import {
   type TiledObjectLayer,
   type TiledProperty,
   type TiledTileLayer,
-} from './map/tiled';
+} from '../src/core/TiledFormat';
 import {
   TILE_NAMES,
   TILE_SIZE as T,

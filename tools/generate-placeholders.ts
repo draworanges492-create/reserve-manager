@@ -8,6 +8,7 @@ import { PAL } from './palette';
 import { drawIcons } from './placeholders/icons';
 import { drawSprites } from './placeholders/sprites';
 import { drawTile } from './placeholders/tiles';
+import { drawBucket, drawDrop, drawWaterhole } from './placeholders/water';
 import {
   TILE_NAMES,
   TILE_SIZE,
@@ -71,5 +72,8 @@ function paletteGpl(): string {
 writePng('tilesets/terrain.png', buildTileset());
 for (const [name, canvas] of Object.entries(drawSprites())) writePng(`sprites/${name}.png`, canvas);
 for (const [name, canvas] of Object.entries(drawIcons())) writePng(`ui/${name}.png`, canvas);
+writePng('sprites/waterhole.png', drawWaterhole());
+writePng('sprites/bucket.png', drawBucket());
+writePng('sprites/fx-drop.png', drawDrop());
 write('palette.gpl', Buffer.from(paletteGpl()));
 console.log(`palette: ${Object.keys(PAL).length} colours`);

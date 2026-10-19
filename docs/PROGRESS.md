@@ -83,11 +83,42 @@
 1512×865: 4× speed measured 0.099 day / 3 s (expected 0.100); pause stops the clock;
 keys work; jumping to day 32 switched to "Wet season" with a greener map; 0 console errors.
 
-**Next — Phase 3 (Water & chore mechanic):** waterhole sim (decay, seasonal rain, pumps),
-visual states (clear / muddy / drying / dry), click and hold-to-refill on Waterhole A,
-tooltip explaining decay, pump building data stub, Water unit tests.
-
 **Known issues**
 
 - Ground types still meet with hard tile edges; animals still draw over trees (see Phase 1).
 - Touch controls still only tested with a mouse.
+
+## Phase 3 — Water & chore mechanic ✅ (2026-10-19)
+
+**Done**
+
+- `sim/Water.ts` (day-tick step 2): daily change = −4 × season (dry ×2, wet ×0.5) + rain
+  (wet +3) + pump (borehole +6, solar +8 when working), clamped 0–100; visual states
+  clear / muddy / drying / dry; `waterBreakdown` for "why" text; `zoneHasWater` (range rule,
+  20 tiles, level ≥ 30, locked zones excluded).
+- `core/WorldLayout.ts`: zone rects/areas and waterhole positions read from the map into GameState.
+- `refillWaterhole` command (+5, free, capped, refused with reasons when locked / full).
+- Waterhole sprites (4 states) with click and hold-to-pump (+5 per 0.3 s), splash + bucket
+  animation, floating message when refused; map now has beds under both waterholes.
+- Tooltip on hover: state and level, evaporation × season, rain, pump, overnight change,
+  "dries out in N days", and what to do (refill / locked / full). Reusable `ui/Tooltip`.
+- `src/data/waterholes.json`, `src/data/buildings.json` (pump stub); `validate-data` now
+  cross-checks waterholes ↔ map and building fields/effects.
+- Fixed: hovering world objects silently failed because of a cross-scene hit test (D41).
+
+**Checks:** `build` ✅ · `test` ✅ (64) · `lint` ✅ · `validate-data` ✅ · browser at
+1512×865 (driven by script because the app window wasn't visible): click 5→10, 1 s hold
+→ 30 and sprite switched to muddy, camera didn't move while pumping, tooltips correct for
+A and locked B, locked click shows "That area is still locked.", a day tick took A 5→0 and
+B 80→72; 0 console errors.
+
+**Next — Phase 4 (Vegetation & populations):** vegetation per zone, population model with
+carrying capacity, predation, Allee effect, wandering animal group sprites, "why" strings,
+zone info panel; check 1 in-game year produces plausible curves.
+
+**Known issues**
+
+- Open question D39 (pump unlock chapter / build days).
+- Hard tile edges between ground types; animals draw over trees; touch untested on a device.
+- The waterhole level changes once a day (spec's daily model), so the sprite jumps between
+  states at day ticks rather than draining smoothly.

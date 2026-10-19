@@ -5,7 +5,9 @@
     "shadow-lg": "assets/sprites/shadow-lg.png",
     "icon-dry": "assets/ui/icon-dry.png",
     "icon-wet": "assets/ui/icon-wet.png",
-    "icon-pause": "assets/ui/icon-pause.png"
+    "icon-pause": "assets/ui/icon-pause.png",
+    "bucket": "assets/sprites/bucket.png",
+    "fx-drop": "assets/sprites/fx-drop.png"
   },
   "spritesheets": {
     "impala": {
@@ -37,6 +39,11 @@
       "path": "assets/sprites/visitor.png",
       "frameWidth": 24,
       "frameHeight": 24
+    },
+    "waterhole": {
+      "path": "assets/sprites/waterhole.png",
+      "frameWidth": 96,
+      "frameHeight": 96
     }
   },
   "tilemaps": {

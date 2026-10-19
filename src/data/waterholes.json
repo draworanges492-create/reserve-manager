@@ -1,0 +1,6 @@
+{
+  "waterholes": [
+    { "id": "waterhole_a", "name": "Waterhole A", "startLevel": 5, "type": "natural" },
+    { "id": "waterhole_b", "name": "Waterhole B", "startLevel": 80, "type": "natural" }
+  ]
+}

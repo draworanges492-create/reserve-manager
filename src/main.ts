@@ -31,3 +31,6 @@ window.addEventListener('resize', () => {
   game.scale.setZoom(zoom);
   game.scale.resize(width, height);
 });
+
+// Dev-only handle for debugging in the browser console; removed from production builds.
+if (import.meta.env.DEV) Object.assign(window, { __game: game });

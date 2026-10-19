@@ -6,5 +6,22 @@
   "hud.date": "Year {year} · {season} · Day {day}/{days}",
   "hud.paused": "Paused",
   "hud.speedHint": "Space: pause · 1/2/3: speed",
-  "command.invalidSpeed": "That speed isn't available."
+  "command.invalidSpeed": "That speed isn't available.",
+  "command.unknownWaterhole": "There's no waterhole there.",
+  "command.zoneLocked": "That area is still locked.",
+  "command.waterholeFull": "It's already full.",
+  "water.state.clear": "Clear",
+  "water.state.muddy": "Muddy",
+  "water.state.drying": "Drying",
+  "water.state.dry": "Dry",
+  "water.title": "{name} · {state} · {level}/100",
+  "water.evaporation": "Evaporation: {value}/day ({season} ×{mult})",
+  "water.rain": "Rain: {value}/day",
+  "water.pump": "Pump: {value}/day",
+  "water.net": "Overnight change: {value}",
+  "water.dryIn": "Dries out in about {days} day(s)",
+  "water.fillsIn": "Holding steady or rising",
+  "water.hint.refill": "Click or hold to refill (+{amount} each)",
+  "water.hint.locked": "Locked until its zone opens",
+  "water.hint.full": "Full"
 }

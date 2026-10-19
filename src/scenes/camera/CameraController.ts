@@ -33,6 +33,8 @@ export class CameraController {
     private readonly onChange: () => void,
     /** True when the pointer is over a HUD element; those clicks must not move the map. */
     private readonly isOverUI: (pointer: Phaser.Input.Pointer) => boolean,
+    /** True over clickable world objects (e.g. waterholes): a press there is an action, not a drag. */
+    private readonly isOverInteractive: (pointer: Phaser.Input.Pointer) => boolean = () => false,
   ) {
     const cam = scene.cameras.main;
     cam.setBounds(0, 0, worldWidth, worldHeight);
@@ -52,7 +54,8 @@ export class CameraController {
 
     input.on(
       Phaser.Input.Events.POINTER_DOWN,
-      (p: Phaser.Input.Pointer) => (this.dragging = !this.isOverUI(p)),
+      (p: Phaser.Input.Pointer) =>
+        (this.dragging = !this.isOverUI(p) && !this.isOverInteractive(p)),
     );
     input.on(Phaser.Input.Events.POINTER_MOVE, this.onPointerMove, this);
     input.on(Phaser.Input.Events.POINTER_UP, this.onPointerUp, this);

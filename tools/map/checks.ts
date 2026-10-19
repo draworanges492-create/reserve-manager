@@ -9,7 +9,7 @@ import {
   type TiledObject,
   type TiledObjectLayer,
   type TiledTileLayer,
-} from './tiled';
+} from '../../src/core/TiledFormat';
 
 export interface ZoneDef {
   id: string;
