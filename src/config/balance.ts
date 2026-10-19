@@ -53,7 +53,30 @@ export interface Balance {
     /** Carrying-capacity multiplier when a zone has no water in range. */
     noWaterFactor: number;
   };
-  economy: { startMoney: number };
+  economy: {
+    startMoney: number;
+    /** Base income until tourism exists (DECISIONS D58). */
+    dailyGrant: number;
+    /** Spec §6.7: upkeep per day = cost × upkeepRate / upkeepPeriodDays. */
+    upkeepRate: number;
+    upkeepPeriodDays: number;
+    /** Share of the cost returned when construction is cancelled (spec §7.2: 50%). */
+    cancelRefund: number;
+    /** How many days of net income to remember (Ch 2 goal: positive 5 days running). */
+    netHistoryDays: number;
+  };
+  staff: {
+    /** Coverage one ranger adds to a zone (spec §6.5). */
+    patrolStrength: number;
+    maxCoverage: number;
+    startMorale: number;
+    /** Morale drifts toward this while staff are paid. */
+    moraleTarget: number;
+    moraleDriftPerDay: number;
+    unpaidMoralePenalty: number;
+    /** Staff leave after this many unpaid days in a row (spec §6.7). */
+    quitAfterUnpaidDays: number;
+  };
   story: { startChapter: number };
   render: {
     maxAnimalSpritesPerZone: number;

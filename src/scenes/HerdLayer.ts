@@ -20,7 +20,8 @@ const keyOf = (g: AnimalGroupRef | null): string | null =>
 export class HerdLayer {
   private readonly groups = new Map<string, AnimalGroupSprite>();
   private readonly spawns: { x: number; y: number; species: string }[];
-  private readonly blocked: (x: number, y: number) => boolean;
+  /** True where nobody can walk (deep water, rocks, buildings, waterhole pools). */
+  readonly blocked: (x: number, y: number) => boolean;
   private hovered: string | null = null;
   private selected: string | null = null;
 
@@ -56,17 +57,18 @@ export class HerdLayer {
       this.selected = keyOf(group);
       this.refreshHighlights();
     });
-    // Opening a zone's panel deselects any herd.
-    const offZone = eventBus.on('zoneSelected', ({ zoneId }) => {
-      if (zoneId) {
-        this.selected = null;
-        this.refreshHighlights();
-      }
-    });
+    // Opening a zone's or building's panel deselects any herd.
+    const deselect = (): void => {
+      this.selected = null;
+      this.refreshHighlights();
+    };
+    const offZone = eventBus.on('zoneSelected', ({ zoneId }) => zoneId && deselect());
+    const offSlot = eventBus.on('slotSelected', ({ slotId }) => slotId && deselect());
     scene.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
       offHover();
       offSelect();
       offZone();
+      offSlot();
     });
   }
 

@@ -1,5 +1,7 @@
 // Read-only lookups into src/data content files.
+import buildingsData from '../data/buildings.json';
 import speciesData from '../data/species.json';
+import staffData from '../data/staff.json';
 import waterholesData from '../data/waterholes.json';
 import zonesData from '../data/zones.json';
 
@@ -66,4 +68,46 @@ export const ZONE_DEFS: readonly ZoneDef[] = zonesData.zones;
 
 export function zoneDef(id: string): ZoneDef | undefined {
   return ZONE_DEFS.find((z) => z.id === id);
+}
+
+export interface BuildingEffect {
+  op: 'installPump' | 'patrolBoost';
+  pumpKind?: 'borehole' | 'solar';
+  value?: number;
+}
+
+export interface BuildingDef {
+  id: string;
+  name: string;
+  slotType: string;
+  cost: number;
+  buildDays: number;
+  unlockChapter: number;
+  /** Only buildable on a slot that already has this (finished) building. */
+  upgradeOf?: string;
+  description: string;
+  effects: BuildingEffect[];
+}
+
+export const BUILDINGS: readonly BuildingDef[] = buildingsData.buildings as BuildingDef[];
+
+export function buildingDef(id: string): BuildingDef | undefined {
+  return BUILDINGS.find((b) => b.id === id);
+}
+
+export interface StaffRoleDef {
+  id: string;
+  name: string;
+  wage: number;
+  unlockChapter: number;
+  /** Rangers patrol their zone and count toward ranger coverage. */
+  patrols: boolean;
+  spriteKey: string;
+  description: string;
+}
+
+export const STAFF_ROLES: readonly StaffRoleDef[] = staffData.roles;
+
+export function staffRole(id: string): StaffRoleDef | undefined {
+  return STAFF_ROLES.find((r) => r.id === id);
 }

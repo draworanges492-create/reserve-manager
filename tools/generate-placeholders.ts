@@ -5,6 +5,7 @@ import { dirname, join, relative } from 'node:path';
 import { PixelCanvas } from './lib/canvas';
 import { encodePng, isPlaceholderFile, PLACEHOLDER_MARKER } from './lib/png';
 import { PAL } from './palette';
+import { drawBuildings } from './placeholders/buildings';
 import { drawIcons } from './placeholders/icons';
 import { drawSprites } from './placeholders/sprites';
 import { drawTile } from './placeholders/tiles';
@@ -73,6 +74,8 @@ writePng('tilesets/terrain.png', buildTileset());
 for (const [name, canvas] of Object.entries(drawSprites())) writePng(`sprites/${name}.png`, canvas);
 for (const [name, canvas] of Object.entries(drawIcons())) writePng(`ui/${name}.png`, canvas);
 writePng('sprites/waterhole.png', drawWaterhole());
+for (const [name, canvas] of Object.entries(drawBuildings()))
+  writePng(`sprites/${name}.png`, canvas);
 writePng('sprites/bucket.png', drawBucket());
 writePng('sprites/fx-drop.png', drawDrop());
 write('palette.gpl', Buffer.from(paletteGpl()));

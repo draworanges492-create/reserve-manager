@@ -60,6 +60,7 @@ describe('zone panel text', () => {
     expect(texts(panel?.lines)).toEqual([
       expect.stringMatching(/^Grass per day: \+\d\.\d regrowth, −\d\.\d grazing \(Dry season\)$/),
       'Water nearby: Yes',
+      'Ranger coverage: 0%',
       'Animals: 80 impala · 24 zebras · 4 lions',
     ]);
   });

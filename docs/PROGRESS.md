@@ -171,11 +171,45 @@ lions 4 → 5, plains grass 51–65%. No player — impala → ~45, zebra → ~1
 lines; forced overgrazing showed "Degraded", −8.1/day grazing and the warning; 0 console
 errors in a fresh tab.
 
-**Next — Phase 5 (Economy, building, staff):** money and costs, build slots + construction,
-hire/assign staff, ranger coverage, tower stub, debt state, Economy unit tests.
-
 **Known issues**
 
 - Open questions D39 (pump timings) and D51/D57 (predation, neglect speed).
 - Hard tile edges between ground types; animals draw over trees; touch untested on a device.
 - Waterhole level and herd counts change once a day (spec's daily model), so changes jump.
+
+## Phase 5 — Economy, building, staff ✅ (2026-10-19)
+
+**Done**
+
+- `sim/Economy.ts` (day-tick step 8): grant, wages, upkeep (5% of cost / 30 days), daily
+  ledger, 30-day net history, debt state, unpaid staff lose morale and quit after 3 days.
+- `sim/Construction.ts`: build countdown; finished pumps start feeding their waterhole.
+- `sim/Poaching.ts`: ranger coverage (min 0.9, 0.25 per ranger, ×2 with a ranger post).
+- Commands: build (on valid slots, chapter- and money-checked), cancel (50% refund,
+  upgrades fall back), hire, assign zone, dismiss — all with readable refusal reasons.
+- Data: buildings.json (borehole pump, solar pump, ranger post, observation tower stub),
+  staff.json (ranger, fence crew, tracker, vet, culling team); validate-data checks both.
+- Map: pump slots linked to their waterholes; state holds slots, buildings, staff, economy.
+- World: building sprites (scaffold + live progress bar while building), green build-mode
+  spots, staff walking patrols in their zone (or waiting at HQ).
+- HUD: money with expected net per day (red in debt) and a breakdown tooltip; Build and
+  Staff buttons (B / H); right-hand menus; placing banner; building panel with Cancel;
+  zone panel shows ranger coverage.
+- New placeholder art: 4 buildings + scaffold, coin / build / staff icons.
+
+**Checks:** `build` ✅ · `test` ✅ (119) · `lint` ✅ · `validate-data` ✅ · browser at
+1512×865 (driven by script, pane in background): Staff menu → Hire → Zone ▸ ×2 put Ranger #1
+on patrol in the plains and money showed "+10/day"; after a dev jump to Chapter 2, Build →
+Place → spot A built a borehole pump over 3 days, Waterhole A switched to pumped, the panel
+showed "Pumps +6/day into Waterhole A"; a ranger post was placed the same way; 0 console
+errors.
+
+**Next — Phase 6 (UI pass):** full HUD (score meters), context panels, alerts feed,
+tooltips everywhere, settings, keyboard shortcuts, colorblind toggle; no overlapping UI at
+640×360.
+
+**Known issues**
+
+- Open questions D39/D60 (unlock chapters, build times), D51/D57 (predation, neglect).
+- Long staff lists will overflow the Staff panel (no scrolling yet) — Phase 6.
+- Hard tile edges; animals draw over trees; touch untested on a device.

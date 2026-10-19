@@ -8,7 +8,13 @@
       "buildDays": 3,
       "unlockChapter": 2,
       "automates": "manual_refill",
-      "effects": [{ "op": "installPump", "pumpKind": "borehole" }]
+      "description": "Pumps groundwater into the waterhole every day.",
+      "effects": [
+        {
+          "op": "installPump",
+          "pumpKind": "borehole"
+        }
+      ]
     },
     {
       "id": "solar_pump",
@@ -18,7 +24,38 @@
       "buildDays": 2,
       "unlockChapter": 4,
       "upgradeOf": "borehole_pump",
-      "effects": [{ "op": "installPump", "pumpKind": "solar" }]
+      "description": "Pumps more, needs no fuel.",
+      "effects": [
+        {
+          "op": "installPump",
+          "pumpKind": "solar"
+        }
+      ]
+    },
+    {
+      "id": "ranger_post",
+      "name": "Ranger post",
+      "slotType": "post",
+      "cost": 300,
+      "buildDays": 4,
+      "unlockChapter": 2,
+      "description": "Rangers patrolling this zone cover twice the ground.",
+      "effects": [
+        {
+          "op": "patrolBoost",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "id": "observation_tower",
+      "name": "Observation tower",
+      "slotType": "tower",
+      "cost": 800,
+      "buildDays": 6,
+      "unlockChapter": 4,
+      "description": "A lookout for visitors (tourism arrives later).",
+      "effects": []
     }
   ]
 }

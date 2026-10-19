@@ -5,6 +5,8 @@ import { t } from '../core/text';
 import { calendarOf } from '../sim/Seasons';
 import { Button } from './Button';
 import { crispText } from './crispText';
+import { moneyText } from './economyInfo';
+import { WARN_COLOR } from './InfoPanel';
 import { TEXT_SIZE, UI } from './theme';
 
 export const TOP_BAR_HEIGHT = 20;
@@ -14,8 +16,8 @@ const BUTTON_H = 13;
 const PROGRESS_W = 56;
 
 /**
- * HUD top bar (spec §7.4, Phase 2 part): season icon, date, day progress and speed
- * controls. Money and score meters join it in later phases.
+ * HUD top bar (spec §7.4): season icon, date, day progress, money with daily net, and
+ * speed controls. Score meters join it in a later phase.
  */
 export class TopBar {
   private readonly bg: Phaser.GameObjects.Rectangle;
@@ -26,6 +28,8 @@ export class TopBar {
   private readonly progressTrack: Phaser.GameObjects.Rectangle;
   private readonly pauseButton: Button;
   private readonly speedButtons: Button[];
+  private readonly coin: Phaser.GameObjects.Image;
+  private readonly money: Phaser.GameObjects.Text;
   private lastDateText = '';
 
   constructor(
@@ -50,6 +54,11 @@ export class TopBar {
       .setOrigin(1, 0.5)
       .setVisible(false);
 
+    this.coin = scene.add.image(0, TOP_BAR_HEIGHT / 2, 'icon-coin');
+    this.money = crispText(scene, 0, TOP_BAR_HEIGHT / 2, '', {
+      fontSize: TEXT_SIZE.label,
+    }).setOrigin(0, 0.5);
+
     const y = (TOP_BAR_HEIGHT - BUTTON_H) / 2;
     this.pauseButton = new Button(scene, 0, y, {
       width: BUTTON_W,
@@ -72,6 +81,11 @@ export class TopBar {
   /** True if a screen point (game pixels) is on the bar. */
   contains(x: number, y: number): boolean {
     return x >= 0 && x <= this.scene.scale.width && y >= 0 && y <= TOP_BAR_HEIGHT;
+  }
+
+  /** True over the money readout (for its breakdown tooltip). */
+  overMoney(x: number, y: number): boolean {
+    return y <= TOP_BAR_HEIGHT && x >= this.coin.x - 8 && x <= this.money.x + this.money.width + 4;
   }
 
   /** Re-position for the current canvas width. */
@@ -104,7 +118,12 @@ export class TopBar {
       const right = this.date.x + this.date.width + PAD * 2;
       this.progressTrack.setX(right);
       this.progress.setX(right);
+      this.coin.setX(right + PROGRESS_W + PAD * 4);
+      this.money.setX(this.coin.x + 9);
     }
+    const money = moneyText(this.session.state);
+    if (this.money.text !== money.text) this.money.setText(money.text);
+    this.money.setColor(money.warn ? WARN_COLOR : UI.text);
     this.progress.width = PROGRESS_W * clock.dayProgress;
     this.pausedLabel.setVisible(clock.paused);
     this.pauseButton.setSelected(clock.paused);

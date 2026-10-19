@@ -13,6 +13,8 @@ export interface WorldLayout {
   zones: Record<string, TileRect>;
   /** Waterhole centres in tiles (fractional: a point in the middle of a tile is x + 0.5). */
   waterholes: Record<string, { zoneId: string; x: number; y: number }>;
+  /** Places buildings can go (spec §5 build_slots), in tiles. */
+  slots: Record<string, { slotType: string; zoneId: string; rect: TileRect; waterholeId?: string }>;
 }
 
 function objects(map: TiledMap, name: string): TiledObject[] {
@@ -43,5 +45,15 @@ export function readWorldLayout(map: TiledMap): WorldLayout {
       y: o.y / th,
     };
   }
-  return { zones, waterholes };
+  const slots: WorldLayout['slots'] = {};
+  for (const o of objects(map, 'build_slots')) {
+    const waterholeId = prop(o, 'waterholeId');
+    slots[String(prop(o, 'slotId'))] = {
+      slotType: String(prop(o, 'slotType')),
+      zoneId: String(prop(o, 'zoneId')),
+      rect: { x: o.x / tw, y: o.y / th, w: o.width / tw, h: o.height / th },
+      ...(waterholeId ? { waterholeId: String(waterholeId) } : {}),
+    };
+  }
+  return { zones, waterholes, slots };
 }

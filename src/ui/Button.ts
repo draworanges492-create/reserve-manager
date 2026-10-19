@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { crispText } from './crispText';
-import { UI } from './theme';
+import { TEXT_SIZE, UI } from './theme';
 
 export interface ButtonOptions {
   width: number;
@@ -10,11 +10,14 @@ export interface ButtonOptions {
   onClick: () => void;
 }
 
-/** Small HUD button: icon or text, hover and "selected" states. */
+const ICON_GAP = 3;
+
+/** Small HUD button: icon and/or text, with hover, selected and disabled states. */
 export class Button extends Phaser.GameObjects.Container {
   private readonly bg: Phaser.GameObjects.Rectangle;
   private selected = false;
   private hovered = false;
+  private enabled = true;
 
   constructor(scene: Phaser.Scene, x: number, y: number, opts: ButtonOptions) {
     super(scene, x, y);
@@ -26,12 +29,25 @@ export class Button extends Phaser.GameObjects.Container {
     this.add(this.bg);
     const cx = opts.width / 2;
     const cy = opts.height / 2;
-    if (opts.icon) this.add(scene.add.image(cx, cy, opts.icon));
-    if (opts.label) this.add(crispText(scene, cx, cy, opts.label).setOrigin(0.5));
+    const icon = opts.icon ? scene.add.image(0, cy, opts.icon) : null;
+    const label = opts.label
+      ? crispText(scene, 0, cy, opts.label, { fontSize: TEXT_SIZE.small }).setOrigin(0, 0.5)
+      : null;
+    // Centre icon + label together.
+    const total = (icon?.width ?? 0) + (icon && label ? ICON_GAP : 0) + (label?.width ?? 0);
+    let x0 = cx - total / 2;
+    if (icon) {
+      icon.setX(Math.round(x0 + icon.width / 2));
+      x0 += icon.width + (label ? ICON_GAP : 0);
+      this.add(icon);
+    }
+    if (label) this.add(label.setX(Math.round(x0)));
 
     this.bg.on(Phaser.Input.Events.POINTER_OVER, () => this.setHovered(true));
     this.bg.on(Phaser.Input.Events.POINTER_OUT, () => this.setHovered(false));
-    this.bg.on(Phaser.Input.Events.POINTER_DOWN, () => opts.onClick());
+    this.bg.on(Phaser.Input.Events.POINTER_DOWN, () => {
+      if (this.enabled) opts.onClick();
+    });
     scene.add.existing(this);
   }
 
@@ -43,12 +59,22 @@ export class Button extends Phaser.GameObjects.Container {
     return this;
   }
 
+  setEnabled(enabled: boolean): this {
+    if (enabled !== this.enabled) {
+      this.enabled = enabled;
+      this.setAlpha(enabled ? 1 : 0.45);
+      this.refresh();
+    }
+    return this;
+  }
+
   private setHovered(hovered: boolean): void {
     this.hovered = hovered;
     this.refresh();
   }
 
   private refresh(): void {
-    this.bg.setFillStyle(this.selected ? UI.selected : this.hovered ? UI.hover : UI.panel);
+    const hover = this.hovered && this.enabled;
+    this.bg.setFillStyle(this.selected ? UI.selected : hover ? UI.hover : UI.panel);
   }
 }

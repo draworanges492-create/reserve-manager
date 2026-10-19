@@ -12,6 +12,7 @@ const PORTRAIT = 40;
 const CLOSE_SIZE = 14;
 const LINE_GAP = 2;
 const MAX_LINES = 8;
+const ACTION_H = 14;
 export const WARN_COLOR = '#ff9b7a';
 
 /** Supplies fresh content each frame (null closes the panel). */
@@ -29,6 +30,8 @@ export class InfoPanel {
   private readonly subtitle: Phaser.GameObjects.Text;
   private readonly lines: Phaser.GameObjects.Text[] = [];
   private source: PanelSource | null = null;
+  private actions: Button[] = [];
+  private actionSignature = '';
 
   constructor(
     private readonly scene: Phaser.Scene,
@@ -113,9 +116,35 @@ export class InfoPanel {
         .setY(y);
       y += label.height + LINE_GAP;
     });
+    y = this.layoutActions(content.actions ?? [], y + PAD);
     const height = y + PAD - LINE_GAP;
     this.bg.setSize(WIDTH, height);
     this.root.setPosition(PAD, Math.round(bottom - height - PAD));
+  }
+
+  /** (Re)creates the bottom buttons when their labels change; returns the y below them. */
+  private layoutActions(
+    actions: NonNullable<ReturnType<PanelSource>>['actions'] & object,
+    y: number,
+  ): number {
+    const signature = actions.map((a) => a.label).join('|');
+    if (signature !== this.actionSignature) {
+      this.actionSignature = signature;
+      for (const b of this.actions) b.destroy();
+      this.actions = actions.map((a, i) => {
+        const button = new Button(this.scene, PAD + i * 90, 0, {
+          width: 86,
+          height: ACTION_H,
+          label: a.label,
+          onClick: () => a.onClick(),
+        });
+        this.root.add(button);
+        return button;
+      });
+    }
+    if (!this.actions.length) return y - PAD;
+    for (const b of this.actions) b.setY(y);
+    return y + ACTION_H + LINE_GAP;
   }
 
   /** Shows a crisp (whole-number scaled) portrait; returns where text should start. */

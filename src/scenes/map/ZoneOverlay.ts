@@ -23,6 +23,7 @@ const POST_SPACING = 24;
 export class ZoneOverlay {
   private readonly hover: Phaser.GameObjects.Graphics;
   private readonly degraded: Phaser.GameObjects.Graphics;
+  private readonly dim: Phaser.GameObjects.Graphics;
   private hovered: ZoneArea | null = null;
   private selected: ZoneArea | null = null;
   private zoom = 1;
@@ -33,9 +34,8 @@ export class ZoneOverlay {
     private readonly zones: ZoneArea[],
     isUnlocked: (zoneId: string) => boolean,
   ) {
-    const dim = scene.add.graphics().setDepth(DEPTH.zoneDim);
-    dim.fillStyle(LOCK_TINT, LOCK_ALPHA);
-    for (const zone of zones) if (!isUnlocked(zone.id)) dim.fillRectShape(zone.rect);
+    this.dim = scene.add.graphics().setDepth(DEPTH.zoneDim);
+    this.refreshLocks(isUnlocked);
 
     const fences = scene.add.graphics().setDepth(DEPTH.fences);
     for (const segment of objectsIn(map, 'fence_segments')) {
@@ -52,6 +52,12 @@ export class ZoneOverlay {
     this.hover = scene.add.graphics().setDepth(DEPTH.hover);
     // On the ground, under waterholes and animals.
     this.degraded = scene.add.graphics().setDepth(DEPTH.objects + 0.5);
+  }
+
+  /** Redraw the fog over locked zones (after an unlock). */
+  refreshLocks(isUnlocked: (zoneId: string) => boolean): void {
+    this.dim.clear().fillStyle(LOCK_TINT, LOCK_ALPHA);
+    for (const zone of this.zones) if (!isUnlocked(zone.id)) this.dim.fillRectShape(zone.rect);
   }
 
   setHover(zone: ZoneArea | null, cameraZoom: number): void {

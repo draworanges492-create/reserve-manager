@@ -4,6 +4,7 @@ import type { GameState } from '../core/GameState';
 import { t } from '../core/text';
 import { seasonOf } from '../sim/Seasons';
 import { isDegraded, vegetationBreakdown } from '../sim/Vegetation';
+import { rangerCoverage } from '../sim/Poaching';
 import { zoneHasWater } from '../sim/Water';
 
 /** One line of panel text; `warn` lines are drawn in the warning colour. */
@@ -19,6 +20,8 @@ export interface PanelContent {
   /** Texture key for the portrait (first frame), if any. */
   portrait?: string;
   lines: PanelLine[];
+  /** Buttons along the bottom (e.g. "Cancel construction"). */
+  actions?: { label: string; onClick: () => void }[];
 }
 
 /** Over capacity by more than this share counts as "more than the land can feed". */
@@ -145,6 +148,10 @@ export function zonePanelContent(state: GameState, zoneId: string): PanelContent
     }),
   });
   lines.push({ text: zoneHasWater(state, zoneId) ? t('zone.water.yes') : t('zone.water.no') });
+  if (zone.unlocked)
+    lines.push({
+      text: t('zone.coverage', { pct: Math.round(rangerCoverage(state, zoneId) * 100) }),
+    });
 
   const herd = state.populations[zoneId] ?? {};
   const animals = SPECIES.filter((s) => (herd[s.id] ?? 0) > 0).map((s) =>

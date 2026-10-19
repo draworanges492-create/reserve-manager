@@ -7,7 +7,15 @@
     "icon-wet": "assets/ui/icon-wet.png",
     "icon-pause": "assets/ui/icon-pause.png",
     "bucket": "assets/sprites/bucket.png",
-    "fx-drop": "assets/sprites/fx-drop.png"
+    "fx-drop": "assets/sprites/fx-drop.png",
+    "icon-coin": "assets/ui/icon-coin.png",
+    "icon-build": "assets/ui/icon-build.png",
+    "icon-staff": "assets/ui/icon-staff.png",
+    "building-borehole_pump": "assets/sprites/building-borehole_pump.png",
+    "building-solar_pump": "assets/sprites/building-solar_pump.png",
+    "building-ranger_post": "assets/sprites/building-ranger_post.png",
+    "building-observation_tower": "assets/sprites/building-observation_tower.png",
+    "building-scaffold": "assets/sprites/building-scaffold.png"
   },
   "spritesheets": {
     "impala": {

@@ -1,0 +1,49 @@
+{
+  "roles": [
+    {
+      "id": "ranger",
+      "name": "Ranger",
+      "wage": 30,
+      "unlockChapter": 1,
+      "patrols": true,
+      "spriteKey": "ranger",
+      "description": "Patrols a zone; deters poachers."
+    },
+    {
+      "id": "fence_crew",
+      "name": "Fence crew",
+      "wage": 25,
+      "unlockChapter": 2,
+      "patrols": false,
+      "spriteKey": "ranger",
+      "description": "Repairs broken fences on their own."
+    },
+    {
+      "id": "tracker",
+      "name": "Tracker",
+      "wage": 35,
+      "unlockChapter": 3,
+      "patrols": false,
+      "spriteKey": "ranger",
+      "description": "Finds animals and poacher signs."
+    },
+    {
+      "id": "vet",
+      "name": "Vet",
+      "wage": 50,
+      "unlockChapter": 3,
+      "patrols": false,
+      "spriteKey": "ranger",
+      "description": "Needed to relocate animals."
+    },
+    {
+      "id": "culling_team",
+      "name": "Culling team",
+      "wage": 60,
+      "unlockChapter": 3,
+      "patrols": false,
+      "spriteKey": "ranger",
+      "description": "Carries out culling quotas."
+    }
+  ]
+}

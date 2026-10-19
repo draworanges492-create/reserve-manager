@@ -4,6 +4,7 @@ import { BALANCE } from '../config/balance';
 import { GAME_SPEEDS, type GameSpeed } from '../config/game';
 import type { SimEvent } from '../sim/types';
 import { clampLevel, waterVisualState } from '../sim/Water';
+import { assignStaff, build, cancelBuild, dismissStaff, hire } from './buildCommands';
 import type { GameState } from './GameState';
 import type { StringKey } from './text';
 
@@ -12,7 +13,12 @@ export type Command =
   | { type: 'setPaused'; paused: boolean }
   | { type: 'togglePause' }
   /** Spec §6.1 manual chore: +5 per click / per hold interval, free, capped at 100. */
-  | { type: 'refillWaterhole'; id: string };
+  | { type: 'refillWaterhole'; id: string }
+  | { type: 'build'; slotId: string; buildingId: string }
+  | { type: 'cancelBuild'; slotId: string }
+  | { type: 'hire'; role: string }
+  | { type: 'assignStaff'; staffId: string; zoneId: string | null }
+  | { type: 'dismissStaff'; staffId: string };
 
 export type CommandResult =
   { ok: true; state: GameState; events: SimEvent[] } | { ok: false; reason: StringKey };
@@ -58,5 +64,15 @@ export function applyCommand(state: GameState, command: Command): CommandResult 
       return withClock(state, speed, !paused);
     case 'refillWaterhole':
       return refillWaterhole(state, command.id);
+    case 'build':
+      return build(state, command.slotId, command.buildingId);
+    case 'cancelBuild':
+      return cancelBuild(state, command.slotId);
+    case 'hire':
+      return hire(state, command.role);
+    case 'assignStaff':
+      return assignStaff(state, command.staffId, command.zoneId);
+    case 'dismissStaff':
+      return dismissStaff(state, command.staffId);
   }
 }

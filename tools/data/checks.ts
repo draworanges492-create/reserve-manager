@@ -18,12 +18,19 @@ export interface Content {
     effects: { op: string; pumpKind?: string }[];
   }[];
   species: SpeciesDef[];
+  staffRoles: {
+    id: string;
+    name: string;
+    wage: number;
+    unlockChapter: number;
+    spriteKey: string;
+  }[];
 }
 
 const DIETS = ['grazer', 'browser', 'predator'];
 
 /** Effect ops buildings may use (grows with later phases). */
-const BUILDING_EFFECT_OPS = ['installPump'];
+const BUILDING_EFFECT_OPS = ['installPump', 'patrolBoost'];
 
 export function checkContent(content: Content, map: TiledMap): string[] {
   const errors: string[] = [];
@@ -73,6 +80,16 @@ export function checkContent(content: Content, map: TiledMap): string[] {
         fail('buildings.json', `"${b.id}" installs unknown pumpKind "${e.pumpKind}"`);
     }
   }
+  // Staff roles.
+  const roleIds = content.staffRoles.map((r) => r.id);
+  for (const id of duplicates(roleIds)) fail('staff.json', `duplicate id "${id}"`);
+  for (const r of content.staffRoles) {
+    if (!(r.wage >= 0)) fail('staff.json', `"${r.id}" needs a wage ≥ 0`);
+    if (!(r.unlockChapter >= 1)) fail('staff.json', `"${r.id}" needs unlockChapter ≥ 1`);
+    if (!(r.spriteKey in assets.spritesheets))
+      fail('staff.json', `"${r.id}" spriteKey "${r.spriteKey}" is not in assets.json`);
+  }
+
   // Species.
   const speciesIds = content.species.map((sp) => sp.id);
   const zoneIds = content.zones.map((z) => z.id);

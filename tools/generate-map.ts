@@ -125,7 +125,12 @@ const objectsByLayer: Record<(typeof OBJECT_LAYERS)[number], TiledObject[]> = {
       height: s.rect.h * T,
       name: s.id,
       type: 'build_slot',
-      properties: props({ slotId: s.id, slotType: s.slotType, zoneId: s.zoneId }),
+      properties: props({
+        slotId: s.id,
+        slotType: s.slotType,
+        zoneId: s.zoneId,
+        ...(s.waterholeId ? { waterholeId: s.waterholeId } : {}),
+      }),
     }),
   ),
   fence_segments: fenceSegments(),

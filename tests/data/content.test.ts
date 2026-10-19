@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import buildings from '../../src/data/buildings.json';
 import speciesData from '../../src/data/species.json';
+import staffData from '../../src/data/staff.json';
 import type { SpeciesDef } from '../../src/core/content';
 import waterholes from '../../src/data/waterholes.json';
 import zones from '../../src/data/zones.json';
@@ -10,6 +11,7 @@ import { WORLD_MAP } from '../helpers/newGame';
 const species = speciesData.species as SpeciesDef[];
 const content = {
   species,
+  staffRoles: staffData.roles,
   zones: zones.zones,
   waterholes: waterholes.waterholes,
   buildings: buildings.buildings,

@@ -9,7 +9,9 @@ import { seasonOf } from '../sim/Seasons';
 import { CameraController } from './camera/CameraController';
 import { type Bounds, unionBounds } from './camera/cameraMath';
 import { DEPTH } from './depth';
+import { BuildingLayer } from './BuildingLayer';
 import { HerdLayer } from './HerdLayer';
+import { StaffLayer } from './StaffLayer';
 import { readZones, type ZoneArea } from './map/mapObjects';
 import { SeasonTint } from './map/SeasonTint';
 import { ZoneOverlay } from './map/ZoneOverlay';
@@ -33,6 +35,9 @@ export class GameScene extends Phaser.Scene {
   private cameraController!: CameraController;
   private waterholes: WaterholeSprite[] = [];
   private herds!: HerdLayer;
+  private buildings!: BuildingLayer;
+  private staff!: StaffLayer;
+  private placing = false;
 
   constructor() {
     super('GameScene');
@@ -60,6 +65,8 @@ export class GameScene extends Phaser.Scene {
     );
     this.overlay.refreshDegraded((id) => session.state.zones[id]?.vegetation ?? 100);
     this.herds = new HerdLayer(this, map, this.zones, session);
+    this.buildings = new BuildingLayer(this, session, map.tileWidth);
+    this.staff = new StaffLayer(this, session, this.zones, map.tileWidth, this.herds.blocked);
     this.waterholes = Object.keys(session.state.waterholes).map(
       (id) => new WaterholeSprite(this, session, id, map.tileWidth),
     );
@@ -84,7 +91,7 @@ export class GameScene extends Phaser.Scene {
       Phaser.Input.Events.POINTER_UP,
       (pointer: Phaser.Input.Pointer, over: Phaser.GameObjects.GameObject[]) => {
         const click = pointer.getDistance() <= BALANCE.render.animals.clickMaxMovePx;
-        if (!click || over.length > 0 || this.isOverUI(pointer)) return;
+        if (!click || over.length > 0 || this.placing || this.isOverUI(pointer)) return;
         const world = this.cameras.main.getWorldPoint(pointer.x, pointer.y);
         const zone = this.zones.find((z) => z.rect.contains(world.x, world.y));
         if (zone) eventBus.emit('zoneSelected', { zoneId: zone.id });
@@ -95,6 +102,17 @@ export class GameScene extends Phaser.Scene {
     );
     const offAnimalSelect = eventBus.on('animalSelected', ({ group }) => {
       if (group) this.overlay.setSelected(null);
+    });
+    const offSlotSelect = eventBus.on('slotSelected', ({ slotId }) => {
+      if (slotId) this.overlay.setSelected(null);
+    });
+    const offBuildMode = eventBus.on('buildModeChanged', ({ buildingId }) => {
+      this.placing = buildingId !== null;
+    });
+    // Story progress (or the dev chapter jump) opened zones: widen the camera, lift the fog.
+    const offZones = eventBus.on('zonesChanged', () => {
+      this.overlay.refreshLocks((id) => !!session.state.zones[id]?.unlocked);
+      this.cameraController.setBounds(this.unlockedBounds(map.tileWidth));
     });
     const offDegraded = eventBus.on('zoneDegradedChanged', () =>
       this.overlay.refreshDegraded((id) => session.state.zones[id]?.vegetation ?? 100),
@@ -111,6 +129,9 @@ export class GameScene extends Phaser.Scene {
       offZoneSelect();
       offAnimalSelect();
       offDegraded();
+      offZones();
+      offSlotSelect();
+      offBuildMode();
     });
   }
 
@@ -118,6 +139,8 @@ export class GameScene extends Phaser.Scene {
     getSession(this).update(delta);
     for (const w of this.waterholes) w.update();
     this.herds.update(delta);
+    this.buildings.update();
+    this.staff.update(delta);
     this.cameraController.update(delta);
   }
 

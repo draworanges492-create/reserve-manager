@@ -4,6 +4,7 @@ import type { SimEvent } from '../sim/types';
 import { runDayTick } from '../sim/tick';
 import { advanceClock } from './Clock';
 import { applyCommand, type Command, type CommandResult } from './Commands';
+import { debugAddMoney, debugSetChapter } from './Debug';
 import { eventBus } from './EventBus';
 import type { GameState } from './GameState';
 
@@ -31,6 +32,19 @@ export class GameSession {
       this.publish(result.events);
     }
     return result;
+  }
+
+  /**
+   * Dev tools only (debug overlay / console): jump chapters, add money. Not a player
+   * command, so it skips validation; announces zone changes so the map redraws.
+   */
+  debugJumpToChapter(chapter: number): void {
+    this.current = debugSetChapter(this.current, chapter);
+    eventBus.emit('zonesChanged', {});
+  }
+
+  debugAddMoney(amount: number): void {
+    this.current = debugAddMoney(this.current, amount);
   }
 
   private publish(events: SimEvent[]): void {

@@ -60,9 +60,28 @@ export const OBJECT_TILES: { tile: TileName; at: Point; solid: boolean }[] = [
   { tile: 'hut', at: { x: 119, y: 66 }, solid: true },
 ];
 
-export const BUILD_SLOTS: { id: string; slotType: string; zoneId: string; rect: Rect }[] = [
-  { id: 'pump_a', slotType: 'pump', zoneId: 'plains', rect: { x: 57, y: 42, w: 2, h: 2 } },
-  { id: 'pump_b', slotType: 'pump', zoneId: 'river', rect: { x: 30, y: 43, w: 2, h: 2 } },
+/** Pump slots name the waterhole they feed (`waterholeId`). */
+export const BUILD_SLOTS: {
+  id: string;
+  slotType: string;
+  zoneId: string;
+  rect: Rect;
+  waterholeId?: string;
+}[] = [
+  {
+    id: 'pump_a',
+    slotType: 'pump',
+    zoneId: 'plains',
+    rect: { x: 57, y: 42, w: 2, h: 2 },
+    waterholeId: 'waterhole_a',
+  },
+  {
+    id: 'pump_b',
+    slotType: 'pump',
+    zoneId: 'river',
+    rect: { x: 30, y: 43, w: 2, h: 2 },
+    waterholeId: 'waterhole_b',
+  },
   { id: 'tower_plains', slotType: 'tower', zoneId: 'plains', rect: { x: 44, y: 36, w: 2, h: 2 } },
   { id: 'tower_outcrop', slotType: 'tower', zoneId: 'outcrop', rect: { x: 54, y: 10, w: 2, h: 2 } },
   { id: 'post_hq', slotType: 'post', zoneId: 'hq', rect: { x: 60, y: 70, w: 2, h: 2 } },

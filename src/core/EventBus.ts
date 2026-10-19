@@ -47,6 +47,25 @@ export type GameEvents = {
   zoneDegradedChanged: { zoneId: string; degraded: boolean };
   /** A herd fell below its minimum viable size (spec §6.3). */
   populationCritical: { zoneId: string; speciesId: string; count: number };
+  constructionStarted: { slotId: string; buildingId: string };
+  constructionCancelled: { slotId: string; refund: number };
+  staffHired: { staffId: string; role: string };
+  /** A staff member was reassigned or dismissed. */
+  staffChanged: { staffId: string };
+  /** Zones were unlocked (story progress, or the dev chapter jump). */
+  zonesChanged: Record<string, never>;
+  /** Construction finished on a build slot (spec §4). */
+  buildingCompleted: { slotId: string; buildingId: string };
+  /** A staff member left after going unpaid too long (spec §6.7). */
+  staffQuit: { staffId: string; role: string };
+  /** Entered or left the debt state. */
+  debtChanged: { inDebt: boolean };
+  /** Player picked a building to place (null leaves build mode). */
+  buildModeChanged: { buildingId: string | null };
+  /** Player clicked a building to open its panel (null closes it). */
+  slotSelected: { slotId: string | null };
+  slotHover: { slotId: string | null };
+  staffHover: { staffId: string | null };
   /** Pointer moved onto / off an animal herd. */
   animalHover: { group: AnimalGroupRef | null };
   /** Player clicked a herd to open its info panel (null closes it). */

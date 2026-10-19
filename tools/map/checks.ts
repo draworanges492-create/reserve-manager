@@ -151,6 +151,9 @@ export function checkMap(map: TiledMap, zoneDefs: ZoneDef[]): string[] {
     if (!(SLOT_TYPES as readonly string[]).includes(type))
       fail(`build slot "${s.name}" has bad slotType "${type}"`);
     checkInZone(s, 'build slot');
+    const feeds = prop(s, 'waterholeId');
+    if (type === 'pump' && !waterholes.some((w) => prop(w, 'waterholeId') === feeds))
+      fail(`pump slot "${s.name}" must name an existing waterholeId`);
   }
 
   const fences = objectLayer('fence_segments');

@@ -28,6 +28,45 @@ export interface ZoneState {
   vegetation: number;
 }
 
+export interface BuildingState {
+  buildingId: string;
+  /** Days of construction left; 0 = finished and working. */
+  daysLeft: number;
+  /** For an upgrade under construction: the finished building it replaces (restored on cancel). */
+  replaces?: string;
+}
+
+export interface SlotState {
+  slotType: string;
+  zoneId: string;
+  /** Rectangle in tiles, from the map. */
+  rect: TileRect;
+  /** Pump slots: the waterhole they feed. */
+  waterholeId?: string;
+  building: BuildingState | null;
+}
+
+export interface StaffMember {
+  id: string;
+  role: string;
+  /** Assigned zone, or null while waiting at HQ. */
+  zoneId: string | null;
+  /** 0–100. */
+  morale: number;
+  /** Days in a row without wages. */
+  unpaidDays: number;
+}
+
+/** One day's money in and out (spec §6.7), for the HUD tooltip. */
+export interface DayLedger {
+  grant: number;
+  wages: number;
+  /** Wages owed but not paid because money ran out. */
+  wagesUnpaid: number;
+  upkeep: number;
+  net: number;
+}
+
 /** What happened to one herd during the last day tick: the "why" behind its number. */
 export interface PopulationChange {
   births: number;
@@ -66,7 +105,17 @@ export interface GameState {
   populations: Record<string, Record<string, number>>;
   /** Last day's breakdown per zone and species (same shape as populations). */
   populationLog: Record<string, Record<string, PopulationChange>>;
+  slots: Record<string, SlotState>;
+  staff: StaffMember[];
+  nextStaffNumber: number;
   resources: { money: number };
+  economy: {
+    lastDay: DayLedger | null;
+    /** Net income of recent days, oldest first. */
+    netHistory: number[];
+    /** Spec §6.7 Debt: money below zero or wages left unpaid. */
+    inDebt: boolean;
+  };
   flags: Record<string, boolean>;
 }
 
@@ -119,7 +168,13 @@ export function createGameState({ seed, world, playerName = '' }: NewGameOptions
     ),
     populations: startingPopulations(),
     populationLog: {},
+    slots: Object.fromEntries(
+      Object.entries(world.slots).map(([id, slot]) => [id, { ...slot, building: null }]),
+    ),
+    staff: [],
+    nextStaffNumber: 1,
     resources: { money: BALANCE.economy.startMoney },
+    economy: { lastDay: null, netHistory: [], inDebt: false },
     flags: {},
   };
 }

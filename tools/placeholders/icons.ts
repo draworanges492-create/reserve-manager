@@ -39,7 +39,40 @@ function pause(): PixelCanvas {
   return c;
 }
 
+function coin(): PixelCanvas {
+  const c = new PixelCanvas(SIZE, SIZE);
+  c.fillEllipse(6, 6, 5, 5, PAL.lionGold);
+  c.fillEllipse(6, 6, 3, 3, PAL.impala);
+  c.line(6, 4, 6, 8, PAL.lionGold);
+  c.outline(PAL.outline);
+  return c;
+}
+
+function hammer(): PixelCanvas {
+  const c = new PixelCanvas(SIZE, SIZE);
+  c.line(3, 10, 8, 5, PAL.wood);
+  c.line(4, 10, 9, 5, PAL.wood);
+  c.fillRect(6, 1, 5, 4, PAL.rock);
+  c.outline(PAL.outline);
+  return c;
+}
+
+function staffIcon(): PixelCanvas {
+  const c = new PixelCanvas(SIZE, SIZE);
+  c.fillEllipse(6, 3.5, 2.5, 2.5, PAL.skin);
+  c.fillRect(3, 6, 6, 5, PAL.red);
+  c.outline(PAL.outline);
+  return c;
+}
+
 /** Icon key → image. Keys must match src/config/assets.json. */
 export function drawIcons(): Record<string, PixelCanvas> {
-  return { 'icon-dry': sun(), 'icon-wet': raindrop(), 'icon-pause': pause() };
+  return {
+    'icon-dry': sun(),
+    'icon-wet': raindrop(),
+    'icon-pause': pause(),
+    'icon-coin': coin(),
+    'icon-build': hammer(),
+    'icon-staff': staffIcon(),
+  };
 }
