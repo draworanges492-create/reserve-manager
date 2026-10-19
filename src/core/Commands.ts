@@ -4,7 +4,8 @@ import { BALANCE } from '../config/balance';
 import { GAME_SPEEDS, type GameSpeed } from '../config/game';
 import type { SimEvent } from '../sim/types';
 import { clampLevel, waterVisualState } from '../sim/Water';
-import { assignStaff, build, cancelBuild, dismissStaff, hire } from './buildCommands';
+import { assignStaff, build, cancelBuild, dismissStaff, hire, repairFence } from './buildCommands';
+import { examineClue } from '../story/storyCommands';
 import type { GameState } from './GameState';
 import type { StringKey } from './text';
 
@@ -18,7 +19,9 @@ export type Command =
   | { type: 'cancelBuild'; slotId: string }
   | { type: 'hire'; role: string }
   | { type: 'assignStaff'; staffId: string; zoneId: string | null }
-  | { type: 'dismissStaff'; staffId: string };
+  | { type: 'dismissStaff'; staffId: string }
+  | { type: 'repairFence'; segmentId: string }
+  | { type: 'examineClue'; clueId: string };
 
 export type CommandResult =
   { ok: true; state: GameState; events: SimEvent[] } | { ok: false; reason: StringKey };
@@ -74,5 +77,9 @@ export function applyCommand(state: GameState, command: Command): CommandResult 
       return assignStaff(state, command.staffId, command.zoneId);
     case 'dismissStaff':
       return dismissStaff(state, command.staffId);
+    case 'repairFence':
+      return repairFence(state, command.segmentId);
+    case 'examineClue':
+      return examineClue(state, command.clueId);
   }
 }

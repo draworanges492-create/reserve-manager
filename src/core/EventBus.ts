@@ -66,6 +66,19 @@ export type GameEvents = {
   slotSelected: { slotId: string | null };
   slotHover: { slotId: string | null };
   staffHover: { staffId: string | null };
+  /** Story (spec §9). */
+  journalAdded: { entryId: string };
+  goalCompleted: { goalId: string; chapter: number };
+  chapterStarted: { chapter: number };
+  fenceRepairStarted: { segmentId: string };
+  fenceRepaired: { segmentId: string };
+  /** Pointer moved onto / off a fence segment. */
+  fenceHover: { segmentId: string | null };
+  clueHover: { clueId: string | null };
+  /** A zone opened because its chapter came and its fences are mended. */
+  zoneOpened: { zoneId: string };
+  dialogueStarted: { dialogueId: string };
+  dialogueEnded: { dialogueId: string };
   /** Pan the camera to a point (tiles), e.g. from an alert or the Species menu. */
   focusRequested: { x: number; y: number };
   /** Pointer moved onto / off an animal herd. */

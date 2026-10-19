@@ -4,6 +4,8 @@ import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import type { TiledMap } from '../src/core/TiledFormat';
 import { checkContent, type Content } from './data/checks';
+import { checkStory, type StoryContent } from './data/storyChecks';
+import { prop, type TiledObjectLayer } from '../src/core/TiledFormat';
 import { checkMap, type ZoneDef } from './map/checks';
 
 const ROOT = join(import.meta.dirname, '..');
@@ -42,6 +44,56 @@ if (zones && waterholes && buildings && species && staffRoles && map) {
   errors.push(...checkContent({ zones, waterholes, buildings, species, staffRoles }, map));
 } else if (errors.length === 0) {
   errors.push('zones, waterholes, buildings, species JSON and reserve.tmj must all exist');
+}
+
+// Story: dialogue graphs, chapters, journal (spec §9).
+const dialogues = [...parsed.entries()]
+  .filter(([file]) => file.includes(`${join('data', 'dialogue')}`))
+  .flatMap(([, json]) => (json as { dialogues: StoryContent['dialogues'] }).dialogues);
+const chapters = data<StoryContent['chapters']>('chapters.json', 'chapters');
+const characters = data<StoryContent['characters']>('characters.json', 'characters');
+const journal = data<StoryContent['journal']>('journal.json', 'entries');
+if (
+  zones &&
+  buildings &&
+  species &&
+  staffRoles &&
+  waterholes &&
+  map &&
+  chapters &&
+  characters &&
+  journal
+) {
+  const objects = (name: string) =>
+    map.layers.find((l): l is TiledObjectLayer => l.type === 'objectgroup' && l.name === name)
+      ?.objects ?? [];
+  const zoneRects = new Map(
+    objects('zones').map((o) => [
+      String(prop(o, 'zoneId')),
+      {
+        x: o.x / map.tilewidth,
+        y: o.y / map.tileheight,
+        w: o.width / map.tilewidth,
+        h: o.height / map.tileheight,
+      },
+    ]),
+  );
+  errors.push(
+    ...checkStory(
+      { dialogues, chapters, characters, journal },
+      {
+        zones: zones.map((z) => ({ ...z, rect: zoneRects.get(z.id) })),
+        species: species.map((s) => s.id),
+        buildings,
+        staffRoles,
+        waterholes: waterholes.map((w) => w.id),
+        fences: objects('fence_segments').map((o) => String(prop(o, 'segmentId'))),
+        events: [],
+      },
+    ),
+  );
+} else if (errors.length === 0) {
+  errors.push('chapters.json, characters.json and journal.json must exist');
 }
 
 if (errors.length > 0) {

@@ -68,6 +68,35 @@ export interface DayLedger {
   net: number;
 }
 
+export type FenceStatus = 'broken' | 'repairing' | 'intact';
+
+export interface FenceState {
+  /** Zone that owns this fence (repairing it helps open that zone). */
+  zoneId: string;
+  /** Zone on the other side, or null on the map edge. */
+  borders: string | null;
+  status: FenceStatus;
+  /** Days of repair left while `repairing`. */
+  daysLeft: number;
+}
+
+/** Story progress (spec §9). Dialogue waiting to play is queued here so saves keep it. */
+export interface StoryState {
+  goalsDone: string[];
+  /** Days in a row a timed goal has held. */
+  goalStreaks: Record<string, number>;
+  firedEvents: string[];
+  pendingDialogues: string[];
+  /** The chapter's completion dialogue has been queued. */
+  completionQueued: boolean;
+}
+
+export interface JournalEntry {
+  entryId: string;
+  day: number;
+  chapter: number;
+}
+
 export type ScoreId = 'ecosystem' | 'trust' | 'reputation';
 
 /** A recent change to a score, shown in its tooltip (spec §6.8). */
@@ -129,6 +158,11 @@ export interface GameState {
     inDebt: boolean;
   };
   flags: Record<string, boolean>;
+  fences: Record<string, FenceState>;
+  story: StoryState;
+  /** Spec §8: −100…100 per character. */
+  relationships: Record<string, number>;
+  journal: JournalEntry[];
   /** Spec §6.8, each 0–100. */
   scores: Record<ScoreId, number>;
   scoreHistory: ScoreChange[];
@@ -199,6 +233,18 @@ function baseState({ seed, world, playerName = '', speed = 1 }: NewGameOptions):
     resources: { money: BALANCE.economy.startMoney },
     economy: { lastDay: null, netHistory: [], inDebt: false },
     flags: {},
+    fences: Object.fromEntries(
+      Object.entries(world.fences).map(([id, f]) => [id, { ...f, status: 'broken', daysLeft: 0 }]),
+    ),
+    story: {
+      goalsDone: [],
+      goalStreaks: {},
+      firedEvents: [],
+      pendingDialogues: [],
+      completionQueued: false,
+    },
+    relationships: {},
+    journal: [],
     scores: {
       ecosystem: 0, // filled in by createGameState
       trust: BALANCE.scores.trustStart,

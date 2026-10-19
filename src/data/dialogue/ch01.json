@@ -1,0 +1,615 @@
+{
+  "dialogues": [
+    {
+      "id": "ch01_arrival",
+      "nodes": {
+        "start": {
+          "speaker": "narrator",
+          "text": "The road ends at a gate that hasn't closed properly in years. Beyond it, dry grass runs to the horizon.",
+          "focus": {
+            "x": 57,
+            "y": 77
+          },
+          "next": "n1"
+        },
+        "n1": {
+          "speaker": "tendai",
+          "portrait": "worried",
+          "text": "So. You're the founder's grandchild. Mind the gate—it's been rotten for years.",
+          "next": "n2"
+        },
+        "n2": {
+          "speaker": "player",
+          "text": "…",
+          "choices": [
+            {
+              "text": "You must be Tendai. Gran wrote about you.",
+              "next": "n3a",
+              "effects": [
+                {
+                  "op": "relationship",
+                  "character": "tendai",
+                  "value": 5
+                }
+              ]
+            },
+            {
+              "text": "Is it always this quiet?",
+              "next": "n3b"
+            }
+          ]
+        },
+        "n3a": {
+          "speaker": "tendai",
+          "portrait": "happy",
+          "text": "Did she now. Hopefully not the story about the honey badger and my lunch.",
+          "next": "n4"
+        },
+        "n3b": {
+          "speaker": "tendai",
+          "text": "Quiet is what's left when the animals give up on a place.",
+          "next": "n4"
+        },
+        "n4": {
+          "speaker": "tendai",
+          "text": "Thirty-one years I've worked this land. The last eight, mostly on my own.",
+          "next": "n5"
+        },
+        "n5": {
+          "speaker": "tendai",
+          "portrait": "worried",
+          "text": "Your grandmother kept this reserve alive with her own two hands. When she got sick, it started to slip.",
+          "next": "n6"
+        },
+        "n6": {
+          "speaker": "tendai",
+          "text": "The fences are broken, the waterholes are dry, and what animals we have left are thirsty.",
+          "next": "n7"
+        },
+        "n7": {
+          "speaker": "tendai",
+          "text": "Do you want to see the waterhole first, or the fences?",
+          "choices": [
+            {
+              "text": "The waterhole.",
+              "next": "water",
+              "effects": [
+                {
+                  "op": "setFlag",
+                  "flag": "ch1_water_first"
+                }
+              ]
+            },
+            {
+              "text": "The fences.",
+              "next": "fence",
+              "effects": [
+                {
+                  "op": "setFlag",
+                  "flag": "ch1_fence_first"
+                }
+              ]
+            }
+          ]
+        },
+        "water": {
+          "speaker": "tendai",
+          "text": "Waterhole A. Half the plains used to drink here. Now look at it—cracked mud.",
+          "focus": {
+            "x": 53.5,
+            "y": 45.5
+          },
+          "next": "w2"
+        },
+        "w2": {
+          "speaker": "tendai",
+          "text": "The old pump died years ago, so for now we do it the hard way. Click the waterhole to pour in water, or hold the button and keep pumping.",
+          "next": "w3"
+        },
+        "w3": {
+          "speaker": "tendai",
+          "text": "It loses water every day, twice as fast in the dry season. Hover over it and it tells you exactly how much, and why.",
+          "next": "w4"
+        },
+        "w4": {
+          "speaker": "tendai",
+          "portrait": "happy",
+          "text": "Get it to 30 or more and keep it there for three days. The animals will remember the way.",
+          "next": "w5"
+        },
+        "w5": {
+          "speaker": "tendai",
+          "text": "The gate can wait a little. Only a little.",
+          "effects": [
+            {
+              "op": "journal",
+              "entry": "ch1_arrival"
+            }
+          ],
+          "next": null
+        },
+        "fence": {
+          "speaker": "tendai",
+          "text": "The main gate. Trucks, tourists, poachers—everything comes through here. Right now it's a gate in name only.",
+          "focus": {
+            "x": 57,
+            "y": 77
+          },
+          "next": "f2"
+        },
+        "f2": {
+          "speaker": "tendai",
+          "text": "Click the broken stretch of fence by the gate to mend it. Twenty for wire and posts, and a day's work.",
+          "next": "f3"
+        },
+        "f3": {
+          "speaker": "tendai",
+          "text": "Dashed lines on the map are broken fences. Solid lines are sound. Remember that.",
+          "next": "f4"
+        },
+        "f4": {
+          "speaker": "tendai",
+          "portrait": "worried",
+          "text": "After the gate, water. Without water nothing else out here matters.",
+          "effects": [
+            {
+              "op": "journal",
+              "entry": "ch1_arrival"
+            }
+          ],
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch01_gate_tutorial",
+      "nodes": {
+        "start": {
+          "speaker": "tendai",
+          "portrait": "happy",
+          "text": "Look at that—real water. Keep it topped up and the herds will notice.",
+          "next": "g2"
+        },
+        "g2": {
+          "speaker": "tendai",
+          "text": "Now the gate. Click the broken fence by the gate to mend it. Twenty for wire and posts, and a day's work.",
+          "focus": {
+            "x": 57,
+            "y": 77
+          },
+          "next": "g3"
+        },
+        "g3": {
+          "speaker": "tendai",
+          "text": "Dashed lines on the map are broken fences. Solid lines are sound.",
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch01_gate_done",
+      "nodes": {
+        "start": {
+          "speaker": "tendai",
+          "portrait": "happy",
+          "text": "Listen to that. It closes. First thing that's worked properly here in years.",
+          "focus": {
+            "x": 57,
+            "y": 77
+          },
+          "next": "b"
+        },
+        "b": {
+          "speaker": "narrator",
+          "text": "",
+          "branch": [
+            {
+              "conditions": [
+                {
+                  "op": "flag",
+                  "flag": "ch1_fence_first"
+                }
+              ],
+              "next": "wt1"
+            }
+          ],
+          "next": "b_end"
+        },
+        "b_end": {
+          "speaker": "tendai",
+          "text": "A shut gate keeps the village cattle out and honest people honest. The dishonest ones we'll deal with later.",
+          "effects": [
+            {
+              "op": "journal",
+              "entry": "gate_mended"
+            }
+          ],
+          "next": null
+        },
+        "wt1": {
+          "speaker": "tendai",
+          "text": "Now, water. Waterhole A is the heart of the plains, and it's bone dry.",
+          "focus": {
+            "x": 53.5,
+            "y": 45.5
+          },
+          "next": "wt2"
+        },
+        "wt2": {
+          "speaker": "tendai",
+          "text": "Click the waterhole to pour water in, or hold the button to keep pumping. It's free—just your arms.",
+          "next": "wt3"
+        },
+        "wt3": {
+          "speaker": "tendai",
+          "text": "It drains every day, faster in the dry season. Hover over it and it'll tell you why.",
+          "next": "wt4"
+        },
+        "wt4": {
+          "speaker": "tendai",
+          "portrait": "happy",
+          "text": "Get it to 30 or more and keep it there three days running.",
+          "effects": [
+            {
+              "op": "journal",
+              "entry": "gate_mended"
+            }
+          ],
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch01_hint_water",
+      "nodes": {
+        "start": {
+          "speaker": "tendai",
+          "portrait": "worried",
+          "text": "{player}, the waterhole won't fill itself. Not yet, anyway.",
+          "focus": {
+            "x": 53.5,
+            "y": 45.5
+          },
+          "next": "h2"
+        },
+        "h2": {
+          "speaker": "tendai",
+          "text": "Click it, or hold the button down. Every click is a bucket.",
+          "next": "h3"
+        },
+        "h3": {
+          "speaker": "tendai",
+          "text": "Thirty is the mark. Below that the animals won't trust it.",
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch01_hint_gate",
+      "nodes": {
+        "start": {
+          "speaker": "tendai",
+          "portrait": "angry",
+          "text": "Cattle from the village wandered in through the gate again last night.",
+          "focus": {
+            "x": 57,
+            "y": 77
+          },
+          "next": "h2"
+        },
+        "h2": {
+          "speaker": "tendai",
+          "text": "Click the broken fence at the gate. Twenty to mend it. Please.",
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch01_first_drink",
+      "nodes": {
+        "start": {
+          "speaker": "narrator",
+          "text": "Dust lifts on the far side of the plains. A line of impala picks its way toward the water, ears turning, ready to run.",
+          "focus": {
+            "x": 53.5,
+            "y": 45.5
+          },
+          "next": "n2"
+        },
+        "n2": {
+          "speaker": "tendai",
+          "portrait": "happy",
+          "text": "There. See the one in front? She's been watching us for days, waiting to see if we meant it.",
+          "next": "n3"
+        },
+        "n3": {
+          "speaker": "player",
+          "text": "…",
+          "choices": [
+            {
+              "text": "They came back.",
+              "next": "c1",
+              "effects": [
+                {
+                  "op": "relationship",
+                  "character": "tendai",
+                  "value": 3
+                }
+              ]
+            },
+            {
+              "text": "Only a handful. Is that all that's left?",
+              "next": "c2"
+            }
+          ]
+        },
+        "c1": {
+          "speaker": "tendai",
+          "portrait": "happy",
+          "text": "They always come back to water. It's people they're not sure about.",
+          "next": "c3"
+        },
+        "c2": {
+          "speaker": "tendai",
+          "portrait": "worried",
+          "text": "Out here, mostly. Some went over the fence into the village fields. Some went into cooking pots.",
+          "next": "c3"
+        },
+        "c3": {
+          "speaker": "tendai",
+          "text": "Click any herd to see how many there are and what's helping or hurting them. Click open ground to see how a zone is doing.",
+          "effects": [
+            {
+              "op": "setFlag",
+              "flag": "ch1_first_drink"
+            },
+            {
+              "op": "journal",
+              "entry": "first_drink"
+            }
+          ],
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch01_tendai_story",
+      "nodes": {
+        "start": {
+          "speaker": "narrator",
+          "text": "That evening Tendai builds a fire beside the old ranger post. The night birds start up one by one.",
+          "next": "t2"
+        },
+        "t2": {
+          "speaker": "tendai",
+          "text": "You want to know why it all fell apart. Everyone who comes here wants to know.",
+          "next": "t3"
+        },
+        "t3": {
+          "speaker": "player",
+          "text": "…",
+          "choices": [
+            {
+              "text": "I want to know.",
+              "next": "t4"
+            },
+            {
+              "text": "Only if you want to tell me.",
+              "next": "t4",
+              "effects": [
+                {
+                  "op": "relationship",
+                  "character": "tendai",
+                  "value": 5
+                }
+              ]
+            }
+          ]
+        },
+        "t4": {
+          "speaker": "tendai",
+          "text": "Eight years ago the borehole pump stopped. Just stopped. Your grandmother had it looked at twice. Nobody could find the fault.",
+          "next": "t5"
+        },
+        "t5": {
+          "speaker": "tendai",
+          "portrait": "worried",
+          "text": "Then came the long drought. The river shrank to puddles. Without the pump, Waterhole A went dry, and the plains herds went with it.",
+          "next": "t6"
+        },
+        "t6": {
+          "speaker": "tendai",
+          "portrait": "worried",
+          "text": "No water, no animals. No animals, no visitors. No visitors, no wages. One by one the rangers left.",
+          "next": "t7"
+        },
+        "t7": {
+          "speaker": "tendai",
+          "portrait": "angry",
+          "text": "Then the snares started. Poachers can smell a reserve with nobody watching it.",
+          "next": "t8"
+        },
+        "t8": {
+          "speaker": "tendai",
+          "text": "Ruth refused to sell. Men in good shoes came every year with offers. She sent every one of them back down the road.",
+          "next": "t9"
+        },
+        "t9": {
+          "speaker": "player",
+          "text": "…",
+          "choices": [
+            {
+              "text": "Why did you stay?",
+              "next": "t10",
+              "effects": [
+                {
+                  "op": "relationship",
+                  "character": "tendai",
+                  "value": 3
+                }
+              ]
+            },
+            {
+              "text": "Who wanted to buy it?",
+              "next": "t11",
+              "effects": [
+                {
+                  "op": "setFlag",
+                  "flag": "heard_of_buyer"
+                }
+              ]
+            }
+          ]
+        },
+        "t10": {
+          "speaker": "tendai",
+          "portrait": "happy",
+          "text": "Somebody had to keep the gate. And I made her a promise.",
+          "next": "t12"
+        },
+        "t11": {
+          "speaker": "tendai",
+          "text": "Developers. Hotel people. One of them kept coming back. Smiled a lot. I didn't like his smile.",
+          "next": "t12"
+        },
+        "t12": {
+          "speaker": "tendai",
+          "text": "Anyway. That's the story. The rest of it, we write ourselves.",
+          "effects": [
+            {
+              "op": "journal",
+              "entry": "tendai_story"
+            },
+            {
+              "op": "relationship",
+              "character": "tendai",
+              "value": 2
+            }
+          ],
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch01_complete",
+      "nodes": {
+        "start": {
+          "speaker": "narrator",
+          "text": "Three days of water. A gate that shuts. Fresh tracks in the mud at dawn.",
+          "next": "c2"
+        },
+        "c2": {
+          "speaker": "tendai",
+          "portrait": "happy",
+          "text": "Not bad for a beginner, {player}. Not bad at all.",
+          "next": "c3"
+        },
+        "c3": {
+          "speaker": "tendai",
+          "text": "But I keep thinking about that pump. Machines wear out slowly. That one died overnight.",
+          "next": "c4"
+        },
+        "c4": {
+          "speaker": "tendai",
+          "portrait": "worried",
+          "text": "Tomorrow we go and look at it properly. Bring your eyes, not just your hands.",
+          "next": "c5"
+        },
+        "c5": {
+          "speaker": "narrator",
+          "text": "Chapter 1 complete: Ruin.",
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch01_seasons",
+      "nodes": {
+        "start": {
+          "speaker": "tendai",
+          "text": "Feel that wind? Dry season. Thirty days of it, then the rains.",
+          "next": "s2"
+        },
+        "s2": {
+          "speaker": "tendai",
+          "text": "In the dry, waterholes drop twice as fast and the grass barely grows. In the wet, the rain does half your work.",
+          "next": "s3"
+        },
+        "s3": {
+          "speaker": "tendai",
+          "text": "The little sun or raindrop at the top tells you which. Hover over the date and it tells you more.",
+          "next": "s4"
+        },
+        "s4": {
+          "speaker": "player",
+          "text": "…",
+          "choices": [
+            {
+              "text": "And the animals?",
+              "next": "s5"
+            },
+            {
+              "text": "Good to know.",
+              "next": null
+            }
+          ]
+        },
+        "s5": {
+          "speaker": "tendai",
+          "text": "They follow the water and the grass. Give them both and they'll stay. Take either away and they go looking.",
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch01_lions",
+      "nodes": {
+        "start": {
+          "speaker": "narrator",
+          "text": "Late afternoon. Four tawny shapes lie flat in the long grass on the eastern plains.",
+          "focus": {
+            "x": 70,
+            "y": 37
+          },
+          "next": "l2"
+        },
+        "l2": {
+          "speaker": "tendai",
+          "portrait": "happy",
+          "text": "The old pride. Four left, out of eleven when your grandmother was young.",
+          "next": "l3"
+        },
+        "l3": {
+          "speaker": "tendai",
+          "text": "Lions need prey, and prey needs grass and water. Look after the bottom of that ladder and the top looks after itself.",
+          "next": "l4"
+        },
+        "l4": {
+          "speaker": "player",
+          "text": "…",
+          "choices": [
+            {
+              "text": "Will they make it?",
+              "next": "l5"
+            },
+            {
+              "text": "Are they a danger to the impala?",
+              "next": "l6"
+            }
+          ]
+        },
+        "l5": {
+          "speaker": "tendai",
+          "portrait": "worried",
+          "text": "If they drop below four, they won't breed. Watch them—the herd panel will warn you.",
+          "next": null
+        },
+        "l6": {
+          "speaker": "tendai",
+          "text": "They'll take a few. That's their job. A plains with no lions is just a big farm.",
+          "next": null
+        }
+      }
+    }
+  ]
+}

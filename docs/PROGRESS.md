@@ -232,13 +232,44 @@ nothing off-screen; colourblind toggle switched colours + icons; Species → Sho
 alert click both panned the camera; tooltips correct; real alerts appeared from the sim
 (season, critical lions); 0 console errors.
 
-**Next — Phase 7 (Dialogue & Chapters 1–2):** DialogueRunner + DialogueScene,
-StoryManager (flags, goals, chapters.json), full Chapter 1 and 2 content (~150–250 lines),
-journal, the 3-clue pump investigation; playable start to end of Chapter 2.
+**Known issues**
+
+- Open questions D39/D60 (unlock chapters, build times), D51/D57 (predation, neglect).
+- Hard tile edges; animals draw over trees; touch untested on a device.
+
+## Phase 7 — Dialogue & Chapters 1–2 ✅ (2026-10-19)
+
+**Done**
+
+- `story/DialogueRunner.ts`: nodes, conditional branches, conditional choices, effects,
+  `{player}`; pure and tested.
+- `story/effects.ts`: the one effect interpreter; `story/conditions.ts`.
+- `story/StoryManager.ts` (tick step 11 + after every action): goals (latching, timed
+  streaks, counters), scripted beats, chapter completion → next chapter, zones opening when
+  their fences are mended, journal entries.
+- Fence repair command (20, 1 day), fence crews, fences drawn by status and clickable.
+- Content: chapters.json (Ch 1 Ruin, Ch 2 Foundations), 22 conversations / ~160 lines in
+  `src/data/dialogue/ch01.json` + `ch02.json`, journal.json (16 entries), characters.json.
+- Ch 2 investigation: 3 clickable clue markers → clue scenes → the "Mr H." reveal.
+- Scenes/UI: name prompt, DialogueScene (portrait, typewriter, choices, camera focus),
+  goal tracker (top-left), Journal panel with chapter filter, fence/clue tooltips, goal and
+  journal alerts; herds walk to water.
+- Placeholder portraits (5 characters × 4 expressions), clue marker, goal icons.
+- validate-data: dialogue links, unreachable nodes, speakers, effects/conditions refs,
+  chapter/unlock consistency, clue placement.
+
+**Checks:** `build` ✅ · `test` ✅ (167, incl. 3 full headless playthroughs from the first
+line to the end of Chapter 2 with different choices) · `lint` ✅ · `validate-data` ✅ ·
+browser: name prompt (typed "Wadsworth", WASD not swallowed) → arrival dialogue with
+choices → "The fences" → hover/click the gate (−20) → next day sound, goal ticked, gate
+scene started; tracker and alerts showed; 0 console errors.
+
+**Next — Phase 8 (Save/load & menu):** autosave each day, 3 manual slots, versioned saves
+with migrations, MenuScene (New game / Continue / Load), name prompt moves into it.
 
 **Known issues**
 
-- Waterhole A starts the game already dry, so it never triggers a "drying up" alert —
-  Chapter 1's tutorial will point the player at it.
-- Open questions D39/D60 (unlock chapters, build times), D51/D57 (predation, neglect).
+- Waterhole A starts dry so it never raises a "drying up" alert (the Ch 1 tutorial covers it).
+- The dialogue box covers the toolbar while open (it's modal, so nothing is lost).
+- Story text is placeholder quality (D83); open questions D39/D60, D51/D57.
 - Hard tile edges; animals draw over trees; touch untested on a device.

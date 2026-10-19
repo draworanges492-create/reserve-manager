@@ -3,6 +3,7 @@ import '@fontsource/alegreya/latin-700.css';
 import Phaser from 'phaser';
 import { computeViewport } from './config/scaling';
 import { BootScene } from './scenes/BootScene';
+import { DialogueScene } from './scenes/DialogueScene';
 import { GameScene } from './scenes/GameScene';
 import { PreloadScene } from './scenes/PreloadScene';
 import { UIScene } from './scenes/UIScene';
@@ -32,8 +33,8 @@ const game = new Phaser.Game({
     zoom: initial.zoom,
   },
   input: { activePointers: 2 }, // two fingers for pinch zoom
-  // UIScene last so it renders above the world.
-  scene: [BootScene, PreloadScene, GameScene, UIScene],
+  // Later scenes render on top: world, then HUD, then dialogue.
+  scene: [BootScene, PreloadScene, GameScene, UIScene, DialogueScene],
 });
 
 window.addEventListener('resize', () => {

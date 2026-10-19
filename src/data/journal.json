@@ -1,0 +1,100 @@
+{
+  "entries": [
+    {
+      "id": "chapter_1_start",
+      "chapter": 1,
+      "title": "Arrival",
+      "text": "I came through the gate my grandmother built. Most of it was lying in the grass."
+    },
+    {
+      "id": "ch1_arrival",
+      "chapter": 1,
+      "title": "Tendai",
+      "text": "Tendai has kept this place for thirty-one years, the last eight alone. He talks like the land owes him nothing and he owes it everything."
+    },
+    {
+      "id": "gate_mended",
+      "chapter": 1,
+      "title": "The gate shuts",
+      "text": "Mended the main gate today. Tendai swung it open and shut three times, just to hear it."
+    },
+    {
+      "id": "first_drink",
+      "chapter": 1,
+      "title": "They came back",
+      "text": "Impala at Waterhole A this morning. A few dozen, nervous, but there."
+    },
+    {
+      "id": "tendai_story",
+      "chapter": 1,
+      "title": "Around the fire",
+      "text": "The pump died, then the drought, then the wages, then the rangers. Then the snares. Gran never sold."
+    },
+    {
+      "id": "chapter_1_end",
+      "chapter": 1,
+      "title": "Ruin, survived",
+      "text": "Water in the ground, a gate that shuts. Tendai thinks the old pump didn't die on its own."
+    },
+    {
+      "id": "chapter_2_start",
+      "chapter": 2,
+      "title": "Foundations",
+      "text": "Today we start building something that lasts."
+    },
+    {
+      "id": "ch2_tasks",
+      "chapter": 2,
+      "title": "The list",
+      "text": "Find out what killed the pump. Build a new one. Hire a ranger. Stop losing money. Mend the west fence for the river."
+    },
+    {
+      "id": "clue_pipe",
+      "chapter": 2,
+      "title": "Cut, not broken",
+      "text": "The pump's main pipe was sawn through. Someone wanted it to look like it failed."
+    },
+    {
+      "id": "clue_tracks",
+      "chapter": 2,
+      "title": "Tracks in the clay",
+      "text": "A heavy vehicle came in from the east road, to the pump and back, never through the gate. Expensive city cigarettes."
+    },
+    {
+      "id": "clue_logbook",
+      "chapter": 2,
+      "title": "Gran's logbook",
+      "text": "“Mr H. visited again. Third offer. Told him no.” Two days later the pump was dead."
+    },
+    {
+      "id": "mystery",
+      "chapter": 2,
+      "title": "Not bad luck",
+      "text": "The pump was sabotaged two days after Gran refused Mr H. a third time. We can't prove it. Yet."
+    },
+    {
+      "id": "pump_running",
+      "chapter": 2,
+      "title": "The pump sings",
+      "text": "New borehole pump running. Tendai stood next to it for an hour, just listening."
+    },
+    {
+      "id": "first_ranger",
+      "chapter": 2,
+      "title": "Help arrives",
+      "text": "Hired our first ranger. Tendai pretended not to be pleased."
+    },
+    {
+      "id": "zone_river",
+      "chapter": 2,
+      "title": "The river",
+      "text": "Mended the west fence. The River & Wetland is part of the reserve again. Gran called it the reserve's memory."
+    },
+    {
+      "id": "chapter_2_end",
+      "chapter": 2,
+      "title": "Two letters",
+      "text": "An ecologist wants to count our impala. And someone called V. Hale wants to be our partner."
+    }
+  ]
+}

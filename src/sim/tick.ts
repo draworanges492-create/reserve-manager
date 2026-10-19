@@ -4,6 +4,7 @@ import { Rng } from '../core/Rng';
 import { runConstruction } from './Construction';
 import { runEconomy } from './Economy';
 import { runPopulation } from './Population';
+import { runStory } from '../story/StoryManager';
 import { runScores } from './Scores';
 import { runSeasons } from './Seasons';
 import { runVegetation } from './Vegetation';
@@ -12,7 +13,8 @@ import type { SimEvent, SimStep, StepResult } from './types';
 
 /**
  * Spec §4 order: 1 Seasons → 2 Water → 3 Vegetation → 4 Population → 5 Culling →
- * 6 Poaching → 7 Tourism → 8 Economy → 9 Scores → 10 Events → 11 Story → 12 Autosave.
+ * 6 Poaching → 7 Tourism → 8 Economy → 9 Scores → 10 Events → 11 Story → 12 Autosave
+ * (autosave is done by GameSession, outside the pure tick).
  * Steps are added here as their phases land. Construction progress runs just before
  * Economy so a building finished today already costs upkeep.
  */
@@ -24,6 +26,7 @@ const STEPS: readonly SimStep[] = [
   runConstruction,
   runEconomy,
   runScores,
+  runStory,
 ];
 
 export function runDayTick(state: GameState): StepResult {

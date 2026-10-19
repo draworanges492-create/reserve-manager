@@ -65,6 +65,13 @@ export interface Balance {
     /** How many days of net income to remember (Ch 2 goal: positive 5 days running). */
     netHistoryDays: number;
   };
+  fences: {
+    /** Spec §7.1: patching a fence segment by hand costs 20 and takes time. */
+    repairCost: number;
+    repairDays: number;
+    /** Broken segments each fence crew mends per day, for free. */
+    crewRepairsPerDay: number;
+  };
   scores: {
     /** Spec §6.8 Ecosystem Health weights. */
     weights: { vegetation: number; biodiversity: number; water: number };

@@ -27,7 +27,10 @@
     "icon-level-poor": "assets/ui/icon-level-poor.png",
     "icon-species": "assets/ui/icon-species.png",
     "icon-journal": "assets/ui/icon-journal.png",
-    "icon-settings": "assets/ui/icon-settings.png"
+    "icon-settings": "assets/ui/icon-settings.png",
+    "clue-marker": "assets/sprites/clue-marker.png",
+    "icon-goal-open": "assets/ui/icon-goal-open.png",
+    "icon-goal-done": "assets/ui/icon-goal-done.png"
   },
   "spritesheets": {
     "impala": {
@@ -64,6 +67,31 @@
       "path": "assets/sprites/waterhole.png",
       "frameWidth": 96,
       "frameHeight": 96
+    },
+    "portrait-tendai": {
+      "path": "assets/portraits/portrait-tendai.png",
+      "frameWidth": 72,
+      "frameHeight": 72
+    },
+    "portrait-amara": {
+      "path": "assets/portraits/portrait-amara.png",
+      "frameWidth": 72,
+      "frameHeight": 72
+    },
+    "portrait-wanjiru": {
+      "path": "assets/portraits/portrait-wanjiru.png",
+      "frameWidth": 72,
+      "frameHeight": 72
+    },
+    "portrait-victor": {
+      "path": "assets/portraits/portrait-victor.png",
+      "frameWidth": 72,
+      "frameHeight": 72
+    },
+    "portrait-kito": {
+      "path": "assets/portraits/portrait-kito.png",
+      "frameWidth": 72,
+      "frameHeight": 72
     }
   },
   "tilemaps": {

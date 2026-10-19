@@ -1,0 +1,382 @@
+{
+  "chapters": [
+    {
+      "id": 1,
+      "title": "Ruin",
+      "introDialogue": "ch01_arrival",
+      "goals": [
+        {
+          "id": "g_gate",
+          "text": "Mend the main gate",
+          "conditions": [
+            {
+              "op": "fenceRepaired",
+              "segmentId": "hq_gate"
+            }
+          ]
+        },
+        {
+          "id": "g_water",
+          "text": "Keep Waterhole A at 30+ for 3 days ({n}/{days})",
+          "conditions": [
+            {
+              "op": "waterholeLevel",
+              "waterholeId": "waterhole_a",
+              "min": 30
+            }
+          ],
+          "days": 3
+        },
+        {
+          "id": "g_drink",
+          "text": "See the first animals come to drink",
+          "conditions": [
+            {
+              "op": "flag",
+              "flag": "ch1_first_drink"
+            }
+          ]
+        }
+      ],
+      "unlocks": {
+        "zones": ["hq", "plains"],
+        "buildings": [],
+        "staff": ["ranger"]
+      },
+      "scriptedEvents": [
+        {
+          "id": "s_gate_tutorial",
+          "when": [
+            {
+              "op": "flag",
+              "flag": "ch1_water_first"
+            },
+            {
+              "op": "waterholeLevel",
+              "waterholeId": "waterhole_a",
+              "min": 30
+            },
+            {
+              "op": "not",
+              "condition": {
+                "op": "fenceRepaired",
+                "segmentId": "hq_gate"
+              }
+            }
+          ],
+          "dialogue": "ch01_gate_tutorial"
+        },
+        {
+          "id": "s_gate_done",
+          "when": [
+            {
+              "op": "fenceRepaired",
+              "segmentId": "hq_gate"
+            }
+          ],
+          "dialogue": "ch01_gate_done"
+        },
+        {
+          "id": "s_hint_water",
+          "when": [
+            {
+              "op": "dayAtLeast",
+              "day": 2
+            },
+            {
+              "op": "not",
+              "condition": {
+                "op": "goalStreak",
+                "goalId": "g_water",
+                "min": 1
+              }
+            },
+            {
+              "op": "not",
+              "condition": {
+                "op": "waterholeLevel",
+                "waterholeId": "waterhole_a",
+                "min": 30
+              }
+            }
+          ],
+          "dialogue": "ch01_hint_water"
+        },
+        {
+          "id": "s_hint_gate",
+          "when": [
+            {
+              "op": "dayAtLeast",
+              "day": 3
+            },
+            {
+              "op": "not",
+              "condition": {
+                "op": "fenceRepaired",
+                "segmentId": "hq_gate"
+              }
+            },
+            {
+              "op": "not",
+              "condition": {
+                "op": "flag",
+                "flag": "ch1_water_first",
+                "value": true
+              }
+            }
+          ],
+          "dialogue": "ch01_hint_gate"
+        },
+        {
+          "id": "s_first_drink",
+          "when": [
+            {
+              "op": "goalStreak",
+              "goalId": "g_water",
+              "min": 1
+            }
+          ],
+          "dialogue": "ch01_first_drink"
+        },
+        {
+          "id": "s_tendai_story",
+          "when": [
+            {
+              "op": "goalStreak",
+              "goalId": "g_water",
+              "min": 2
+            },
+            {
+              "op": "fenceRepaired",
+              "segmentId": "hq_gate"
+            }
+          ],
+          "dialogue": "ch01_tendai_story"
+        },
+        {
+          "id": "s_seasons",
+          "when": [
+            {
+              "op": "dayAtLeast",
+              "day": 1
+            }
+          ],
+          "dialogue": "ch01_seasons"
+        },
+        {
+          "id": "s_lions",
+          "when": [
+            {
+              "op": "goalDone",
+              "goalId": "g_drink"
+            },
+            {
+              "op": "dayAtLeast",
+              "day": 3
+            }
+          ],
+          "dialogue": "ch01_lions"
+        }
+      ],
+      "clues": [],
+      "completionDialogue": "ch01_complete"
+    },
+    {
+      "id": 2,
+      "title": "Foundations",
+      "introDialogue": "ch02_intro",
+      "goals": [
+        {
+          "id": "g_mystery",
+          "text": "Find out what happened to the old pump ({found}/{total} clues)",
+          "conditions": [
+            {
+              "op": "flag",
+              "flag": "ch2_mystery_solved"
+            }
+          ],
+          "counter": {
+            "flags": ["clue_pipe", "clue_tracks", "clue_logbook"]
+          }
+        },
+        {
+          "id": "g_pump",
+          "text": "Build a working borehole pump",
+          "conditions": [
+            {
+              "op": "buildingWorking",
+              "buildingId": "borehole_pump"
+            }
+          ]
+        },
+        {
+          "id": "g_ranger",
+          "text": "Hire a ranger",
+          "conditions": [
+            {
+              "op": "staffCount",
+              "role": "ranger",
+              "min": 1
+            }
+          ]
+        },
+        {
+          "id": "g_money",
+          "text": "Earn more than you spend 5 days running ({n}/{days})",
+          "conditions": [
+            {
+              "op": "netPositive"
+            }
+          ],
+          "days": 5
+        }
+      ],
+      "unlocks": {
+        "zones": ["river"],
+        "buildings": ["borehole_pump", "ranger_post"],
+        "staff": ["fence_crew"]
+      },
+      "scriptedEvents": [
+        {
+          "id": "s_clues_done",
+          "when": [
+            {
+              "op": "flag",
+              "flag": "clue_pipe"
+            },
+            {
+              "op": "flag",
+              "flag": "clue_tracks"
+            },
+            {
+              "op": "flag",
+              "flag": "clue_logbook"
+            }
+          ],
+          "dialogue": "ch02_mystery"
+        },
+        {
+          "id": "s_pump_running",
+          "when": [
+            {
+              "op": "buildingWorking",
+              "buildingId": "borehole_pump"
+            }
+          ],
+          "dialogue": "ch02_pump_running"
+        },
+        {
+          "id": "s_first_ranger",
+          "when": [
+            {
+              "op": "staffCount",
+              "role": "ranger",
+              "min": 1
+            }
+          ],
+          "dialogue": "ch02_first_ranger"
+        },
+        {
+          "id": "s_river",
+          "when": [
+            {
+              "op": "zoneOpen",
+              "zoneId": "river"
+            }
+          ],
+          "dialogue": "ch02_river"
+        },
+        {
+          "id": "s_hint_clues",
+          "when": [
+            {
+              "op": "buildingWorking",
+              "buildingId": "borehole_pump"
+            },
+            {
+              "op": "not",
+              "condition": {
+                "op": "flag",
+                "flag": "ch2_mystery_solved"
+              }
+            },
+            {
+              "op": "goalDone",
+              "goalId": "g_ranger"
+            }
+          ],
+          "dialogue": "ch02_hint_clues"
+        },
+        {
+          "id": "s_hint_ranger",
+          "when": [
+            {
+              "op": "buildingWorking",
+              "buildingId": "borehole_pump"
+            },
+            {
+              "op": "not",
+              "condition": {
+                "op": "staffCount",
+                "role": "ranger",
+                "min": 1
+              }
+            }
+          ],
+          "dialogue": "ch02_hint_ranger"
+        },
+        {
+          "id": "s_low_money",
+          "when": [
+            {
+              "op": "staffCount",
+              "role": "ranger",
+              "min": 1
+            },
+            {
+              "op": "not",
+              "condition": {
+                "op": "money",
+                "min": 60
+              }
+            }
+          ],
+          "dialogue": "ch02_low_money"
+        }
+      ],
+      "clues": [
+        {
+          "id": "clue_pipe",
+          "at": {
+            "x": 59.5,
+            "y": 41.5
+          },
+          "dialogue": "ch02_clue_pipe",
+          "flag": "clue_pipe",
+          "visibleWhen": []
+        },
+        {
+          "id": "clue_tracks",
+          "at": {
+            "x": 78.5,
+            "y": 61
+          },
+          "dialogue": "ch02_clue_tracks",
+          "flag": "clue_tracks",
+          "visibleWhen": []
+        },
+        {
+          "id": "clue_logbook",
+          "at": {
+            "x": 51.5,
+            "y": 71
+          },
+          "dialogue": "ch02_clue_logbook",
+          "flag": "clue_logbook",
+          "visibleWhen": []
+        }
+      ],
+      "completionDialogue": "ch02_complete"
+    }
+  ]
+}

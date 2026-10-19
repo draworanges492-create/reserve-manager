@@ -1,7 +1,7 @@
 // Building and staff commands (spec §4 Commands; §7.2 building, §7.3 staff).
 import { BALANCE } from '../config/balance';
 import { adjustScore } from '../sim/Scores';
-import { buildingDef, staffRole } from './content';
+import { buildingDef, staffRole, zoneDef } from './content';
 import type { CommandResult } from './Commands';
 import type { GameState, StaffMember } from './GameState';
 
@@ -125,5 +125,36 @@ export function dismissStaff(state: GameState, staffId: string): CommandResult {
       'score.reason.dismissed',
     ),
     events: [{ type: 'staffChanged', payload: { staffId } }],
+  };
+}
+
+/** Can the player mend this fence now? Its zone is open, or due this chapter and facing open land. */
+export function fenceRepairable(state: GameState, segmentId: string): boolean {
+  const fence = state.fences[segmentId];
+  if (!fence || fence.status !== 'broken') return false;
+  if (state.zones[fence.zoneId]?.unlocked) return true;
+  const due = (zoneDef(fence.zoneId)?.unlockChapter ?? Infinity) <= state.chapter.current;
+  return due && fence.borders !== null && state.zones[fence.borders]?.unlocked === true;
+}
+
+/** Spec §7.1 chore: patch a fence segment by hand (costs money, takes a day). */
+export function repairFence(state: GameState, segmentId: string): CommandResult {
+  const fence = state.fences[segmentId];
+  if (!fence) return fail('command.unknownFence');
+  if (fence.status !== 'broken') return fail('command.fenceNotBroken');
+  if (!fenceRepairable(state, segmentId)) return fail('command.fenceNotYet');
+  const { repairCost, repairDays } = BALANCE.fences;
+  if (state.resources.money < repairCost) return fail('command.notEnoughMoney');
+  return {
+    ok: true,
+    state: {
+      ...state,
+      resources: { ...state.resources, money: state.resources.money - repairCost },
+      fences: {
+        ...state.fences,
+        [segmentId]: { ...fence, status: 'repairing', daysLeft: repairDays },
+      },
+    },
+    events: [{ type: 'fenceRepairStarted', payload: { segmentId } }],
   };
 }

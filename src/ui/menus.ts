@@ -59,10 +59,6 @@ export function speciesMenu(
   };
 }
 
-export function journalMenu(): SideContent {
-  return { title: t('journal.title'), intro: [{ text: t('journal.empty') }], rows: [] };
-}
-
 const onOff = (on: boolean): string => t(on ? 'settings.on' : 'settings.off');
 const pct = (v: number): string => `${Math.round(v * 100)}%`;
 

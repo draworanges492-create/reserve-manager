@@ -107,6 +107,12 @@ export class HerdLayer {
       home: spawn ?? { x: zone.rect.centerX, y: zone.rect.centerY },
       tileSize: this.map.tileWidth,
       blocked: this.blocked,
+      waterSpot: () => {
+        const hole = Object.values(this.session.state.waterholes).find(
+          (h) => h.zoneId === zoneId && h.level >= BALANCE.water.availableMinLevel,
+        );
+        return hole ? { x: hole.x * this.map.tileWidth, y: hole.y * this.map.tileHeight } : null;
+      },
     });
     this.groups.set(group.key, group);
     return group;

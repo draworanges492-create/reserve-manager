@@ -77,5 +77,4 @@ All face **right** (the game mirrors them). Frames sit side by side in one strip
 
 Still to come (later phases): wildebeest 24, giraffe 48, leopard 24, rhino 48; fence
 crew / tracker / vet / culling team;
-lodge; portraits 72×72 with 4
-expressions each; 9-slice UI panels.
+lodge; 9-slice UI panels.

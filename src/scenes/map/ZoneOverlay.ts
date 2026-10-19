@@ -1,10 +1,8 @@
 import Phaser from 'phaser';
 import { BALANCE } from '../../config/balance';
 import { DEPTH } from '../depth';
-import { objectsIn, type ZoneArea } from './mapObjects';
+import type { ZoneArea } from './mapObjects';
 
-const FENCE_COLOR = 0x6a4a32;
-const POST_COLOR = 0x4a3222;
 const LOCK_TINT = 0x0d120c;
 /** Heavy fog: a locked zone inside the camera's rectangle should read as off-limits. */
 const LOCK_ALPHA = 0.8;
@@ -12,13 +10,10 @@ const HOVER_COLOR = 0xe8d9a8;
 /** Brown wash over overgrazed zones (spec §6.2: "visual brown overlay"). */
 const DEGRADED_TINT = 0x7a4a1e;
 const DEGRADED_ALPHA = 0.3;
-const DASH = 8;
-const GAP = 5;
-const POST_SPACING = 24;
 
 /**
- * Zone-level drawing: locked-zone fog, run-down fences, degraded-grass wash (spec §5, §6.2)
- * and outlines for the hovered and selected zone.
+ * Zone-level drawing: locked-zone fog, degraded-grass wash (spec §5, §6.2) and outlines
+ * for the hovered and selected zone. Fences are drawn by FenceLayer.
  */
 export class ZoneOverlay {
   private readonly hover: Phaser.GameObjects.Graphics;
@@ -30,24 +25,12 @@ export class ZoneOverlay {
 
   constructor(
     scene: Phaser.Scene,
-    map: Phaser.Tilemaps.Tilemap,
+    _map: Phaser.Tilemaps.Tilemap,
     private readonly zones: ZoneArea[],
     isUnlocked: (zoneId: string) => boolean,
   ) {
     this.dim = scene.add.graphics().setDepth(DEPTH.zoneDim);
     this.refreshLocks(isUnlocked);
-
-    const fences = scene.add.graphics().setDepth(DEPTH.fences);
-    for (const segment of objectsIn(map, 'fence_segments')) {
-      const points = (segment.polyline ?? []).map(
-        (p) => new Phaser.Math.Vector2((segment.x ?? 0) + p.x, (segment.y ?? 0) + p.y),
-      );
-      for (let i = 1; i < points.length; i++) {
-        const a = points[i - 1];
-        const b = points[i];
-        if (a && b) drawBrokenFence(fences, a, b);
-      }
-    }
 
     this.hover = scene.add.graphics().setDepth(DEPTH.hover);
     // On the ground, under waterholes and animals.
@@ -89,26 +72,5 @@ export class ZoneOverlay {
     }
     if (this.selected)
       this.hover.lineStyle(px * 2, HOVER_COLOR, 1).strokeRectShape(this.selected.rect);
-  }
-}
-
-/** Dashed line with posts: the fences start run-down (Chapter 1 repairs them). */
-function drawBrokenFence(
-  g: Phaser.GameObjects.Graphics,
-  a: Phaser.Math.Vector2,
-  b: Phaser.Math.Vector2,
-): void {
-  const length = a.distance(b);
-  const dir = b.clone().subtract(a).normalize();
-  g.lineStyle(2, FENCE_COLOR, 1);
-  for (let d = 0; d < length; d += DASH + GAP) {
-    const start = a.clone().add(dir.clone().scale(d));
-    const end = a.clone().add(dir.clone().scale(Math.min(length, d + DASH)));
-    g.lineBetween(start.x, start.y, end.x, end.y);
-  }
-  g.fillStyle(POST_COLOR, 1);
-  for (let d = 0; d <= length; d += POST_SPACING) {
-    const p = a.clone().add(dir.clone().scale(d));
-    g.fillRect(p.x - 1.5, p.y - 1.5, 3, 3);
   }
 }

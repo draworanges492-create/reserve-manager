@@ -187,6 +187,19 @@ function gear(): PixelCanvas {
   return c;
 }
 
+/** Goal tracker boxes: empty, or ticked. */
+function goalBox(done: boolean): PixelCanvas {
+  const c = new PixelCanvas(9, 9);
+  c.fillRect(0, 0, 9, 9, PAL.uiText);
+  c.fillRect(1, 1, 7, 7, PAL.uiPanel);
+  if (done) {
+    c.line(2, 4, 3, 6, PAL.grassLight);
+    c.line(3, 6, 7, 1, PAL.grassLight);
+    c.line(2, 5, 3, 7, PAL.grassLight);
+  }
+  return c;
+}
+
 /** Icon key → image. Keys must match src/config/assets.json. */
 export function drawIcons(): Record<string, PixelCanvas> {
   return {
@@ -208,5 +221,7 @@ export function drawIcons(): Record<string, PixelCanvas> {
     'icon-species': paw(),
     'icon-journal': book(),
     'icon-settings': gear(),
+    'icon-goal-open': goalBox(false),
+    'icon-goal-done': goalBox(true),
   };
 }

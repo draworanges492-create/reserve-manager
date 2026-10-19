@@ -1,0 +1,626 @@
+{
+  "dialogues": [
+    {
+      "id": "ch02_intro",
+      "nodes": {
+        "start": {
+          "speaker": "narrator",
+          "text": "Chapter 2: Foundations.",
+          "next": "i2"
+        },
+        "i2": {
+          "speaker": "tendai",
+          "text": "Here she is. The old borehole pump. Your grandmother's pride.",
+          "focus": {
+            "x": 58,
+            "y": 43
+          },
+          "next": "i3"
+        },
+        "i3": {
+          "speaker": "tendai",
+          "portrait": "worried",
+          "text": "I always told myself it was bad luck. Standing here with you, I'm not so sure any more.",
+          "next": "i4"
+        },
+        "i4": {
+          "speaker": "tendai",
+          "text": "Three things I want you to look at: here at the pump, the tracks out on the east road, and Ruth's logbook in the office. Look for the markers on the map.",
+          "next": "i5"
+        },
+        "i5": {
+          "speaker": "player",
+          "text": "…",
+          "choices": [
+            {
+              "text": "Let's find out what happened.",
+              "next": "i6",
+              "effects": [
+                {
+                  "op": "relationship",
+                  "character": "tendai",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "text": "Shouldn't we just build a new pump?",
+              "next": "i7"
+            }
+          ]
+        },
+        "i6": {
+          "speaker": "tendai",
+          "portrait": "happy",
+          "text": "Good. Eyes first.",
+          "next": "i8"
+        },
+        "i7": {
+          "speaker": "tendai",
+          "text": "We will. But if someone broke the first one, they can break the second.",
+          "next": "i8"
+        },
+        "i8": {
+          "speaker": "tendai",
+          "text": "A new borehole pump costs 400. Open Build, pick the pump, and place it on the spot beside the waterhole.",
+          "next": "i9"
+        },
+        "i9": {
+          "speaker": "tendai",
+          "text": "We need help too. Hire a ranger from the Staff menu, and keep the books in the black—more coming in than going out—five days running.",
+          "next": "i10"
+        },
+        "i10": {
+          "speaker": "tendai",
+          "text": "One more thing. Mend the fence along the west side of the plains and the River & Wetland is ours again.",
+          "focus": {
+            "x": 37,
+            "y": 50
+          },
+          "effects": [
+            {
+              "op": "journal",
+              "entry": "ch2_tasks"
+            }
+          ],
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch02_clue_pipe",
+      "nodes": {
+        "start": {
+          "speaker": "narrator",
+          "text": "Under the pump housing, the main pipe has been cut clean through. Not rusted. Not cracked. Cut.",
+          "focus": {
+            "x": 58,
+            "y": 43
+          },
+          "next": "p2"
+        },
+        "p2": {
+          "speaker": "tendai",
+          "portrait": "angry",
+          "text": "Saw marks. Somebody crawled under here with a hacksaw and took their time.",
+          "next": "p3"
+        },
+        "p3": {
+          "speaker": "player",
+          "text": "…",
+          "choices": [
+            {
+              "text": "Then it was sabotage.",
+              "next": "p4"
+            },
+            {
+              "text": "Could a scrap thief have wanted the metal?",
+              "next": "p5"
+            }
+          ]
+        },
+        "p4": {
+          "speaker": "tendai",
+          "text": "Looks like it. But sabotage needs a reason. Let's find one.",
+          "next": "p6"
+        },
+        "p5": {
+          "speaker": "tendai",
+          "text": "A thief takes the pipe. This one was left lying here, so the pump would look broken.",
+          "next": "p6"
+        },
+        "p6": {
+          "speaker": "tendai",
+          "text": "One down.",
+          "effects": [
+            {
+              "op": "setFlag",
+              "flag": "clue_pipe"
+            },
+            {
+              "op": "journal",
+              "entry": "clue_pipe"
+            }
+          ],
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch02_clue_tracks",
+      "nodes": {
+        "start": {
+          "speaker": "narrator",
+          "text": "Where the east road meets the plains, old tyre ruts are baked into the clay. Wide tyres. A heavy vehicle.",
+          "focus": {
+            "x": 78.5,
+            "y": 62.5
+          },
+          "next": "k2"
+        },
+        "k2": {
+          "speaker": "tendai",
+          "portrait": "worried",
+          "text": "That's not my truck, and it's no tourist bus. Those tracks run to the pump and straight back out east—never through the gate.",
+          "next": "k3"
+        },
+        "k3": {
+          "speaker": "narrator",
+          "text": "Pressed into the clay beside them: the foil from a pack of expensive city cigarettes.",
+          "next": "k4"
+        },
+        "k4": {
+          "speaker": "player",
+          "text": "…",
+          "choices": [
+            {
+              "text": "Someone came here on purpose.",
+              "next": "k5"
+            },
+            {
+              "text": "Could have been anyone.",
+              "next": "k6"
+            }
+          ]
+        },
+        "k5": {
+          "speaker": "tendai",
+          "text": "Someone with money, and a reason not to be seen at the gate.",
+          "next": "k7"
+        },
+        "k6": {
+          "speaker": "tendai",
+          "text": "Could be. But nobody drives all this way by accident.",
+          "next": "k7"
+        },
+        "k7": {
+          "speaker": "tendai",
+          "text": "Two.",
+          "effects": [
+            {
+              "op": "setFlag",
+              "flag": "clue_tracks"
+            },
+            {
+              "op": "journal",
+              "entry": "clue_tracks"
+            }
+          ],
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch02_clue_logbook",
+      "nodes": {
+        "start": {
+          "speaker": "narrator",
+          "text": "Ruth's logbook lies on the office desk under a layer of dust. Her handwriting fills every page.",
+          "focus": {
+            "x": 51,
+            "y": 72.5
+          },
+          "next": "l2"
+        },
+        "l2": {
+          "speaker": "narrator",
+          "text": "The last entries are short. “Mr H. visited again. Third offer. Told him no.” Two days later: “Pump dead. Engineer says no fault.”",
+          "next": "l3"
+        },
+        "l3": {
+          "speaker": "tendai",
+          "portrait": "worried",
+          "text": "Mr H. I remember him. Tall, good suit, smiled with all his teeth. Never gave his whole name.",
+          "next": "l4"
+        },
+        "l4": {
+          "speaker": "player",
+          "text": "…",
+          "choices": [
+            {
+              "text": "Gran knew something was wrong.",
+              "next": "l5",
+              "effects": [
+                {
+                  "op": "relationship",
+                  "character": "tendai",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "text": "That's not proof.",
+              "next": "l6"
+            }
+          ]
+        },
+        "l5": {
+          "speaker": "tendai",
+          "portrait": "worried",
+          "text": "She knew. She just couldn't prove it, and then she got sick.",
+          "next": "l7"
+        },
+        "l6": {
+          "speaker": "tendai",
+          "text": "No, it isn't. But it's a name. Half of one.",
+          "next": "l7"
+        },
+        "l7": {
+          "speaker": "tendai",
+          "text": "Keep looking, {player}.",
+          "effects": [
+            {
+              "op": "setFlag",
+              "flag": "clue_logbook"
+            },
+            {
+              "op": "journal",
+              "entry": "clue_logbook"
+            }
+          ],
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch02_mystery",
+      "nodes": {
+        "start": {
+          "speaker": "tendai",
+          "text": "Sit with me a minute. Cut pipe. A heavy truck that came and went without using the gate. And a buyer who wouldn't take no for an answer.",
+          "next": "m2"
+        },
+        "m2": {
+          "speaker": "tendai",
+          "portrait": "angry",
+          "text": "Two days after Ruth turned him down a third time, the pump died. That's not luck.",
+          "next": "m3"
+        },
+        "m3": {
+          "speaker": "player",
+          "text": "…",
+          "choices": [
+            {
+              "text": "We find Mr H. and make him answer for it.",
+              "next": "m4",
+              "effects": [
+                {
+                  "op": "setFlag",
+                  "flag": "ch2_wants_justice"
+                },
+                {
+                  "op": "relationship",
+                  "character": "tendai",
+                  "value": 3
+                }
+              ]
+            },
+            {
+              "text": "We can't prove anything. We protect what's left.",
+              "next": "m5",
+              "effects": [
+                {
+                  "op": "setFlag",
+                  "flag": "ch2_protect_first"
+                }
+              ]
+            },
+            {
+              "text": "Maybe someone wanted us to blame him.",
+              "next": "m6",
+              "effects": [
+                {
+                  "op": "setFlag",
+                  "flag": "ch2_doubts"
+                }
+              ]
+            }
+          ]
+        },
+        "m4": {
+          "speaker": "tendai",
+          "portrait": "happy",
+          "text": "Careful. Men like that have friends in offices. But I like the fire in you.",
+          "next": "m7"
+        },
+        "m5": {
+          "speaker": "tendai",
+          "text": "Wise. Water, rangers, a gate that shuts. We make this place too strong to break.",
+          "next": "m7"
+        },
+        "m6": {
+          "speaker": "tendai",
+          "text": "Hm. Ruth used to say I jumped to conclusions. Keep your eyes open, then.",
+          "next": "m7"
+        },
+        "m7": {
+          "speaker": "tendai",
+          "text": "Either way, the new pump gets a padlock, and a ranger walks past it every night.",
+          "effects": [
+            {
+              "op": "setFlag",
+              "flag": "ch2_mystery_solved"
+            },
+            {
+              "op": "setFlag",
+              "flag": "suspects_mr_h"
+            },
+            {
+              "op": "journal",
+              "entry": "mystery"
+            }
+          ],
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch02_hint_clues",
+      "nodes": {
+        "start": {
+          "speaker": "tendai",
+          "portrait": "worried",
+          "text": "The pump runs, but those three markers are still waiting for you.",
+          "next": "h2"
+        },
+        "h2": {
+          "speaker": "tendai",
+          "text": "The pump, the east road, the office. Click them and look closely.",
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch02_hint_ranger",
+      "nodes": {
+        "start": {
+          "speaker": "tendai",
+          "portrait": "worried",
+          "text": "I can't watch the whole plains on my own, {player}.",
+          "next": "h2"
+        },
+        "h2": {
+          "speaker": "tendai",
+          "text": "Open Staff and hire a ranger. Thirty a day, and worth every coin.",
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch02_pump_running",
+      "nodes": {
+        "start": {
+          "speaker": "narrator",
+          "text": "The new pump coughs, shudders, and settles into a steady rhythm. Clear water spills into Waterhole A.",
+          "focus": {
+            "x": 53.5,
+            "y": 45.5
+          },
+          "next": "r2"
+        },
+        "r2": {
+          "speaker": "tendai",
+          "portrait": "happy",
+          "text": "Eight years I've waited to hear that sound.",
+          "next": "r3"
+        },
+        "r3": {
+          "speaker": "tendai",
+          "text": "Six a day, more than even the dry season takes. You can rest your arms now. Mostly.",
+          "next": "r4"
+        },
+        "r4": {
+          "speaker": "tendai",
+          "text": "It costs a little upkeep every day. Click the pump any time to see what it's doing.",
+          "effects": [
+            {
+              "op": "journal",
+              "entry": "pump_running"
+            }
+          ],
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch02_first_ranger",
+      "nodes": {
+        "start": {
+          "speaker": "tendai",
+          "portrait": "happy",
+          "text": "A new ranger! Young, keen, and they brought their own boots. Good sign.",
+          "next": "f2"
+        },
+        "f2": {
+          "speaker": "tendai",
+          "text": "A ranger sitting at HQ protects nothing. Open Staff and press 'Zone' to send them out on patrol.",
+          "next": "f3"
+        },
+        "f3": {
+          "speaker": "tendai",
+          "text": "Each ranger on patrol covers a quarter of a zone. A ranger post doubles that.",
+          "next": "f4"
+        },
+        "f4": {
+          "speaker": "tendai",
+          "portrait": "worried",
+          "text": "Wages come out every day. If the money runs out they go unpaid, and after three days they walk.",
+          "effects": [
+            {
+              "op": "journal",
+              "entry": "first_ranger"
+            }
+          ],
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch02_river",
+      "nodes": {
+        "start": {
+          "speaker": "narrator",
+          "text": "Beyond the mended fence the land drops toward the river. Reeds, mud, birdsong. Water that never quite runs dry.",
+          "focus": {
+            "x": 20,
+            "y": 50
+          },
+          "next": "v2"
+        },
+        "v2": {
+          "speaker": "tendai",
+          "portrait": "happy",
+          "text": "Your grandmother's favourite place. She used to say the river was the reserve's memory.",
+          "next": "v3"
+        },
+        "v3": {
+          "speaker": "tendai",
+          "text": "There's a second waterhole down there, and room for another pump if we ever need one.",
+          "next": "v4"
+        },
+        "v4": {
+          "speaker": "player",
+          "text": "…",
+          "choices": [
+            {
+              "text": "Let's bring the animals down here.",
+              "next": "v5"
+            },
+            {
+              "text": "One step at a time.",
+              "next": "v6",
+              "effects": [
+                {
+                  "op": "relationship",
+                  "character": "tendai",
+                  "value": 2
+                }
+              ]
+            }
+          ]
+        },
+        "v5": {
+          "speaker": "tendai",
+          "text": "They'll find it themselves once there's water and grass. That's the trick: don't herd, invite.",
+          "next": null
+        },
+        "v6": {
+          "speaker": "tendai",
+          "portrait": "happy",
+          "text": "Now you sound just like her.",
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch02_complete",
+      "nodes": {
+        "start": {
+          "speaker": "narrator",
+          "text": "Water flows. A ranger walks the plains at dusk. For the first time in years, the reserve's books balance.",
+          "next": "z2"
+        },
+        "z2": {
+          "speaker": "tendai",
+          "portrait": "happy",
+          "text": "Look at us, {player}. A pump, a ranger, money in the tin. Ruth would be proud.",
+          "next": "z3"
+        },
+        "z3": {
+          "speaker": "narrator",
+          "text": "That week, two letters arrive.",
+          "next": "z4"
+        },
+        "z4": {
+          "speaker": "narrator",
+          "text": "The first is from Dr. Amara Okafor, an ecologist. She has heard the impala are back and asks to come and count them. “Herds that grow this fast,” she writes, “can eat a place bare.”",
+          "next": "z5"
+        },
+        "z5": {
+          "speaker": "narrator",
+          "text": "The second is on thick cream paper. Hale & Partners would like to discuss “an exciting partnership”. It is signed V. Hale.",
+          "next": "z6"
+        },
+        "z6": {
+          "speaker": "narrator",
+          "text": "",
+          "branch": [
+            {
+              "conditions": [
+                {
+                  "op": "flag",
+                  "flag": "suspects_mr_h"
+                }
+              ],
+              "next": "z7"
+            }
+          ],
+          "next": "z8"
+        },
+        "z7": {
+          "speaker": "tendai",
+          "portrait": "angry",
+          "text": "Hale. Mr H. Well, well, well.",
+          "next": "z9"
+        },
+        "z8": {
+          "speaker": "tendai",
+          "portrait": "worried",
+          "text": "Hale. That name rings a bell, and not a nice one.",
+          "next": "z9"
+        },
+        "z9": {
+          "speaker": "tendai",
+          "text": "Whatever comes next, we face it with water in the ground and people on the fence line.",
+          "next": "z10"
+        },
+        "z10": {
+          "speaker": "narrator",
+          "text": "End of Chapter 2: Foundations. That's as far as the story goes for now. Thank you for playing! The reserve keeps running, so carry on managing it for as long as you like.",
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch02_low_money",
+      "nodes": {
+        "start": {
+          "speaker": "tendai",
+          "portrait": "worried",
+          "text": "Money's getting thin, {player}.",
+          "next": "m2"
+        },
+        "m2": {
+          "speaker": "tendai",
+          "text": "Watch the coin at the top. Hover over it and it shows what comes in and what goes out.",
+          "next": "m3"
+        },
+        "m3": {
+          "speaker": "tendai",
+          "text": "If wages can't be paid, staff start walking after three days. Better to have one ranger paid than three angry.",
+          "next": null
+        }
+      }
+    }
+  ]
+}

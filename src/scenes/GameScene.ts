@@ -11,6 +11,8 @@ import { type Bounds, unionBounds } from './camera/cameraMath';
 import { DEPTH } from './depth';
 import { BuildingLayer } from './BuildingLayer';
 import { HerdLayer } from './HerdLayer';
+import { ClueLayer } from './map/ClueLayer';
+import { FenceLayer } from './map/FenceLayer';
 import { StaffLayer } from './StaffLayer';
 import { readZones, type ZoneArea } from './map/mapObjects';
 import { SeasonTint } from './map/SeasonTint';
@@ -39,6 +41,8 @@ export class GameScene extends Phaser.Scene {
   private buildings!: BuildingLayer;
   private staff!: StaffLayer;
   private placing = false;
+  private fences!: FenceLayer;
+  private clues!: ClueLayer;
 
   constructor() {
     super('GameScene');
@@ -67,6 +71,8 @@ export class GameScene extends Phaser.Scene {
     this.overlay.refreshDegraded((id) => session.state.zones[id]?.vegetation ?? 100);
     this.herds = new HerdLayer(this, map, this.zones, session);
     this.buildings = new BuildingLayer(this, session, map.tileWidth);
+    this.fences = new FenceLayer(this, map, session);
+    this.clues = new ClueLayer(this, session, map.tileWidth);
     this.staff = new StaffLayer(this, session, this.zones, map.tileWidth, this.herds.blocked);
     this.waterholes = Object.keys(session.state.waterholes).map(
       (id) => new WaterholeSprite(this, session, id, map.tileWidth),
@@ -146,6 +152,8 @@ export class GameScene extends Phaser.Scene {
     for (const w of this.waterholes) w.update();
     this.herds.update(delta);
     this.buildings.update();
+    this.fences.update();
+    this.clues.update();
     this.staff.update(delta);
     this.cameraController.update(delta);
   }

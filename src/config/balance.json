@@ -51,6 +51,11 @@
     "cancelRefund": 0.5,
     "netHistoryDays": 30
   },
+  "fences": {
+    "repairCost": 20,
+    "repairDays": 1,
+    "crewRepairsPerDay": 1
+  },
   "staff": {
     "patrolStrength": 0.25,
     "maxCoverage": 0.9,

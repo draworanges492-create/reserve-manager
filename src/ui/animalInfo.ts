@@ -5,6 +5,7 @@ import { t } from '../core/text';
 import { seasonOf } from '../sim/Seasons';
 import { isDegraded, vegetationBreakdown } from '../sim/Vegetation';
 import { rangerCoverage } from '../sim/Poaching';
+import { fencesBlocking } from '../story/StoryManager';
 import { zoneHasWater } from '../sim/Water';
 
 /** One line of panel text; `warn` lines are drawn in the warning colour. */
@@ -135,8 +136,16 @@ export function zonePanelContent(state: GameState, zoneId: string): PanelContent
   const veg = Math.round(zone.vegetation);
   const degraded = isDegraded(zone.vegetation);
   const lines: PanelLine[] = [];
-  if (!zone.unlocked)
-    lines.push({ text: t('zone.lockedLine', { chapter: def.unlockChapter }), warn: true });
+  if (!zone.unlocked) {
+    const blocking = fencesBlocking(state, zoneId).length;
+    lines.push({
+      text:
+        def.unlockChapter <= state.chapter.current && blocking
+          ? t('zone.fencesToOpen', { n: blocking })
+          : t('zone.lockedLine', { chapter: def.unlockChapter }),
+      warn: true,
+    });
+  }
 
   const why = vegetationBreakdown(state, zoneId);
   const season = seasonOf(state.clock.day);

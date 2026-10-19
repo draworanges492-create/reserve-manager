@@ -20,7 +20,14 @@ export interface AnimalGroupOptions {
   tileSize: number;
   /** True where an animal can't stand (deep water, rocks, buildings, waterhole pools). */
   blocked: (x: number, y: number) => boolean;
+  /** A waterhole with water in this zone (world px), if any: herds wander toward it (spec §5). */
+  waterSpot?: () => { x: number; y: number } | null;
 }
+
+/** Chance a herd heads for water (when there is some) each time it picks a new spot. */
+const WATER_PULL = 0.5;
+/** How close to a waterhole's centre a thirsty herd gathers, in tiles. */
+const DRINKING_RADIUS_TILES = 3;
 
 interface Member {
   sprite: Phaser.GameObjects.Sprite;
@@ -147,13 +154,23 @@ export class AnimalGroupSprite {
     this.restMs -= scaledMs;
     if (this.restMs <= 0) {
       const { opts } = this;
-      this.centreTarget = pickSpot(
-        this.centre,
-        HERD_ROAM_TILES * opts.tileSize,
-        opts.area,
-        opts.blocked,
-        Math.random,
-      );
+      const water = opts.waterSpot?.();
+      this.centreTarget =
+        water && Math.random() < WATER_PULL
+          ? pickSpot(
+              water,
+              DRINKING_RADIUS_TILES * opts.tileSize,
+              opts.area,
+              opts.blocked,
+              Math.random,
+            )
+          : pickSpot(
+              this.centre,
+              HERD_ROAM_TILES * opts.tileSize,
+              opts.area,
+              opts.blocked,
+              Math.random,
+            );
       this.restMs = between(CFG.herdRestMs);
     }
   }

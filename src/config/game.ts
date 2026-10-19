@@ -31,3 +31,6 @@ export const CAMERA_WHEEL_STEP = 60;
 export const CAMERA_WHEEL_COOLDOWN_MS = 180;
 /** Finger-distance ratio that counts as one pinch zoom step. */
 export const CAMERA_PINCH_STEP = 1.25;
+
+/** Dialogue typewriter speed (characters per real second). */
+export const DIALOGUE_CHARS_PER_SECOND = 60;

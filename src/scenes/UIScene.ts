@@ -20,7 +20,10 @@ import {
 } from '../ui/economyInfo';
 import { hoverTipLines } from '../ui/hoverTip';
 import { InfoPanel } from '../ui/InfoPanel';
-import { journalMenu, settingsMenu, speciesMenu } from '../ui/menus';
+import { GoalTracker } from '../ui/GoalTracker';
+import { settingsMenu, speciesMenu } from '../ui/menus';
+import { fenceTooltip, type JournalFilter, journalMenu } from '../ui/storyInfo';
+import { fencesBlocking } from '../story/StoryManager';
 import { SidePanel } from '../ui/SidePanel';
 import { TEXT_SIZE } from '../ui/theme';
 import { TimeOfDayOverlay } from '../ui/TimeOfDayOverlay';
@@ -42,6 +45,8 @@ const ALERT_EVENTS: AlertEvent['type'][] = [
   'debtChanged',
   'buildingCompleted',
   'seasonChanged',
+  'goalCompleted',
+  'journalAdded',
 ];
 
 type Menu = 'build' | 'staff' | 'species' | 'journal' | 'settings';
@@ -68,7 +73,11 @@ export class UIScene extends Phaser.Scene {
     animal: AnimalGroupRef | null;
     slot: string | null;
     staff: string | null;
-  } = { waterhole: null, animal: null, slot: null, staff: null };
+    fence: string | null;
+    clue: string | null;
+  } = { waterhole: null, animal: null, slot: null, staff: null, fence: null, clue: null };
+  private goalTracker!: GoalTracker;
+  private journalFilter: JournalFilter = 'all';
   private selection: Selection | null = null;
   private menu: Menu | null = null;
   private placing: string | null = null;
@@ -84,7 +93,14 @@ export class UIScene extends Phaser.Scene {
     this.session = getSession(this);
     // Phaser reuses this object on restart, so record the size we're building with now.
     this.builtTextSize = getSettings().textSize;
-    this.hover = { waterhole: null, animal: null, slot: null, staff: null };
+    this.hover = {
+      waterhole: null,
+      animal: null,
+      slot: null,
+      staff: null,
+      fence: null,
+      clue: null,
+    };
     this.selection = null;
     this.timeOfDay = new TimeOfDayOverlay(this);
     this.topBar = new TopBar(this, this.session);
@@ -95,6 +111,7 @@ export class UIScene extends Phaser.Scene {
       (alert) => this.openAlert(alert),
       (alert) => this.alerts.remove(alert.key),
     );
+    this.goalTracker = new GoalTracker(this, MARGIN, TOP_BAR_HEIGHT + MARGIN);
     this.tooltip = new Tooltip(this);
 
     const zoneLabel = crispText(this, 0, TOP_BAR_HEIGHT + MARGIN, '', {
@@ -142,6 +159,8 @@ export class UIScene extends Phaser.Scene {
       eventBus.on('waterholeHover', ({ id }) => (this.hover.waterhole = id)),
       eventBus.on('slotHover', ({ slotId }) => (this.hover.slot = slotId)),
       eventBus.on('staffHover', ({ staffId }) => (this.hover.staff = staffId)),
+      eventBus.on('fenceHover', ({ segmentId }) => (this.hover.fence = segmentId)),
+      eventBus.on('clueHover', ({ clueId }) => (this.hover.clue = clueId)),
       eventBus.on('animalSelected', ({ group }) =>
         this.onSelected(group && { kind: 'animal', group }),
       ),
@@ -162,8 +181,12 @@ export class UIScene extends Phaser.Scene {
           zoneLabel.setVisible(false);
           return;
         }
+        const blocking = fencesBlocking(this.session.state, def.id).length;
+        const opensNow = def.unlockChapter <= this.session.state.chapter.current && blocking > 0;
         const label = !zone.unlocked
-          ? t('zone.locked', { name: def.name, chapter: def.unlockChapter })
+          ? opensNow
+            ? `${def.name} · ${t('zone.fencesToOpen', { n: blocking })}`
+            : t('zone.locked', { name: def.name, chapter: def.unlockChapter })
           : isDegraded(zone.vegetation)
             ? `${def.name} · ${t('zone.state.degraded')}`
             : def.name;
@@ -197,6 +220,7 @@ export class UIScene extends Phaser.Scene {
     );
     return (
       this.topBar.contains(x, y) ||
+      this.goalTracker.contains(x, y) ||
       this.infoPanel.contains(x, y) ||
       this.sidePanel.contains(x, y) ||
       this.alertFeed.contains(x, y) ||
@@ -207,6 +231,7 @@ export class UIScene extends Phaser.Scene {
   override update(): void {
     const { state } = this.session;
     this.topBar.update();
+    this.goalTracker.update(state);
     this.timeOfDay.update(state.clock.dayProgress, getSettings().timeOfDay);
     this.updateTooltip();
     this.infoPanel.update(state, this.scale.height);
@@ -271,7 +296,7 @@ export class UIScene extends Phaser.Scene {
           eventBus.emit('animalSelected', { group: { zoneId, speciesId } });
         });
       case 'journal':
-        return journalMenu();
+        return journalMenu(state, this.journalFilter, (f) => (this.journalFilter = f));
       case 'settings':
         return settingsMenu(getSettings(), updateSettings, {
           confirming: this.confirmNewGame,
@@ -287,7 +312,12 @@ export class UIScene extends Phaser.Scene {
   }
 
   private bindKeys(): void {
-    const kb = this.input.keyboard;
+    const raw = this.input.keyboard;
+    // While someone is talking, Space / 1–3 / Esc belong to the dialogue box.
+    const talking = (): boolean => this.session.dialogueView !== null;
+    const kb = raw && {
+      on: (event: string, fn: () => void) => raw.on(event, () => !talking() && fn()),
+    };
     kb?.on('keydown-SPACE', () => this.session.dispatch({ type: 'togglePause' }));
     (['ONE', 'TWO', 'THREE'] as const).forEach((key, i) =>
       kb?.on(`keydown-${key}`, () =>
@@ -366,15 +396,19 @@ export class UIScene extends Phaser.Scene {
     const h = this.hover;
     let lines = hoverTipLines();
     if (!lines.length) {
-      lines = h.waterhole
-        ? waterholeTooltip(state, h.waterhole)
-        : h.staff
-          ? staffHover(state, h.staff)
-          : h.animal
-            ? animalHoverLines(state, h.animal.zoneId, h.animal.speciesId)
-            : h.slot
-              ? buildingHover(state, h.slot)
-              : this.topBar.tooltipAt(p.x, p.y);
+      lines = h.clue
+        ? [t('clue.hover')]
+        : h.fence
+          ? fenceTooltip(state, h.fence)
+          : h.waterhole
+            ? waterholeTooltip(state, h.waterhole)
+            : h.staff
+              ? staffHover(state, h.staff)
+              : h.animal
+                ? animalHoverLines(state, h.animal.zoneId, h.animal.speciesId)
+                : h.slot
+                  ? buildingHover(state, h.slot)
+                  : this.topBar.tooltipAt(p.x, p.y);
     }
     if (lines.length) this.tooltip.show(lines, p.x, p.y);
     else this.tooltip.hide();

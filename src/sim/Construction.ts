@@ -1,4 +1,6 @@
 // Construction progress (spec §7.2). Runs just before Economy in the day tick.
+import { BALANCE } from '../config/balance';
+import { fenceRepairable } from '../core/buildCommands';
 import { buildingDef } from '../core/content';
 import type { GameState } from '../core/GameState';
 import type { SimEvent, SimStep } from './types';
@@ -31,10 +33,40 @@ function applyEffects(state: GameState, slotId: string, buildingId: string): Gam
   return next;
 }
 
+/** Hand repairs finish; each fence crew mends broken fences they can reach (spec §7.1). */
+function progressFences(state: GameState, events: SimEvent[]): GameState {
+  const fences = { ...state.fences };
+  for (const [id, f] of Object.entries(fences)) {
+    if (f.status !== 'repairing') continue;
+    const daysLeft = f.daysLeft - 1;
+    fences[id] = daysLeft <= 0 ? { ...f, status: 'intact', daysLeft: 0 } : { ...f, daysLeft };
+    if (daysLeft <= 0) events.push({ type: 'fenceRepaired', payload: { segmentId: id } });
+  }
+  let next: GameState = { ...state, fences };
+  const crews = state.staff.filter((s) => s.role === 'fence_crew').length;
+  let budget = crews * BALANCE.fences.crewRepairsPerDay;
+  // Fences that open a new zone first, then the rest.
+  const broken = Object.keys(fences)
+    .filter((id) => fenceRepairable(next, id))
+    .sort(
+      (a, b) =>
+        Number(!!next.zones[fences[a]?.zoneId ?? '']?.unlocked) -
+        Number(!!next.zones[fences[b]?.zoneId ?? '']?.unlocked),
+    );
+  for (const id of broken) {
+    if (budget-- <= 0) break;
+    const f = next.fences[id];
+    if (!f) continue;
+    next = { ...next, fences: { ...next.fences, [id]: { ...f, status: 'intact', daysLeft: 0 } } };
+    events.push({ type: 'fenceRepaired', payload: { segmentId: id } });
+  }
+  return next;
+}
+
 export const runConstruction: SimStep = (state) => {
   const events: SimEvent[] = [];
-  let next = state;
-  for (const [slotId, slot] of Object.entries(state.slots)) {
+  let next = progressFences(state, events);
+  for (const [slotId, slot] of Object.entries(next.slots)) {
     const building = slot.building;
     if (!building || building.daysLeft <= 0) continue;
     const daysLeft = building.daysLeft - 1;

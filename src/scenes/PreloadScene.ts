@@ -8,6 +8,7 @@ import { readWorldLayout } from '../core/WorldLayout';
 import { GameSession } from '../core/GameSession';
 import { crispText } from '../ui/crispText';
 import { TEXT_SIZE } from '../ui/theme';
+import { askPlayerName } from '../ui/namePrompt';
 import { setSession } from './session';
 
 const BAR_WIDTH = 200;
@@ -39,17 +40,25 @@ export class PreloadScene extends Phaser.Scene {
   }
 
   create(): void {
-    // New game for now; MenuScene (Phase 8) will offer Continue / load a slot instead.
-    // Wall-clock seeding is fine here: only the sim must be deterministic, given its seed.
-    const seed = (Date.now() ^ Math.floor(Math.random() * 0xffffffff)) >>> 0;
     const tmj = (this.cache.tilemap.get('reserve') as { data: TiledMap }).data;
-    const session = new GameSession(
-      createGameState({ seed, world: readWorldLayout(tmj), speed: getSettings().defaultSpeed }),
-    );
-    setSession(this, session);
-    // Dev-only handle for debugging in the browser console; removed from production builds.
-    if (import.meta.env.DEV) Object.assign(window, { __session: session });
-    this.scene.start('GameScene');
-    this.scene.launch('UIScene');
+    // New game for now; MenuScene (Phase 8) will offer Continue / load a slot as well.
+    void askPlayerName(document.body).then((playerName) => {
+      // Wall-clock seeding is fine here: only the sim must be deterministic, given its seed.
+      const seed = (Date.now() ^ Math.floor(Math.random() * 0xffffffff)) >>> 0;
+      const state = createGameState({
+        seed,
+        world: readWorldLayout(tmj),
+        playerName,
+        speed: getSettings().defaultSpeed,
+      });
+      const session = new GameSession(state);
+      session.beginStory();
+      setSession(this, session);
+      // Dev-only handle for debugging in the browser console; removed from production builds.
+      if (import.meta.env.DEV) Object.assign(window, { __session: session });
+      this.scene.start('GameScene');
+      this.scene.launch('UIScene');
+      this.scene.launch('DialogueScene');
+    });
   }
 }

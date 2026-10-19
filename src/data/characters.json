@@ -1,0 +1,34 @@
+{
+  "characters": [
+    {
+      "id": "tendai",
+      "name": "Tendai",
+      "portraitKey": "portrait-tendai",
+      "role": "Head ranger"
+    },
+    {
+      "id": "amara",
+      "name": "Dr. Amara Okafor",
+      "portraitKey": "portrait-amara",
+      "role": "Ecologist"
+    },
+    {
+      "id": "wanjiru",
+      "name": "Mama Wanjiru",
+      "portraitKey": "portrait-wanjiru",
+      "role": "Village leader"
+    },
+    {
+      "id": "victor",
+      "name": "Victor Hale",
+      "portraitKey": "portrait-victor",
+      "role": "Investor"
+    },
+    {
+      "id": "kito",
+      "name": "Kito",
+      "portraitKey": "portrait-kito",
+      "role": "Former poacher"
+    }
+  ]
+}

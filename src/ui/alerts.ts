@@ -4,6 +4,7 @@ import { buildingDef, speciesDef, staffRole, waterholeDef, zoneDef } from '../co
 import type { GameEvents } from '../core/EventBus';
 import type { GameState } from '../core/GameState';
 import { t } from '../core/text';
+import { chapterDef, journalTemplate } from '../story/content';
 
 export type Severity = 'info' | 'warning' | 'critical';
 
@@ -39,7 +40,9 @@ export type AlertEvent =
   | EventOf<'staffQuit'>
   | EventOf<'debtChanged'>
   | EventOf<'buildingCompleted'>
-  | EventOf<'seasonChanged'>;
+  | EventOf<'seasonChanged'>
+  | EventOf<'goalCompleted'>
+  | EventOf<'journalAdded'>;
 
 /** Info alerts fade after this many in-game days; warnings stay until resolved or dismissed. */
 export const INFO_LIFETIME_DAYS = 2;
@@ -150,6 +153,34 @@ export function alertFor(state: GameState, event: AlertEvent): AlertChange | nul
           day,
         },
       };
+    }
+    case 'goalCompleted': {
+      const goal = chapterDef(event.payload.chapter)?.goals.find(
+        (g) => g.id === event.payload.goalId,
+      );
+      // Drop progress counters like "(3/3)" — it's done.
+      const text = (goal?.text ?? event.payload.goalId).replace(/\s*\(.*\)$/, '');
+      return {
+        add: {
+          key: `goal:${event.payload.goalId}`,
+          severity: 'info',
+          text: t('story.goalDone', { goal: text }),
+          day,
+        },
+      };
+    }
+    case 'journalAdded': {
+      const title = journalTemplate(event.payload.entryId)?.title;
+      return title
+        ? {
+            add: {
+              key: 'journal',
+              severity: 'info',
+              text: t('story.journalUpdated', { title }),
+              day,
+            },
+          }
+        : null;
     }
     case 'seasonChanged':
       return {

@@ -7,6 +7,7 @@ import { encodePng, isPlaceholderFile, PLACEHOLDER_MARKER } from './lib/png';
 import { PAL } from './palette';
 import { drawBuildings } from './placeholders/buildings';
 import { drawIcons } from './placeholders/icons';
+import { drawClueMarker, drawPortraits } from './placeholders/portraits';
 import { drawSprites } from './placeholders/sprites';
 import { drawTile } from './placeholders/tiles';
 import { drawBucket, drawDrop, drawWaterhole } from './placeholders/water';
@@ -77,6 +78,9 @@ writePng('sprites/waterhole.png', drawWaterhole());
 for (const [name, canvas] of Object.entries(drawBuildings()))
   writePng(`sprites/${name}.png`, canvas);
 writePng('sprites/bucket.png', drawBucket());
+writePng('sprites/clue-marker.png', drawClueMarker());
+for (const [name, canvas] of Object.entries(drawPortraits()))
+  writePng(`portraits/${name}.png`, canvas);
 writePng('sprites/fx-drop.png', drawDrop());
 write('palette.gpl', Buffer.from(paletteGpl()));
 console.log(`palette: ${Object.keys(PAL).length} colours`);
