@@ -4,13 +4,14 @@ import { type AnimalGroupRef, eventBus } from '../core/EventBus';
 import { t } from '../core/text';
 import { crispText, withShadow } from '../ui/crispText';
 import { TimeOfDayOverlay } from '../ui/TimeOfDayOverlay';
-import { animalHoverLines } from '../ui/animalInfo';
+import { animalHoverLines, animalPanelContent, zonePanelContent } from '../ui/animalInfo';
 import { InfoPanel } from '../ui/InfoPanel';
 import { Tooltip } from '../ui/Tooltip';
 import { waterholeTooltip } from '../ui/waterholeTooltip';
 import { TOP_BAR_HEIGHT, TopBar } from '../ui/TopBar';
 import { TEXT_SIZE, UI } from '../ui/theme';
 import { zoneDef } from '../core/content';
+import { isDegraded } from '../sim/Vegetation';
 import { getSession } from './session';
 
 const MARGIN = 6;
@@ -68,15 +69,38 @@ export class UIScene extends Phaser.Scene {
       ),
     );
 
-    this.infoPanel = new InfoPanel(this, () => eventBus.emit('animalSelected', { group: null }));
-    kb?.on('keydown-ESC', () => eventBus.emit('animalSelected', { group: null }));
+    // One panel shows the current selection: a herd or a zone.
+    let panelKind: 'animal' | 'zone' | null = null;
+    const closePanel = (): void => {
+      if (panelKind === 'animal') eventBus.emit('animalSelected', { group: null });
+      if (panelKind === 'zone') eventBus.emit('zoneSelected', { zoneId: null });
+    };
+    this.infoPanel = new InfoPanel(this, closePanel);
+    kb?.on('keydown-ESC', closePanel);
     const offAnimalHover = eventBus.on('animalHover', ({ group }) => {
       this.hoveredAnimal = group;
       if (!group && !this.hoveredWaterhole) this.tooltip.hide();
     });
     const offSelect = eventBus.on('animalSelected', ({ group }) => {
-      if (group) this.infoPanel.show(group.zoneId, group.speciesId, session.state);
-      else this.infoPanel.hide();
+      if (group) {
+        panelKind = 'animal';
+        this.infoPanel.show(
+          (s) => animalPanelContent(s, group.zoneId, group.speciesId),
+          session.state,
+        );
+      } else if (panelKind === 'animal') {
+        panelKind = null;
+        this.infoPanel.hide();
+      }
+    });
+    const offZoneSelect = eventBus.on('zoneSelected', ({ zoneId }) => {
+      if (zoneId) {
+        panelKind = 'zone';
+        this.infoPanel.show((s) => zonePanelContent(s, zoneId), session.state);
+      } else if (panelKind === 'zone') {
+        panelKind = null;
+        this.infoPanel.hide();
+      }
     });
     const offWater = eventBus.on('waterholeHover', ({ id }) => {
       this.hoveredWaterhole = id;
@@ -88,12 +112,13 @@ export class UIScene extends Phaser.Scene {
         zoneLabel.setVisible(false);
         return;
       }
-      const locked = !session.state.zones[def.id]?.unlocked;
-      zoneLabel
-        .setText(
-          locked ? t('zone.locked', { name: def.name, chapter: def.unlockChapter }) : def.name,
-        )
-        .setVisible(true);
+      const zone = session.state.zones[def.id];
+      const label = !zone?.unlocked
+        ? t('zone.locked', { name: def.name, chapter: def.unlockChapter })
+        : isDegraded(zone.vegetation)
+          ? `${def.name} · ${t('zone.state.degraded')}`
+          : def.name;
+      zoneLabel.setText(label).setVisible(true);
     });
     this.tooltip = new Tooltip(this);
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
@@ -101,6 +126,7 @@ export class UIScene extends Phaser.Scene {
       offWater();
       offAnimalHover();
       offSelect();
+      offZoneSelect();
       this.scale.off(Phaser.Scale.Events.RESIZE, layout);
     });
   }

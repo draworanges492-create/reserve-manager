@@ -19,6 +19,8 @@ export type Diet = 'grazer' | 'browser' | 'predator';
 export interface SpeciesDef {
   id: string;
   name: string;
+  /** For sentences: "taken by lions", "−3 impala". */
+  plural: string;
   diet: Diet;
   /** Daily growth rate. */
   r: number;
@@ -36,6 +38,12 @@ export interface SpeciesDef {
   startPopulation: Record<string, number>;
   targetN: number;
   spriteKey: string;
+  /** Predators only: prey killed per predator per day when prey is plentiful. */
+  killsPerDay?: Record<string, number>;
+  /** Predators only: prey count at which hunting succeeds at half its top rate. */
+  huntHalfSaturation?: number;
+  /** Predators only: predators supported per prey animal (spec §6.3 K_predator). */
+  predationEfficiency?: number;
   /** Must stay `verified: false` until the user checks them against a source (spec §0 rule 8). */
   facts: { text: string; verified: boolean }[];
 }
@@ -50,6 +58,8 @@ export interface ZoneDef {
   id: string;
   name: string;
   unlockChapter: number;
+  /** Vegetation 0–100 at the start of a new game. */
+  startVegetation: number;
 }
 
 export const ZONE_DEFS: readonly ZoneDef[] = zonesData.zones;

@@ -43,10 +43,16 @@ export type GameEvents = {
   waterholeRefilled: { id: string; level: number };
   /** Pointer moved onto / off a waterhole (null = none). */
   waterholeHover: { id: string | null };
+  /** A zone's vegetation crossed the "degraded" line (spec §6.2). */
+  zoneDegradedChanged: { zoneId: string; degraded: boolean };
+  /** A herd fell below its minimum viable size (spec §6.3). */
+  populationCritical: { zoneId: string; speciesId: string; count: number };
   /** Pointer moved onto / off an animal herd. */
   animalHover: { group: AnimalGroupRef | null };
-  /** Player clicked a herd (or empty ground: null) to open / close its info panel. */
+  /** Player clicked a herd to open its info panel (null closes it). */
   animalSelected: { group: AnimalGroupRef | null };
+  /** Player clicked open ground in a zone to open its info panel (null closes it). */
+  zoneSelected: { zoneId: string | null };
   /** A command failed; UI shows the reason near where the player acted. */
   commandFailed: { reason: StringKey; worldX?: number; worldY?: number };
 };

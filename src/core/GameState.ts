@@ -24,6 +24,18 @@ export interface ZoneState {
   rect: TileRect;
   /** Area in tiles (spec §5: computed from the rectangle). */
   area: number;
+  /** Grass and browse, 0–100 (spec §6.2). */
+  vegetation: number;
+}
+
+/** What happened to one herd during the last day tick: the "why" behind its number. */
+export interface PopulationChange {
+  births: number;
+  starved: number;
+  /** Animals taken, by predator species id. */
+  eatenBy: Record<string, number>;
+  /** Carrying capacity used that day. */
+  capacity: number;
 }
 
 export type PumpState = 'none' | 'working' | 'broken';
@@ -52,6 +64,8 @@ export interface GameState {
   waterholes: Record<string, WaterholeState>;
   /** Animal counts per zone, then per species: populations[zoneId][speciesId]. */
   populations: Record<string, Record<string, number>>;
+  /** Last day's breakdown per zone and species (same shape as populations). */
+  populationLog: Record<string, Record<string, PopulationChange>>;
   resources: { money: number };
   flags: Record<string, boolean>;
 }
@@ -80,7 +94,13 @@ export function createGameState({ seed, world, playerName = '' }: NewGameOptions
     zones: Object.fromEntries(
       zonesData.zones.map((z) => {
         const rect = rectOf(z.id);
-        return [z.id, { unlocked: z.unlockChapter <= chapter, rect, area: rect.w * rect.h }];
+        const zone: ZoneState = {
+          unlocked: z.unlockChapter <= chapter,
+          rect,
+          area: rect.w * rect.h,
+          vegetation: z.startVegetation,
+        };
+        return [z.id, zone];
       }),
     ),
     waterholes: Object.fromEntries(
@@ -98,6 +118,7 @@ export function createGameState({ seed, world, playerName = '' }: NewGameOptions
       }),
     ),
     populations: startingPopulations(),
+    populationLog: {},
     resources: { money: BALANCE.economy.startMoney },
     flags: {},
   };

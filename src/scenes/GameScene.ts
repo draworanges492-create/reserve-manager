@@ -58,6 +58,7 @@ export class GameScene extends Phaser.Scene {
       this.zones,
       (id) => !!session.state.zones[id]?.unlocked,
     );
+    this.overlay.refreshDegraded((id) => session.state.zones[id]?.vegetation ?? 100);
     this.herds = new HerdLayer(this, map, this.zones, session);
     this.waterholes = Object.keys(session.state.waterholes).map(
       (id) => new WaterholeSprite(this, session, id, map.tileWidth),
@@ -78,15 +79,25 @@ export class GameScene extends Phaser.Scene {
 
     this.input.on(Phaser.Input.Events.POINTER_MOVE, () => this.updateHover());
     this.input.on(Phaser.Input.Events.GAME_OUT, () => this.setHovered(null));
-    // A click on bare ground (not a drag) closes the animal info panel.
+    // A click (not a drag) on open ground opens that zone's info panel.
     this.input.on(
       Phaser.Input.Events.POINTER_UP,
       (pointer: Phaser.Input.Pointer, over: Phaser.GameObjects.GameObject[]) => {
         const click = pointer.getDistance() <= BALANCE.render.animals.clickMaxMovePx;
-        if (click && over.length === 0 && !this.isOverUI(pointer)) {
-          eventBus.emit('animalSelected', { group: null });
-        }
+        if (!click || over.length > 0 || this.isOverUI(pointer)) return;
+        const world = this.cameras.main.getWorldPoint(pointer.x, pointer.y);
+        const zone = this.zones.find((z) => z.rect.contains(world.x, world.y));
+        if (zone) eventBus.emit('zoneSelected', { zoneId: zone.id });
       },
+    );
+    const offZoneSelect = eventBus.on('zoneSelected', ({ zoneId }) =>
+      this.overlay.setSelected(this.zones.find((z) => z.id === zoneId) ?? null),
+    );
+    const offAnimalSelect = eventBus.on('animalSelected', ({ group }) => {
+      if (group) this.overlay.setSelected(null);
+    });
+    const offDegraded = eventBus.on('zoneDegradedChanged', () =>
+      this.overlay.refreshDegraded((id) => session.state.zones[id]?.vegetation ?? 100),
     );
     const offSeason = eventBus.on('seasonChanged', ({ season }) => seasonTint.fadeTo(season));
     const offFail = eventBus.on('commandFailed', ({ reason, worldX, worldY }) => {
@@ -97,6 +108,9 @@ export class GameScene extends Phaser.Scene {
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
       offSeason();
       offFail();
+      offZoneSelect();
+      offAnimalSelect();
+      offDegraded();
     });
   }
 

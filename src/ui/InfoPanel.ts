@@ -1,20 +1,25 @@
-import Phaser from 'phaser';
+import type Phaser from 'phaser';
 import type { GameState } from '../core/GameState';
 import { t } from '../core/text';
-import { animalPanelText } from './animalInfo';
+import type { PanelContent } from './animalInfo';
 import { Button } from './Button';
 import { crispText } from './crispText';
 import { TEXT_SIZE, UI } from './theme';
 
-const WIDTH = 190;
+const WIDTH = 220;
 const PAD = 6;
-const PORTRAIT = 48;
+const PORTRAIT = 40;
 const CLOSE_SIZE = 14;
-const WARN_COLOR = '#ff9b7a';
+const LINE_GAP = 2;
+const MAX_LINES = 8;
+export const WARN_COLOR = '#ff9b7a';
+
+/** Supplies fresh content each frame (null closes the panel). */
+export type PanelSource = (state: GameState) => PanelContent | null;
 
 /**
- * Panel for a selected herd (spec §7.4 context panel, first piece): species, zone,
- * population, diet, status and water. Updates live while open.
+ * Bottom-left context panel (spec §7.4) for whatever is selected — a herd or a zone.
+ * Content is rebuilt every frame so the numbers stay live.
  */
 export class InfoPanel {
   private readonly root: Phaser.GameObjects.Container;
@@ -22,10 +27,8 @@ export class InfoPanel {
   private readonly portrait: Phaser.GameObjects.Image;
   private readonly title: Phaser.GameObjects.Text;
   private readonly subtitle: Phaser.GameObjects.Text;
-  private readonly body: Phaser.GameObjects.Text;
-  private readonly status: Phaser.GameObjects.Text;
-  private readonly close: Button;
-  private shown: { zoneId: string; speciesId: string } | null = null;
+  private readonly lines: Phaser.GameObjects.Text[] = [];
+  private source: PanelSource | null = null;
 
   constructor(
     private readonly scene: Phaser.Scene,
@@ -36,34 +39,28 @@ export class InfoPanel {
       .setOrigin(0)
       .setStrokeStyle(1, UI.border)
       .setInteractive(); // swallow clicks so they don't reach the map
-    this.portrait = scene.add.image(PAD + PORTRAIT / 2, PAD + PORTRAIT / 2, '__DEFAULT');
-    const textX = PAD * 2 + PORTRAIT;
-    this.title = crispText(scene, textX, PAD, '', { fontSize: TEXT_SIZE.label, fontStyle: 'bold' });
-    this.subtitle = crispText(scene, textX, PAD + 14, '', {
+    this.portrait = scene.add.image(0, 0, '__DEFAULT').setVisible(false);
+    this.title = crispText(scene, PAD, PAD, '', { fontSize: TEXT_SIZE.label, fontStyle: 'bold' });
+    this.subtitle = crispText(scene, PAD, PAD + 14, '', {
       fontSize: TEXT_SIZE.small,
       color: UI.textDim,
     });
-    this.body = crispText(scene, textX, PAD + 30, '', { fontSize: TEXT_SIZE.body, lineSpacing: 1 });
-    this.status = crispText(scene, PAD, 0, '', {
-      fontSize: TEXT_SIZE.body,
-      wordWrap: { width: WIDTH - PAD * 2 },
-    });
-    this.close = new Button(scene, WIDTH - CLOSE_SIZE - 3, 3, {
+    for (let i = 0; i < MAX_LINES; i++) {
+      this.lines.push(
+        crispText(scene, PAD, 0, '', {
+          fontSize: TEXT_SIZE.body,
+          wordWrap: { width: WIDTH - PAD * 2 },
+        }),
+      );
+    }
+    const close = new Button(scene, WIDTH - CLOSE_SIZE - 3, 3, {
       width: CLOSE_SIZE,
       height: CLOSE_SIZE,
       label: t('panel.close'),
       onClick: onClose,
     });
     this.root = scene.add
-      .container(0, 0, [
-        this.bg,
-        this.portrait,
-        this.title,
-        this.subtitle,
-        this.body,
-        this.status,
-        this.close,
-      ])
+      .container(0, 0, [this.bg, this.portrait, this.title, this.subtitle, ...this.lines, close])
       .setVisible(false);
   }
 
@@ -71,54 +68,70 @@ export class InfoPanel {
     return this.root.visible;
   }
 
-  show(zoneId: string, speciesId: string, state: GameState): void {
-    this.shown = { zoneId, speciesId };
+  show(source: PanelSource, state: GameState): void {
+    this.source = source;
     this.root.setVisible(true);
     this.update(state);
   }
 
   hide(): void {
-    this.shown = null;
+    this.source = null;
     this.root.setVisible(false);
   }
 
   /** True if a screen point is on the panel (for the HUD hit check). */
   contains(x: number, y: number): boolean {
     if (!this.root.visible) return false;
-    return (
-      x >= this.root.x &&
-      y >= this.root.y &&
-      x <= this.root.x + this.bg.width &&
-      y <= this.root.y + this.bg.height
-    );
+    const { x: left, y: top } = this.root;
+    return x >= left && y >= top && x <= left + this.bg.width && y <= top + this.bg.height;
   }
 
-  /** Refresh text and keep the panel anchored above `bottom` on the left edge. */
+  /** Refresh and keep the panel anchored above `bottom` on the left edge. */
   update(state: GameState, bottom = this.scene.scale.height): void {
-    if (!this.shown) return;
-    const text = animalPanelText(state, this.shown.zoneId, this.shown.speciesId);
-    if (!text) return this.hide();
-    const [population = '', diet = '', statusLine = '', water = ''] = text.lines;
-    this.title.setText(text.title);
-    this.subtitle.setText(text.subtitle);
-    this.body.setText([population, diet].join('\n'));
-    this.status
-      .setText([statusLine, water].join('\n'))
-      .setColor(text.critical ? WARN_COLOR : UI.text);
+    if (!this.source) return;
+    const content = this.source(state);
+    if (!content) return this.hide();
 
-    const spriteKey = this.shown.speciesId;
-    if (this.portrait.texture.key !== spriteKey && this.scene.textures.exists(spriteKey)) {
-      this.portrait.setTexture(spriteKey, 0);
-      const frame = this.scene.textures.getFrame(spriteKey, 0);
-      // Whole-number scale keeps the pixel art crisp.
+    const textX = this.layoutPortrait(content.portrait);
+    this.title.setText(content.title).setX(textX);
+    this.subtitle
+      .setText(content.subtitle)
+      .setX(textX)
+      .setColor(content.subtitleWarn ? WARN_COLOR : UI.textDim);
+
+    let y = Math.max(
+      this.subtitle.y + this.subtitle.height + PAD,
+      content.portrait ? PAD * 2 + PORTRAIT : 0,
+    );
+    this.lines.forEach((label, i) => {
+      const line = content.lines[i];
+      label.setVisible(!!line);
+      if (!line) return;
+      label
+        .setText(line.text)
+        .setColor(line.warn ? WARN_COLOR : UI.text)
+        .setY(y);
+      y += label.height + LINE_GAP;
+    });
+    const height = y + PAD - LINE_GAP;
+    this.bg.setSize(WIDTH, height);
+    this.root.setPosition(PAD, Math.round(bottom - height - PAD));
+  }
+
+  /** Shows a crisp (whole-number scaled) portrait; returns where text should start. */
+  private layoutPortrait(key: string | undefined): number {
+    if (!key || !this.scene.textures.exists(key)) {
+      this.portrait.setVisible(false);
+      return PAD;
+    }
+    if (this.portrait.texture.key !== key) {
+      this.portrait.setTexture(key, 0);
+      const frame = this.scene.textures.getFrame(key, 0);
       this.portrait.setScale(
         Math.max(1, Math.floor(PORTRAIT / Math.max(frame.width, frame.height))),
       );
     }
-    const statusY = Math.max(PAD * 2 + PORTRAIT, this.body.y + this.body.height + PAD);
-    this.status.setY(statusY);
-    const height = statusY + this.status.height + PAD;
-    this.bg.setSize(WIDTH, height);
-    this.root.setPosition(PAD, Math.round(bottom - height - PAD));
+    this.portrait.setPosition(PAD + PORTRAIT / 2, PAD + PORTRAIT / 2).setVisible(true);
+    return PAD * 2 + PORTRAIT;
   }
 }

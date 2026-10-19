@@ -33,6 +33,26 @@ export interface Balance {
     /** Lower bounds of the visual states (spec §6.1): clear > 60, muddy 30–60, drying 10–30, dry < 10. */
     stateThresholds: { clear: number; muddy: number; drying: number };
   };
+  vegetation: {
+    /** Regrowth per day at bare ground, before the season multiplier. */
+    regrowRate: number;
+    seasonMult: Record<Season, number>;
+    /**
+     * Converts the spec's grazing sum into vegetation points. With the spec's literal
+     * formula, 80 impala eat ~0.001 points a day, so grass could never run down
+     * (DECISIONS D50): species `grazeRate` is read as % of one tile eaten per animal per day.
+     */
+    grazingScale: number;
+    /** Below this a zone is "degraded" (brown overlay, warning). */
+    degradedBelow: number;
+    maxLevel: number;
+  };
+  population: {
+    /** Extra daily die-off per animal above carrying capacity (spec §6.3 d). */
+    overshootDeathRate: number;
+    /** Carrying-capacity multiplier when a zone has no water in range. */
+    noWaterFactor: number;
+  };
   economy: { startMoney: number };
   story: { startChapter: number };
   render: {

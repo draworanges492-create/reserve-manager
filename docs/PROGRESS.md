@@ -138,12 +138,44 @@ sprites moved over 30 s of game time (avg ~2.7 tiles) and stayed in the plains; 
 panel text correct; drag from an animal pans, click opens, Esc / bare-ground click closes;
 resize fills the window at 900×700, 1512×865 and 1728×1000; 0 console errors.
 
-**Next — Phase 4 (Vegetation & populations):** vegetation per zone, population model with
-carrying capacity, predation, Allee effect, "why" strings in the animal panel, zone info
-panel; check 1 in-game year produces plausible curves.
-
 **Known issues**
 
 - Open question D39 (pump unlock chapter / build days).
 - Hard tile edges between ground types; animals draw over trees; touch untested on a device.
 - Waterhole level changes once a day, so its sprite jumps between states.
+
+## Phase 4 — Vegetation & populations ✅ (2026-10-19)
+
+**Done**
+
+- `sim/Vegetation.ts` (tick step 3): regrowth × season × bare ground − grazing by grazers;
+  degraded below 25 (event + brown wash + warnings).
+- `sim/Population.ts` (tick step 4): carrying capacity from area × density × grass × water
+  (predators: from prey), logistic growth, overshoot die-off, saturating predation, Allee
+  effect, stochastic rounding, "why" log per herd, `populationCritical` event.
+- Herd sprites follow the numbers (≤ 12 each) — they were already wandering.
+- Animal panel now explains changes: "Population: 84 (+1 yesterday)", "Yesterday: +1 born",
+  "The land supports about 113 here (grass 54%, water nearby)", warnings when over capacity
+  or below minimum viable size.
+- New zone panel (click open ground): grass %, healthy/degraded, regrowth vs grazing, water,
+  animals; zone hover label shows "Degraded".
+- `npm run sim:balance -- --years N --player none|reasonable --seed S` (spec §13): CSV to
+  stdout, summary to stderr.
+
+**Balance (1 year, seeds 1–3):** attentive player — impala 80 → ~100–110, zebra 24 → ~43,
+lions 4 → 5, plains grass 51–65%. No player — impala → ~45, zebra → ~18, lions → 2
+(critical), grass recovers to ~80%. No extinctions or explosions (also a unit test).
+
+**Checks:** `build` ✅ · `test` ✅ (95) · `lint` ✅ · `validate-data` ✅ · browser at
+1512×865: populations tick and sprite counts follow; animal and zone panels show the right
+lines; forced overgrazing showed "Degraded", −8.1/day grazing and the warning; 0 console
+errors in a fresh tab.
+
+**Next — Phase 5 (Economy, building, staff):** money and costs, build slots + construction,
+hire/assign staff, ranger coverage, tower stub, debt state, Economy unit tests.
+
+**Known issues**
+
+- Open questions D39 (pump timings) and D51/D57 (predation, neglect speed).
+- Hard tile edges between ground types; animals draw over trees; touch untested on a device.
+- Waterhole level and herd counts change once a day (spec's daily model), so changes jump.

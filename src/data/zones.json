@@ -1,11 +1,46 @@
 {
   "zones": [
-    { "id": "hq", "name": "HQ & Gate", "unlockChapter": 1 },
-    { "id": "plains", "name": "Central Plains", "unlockChapter": 1 },
-    { "id": "river", "name": "River & Wetland", "unlockChapter": 2 },
-    { "id": "woodland", "name": "Woodland", "unlockChapter": 3 },
-    { "id": "east_border", "name": "Eastern Border", "unlockChapter": 3 },
-    { "id": "outcrop", "name": "Rocky Outcrop", "unlockChapter": 4 },
-    { "id": "north", "name": "Northern Reach", "unlockChapter": 5 }
+    {
+      "id": "hq",
+      "name": "HQ & Gate",
+      "unlockChapter": 1,
+      "startVegetation": 40
+    },
+    {
+      "id": "plains",
+      "name": "Central Plains",
+      "unlockChapter": 1,
+      "startVegetation": 55
+    },
+    {
+      "id": "river",
+      "name": "River & Wetland",
+      "unlockChapter": 2,
+      "startVegetation": 80
+    },
+    {
+      "id": "woodland",
+      "name": "Woodland",
+      "unlockChapter": 3,
+      "startVegetation": 75
+    },
+    {
+      "id": "east_border",
+      "name": "Eastern Border",
+      "unlockChapter": 3,
+      "startVegetation": 60
+    },
+    {
+      "id": "outcrop",
+      "name": "Rocky Outcrop",
+      "unlockChapter": 4,
+      "startVegetation": 45
+    },
+    {
+      "id": "north",
+      "name": "Northern Reach",
+      "unlockChapter": 5,
+      "startVegetation": 70
+    }
   ]
 }

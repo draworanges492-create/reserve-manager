@@ -56,9 +56,17 @@ export class HerdLayer {
       this.selected = keyOf(group);
       this.refreshHighlights();
     });
+    // Opening a zone's panel deselects any herd.
+    const offZone = eventBus.on('zoneSelected', ({ zoneId }) => {
+      if (zoneId) {
+        this.selected = null;
+        this.refreshHighlights();
+      }
+    });
     scene.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
       offHover();
       offSelect();
+      offZone();
     });
   }
 

@@ -1,7 +1,9 @@
 // The day tick: runs every sim step in the fixed order from spec §4.
 import type { GameState } from '../core/GameState';
 import { Rng } from '../core/Rng';
+import { runPopulation } from './Population';
 import { runSeasons } from './Seasons';
+import { runVegetation } from './Vegetation';
 import { runWater } from './Water';
 import type { SimEvent, SimStep, StepResult } from './types';
 
@@ -10,7 +12,7 @@ import type { SimEvent, SimStep, StepResult } from './types';
  * 6 Poaching → 7 Tourism → 8 Economy → 9 Scores → 10 Events → 11 Story → 12 Autosave.
  * Steps are added here as their phases land.
  */
-const STEPS: readonly SimStep[] = [runSeasons, runWater];
+const STEPS: readonly SimStep[] = [runSeasons, runWater, runVegetation, runPopulation];
 
 export function runDayTick(state: GameState): StepResult {
   const rng = Rng.fromState(state.rngState);

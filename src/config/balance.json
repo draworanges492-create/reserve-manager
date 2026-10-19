@@ -29,6 +29,20 @@
       "drying": 10
     }
   },
+  "vegetation": {
+    "regrowRate": 1.5,
+    "seasonMult": {
+      "dry": 0.4,
+      "wet": 1.5
+    },
+    "grazingScale": 250,
+    "degradedBelow": 25,
+    "maxLevel": 100
+  },
+  "population": {
+    "overshootDeathRate": 0.05,
+    "noWaterFactor": 0.3
+  },
   "economy": {
     "startMoney": 500
   },
