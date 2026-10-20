@@ -17,7 +17,7 @@ const strategies: Record<string, Strategy> = {
 const DAY_MS = 120_000;
 const MAX_DAYS = 400;
 /** The chapter whose completion ends the run. */
-const LAST = 3;
+const LAST = 4;
 
 function play(strategy: Strategy): GameState {
   const session = new GameSession({ ...newGame(7), playerName: 'Sam' });
@@ -51,6 +51,7 @@ function play(strategy: Strategy): GameState {
       }
     }
     if (session.state.chapter.current >= 3) playChapter3(session);
+    if (session.state.chapter.current >= 4) playChapter4(session);
     // A day passes (if a conversation is waiting it starts instead; the loop above plays it).
     session.update(DAY_MS);
   }
@@ -69,8 +70,12 @@ function playChapter3(session: GameSession): void {
     const role = method === 'cull' ? 'culling_team' : 'vet';
     if (!st().staff.some((s) => s.role === role)) session.dispatch({ type: 'hire', role });
     const plan = st().herdPlans['plains:impala'];
-    if (!plan || plan.target > 70)
+    if (!st().flags.herd_plan_done && (!plan || plan.target > 70))
       session.dispatch({ type: 'setHerdPlan', zoneId: 'plains', speciesId: 'impala', method });
+    // Plan done: the culling team isn't needed any more (a vet stays for Chapter 4).
+    const team = st().staff.find((s) => s.role === 'culling_team');
+    if (st().flags.herd_plan_done && team)
+      session.dispatch({ type: 'dismissStaff', staffId: team.id });
   }
   if (st().flags.ch3_border_chosen) {
     if (st().fences.east_border_w0?.status === 'broken')
@@ -78,6 +83,21 @@ function playChapter3(session: GameSession): void {
     if (st().flags.border_beehive)
       session.dispatch({ type: 'build', slotId: 'beehive_east', buildingId: 'beehive_fence' });
   }
+}
+
+/** Chapter 4: a tower, a vet, bring in giraffe and wildebeest, open the outcrop, spot the leopard. */
+function playChapter4(session: GameSession): void {
+  const st = () => session.state;
+  session.dispatch({ type: 'build', slotId: 'tower_plains', buildingId: 'observation_tower' });
+  if (!st().staff.some((s) => s.role === 'vet')) session.dispatch({ type: 'hire', role: 'vet' });
+  for (const speciesId of ['wildebeest', 'giraffe'])
+    session.dispatch({ type: 'reintroduce', speciesId });
+  if (st().resources.money > 100)
+    for (const id of fencesBlocking(st(), 'outcrop'))
+      session.dispatch({ type: 'repairFence', segmentId: id });
+  // An attentive player watching the plains at dusk spots the leopards.
+  if ((st().populations.plains?.leopard ?? 0) > 0)
+    session.dispatch({ type: 'recordSighting', speciesId: 'leopard' });
 }
 
 function summary(state: GameState): string {
@@ -89,6 +109,9 @@ function summary(state: GameState): string {
     veg: state.zones.plains?.vegetation,
     trust: state.scores.trust,
     plans: state.herdPlans,
+    visitors: state.tourism.visitorsHistory.reduce((a, b) => a + b, 0),
+    species: Object.keys(state.populations.plains ?? {}).length,
+    rep: state.scores.reputation,
     goalsDone: state.story.goalsDone,
     streaks: state.story.goalStreaks,
     pending: state.story.pendingDialogues,
@@ -103,6 +126,7 @@ describe('playthrough: start to end of the last written chapter (Phase 7/10 acce
       expect(state.flags.chapter_1_complete, summary(state)).toBe(true);
       expect(state.flags.chapter_2_complete, summary(state)).toBe(true);
       expect(state.flags.chapter_3_complete, summary(state)).toBe(true);
+      expect(state.flags.chapter_4_complete, summary(state)).toBe(true);
       expect(state.flags.ch2_mystery_solved).toBe(true);
       // Nothing left waiting: every scene that was queued got played.
       expect(state.story.pendingDialogues).toEqual([]);
@@ -120,6 +144,10 @@ describe('playthrough: start to end of the last written chapter (Phase 7/10 acce
           'ch3_plan',
           'ch3_border',
           'chapter_3_end',
+          'ch4_victor',
+          'ch4_kito',
+          'ch4_rhino',
+          'chapter_4_end',
         ]),
       );
     });

@@ -231,6 +231,56 @@ function beehiveFence(): string {
   ].join('');
 }
 
+/** Safari lodge (72×72, a 3×3 slot): stone base, big thatched roof, a deck with chairs. */
+function lodge(): string {
+  const straw = Array.from({ length: 70 }, (_, i) => {
+    const x = 6 + (i % 35) * 1.75;
+    const top = 6 + Math.abs(x - 36) * 0.35;
+    return line(
+      x,
+      top + (i < 35 ? 2 : 10),
+      x + 0.3,
+      top + (i < 35 ? 6 : 14),
+      i % 3 ? THATCH.dark : THATCH.light,
+      0.4,
+    );
+  });
+  return [
+    fill(ellipse(36, 67, 33, 3.4), SHADE),
+    // Deck in front, with a rail and two chairs.
+    rect(4, 52, 64, 10, WOOD.mid),
+    ...Array.from({ length: 16 }, (_, i) => line(4 + i * 4, 52, 4 + i * 4, 62, WOOD.dark, 0.4)),
+    rect(4, 52, 64, 1, WOOD.light),
+    ...[6, 18, 30, 42, 54, 66].map((x) => post(x, 56, 9, 1.5)),
+    line(4, 57, 68, 57, WOOD.light, 0.8),
+    rect(4, 61.5, 64, 1, WOOD.dark),
+    ...[
+      [46, 54],
+      [54, 54],
+    ].map(
+      ([x, y]) =>
+        rect(x ?? 0, y ?? 0, 4, 1.4, '#c2402f') +
+        rect((x ?? 0) + 0.4, (y ?? 0) + 1.4, 0.6, 2, WOOD.dark) +
+        rect((x ?? 0) + 3, (y ?? 0) + 1.4, 0.6, 2, WOOD.dark),
+    ),
+    // Stone walls with big windows and an open doorway.
+    stonework(10, 32, 52, 20, 81),
+    windowPane(15, 37, 9, 8, false),
+    windowPane(48, 37, 9, 8, false),
+    rect(31, 38, 10, 14, '#2a2018'),
+    rect(32, 39, 8, 13, '#4a3424'),
+    line(36, 39, 36, 52, '#2a2018', 0.5),
+    // Big hipped thatch roof.
+    fill('M2,34 L18,6 L54,6 L70,34 Z', THATCH.mid),
+    fill('M2,34 L18,6 L22,6 L8,34 Z', THATCH.light),
+    fill('M64,34 L50,6 L54,6 L70,34 Z', THATCH.dark),
+    ...straw,
+    rect(2, 33, 68, 1.5, THATCH.dark),
+    rect(18, 5, 36, 1.5, WOOD.dark),
+    ...[24, 36, 48].map((x) => rect(x - 0.8, 2, 1.6, 4, WOOD.dark)),
+  ].join('');
+}
+
 /** Key → drawing. Keys must match src/config/assets.json and buildings.json ids. */
 export const BUILDING_ART: Record<string, () => string> = {
   'building-borehole_pump': boreholePump,
@@ -239,4 +289,5 @@ export const BUILDING_ART: Record<string, () => string> = {
   'building-observation_tower': tower,
   'building-scaffold': scaffold,
   'building-beehive_fence': beehiveFence,
+  'building-lodge': lodge,
 };

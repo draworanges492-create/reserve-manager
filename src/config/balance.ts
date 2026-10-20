@@ -117,6 +117,18 @@ export interface Balance {
     relocateTrustPerAnimal: number;
     relocateReputationPerAnimal: number;
   };
+  /** Spec §6.6 tourism (Chapter 4+, D116). */
+  tourism: {
+    ticketPrice: number;
+    /** Extra per visitor once at least one tower is up (sightings sell). */
+    towerBonusPerVisitor: number;
+    seasonMult: Record<Season, number>;
+    /** Added to attraction while a leopard is in the reserve and has been seen. */
+    rareBonus: number;
+    /** Victor's cut of ticket money if the player took his lodge deal. */
+    victorShare: number;
+    historyDays: number;
+  };
   /** Elephants raiding village crops (Chapter 3 onwards, D111). */
   cropRaids: {
     baseChance: number;

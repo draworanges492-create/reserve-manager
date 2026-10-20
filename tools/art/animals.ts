@@ -172,3 +172,99 @@ export function elephant(frame: Frame): string {
     limb('M37.2,21.6 C38,22.4 39,22.6 39.6,22', '#4a4652', 0.5, 0),
   ].join('');
 }
+
+const GIRAFFE: Ramp = { light: '#f0d49a', mid: '#e2bf7e', dark: '#b8955a' };
+const PATCH = '#8a4a22';
+
+export function giraffe(frame: Frame): string {
+  const a = frame === 0;
+  const body =
+    'M11,25 C10.6,21 14,18.4 19,18.2 C24,18 28,16.6 31,17.6 C33.8,18.6 33.8,23 32,25.6 C29.6,28.4 22,28.8 17,28.4 C13.2,28.1 11.2,27.2 11,25 Z';
+  const neck = 'M28.6,19.6 C30.4,14 34,8.4 37,4.6 L40,5.8 C37.8,10 35,15.6 33.6,21.4 Z';
+  const head =
+    'M36.4,4.6 C37.4,3.2 40,3.2 42.6,4.6 C43.8,5.3 43.6,6.6 42.4,6.8 C40.6,7.1 38.4,6.8 37,6.2 Z';
+  const patches = [
+    [14, 21],
+    [17.5, 20],
+    [21, 21.4],
+    [24.6, 19.8],
+    [28, 20.4],
+    [15.6, 24.6],
+    [19.4, 25],
+    [23.2, 24.6],
+    [27, 24],
+    [30.6, 22.4],
+  ]
+    .map(([x = 0, y = 0]) =>
+      fill(`M${x - 1.5},${y} l1.4,-1.3 l1.7,0.4 l0.3,1.6 l-1.4,1.2 l-1.7,-0.3 Z`, PATCH),
+    )
+    .join('');
+  const neckPatches = [
+    [31.6, 15.6],
+    [33.4, 12],
+    [35.2, 8.8],
+    [32.4, 18.6],
+  ]
+    .map(([x = 0, y = 0]) =>
+      fill(`M${x - 1},${y} l1,-1 l1.2,0.3 l0.2,1.2 l-1,0.9 l-1.2,-0.2 Z`, PATCH),
+    )
+    .join('');
+  const longLeg = (hip: [number, number], foot: [number, number], color: string) =>
+    leg(hip, [hip[0] + (foot[0] - hip[0]) * 0.4, 37], foot, color, color, 1.5) +
+    fill(ellipse(foot[0], foot[1], 0.9, 0.5), '#3a2a1c');
+  return [
+    longLeg([14, 26], a ? [15.4, 46] : [12.4, 46], GIRAFFE.dark),
+    longLeg([29, 26], a ? [27.6, 46] : [30.6, 46], GIRAFFE.dark),
+    limb('M11.4,21 C9.6,23 9,27 9.4,31', GIRAFFE.mid, 0.6, 0),
+    fill(ellipse(9.4, 31.6, 0.6, 1.2), '#2e2016'),
+    shaded(body, GIRAFFE, { rim: [0.9, 1], extra: patches }),
+    longLeg([16, 27], a ? [13.6, 46.4] : [17.6, 46.4], GIRAFFE.mid),
+    longLeg([31, 26.4], a ? [32.6, 46.4] : [29.6, 46.4], GIRAFFE.mid),
+    shaded(neck, GIRAFFE, { rim: [0.6, 0], extra: neckPatches }),
+    limb('M29,18.6 C30.8,13.6 33.8,8.6 36.6,5', '#6a3a1c', 0.7, 0),
+    shaded(head, GIRAFFE, {
+      light: ellipse(39, 4.2, 1.6, 0.5),
+      extra: fill(ellipse(42.6, 6, 1.1, 0.8), '#c49a62'),
+    }),
+    limb('M38.6,4 L38.2,1.6', '#5a3a22', 0.7, 0),
+    limb('M39.8,3.8 L39.8,1.4', '#5a3a22', 0.7, 0),
+    dot(38.2, 1.5, 0.5, '#2e2016'),
+    dot(39.8, 1.3, 0.5, '#2e2016'),
+    fill(ellipse(37.2, 4.6, 1.1, 0.5), GIRAFFE.dark),
+    dot(39.6, 4.9, 0.4, '#1e1610'),
+  ].join('');
+}
+
+const GNU: Ramp = { light: '#8a8e96', mid: '#6c707a', dark: '#4c5058' };
+const GNU_DARK = '#26282c';
+
+export function wildebeest(frame: Frame): string {
+  const a = frame === 0;
+  // Heavy front, sloping back, dark mane and beard, curved horns.
+  const body =
+    'M5,13.6 C5,11.4 7.4,10.6 10,10.4 C12.4,10.2 14.6,9 16.6,9 C18.6,9 19.4,11.6 18.6,13.8 C17.6,15.8 14.6,16.4 11.4,16.4 C8.6,16.4 6.4,16 5.6,15.2 C5.2,14.8 5,14.2 5,13.6 Z';
+  const head =
+    'M17,9.6 C17.6,8.4 19.4,8.2 20.8,9.2 C22,10.2 22.6,12 22.2,13.2 C21.8,14 20.8,14 20.2,13.4 C19,12.4 17.6,11.4 17,9.6 Z';
+  const brindle = [9, 10.6, 12.2, 13.8, 15.4]
+    .map((x) => limb(`M${x},10.2 L${x - 0.6},14.6`, GNU.dark, 0.45, 0))
+    .join('');
+  return [
+    leg([7.6, 14.6], [7, 18], a ? [8.4, 21.6] : [6.4, 21.6], GNU.dark, GNU_DARK, 0.85),
+    leg([16, 14.2], [16.2, 18], a ? [15.2, 21.6] : [17.2, 21.6], GNU.dark, GNU_DARK, 0.85),
+    limb('M5.2,12.6 C4,13.6 3.6,15.2 3.8,16.6', GNU_DARK, 0.6, 0),
+    fill(ellipse(3.8, 17, 0.6, 1.1), GNU_DARK),
+    shaded(body, GNU, {
+      light: 'M7,11 C10,10.2 13,9.8 16,9.4 C13,10.4 10,11 7,11 Z',
+      extra: brindle,
+    }),
+    limb('M10.6,9.8 C13,8.6 15,8 17.4,8.2', GNU_DARK, 0.9, 0),
+    leg([8.6, 15], [7.8, 18], a ? [7, 21.6] : [9.4, 21.6], GNU.mid, GNU_DARK, 0.95),
+    leg([17, 14.4], [17.2, 18], a ? [17.8, 21.6] : [16.2, 21.6], GNU.mid, GNU_DARK, 0.95),
+    shaded(head, GNU, { extra: fill('M20.6,11 L23,11 L23,14 L20.4,14 Z', GNU_DARK) }),
+    // Beard under the throat and the horns curving out and up.
+    limb('M17.6,12 C18,13.6 18.8,14.6 19.6,15', GNU_DARK, 0.9, 0),
+    limb('M17.8,8.8 C17,7.4 17.6,6.4 18.8,6.6', '#3a3630', 0.6, 0),
+    limb('M18.8,8.6 C18.6,7.2 19.6,6.4 20.6,7', '#3a3630', 0.6, 0),
+    dot(19.4, 10.2, 0.35, '#0e0c0a'),
+  ].join('');
+}

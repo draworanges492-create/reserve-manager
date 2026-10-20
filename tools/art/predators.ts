@@ -148,3 +148,55 @@ export function vulture(frame: Frame): string {
 }
 
 export { PALE };
+
+const LEOPARD: Ramp = { light: '#f0cc78', mid: '#dcae56', dark: '#b4863a' };
+const ROSETTE = '#3a2616';
+
+export function leopard(frame: Frame): string {
+  const a = frame === 0;
+  // Long, low body; tail curling up at the tip.
+  const body =
+    'M4.6,14.6 C4.6,12.6 7,11.8 10.4,11.8 C13.4,11.8 16,11.6 17.4,12.4 C18.8,13.4 18.6,15.6 17.2,16.6 C15,17.6 10.6,17.6 7.6,17.2 C5.8,16.9 4.6,16 4.6,14.6 Z';
+  const head =
+    'M16.6,10.6 C17.4,9.2 19.6,9 21,10.2 C22,11.1 22,12.8 21,13.4 C19.8,14 18,13.8 17.2,13 C16.6,12.4 16.4,11.4 16.6,10.6 Z';
+  const rosettes = [
+    [7, 13.4],
+    [9.2, 12.8],
+    [11.6, 13.6],
+    [14, 12.8],
+    [16, 14],
+    [8.4, 15.4],
+    [10.8, 15.8],
+    [13.4, 15.4],
+  ]
+    .map(
+      ([x, y]) =>
+        `<circle cx="${x}" cy="${y}" r="0.7" fill="none" stroke="${ROSETTE}" stroke-width="0.35"/>`,
+    )
+    .join('');
+  const paw = (x: number) => fill(ellipse(x, 21.5, 0.75, 0.4), LEOPARD.light);
+  const legOf = (hip: [number, number], foot: [number, number], color: string) =>
+    leg(hip, [hip[0] + (foot[0] - hip[0]) * 0.5, 18.6], foot, color, color, 1.1) + paw(foot[0]);
+  return [
+    legOf([8, 16], a ? [9, 21.2] : [7, 21.2], LEOPARD.dark),
+    legOf([15.4, 16], a ? [14.4, 21.2] : [16.4, 21.2], LEOPARD.dark),
+    limb('M4.8,14 C2.6,14.6 1.6,16.6 2,18.4 C2.2,19.4 3.2,19.6 3.6,18.8', LEOPARD.mid, 0.7, 0),
+    `<path d="M4.8,14 C2.6,14.6 1.6,16.6 2,18.4" fill="none" stroke="${ROSETTE}" stroke-width="0.7" stroke-dasharray="0.5 0.8"/>`,
+    shaded(body, LEOPARD, {
+      light: 'M6,12.6 C9,12 13,11.8 16,12.2 C13,12.8 9,13 6,12.6 Z',
+      extra: rosettes + fill('M0,16.4 C8,17 12,17 24,16.2 V24 H0 Z', '#f2e2b8'),
+    }),
+    legOf([9, 16.4], a ? [7.6, 21.4] : [10.2, 21.4], LEOPARD.mid),
+    legOf([16.4, 16.2], a ? [17, 21.4] : [15.4, 21.4], LEOPARD.mid),
+    shaded(head, LEOPARD, {
+      extra:
+        dot(18.4, 11, 0.3, ROSETTE) +
+        dot(17.6, 12.4, 0.3, ROSETTE) +
+        fill(ellipse(20.8, 12.4, 0.9, 0.6), '#f2e2b8'),
+    }),
+    fill(ellipse(17.6, 9.6, 0.7, 0.7), LEOPARD.mid),
+    fill(ellipse(17.6, 9.7, 0.3, 0.3), ROSETTE),
+    dot(19.6, 11, 0.35, '#1e1408'),
+    dot(21.6, 11.8, 0.32, '#3a1e14'),
+  ].join('');
+}

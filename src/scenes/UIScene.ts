@@ -54,6 +54,7 @@ const ALERT_EVENTS: AlertEvent['type'][] = [
   'encyclopediaUnlocked',
   'cropRaid',
   'herdPlanDone',
+  'speciesReintroduced',
 ];
 
 type Menu = 'build' | 'staff' | 'species' | 'journal' | 'settings';
@@ -337,6 +338,7 @@ export class UIScene extends Phaser.Scene {
             eventBus.emit('animalSelected', { group: { zoneId, speciesId } });
           },
           (speciesId) => (this.encyclopediaPage = speciesId),
+          (speciesId) => dispatch({ type: 'reintroduce', speciesId }),
         );
       case 'journal':
         return journalMenu(state, this.journalFilter, (f) => (this.journalFilter = f));

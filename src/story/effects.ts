@@ -1,5 +1,6 @@
 // The single effect interpreter (spec §6.9): dialogue choices, events and goals all use it.
 import { BALANCE } from '../config/balance';
+import { buildingDef } from '../core/content';
 import type { GameState } from '../core/GameState';
 import { adjustScore } from '../sim/Scores';
 import type { SimEvent } from '../sim/types';
@@ -73,6 +74,22 @@ function applyOne(state: GameState, e: Effect, events: SimEvent[]): GameState {
       return {
         ...state,
         fences: { ...state.fences, [e.segmentId]: { ...fence, status: 'broken', daysLeft: 0 } },
+      };
+    }
+    case 'buildFree': {
+      const slot = state.slots[e.slotId];
+      const def = buildingDef(e.buildingId);
+      if (!slot || slot.building || !def) return state;
+      events.push({
+        type: 'constructionStarted',
+        payload: { slotId: e.slotId, buildingId: e.buildingId },
+      });
+      return {
+        ...state,
+        slots: {
+          ...state.slots,
+          [e.slotId]: { ...slot, building: { buildingId: e.buildingId, daysLeft: def.buildDays } },
+        },
       };
     }
     case 'journal':

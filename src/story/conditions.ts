@@ -1,5 +1,6 @@
 // Evaluates story conditions against the game state (spec §9.1).
 import type { GameState } from '../core/GameState';
+import { visitorsPerMonth } from '../sim/Tourism';
 import type { Condition } from './types';
 
 /** Animals of a species across every zone. */
@@ -58,6 +59,10 @@ export function holds(state: GameState, c: Condition): boolean {
       return speciesPresent(state) >= c.min;
     case 'populationAtLeast':
       return totalOf(state, c.species) >= c.min;
+    case 'visitorsPerMonth':
+      return visitorsPerMonth(state) >= c.min;
+    case 'seen':
+      return state.encyclopedia.includes(c.species);
     case 'not':
       return !holds(state, c.condition);
   }

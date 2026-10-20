@@ -48,6 +48,8 @@ export interface SpeciesDef {
   predationEfficiency?: number;
   /** Scavengers only: animals supported per carcass left in the zone each day (D107). */
   carrionEfficiency?: number;
+  /** Chapter 4+: can be brought in from another reserve (spec §9.2 "relocation"). */
+  reintroduce?: { chapter: number; zone: string; count: number; cost: number };
   /** Must stay `verified: false` until the user checks them against a source (spec §0 rule 8). */
   facts: { text: string; verified: boolean }[];
 }
@@ -73,7 +75,7 @@ export function zoneDef(id: string): ZoneDef | undefined {
 }
 
 export interface BuildingEffect {
-  op: 'installPump' | 'patrolBoost' | 'raidGuard';
+  op: 'installPump' | 'patrolBoost' | 'raidGuard' | 'tourismInfra';
   pumpKind?: 'borehole' | 'solar';
   value?: number;
 }

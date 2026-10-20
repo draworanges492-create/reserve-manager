@@ -87,6 +87,10 @@ export function checkStory(content: StoryContent, refs: StoryRefs): string[] {
       case 'counterAtLeast':
       case 'daysInChapter':
       case 'speciesPresent':
+      case 'visitorsPerMonth':
+        return;
+      case 'seen':
+        if (!refs.species.includes(c.species)) fail(where, `unknown species "${c.species}"`);
         return;
       case 'scoreAtLeast':
         if (!['ecosystem', 'trust', 'reputation'].includes(c.score))
@@ -135,6 +139,10 @@ export function checkStory(content: StoryContent, refs: StoryRefs): string[] {
         if (!characterIds.includes(e.character)) fail(where, `unknown character "${e.character}"`);
         return;
       case 'counter':
+        return;
+      case 'buildFree':
+        if (!refs.buildings.some((b) => b.id === e.buildingId))
+          fail(where, `unknown building "${e.buildingId}"`);
         return;
       case 'breakFence':
         if (!refs.fences.includes(e.segmentId)) fail(where, `unknown fence "${e.segmentId}"`);
@@ -246,6 +254,20 @@ export function checkStory(content: StoryContent, refs: StoryRefs): string[] {
       else if (zone.unlockChapter > ch.id)
         fail(where, `clue "${clue.id}" sits in "${zone.id}", which isn't open yet`);
       for (const c of clue.visibleWhen) checkCondition(`${where} clue "${clue.id}"`, c);
+      // The clue's dialogue must set its flag, or the marker never goes away and replays.
+      const sets =
+        content.dialogues.find((d) => d.id === clue.dialogue)?.nodes &&
+        Object.values(content.dialogues.find((d) => d.id === clue.dialogue)?.nodes ?? {}).some(
+          (n) =>
+            [...(n.effects ?? []), ...(n.choices ?? []).flatMap((ch) => ch.effects ?? [])].some(
+              (e) => e.op === 'setFlag' && e.flag === clue.flag,
+            ),
+        );
+      if (!sets)
+        fail(
+          where,
+          `clue "${clue.id}": dialogue "${clue.dialogue}" never sets flag "${clue.flag}"`,
+        );
     }
   }
 

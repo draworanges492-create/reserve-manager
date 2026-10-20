@@ -100,6 +100,9 @@ export const SPAWNS: { kind: string; at: Point; species?: string }[] = [
   { kind: 'animal', at: { x: 44, y: 60 }, species: 'elephant' },
   { kind: 'animal', at: { x: 78, y: 46 }, species: 'hyena' },
   { kind: 'animal', at: { x: 64, y: 36 }, species: 'vulture' },
+  { kind: 'animal', at: { x: 62, y: 34 }, species: 'leopard' },
+  { kind: 'animal', at: { x: 72, y: 50 }, species: 'giraffe' },
+  { kind: 'animal', at: { x: 50, y: 50 }, species: 'wildebeest' },
   { kind: 'visitor', at: { x: 56, y: 79 } },
   { kind: 'staff', at: { x: 51, y: 74 } },
 ];

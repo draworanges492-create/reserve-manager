@@ -9,6 +9,7 @@ import { runPopulation } from './Population';
 import { runStory } from '../story/StoryManager';
 import { runScores } from './Scores';
 import { runSeasons } from './Seasons';
+import { runTourism } from './Tourism';
 import { runVegetation } from './Vegetation';
 import { runWater } from './Water';
 import type { SimEvent, SimStep, StepResult } from './types';
@@ -27,6 +28,7 @@ const STEPS: readonly SimStep[] = [
   runVegetation,
   runPopulation,
   runHerdPlans,
+  runTourism,
   runConstruction,
   runEconomy,
   runScores,

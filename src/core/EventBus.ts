@@ -96,6 +96,8 @@ export type GameEvents = {
     speciesId: string;
     method: 'cull' | 'relocate' | 'contraception';
   };
+  /** A species was brought in from another reserve (Chapter 4+). */
+  speciesReintroduced: { speciesId: string; zoneId: string; count: number };
   /** Elephants raided the village's crops (D111). */
   cropRaid: { compensated: boolean; fenceBroken: boolean };
   /** A command failed; UI shows the reason near where the player acted. */

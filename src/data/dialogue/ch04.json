@@ -1,0 +1,648 @@
+{
+  "dialogues": [
+    {
+      "id": "ch04_intro",
+      "nodes": {
+        "start": {
+          "speaker": "narrator",
+          "text": "Chapter 4: Growth.",
+          "next": "n1"
+        },
+        "n1": {
+          "speaker": "tendai",
+          "portrait": "happy",
+          "text": "Three cars at the gate this morning, {player}. Three! People who drove two hours to look at our animals.",
+          "focus": {
+            "x": 57,
+            "y": 76
+          },
+          "effects": [
+            {
+              "op": "setFlag",
+              "flag": "tourism_open"
+            },
+            {
+              "op": "journal",
+              "entry": "ch4_visitors"
+            }
+          ],
+          "next": "n2"
+        },
+        "n2": {
+          "speaker": "tendai",
+          "text": "Visitors pay at the gate. Ten a head. More if they can actually see something.",
+          "next": "n3"
+        },
+        "n3": {
+          "speaker": "amara",
+          "portrait": "worried",
+          "text": "More people means more noise and more cars. Animals notice. Let them come, but give them somewhere to watch from.",
+          "next": "n4"
+        },
+        "n4": {
+          "speaker": "tendai",
+          "text": "An observation tower, then. Up on the plains, where the herds cross. Ruth always wanted one.",
+          "next": "n5"
+        },
+        "n5": {
+          "speaker": "narrator",
+          "text": "Build an observation tower (Build, B). Visitors come for the animals: the more species you have, and the better your reputation, the more come.",
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch04_first_visitors",
+      "nodes": {
+        "start": {
+          "speaker": "narrator",
+          "text": "A family stands at the foot of the tower, passing a pair of binoculars back and forth.",
+          "focus": {
+            "x": 45,
+            "y": 39
+          },
+          "next": "n1"
+        },
+        "n1": {
+          "speaker": "tendai",
+          "portrait": "happy",
+          "text": "The little one saw the lions. She has not stopped talking since.",
+          "next": "n2"
+        },
+        "n2": {
+          "speaker": "amara",
+          "text": "Every visitor who goes home happy tells ten more. Every one who sees nothing tells twenty.",
+          "next": "n3"
+        },
+        "n3": {
+          "speaker": "amara",
+          "text": "The more different animals they can see, the better. Giraffe would help. And if the old stories about a leopard on the rocks are true…",
+          "effects": [
+            {
+              "op": "journal",
+              "entry": "ch4_first_visitors"
+            }
+          ],
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch04_bring_back",
+      "nodes": {
+        "start": {
+          "speaker": "amara",
+          "text": "I have been on the phone to a reserve up north. They have giraffe and wildebeest to spare, if we can pay for the move.",
+          "focus": {
+            "x": 56,
+            "y": 48
+          },
+          "next": "n1"
+        },
+        "n1": {
+          "speaker": "amara",
+          "text": "Giraffe browse the trees that nothing else reaches. Wildebeest share the grass with the zebras. Both would bring visitors.",
+          "next": "n2"
+        },
+        "n2": {
+          "speaker": "tendai",
+          "text": "And both need a vet to travel. Hire one if we have not got one yet.",
+          "next": "n3"
+        },
+        "n3": {
+          "speaker": "narrator",
+          "text": "Bring species in from the Species menu (K). It needs a vet and money; the reserve needs 8 species to count as whole again.",
+          "effects": [
+            {
+              "op": "setFlag",
+              "flag": "ch4_bring_back"
+            },
+            {
+              "op": "journal",
+              "entry": "ch4_bring_back"
+            }
+          ],
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch04_victor",
+      "nodes": {
+        "start": {
+          "speaker": "narrator",
+          "text": "A long silver car pulls up at the gate. The man who steps out is smiling before his shoes touch the dust.",
+          "focus": {
+            "x": 57,
+            "y": 76
+          },
+          "next": "n1"
+        },
+        "n1": {
+          "speaker": "victor",
+          "portrait": "happy",
+          "text": "Victor Hale. We have written to each other. Well, I wrote. You must be very busy.",
+          "effects": [
+            {
+              "op": "journal",
+              "entry": "ch4_victor"
+            }
+          ],
+          "next": "n2"
+        },
+        "n2": {
+          "speaker": "victor",
+          "portrait": "happy",
+          "text": "Your tower is charming. Your visitors are charming. But they drive home at night, and their money drives with them.",
+          "next": "n3"
+        },
+        "n3": {
+          "speaker": "victor",
+          "text": "Let me build you a lodge. Free of charge. Twenty beds, a deck over the plains. In return, Hale & Partners takes a modest share of the ticket money.",
+          "next": "n4"
+        },
+        "n4": {
+          "speaker": "tendai",
+          "portrait": "angry",
+          "text": "…",
+          "next": "n5"
+        },
+        "n5": {
+          "speaker": "player",
+          "text": "…",
+          "choices": [
+            {
+              "text": "A free lodge? We accept.",
+              "next": "accept",
+              "effects": [
+                {
+                  "op": "setFlag",
+                  "flag": "victor_lodge"
+                },
+                {
+                  "op": "buildFree",
+                  "slotId": "lodge_hq",
+                  "buildingId": "lodge"
+                },
+                {
+                  "op": "relationship",
+                  "character": "victor",
+                  "value": 10
+                },
+                {
+                  "op": "relationship",
+                  "character": "tendai",
+                  "value": -6
+                },
+                {
+                  "op": "trust",
+                  "value": -2
+                }
+              ]
+            },
+            {
+              "text": "Thank you, but we will build our own, in our own time.",
+              "next": "decline",
+              "effects": [
+                {
+                  "op": "setFlag",
+                  "flag": "victor_declined"
+                },
+                {
+                  "op": "relationship",
+                  "character": "victor",
+                  "value": -4
+                },
+                {
+                  "op": "relationship",
+                  "character": "tendai",
+                  "value": 4
+                }
+              ]
+            },
+            {
+              "text": "Before we talk business: what do you know about the old pump?",
+              "next": "pump",
+              "effects": [
+                {
+                  "op": "setFlag",
+                  "flag": "victor_cold"
+                },
+                {
+                  "op": "setFlag",
+                  "flag": "asked_about_pump"
+                },
+                {
+                  "op": "relationship",
+                  "character": "victor",
+                  "value": -12
+                },
+                {
+                  "op": "relationship",
+                  "character": "tendai",
+                  "value": 6
+                }
+              ]
+            }
+          ]
+        },
+        "accept": {
+          "speaker": "victor",
+          "portrait": "happy",
+          "text": "Wonderful. My builders start tomorrow. You will not regret it.",
+          "next": "n7"
+        },
+        "n7": {
+          "speaker": "tendai",
+          "portrait": "worried",
+          "text": "Ruth sent him away three times. I hope you know what you are doing.",
+          "next": "end"
+        },
+        "decline": {
+          "speaker": "victor",
+          "text": "Of course. Independence. Admirable. The offer stays open, as long as the reserve does.",
+          "next": "end"
+        },
+        "pump": {
+          "speaker": "victor",
+          "portrait": "angry",
+          "text": "The pump? I have no idea what you mean. I build lodges, not plumbing.",
+          "next": "n10"
+        },
+        "n10": {
+          "speaker": "narrator",
+          "text": "For a moment the smile is gone. Then it is back, a little thinner.",
+          "next": "n11"
+        },
+        "n11": {
+          "speaker": "victor",
+          "text": "Think about my offer. Things out here break so easily. It would be a shame.",
+          "next": "end"
+        },
+        "end": {
+          "speaker": "narrator",
+          "text": "The silver car leaves a long cloud of dust on the east road.",
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch04_outcrop",
+      "nodes": {
+        "start": {
+          "speaker": "narrator",
+          "text": "The rocky outcrop rises out of the northern plains, warm and quiet.",
+          "focus": {
+            "x": 60,
+            "y": 22
+          },
+          "next": "n1"
+        },
+        "n1": {
+          "speaker": "tendai",
+          "text": "Leopard country. When I was young there was a female up here. I saw her twice in ten years.",
+          "next": "n2"
+        },
+        "n2": {
+          "speaker": "tendai",
+          "portrait": "happy",
+          "text": "Look at this. Fresh tracks, and a kill dragged up into that fig. She has a daughter, or I am a zebra.",
+          "effects": [
+            {
+              "op": "population",
+              "species": "leopard",
+              "zone": "plains",
+              "value": 2
+            },
+            {
+              "op": "journal",
+              "entry": "ch4_leopard_tracks"
+            }
+          ],
+          "next": "n3"
+        },
+        "n3": {
+          "speaker": "tendai",
+          "text": "They come down to the plains at dusk to hunt impala. Keep your eyes on the northern edge of the plains. If you spot her, the visitors will hear about it.",
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch04_leopard",
+      "nodes": {
+        "start": {
+          "speaker": "amara",
+          "portrait": "happy",
+          "text": "A leopard! On camera, in daylight. Do you know how rare that is?",
+          "effects": [
+            {
+              "op": "reputation",
+              "value": 5
+            },
+            {
+              "op": "journal",
+              "entry": "ch4_leopard_seen"
+            }
+          ],
+          "next": "n1"
+        },
+        "n1": {
+          "speaker": "tendai",
+          "portrait": "happy",
+          "text": "Ruth would have framed that photo and hung it in the office.",
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch04_kito",
+      "nodes": {
+        "start": {
+          "speaker": "narrator",
+          "text": "At dusk two rangers walk a young man in to the office. His hands are scratched and his shoes are worn through.",
+          "focus": {
+            "x": 51,
+            "y": 73
+          },
+          "next": "n1"
+        },
+        "n1": {
+          "speaker": "tendai",
+          "portrait": "angry",
+          "text": "Caught him near the rocks with a coil of wire and a bag of snares.",
+          "next": "n2"
+        },
+        "n2": {
+          "speaker": "kito",
+          "portrait": "worried",
+          "text": "I did not set them. I only carry them. A man pays me to carry them. Two hundred for a bag.",
+          "next": "n3"
+        },
+        "n3": {
+          "speaker": "kito",
+          "portrait": "worried",
+          "text": "My name is Kito. My mother is sick. Two hundred is a month of medicine.",
+          "next": "n4"
+        },
+        "n4": {
+          "speaker": "player",
+          "text": "…",
+          "choices": [
+            {
+              "text": "Call the police. Snares kill.",
+              "next": "police",
+              "effects": [
+                {
+                  "op": "setFlag",
+                  "flag": "kito_police"
+                },
+                {
+                  "op": "trust",
+                  "value": 2
+                },
+                {
+                  "op": "relationship",
+                  "character": "kito",
+                  "value": -15
+                },
+                {
+                  "op": "relationship",
+                  "character": "tendai",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "text": "Tendai, talk to him. Find out who pays him.",
+              "next": "talk",
+              "effects": [
+                {
+                  "op": "setFlag",
+                  "flag": "kito_talked"
+                },
+                {
+                  "op": "relationship",
+                  "character": "kito",
+                  "value": 12
+                },
+                {
+                  "op": "relationship",
+                  "character": "tendai",
+                  "value": 4
+                }
+              ]
+            }
+          ]
+        },
+        "police": {
+          "speaker": "narrator",
+          "text": "The police van takes Kito away before midnight. He does not look back.",
+          "next": "end"
+        },
+        "talk": {
+          "speaker": "tendai",
+          "text": "Sit, boy. Drink this. Now. From the beginning, and slowly.",
+          "next": "n7"
+        },
+        "n7": {
+          "speaker": "kito",
+          "portrait": "worried",
+          "text": "I only ever see the driver. A big truck, no lights. It comes in from the east road when there is no moon.",
+          "next": "end"
+        },
+        "end": {
+          "speaker": "tendai",
+          "portrait": "worried",
+          "text": "Snares near the rocks, where the leopards hunt. Somebody knows what lives here.",
+          "effects": [
+            {
+              "op": "setFlag",
+              "flag": "kito_met"
+            },
+            {
+              "op": "journal",
+              "entry": "ch4_kito"
+            }
+          ],
+          "next": "n9"
+        },
+        "n9": {
+          "speaker": "tendai",
+          "text": "One more thing. A ranger saw strange tracks by the north fence last week. Go and look before the rain takes them.",
+          "focus": {
+            "x": 42,
+            "y": 33
+          },
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch04_rhino_print",
+      "nodes": {
+        "start": {
+          "speaker": "narrator",
+          "text": "In the mud by the north fence there is a footprint as wide as a dinner plate, with three toes.",
+          "focus": {
+            "x": 42,
+            "y": 33
+          },
+          "next": "n1"
+        },
+        "n1": {
+          "speaker": "amara",
+          "portrait": "happy",
+          "text": "That is a rhino. A big one. No question.",
+          "next": "n2"
+        },
+        "n2": {
+          "speaker": "tendai",
+          "portrait": "worried",
+          "text": "There has not been a rhino here since before Ruth died. If one has walked in from the north…",
+          "next": "n3"
+        },
+        "n3": {
+          "speaker": "player",
+          "text": "…",
+          "choices": [
+            {
+              "text": "Then we protect it, whatever it takes.",
+              "next": "protect",
+              "effects": [
+                {
+                  "op": "relationship",
+                  "character": "tendai",
+                  "value": 3
+                }
+              ]
+            },
+            {
+              "text": "Keep this quiet. Nobody outside hears about it.",
+              "next": "quiet",
+              "effects": [
+                {
+                  "op": "relationship",
+                  "character": "amara",
+                  "value": 2
+                }
+              ]
+            }
+          ]
+        },
+        "protect": {
+          "speaker": "tendai",
+          "text": "Whatever it takes may be a lot.",
+          "next": "end"
+        },
+        "quiet": {
+          "speaker": "amara",
+          "text": "Agreed. A rhino is worth more to a poacher than this whole reserve is to a bank.",
+          "next": "end"
+        },
+        "end": {
+          "speaker": "narrator",
+          "text": "You photograph the print and send the rangers home by the long way.",
+          "effects": [
+            {
+              "op": "setFlag",
+              "flag": "rhino_rumour"
+            },
+            {
+              "op": "journal",
+              "entry": "ch4_rhino"
+            }
+          ],
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch04_hint_tower",
+      "nodes": {
+        "start": {
+          "speaker": "tendai",
+          "text": "The visitors keep asking where they can watch from. An observation tower on the plains would do it (Build, B).",
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch04_hint_species",
+      "nodes": {
+        "start": {
+          "speaker": "amara",
+          "text": "Visitors want variety. Giraffe or wildebeest from the north, and our leopards if we can find them. The Species menu (K) has the transfer offers.",
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch04_complete",
+      "nodes": {
+        "start": {
+          "speaker": "narrator",
+          "text": "A season of visitors. A tower full of binoculars, eight kinds of animal on the plains, and one footprint in the mud.",
+          "focus": {
+            "x": 56,
+            "y": 46
+          },
+          "next": "n1"
+        },
+        "n1": {
+          "speaker": "amara",
+          "portrait": "happy",
+          "text": "The reserve pays for itself now, nearly. I did not think I would see that.",
+          "next": "n2"
+        },
+        "n2": {
+          "speaker": "tendai",
+          "text": "Money brings people. People bring eyes. Some of those eyes are looking at our rhino.",
+          "branch": [
+            {
+              "conditions": [
+                {
+                  "op": "flag",
+                  "flag": "victor_lodge"
+                }
+              ],
+              "next": "lodge"
+            },
+            {
+              "conditions": [
+                {
+                  "op": "flag",
+                  "flag": "victor_cold"
+                }
+              ],
+              "next": "cold"
+            }
+          ],
+          "next": "plain"
+        },
+        "lodge": {
+          "speaker": "tendai",
+          "portrait": "worried",
+          "text": "And Hale’s lodge sits on our plains, full of Hale’s staff, watching everything.",
+          "next": "end"
+        },
+        "cold": {
+          "speaker": "tendai",
+          "portrait": "worried",
+          "text": "And Hale has not written since you asked him about the pump. Not one letter. That worries me more than his letters did.",
+          "next": "end"
+        },
+        "plain": {
+          "speaker": "tendai",
+          "text": "And Hale still sends a letter every week, each one a little less polite.",
+          "next": "end"
+        },
+        "end": {
+          "speaker": "tendai",
+          "text": "If there is a rhino out there, {player}, someone else knows it too.",
+          "next": null
+        }
+      }
+    }
+  ]
+}

@@ -2,12 +2,12 @@
 // Paths are relative to public/assets and must match src/config/assets.json.
 import type { PixelCanvas } from '../lib/canvas';
 import type { StructureName } from '../tileset';
-import { elephant, type Frame, impala, zebra } from './animals';
+import { elephant, type Frame, giraffe, impala, wildebeest, zebra } from './animals';
 import { BUILDING_ART } from './buildings';
 import { bucket, clueMarker, drop, dust, shadowArt } from './fx';
 import { ranger, visitor } from './people';
 import { PORTRAIT_IDS, portraitFrames } from './portraits';
-import { hyena, lion, vulture } from './predators';
+import { hyena, leopard, lion, vulture } from './predators';
 import { raster, sheet } from './raster';
 import { STRUCTURE_ART } from './structures';
 import { TREE_ART, TREE_SIZES, TREE_VARIANTS, type TreeKind } from './trees';
@@ -23,6 +23,9 @@ export function drawWorldArt(): Record<string, PixelCanvas> {
     'sprites/hyena.png': walk(hyena, 24),
     'sprites/vulture.png': walk(vulture, 24),
     'sprites/elephant.png': walk(elephant, 48),
+    'sprites/giraffe.png': walk(giraffe, 48),
+    'sprites/wildebeest.png': walk(wildebeest, 24),
+    'sprites/leopard.png': walk(leopard, 24),
     'sprites/ranger.png': walk(ranger, 24),
     'sprites/visitor.png': walk(visitor, 24),
     'sprites/shadow-sm.png': raster(shadowArt(20, 6), '', 20, 6, { outline: false }),
@@ -38,8 +41,10 @@ export function drawWorldArt(): Record<string, PixelCanvas> {
     'sprites/fx-dust.png': raster(dust(), '', 4, 4, { outline: false }),
     'sprites/clue-marker.png': raster(clueMarker(), '', 16, 16),
   };
-  for (const [key, draw] of Object.entries(BUILDING_ART))
-    out[`sprites/${key}.png`] = raster(draw(), '', 48, 48);
+  for (const [key, draw] of Object.entries(BUILDING_ART)) {
+    const size = key === 'building-lodge' ? 72 : 48; // the lodge fills a 3×3 slot
+    out[`sprites/${key}.png`] = raster(draw(), '', size, size);
+  }
   for (const kind of Object.keys(TREE_ART) as TreeKind[]) {
     const { w, h } = TREE_SIZES[kind];
     for (let v = 0; v < TREE_VARIANTS; v++)

@@ -19,6 +19,7 @@ import { readZones, type ZoneArea } from './map/mapObjects';
 import { SeasonTint } from './map/SeasonTint';
 import { ZoneOverlay } from './map/ZoneOverlay';
 import { TreeLayer } from './map/TreeLayer';
+import { VisitorLayer } from './VisitorLayer';
 import { getSession } from './session';
 import type { UIScene } from './UIScene';
 import { viewScale } from '../ui/view';
@@ -45,6 +46,7 @@ export class GameScene extends Phaser.Scene {
   private herds!: HerdLayer;
   private buildings!: BuildingLayer;
   private staff!: StaffLayer;
+  private visitors!: VisitorLayer;
   private placing = false;
   private fences!: FenceLayer;
   private clues!: ClueLayer;
@@ -109,6 +111,7 @@ export class GameScene extends Phaser.Scene {
     this.buildings = new BuildingLayer(this, session, map.tileWidth, objects);
     this.fences = new FenceLayer(this, map, session);
     this.clues = new ClueLayer(this, session, map.tileWidth);
+    this.visitors = new VisitorLayer(this, session, map.tileWidth);
     this.staff = new StaffLayer(this, session, this.zones, map.tileWidth, this.herds.blocked);
     this.waterholes = Object.keys(session.state.waterholes).map(
       (id) => new WaterholeSprite(this, session, id, map.tileWidth),
@@ -193,6 +196,7 @@ export class GameScene extends Phaser.Scene {
     this.fences.update();
     this.clues.update();
     this.staff.update(delta);
+    this.visitors.update(delta);
     this.cameraController.update(delta);
   }
 

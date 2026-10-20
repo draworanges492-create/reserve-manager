@@ -12,7 +12,7 @@
       "sightingValue": 1.0,
       "poachingValue": 0.2,
       "charisma": 0.4,
-      "predators": ["lion", "hyena"],
+      "predators": ["lion", "hyena", "leopard"],
       "prey": [],
       "startPopulation": {
         "plains": 80
@@ -65,7 +65,7 @@
       "poachingValue": 0.6,
       "charisma": 1.0,
       "predators": [],
-      "prey": ["impala", "zebra"],
+      "prey": ["impala", "zebra", "wildebeest"],
       "startPopulation": {
         "plains": 4
       },
@@ -79,7 +79,8 @@
       ],
       "killsPerDay": {
         "impala": 0.06,
-        "zebra": 0.02
+        "zebra": 0.02,
+        "wildebeest": 0.03
       },
       "huntHalfSaturation": 20,
       "predationEfficiency": 0.04
@@ -127,7 +128,7 @@
       "poachingValue": 0.1,
       "charisma": 0.3,
       "predators": [],
-      "prey": ["impala", "zebra"],
+      "prey": ["impala", "zebra", "wildebeest"],
       "startPopulation": {
         "plains": 5
       },
@@ -135,7 +136,8 @@
       "spriteKey": "hyena",
       "killsPerDay": {
         "impala": 0.04,
-        "zebra": 0.01
+        "zebra": 0.01,
+        "wildebeest": 0.02
       },
       "huntHalfSaturation": 20,
       "predationEfficiency": 0.08,
@@ -177,6 +179,107 @@
         },
         {
           "text": "TODO: verify — vultures are often poisoned when poachers lace carcasses to avoid being spotted.",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "id": "giraffe",
+      "name": "Giraffe",
+      "plural": "giraffes",
+      "diet": "browser",
+      "r": 0.006,
+      "habitatDensity": 0.006,
+      "grazeRate": 0.08,
+      "minViable": 4,
+      "sightingValue": 4.0,
+      "poachingValue": 0.3,
+      "charisma": 0.9,
+      "predators": [],
+      "prey": [],
+      "startPopulation": {},
+      "targetN": 8,
+      "spriteKey": "giraffe",
+      "reintroduce": {
+        "chapter": 4,
+        "zone": "plains",
+        "count": 6,
+        "cost": 900
+      },
+      "facts": [
+        {
+          "text": "TODO: verify — giraffes browse the tops of acacia trees that no other grazer can reach.",
+          "verified": false
+        },
+        {
+          "text": "TODO: verify — a giraffe's long neck has the same number of bones as a human neck.",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "id": "wildebeest",
+      "name": "Blue wildebeest",
+      "plural": "wildebeest",
+      "diet": "grazer",
+      "r": 0.025,
+      "habitatDensity": 0.04,
+      "grazeRate": 0.04,
+      "minViable": 8,
+      "sightingValue": 1.5,
+      "poachingValue": 0.2,
+      "charisma": 0.5,
+      "predators": ["lion", "hyena"],
+      "prey": [],
+      "startPopulation": {},
+      "targetN": 30,
+      "spriteKey": "wildebeest",
+      "reintroduce": {
+        "chapter": 4,
+        "zone": "plains",
+        "count": 16,
+        "cost": 600
+      },
+      "facts": [
+        {
+          "text": "TODO: verify — wildebeest often graze alongside zebras, which eat the taller grass first.",
+          "verified": false
+        },
+        {
+          "text": "TODO: verify — calves can stand and run within minutes of being born.",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "id": "leopard",
+      "name": "Leopard",
+      "plural": "leopards",
+      "diet": "predator",
+      "r": 0.008,
+      "habitatDensity": 0,
+      "grazeRate": 0,
+      "minViable": 2,
+      "sightingValue": 6.0,
+      "poachingValue": 0.7,
+      "charisma": 1.0,
+      "predators": [],
+      "prey": ["impala"],
+      "startPopulation": {},
+      "targetN": 3,
+      "spriteKey": "leopard",
+      "killsPerDay": {
+        "impala": 0.05
+      },
+      "huntHalfSaturation": 10,
+      "predationEfficiency": 0.06,
+      "facts": [
+        {
+          "text": "TODO: verify — leopards haul their kills up into trees, out of reach of lions and hyenas.",
+          "verified": false
+        },
+        {
+          "text": "TODO: verify — they are mostly active at night and are rarely seen.",
           "verified": false
         }
       ]

@@ -610,6 +610,185 @@
       ],
       "clues": [],
       "completionDialogue": "ch03_complete"
+    },
+    {
+      "id": 4,
+      "title": "Growth",
+      "introDialogue": "ch04_intro",
+      "goals": [
+        {
+          "id": "g4_tower",
+          "text": "Build an observation tower",
+          "conditions": [
+            {
+              "op": "buildingWorking",
+              "buildingId": "observation_tower"
+            }
+          ]
+        },
+        {
+          "id": "g4_visitors",
+          "text": "Welcome 150 visitors in 30 days",
+          "conditions": [
+            {
+              "op": "visitorsPerMonth",
+              "min": 150
+            }
+          ]
+        },
+        {
+          "id": "g4_species",
+          "text": "Have 8 species living in the reserve",
+          "conditions": [
+            {
+              "op": "speciesPresent",
+              "min": 8
+            }
+          ]
+        },
+        {
+          "id": "g4_rhino",
+          "text": "Look into the strange tracks by the north fence",
+          "conditions": [
+            {
+              "op": "flag",
+              "flag": "rhino_rumour"
+            }
+          ]
+        }
+      ],
+      "unlocks": {
+        "zones": ["outcrop"],
+        "buildings": ["observation_tower", "lodge", "solar_pump"],
+        "staff": []
+      },
+      "scriptedEvents": [
+        {
+          "id": "s4_first_visitors",
+          "when": [
+            {
+              "op": "counterAtLeast",
+              "counter": "visitors",
+              "min": 1
+            },
+            {
+              "op": "buildingWorking",
+              "buildingId": "observation_tower"
+            }
+          ],
+          "dialogue": "ch04_first_visitors"
+        },
+        {
+          "id": "s4_bring_back",
+          "when": [
+            {
+              "op": "daysInChapter",
+              "min": 4
+            }
+          ],
+          "dialogue": "ch04_bring_back"
+        },
+        {
+          "id": "s4_victor",
+          "when": [
+            {
+              "op": "buildingWorking",
+              "buildingId": "observation_tower"
+            },
+            {
+              "op": "daysInChapter",
+              "min": 6
+            }
+          ],
+          "dialogue": "ch04_victor"
+        },
+        {
+          "id": "s4_outcrop",
+          "when": [
+            {
+              "op": "zoneOpen",
+              "zoneId": "outcrop"
+            }
+          ],
+          "dialogue": "ch04_outcrop"
+        },
+        {
+          "id": "s4_leopard",
+          "when": [
+            {
+              "op": "seen",
+              "species": "leopard"
+            }
+          ],
+          "dialogue": "ch04_leopard"
+        },
+        {
+          "id": "s4_kito",
+          "when": [
+            {
+              "op": "zoneOpen",
+              "zoneId": "outcrop"
+            },
+            {
+              "op": "daysInChapter",
+              "min": 10
+            }
+          ],
+          "dialogue": "ch04_kito"
+        },
+        {
+          "id": "s4_hint_tower",
+          "when": [
+            {
+              "op": "daysInChapter",
+              "min": 5
+            },
+            {
+              "op": "not",
+              "condition": {
+                "op": "buildingWorking",
+                "buildingId": "observation_tower"
+              }
+            }
+          ],
+          "dialogue": "ch04_hint_tower"
+        },
+        {
+          "id": "s4_hint_species",
+          "when": [
+            {
+              "op": "daysInChapter",
+              "min": 18
+            },
+            {
+              "op": "not",
+              "condition": {
+                "op": "speciesPresent",
+                "min": 8
+              }
+            }
+          ],
+          "dialogue": "ch04_hint_species"
+        }
+      ],
+      "clues": [
+        {
+          "id": "clue_rhino",
+          "at": {
+            "x": 42.5,
+            "y": 33.5
+          },
+          "dialogue": "ch04_rhino_print",
+          "flag": "rhino_rumour",
+          "visibleWhen": [
+            {
+              "op": "flag",
+              "flag": "kito_met"
+            }
+          ]
+        }
+      ],
+      "completionDialogue": "ch04_complete"
     }
   ]
 }

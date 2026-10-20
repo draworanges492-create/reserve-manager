@@ -8,6 +8,7 @@ import type { PanelLine } from './animalInfo';
 import type { SideContent } from './SidePanel';
 import type { LoadResult, SlotId } from '../core/Save';
 import { slotName, slotText } from './saveInfo';
+import { reintroduceBlocker } from '../core/reintroduce';
 
 /** Herd with the most animals, for "Show". */
 export function biggestHerd(
@@ -37,12 +38,42 @@ export function speciesMenu(
   state: GameState,
   onShow: (zoneId: string, speciesId: string) => void,
   onRead: (speciesId: string) => void,
+  /** Chapter 4+: bring a species in from another reserve. */
+  onBringIn?: (speciesId: string) => void,
 ): SideContent {
   const present = SPECIES.filter((s) => biggestHerd(state, s.id));
   return {
     title: t('species.title'),
     intro: [{ text: t('species.intro', { n: present.length }) }],
     rows: SPECIES.map((s) => {
+      // Chapter 4+: species that can come from another reserve are named, with a button.
+      const r = s.reintroduce;
+      if (
+        r &&
+        onBringIn &&
+        state.chapter.current >= r.chapter &&
+        !state.flags[`reintroduced_${s.id}`] &&
+        reserveTotal(state, s.id) === 0
+      ) {
+        return {
+          lines: [
+            { text: t('species.canBringIn', { name: s.name }) },
+            {
+              text: t('species.canBringInHint', {
+                count: r.count,
+                zone: zoneDef(r.zone)?.name ?? r.zone,
+              }),
+            },
+          ],
+          actions: [
+            {
+              label: t('species.bringIn', { cost: r.cost }),
+              enabled: reintroduceBlocker(state, s.id) === null,
+              onClick: () => onBringIn(s.id),
+            },
+          ],
+        };
+      }
       // Spec §7.6: unseen species stay a mystery until spotted.
       if (!state.encyclopedia.includes(s.id)) {
         return {

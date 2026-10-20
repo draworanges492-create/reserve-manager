@@ -30,6 +30,10 @@ export function moneyTooltip(state: GameState): string[] {
   const l = expectedLedger(state);
   const lines = [t('money.tooltip.title', { money: Math.floor(state.resources.money) })];
   lines.push(t('money.tooltip.grant', { n: round1(l.grant) }));
+  if (l.tourism)
+    lines.push(
+      t('money.tooltip.tourism', { n: round1(l.tourism), visitors: state.tourism.lastVisitors }),
+    );
   if (l.wages) lines.push(t('money.tooltip.wages', { n: round1(l.wages) }));
   if (l.upkeep) lines.push(t('money.tooltip.upkeep', { n: round1(l.upkeep) }));
   lines.push(t('money.tooltip.net', { n: signed(l.net) }));

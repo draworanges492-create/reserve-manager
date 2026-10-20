@@ -27,6 +27,9 @@ export type Condition =
   | { op: 'speciesPresent'; min: number }
   /** Animals of one species across all zones. */
   | { op: 'populationAtLeast'; species: string; min: number }
+  /** Phase 11+: visitors over the last 30 days; a species' encyclopedia entry is unlocked. */
+  | { op: 'visitorsPerMonth'; min: number }
+  | { op: 'seen'; species: string }
   | { op: 'not'; condition: Condition };
 
 /**
@@ -48,7 +51,9 @@ export type Effect =
   | { op: 'journal'; entry: string }
   /** Phase 10+: add to a story tally; knock a fence down (e.g. elephants break through). */
   | { op: 'counter'; counter: string; value: number }
-  | { op: 'breakFence'; segmentId: string };
+  | { op: 'breakFence'; segmentId: string }
+  /** Start a building on a slot at no cost (e.g. Victor's lodge), if the slot is empty. */
+  | { op: 'buildFree'; slotId: string; buildingId: string };
 
 export type Expression = 'neutral' | 'happy' | 'worried' | 'angry';
 

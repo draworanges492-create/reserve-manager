@@ -80,7 +80,7 @@ describe('versions (Phase 8 acceptance: mismatch handled gracefully)', () => {
     delete v1State.encyclopedia;
     const json = JSON.stringify({ format: SAVE_FORMAT, version: 1, summary: {}, state: v1State });
     const loaded = load(json);
-    expect(loaded.version).toBe(5);
+    expect(loaded.version).toBe(6);
     expect(loaded.meta).toEqual({ playTimeSeconds: 0 });
     expect({
       ...loaded,
@@ -97,7 +97,7 @@ describe('versions (Phase 8 acceptance: mismatch handled gracefully)', () => {
     const loaded = load(
       JSON.stringify({ format: SAVE_FORMAT, version: 2, summary: {}, state: v2State }),
     );
-    expect(loaded.version).toBe(5);
+    expect(loaded.version).toBe(6);
     expect(loaded.encyclopedia).toEqual([
       'elephant',
       'hyena',
@@ -119,7 +119,7 @@ describe('versions (Phase 8 acceptance: mismatch handled gracefully)', () => {
     const loaded = load(
       JSON.stringify({ format: SAVE_FORMAT, version: 3, summary: {}, state: v3State }),
     );
-    expect(loaded.version).toBe(5);
+    expect(loaded.version).toBe(6);
     expect(loaded.populations.plains).toEqual({ ...plains, elephant: 6, hyena: 5, vulture: 8 });
     expect({ ...loaded, populations: current.populations }).toEqual(current);
   });
@@ -136,7 +136,7 @@ describe('versions (Phase 8 acceptance: mismatch handled gracefully)', () => {
     const loaded = load(
       JSON.stringify({ format: SAVE_FORMAT, version: 4, summary: {}, state: v4State }),
     );
-    expect(loaded.version).toBe(5);
+    expect(loaded.version).toBe(6);
     expect(loaded.chapter).toEqual({
       current: current.chapter.current,
       startDay: current.clock.day,

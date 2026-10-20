@@ -274,5 +274,13 @@
   "alert.fenceBrokenByElephants": "They broke the east border fence on the way.",
   "alert.planDone.cull": "Cull finished: the {species} in {zone} are at your target.",
   "alert.planDone.relocate": "Relocation finished: the {species} in {zone} are at your target.",
-  "alert.planDone.contraception": "Contraception worked: the {species} in {zone} are at your target."
+  "alert.planDone.contraception": "Contraception worked: the {species} in {zone} are at your target.",
+  "money.tooltip.tourism": "Visitors: +{n} ({visitors} yesterday)",
+  "command.cannotReintroduce": "This species can't be brought in.",
+  "command.alreadyReintroduced": "You've already brought them in.",
+  "command.needsVet": "Needs a vet (Staff, H).",
+  "species.bringIn": "Bring in ({cost})",
+  "species.canBringIn": "{name} · could come from another reserve",
+  "species.canBringInHint": "{count} animals to the {zone}, needs a vet",
+  "alert.reintroduced": "{count} {species} arrived in the {zone}."
 }

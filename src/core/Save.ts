@@ -96,6 +96,12 @@ const MIGRATIONS: Record<number, Migration> = {
       counters: s.counters ?? {},
     };
   },
+  // v6 (Phase 11): tourism.
+  5: (s) => ({
+    ...s,
+    version: 6,
+    tourism: s.tourism ?? { visitorsHistory: [], lastVisitors: 0, lastRevenue: 0 },
+  }),
 };
 
 export function summarize(state: GameState, savedAt: string): SaveSummary {

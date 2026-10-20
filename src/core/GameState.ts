@@ -12,9 +12,9 @@ import type { TileRect, WorldLayout } from './WorldLayout';
  * Bump when the saved shape changes, and add a migration in core/Save.ts.
  * v1: up to Phase 7 · v2: adds meta.playTimeSeconds · v3: adds encyclopedia ·
  * v4: elephants, hyenas and vultures join the reserve (D107) ·
- * v5: chapter.startDay, herd plans and counters (Phase 10).
+ * v5: chapter.startDay, herd plans and counters (Phase 10) · v6: tourism (Phase 11).
  */
-export const STATE_VERSION = 5;
+export const STATE_VERSION = 6;
 
 export interface ClockState {
   /** Days elapsed since the start, from 0. Calendar values derive from this (sim/Seasons). */
@@ -67,6 +67,8 @@ export interface StaffMember {
 /** One day's money in and out (spec §6.7), for the HUD tooltip. */
 export interface DayLedger {
   grant: number;
+  /** Ticket money from visitors (Chapter 4+). */
+  tourism: number;
   wages: number;
   /** Wages owed but not paid because money ran out. */
   wagesUnpaid: number;
@@ -193,6 +195,8 @@ export interface GameState {
   herdPlans: Record<string, HerdPlan>;
   /** Running tallies the story and events read (crop raids, animals relocated, …). */
   counters: Record<string, number>;
+  /** Spec §6.6: visitors per day for the last 30 days (newest last) and yesterday's takings. */
+  tourism: { visitorsHistory: number[]; lastVisitors: number; lastRevenue: number };
 }
 
 export interface NewGameOptions {
@@ -282,6 +286,7 @@ function baseState({ seed, world, playerName = '', speed = 1 }: NewGameOptions):
     scoreHistory: [],
     herdPlans: {},
     counters: {},
+    tourism: { visitorsHistory: [], lastVisitors: 0, lastRevenue: 0 },
   };
 }
 

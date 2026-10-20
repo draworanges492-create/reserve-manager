@@ -60,3 +60,16 @@ describe('story content checks', () => {
     );
   });
 });
+
+describe('clue checks', () => {
+  it('catch a clue whose dialogue never sets its flag (the marker would replay forever)', () => {
+    const chapters = CHAPTERS.map((c) =>
+      c.id === 4
+        ? { ...c, clues: c.clues.map((cl) => ({ ...cl, flag: 'never_set_anywhere' })) }
+        : c,
+    );
+    expect(checkStory({ ...content, chapters }, refs)).toEqual(
+      expect.arrayContaining([expect.stringContaining('never sets flag "never_set_anywhere"')]),
+    );
+  });
+});

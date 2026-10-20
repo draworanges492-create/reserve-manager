@@ -381,3 +381,19 @@ The player's save was backed up before testing and restored afterwards.
 with three choice strategies) · `lint` ✅ · `validate-data` ✅ · browser: Chapter 3 intro →
 count → first raid → plan and border choices; herd panel with plan buttons; beehive fence
 built; 0 console errors. The player's save was backed up and restored.
+
+## Phase 11 — Chapter 4 "Growth" ✅ (2026-10-20)
+
+**Done**
+
+- Tourism (D116): visitors, ticket money, towers and lodge (new building and art),
+  walking visitor figures, money tooltip line; state v6.
+- New species (D117): giraffe, blue wildebeest, leopard (art, data, unverified facts);
+  bringing species in through the Species menu.
+- Story: Chapter 4 script (D118) with Victor's lodge deal, the leopard, Kito and the rhino
+  print; new conditions `visitorsPerMonth`, `seen`; effect `buildFree`.
+- Fixes: clue flag validation (D119), money label overlap (D120).
+
+**Checks:** `build` ✅ · `test` ✅ (208, playthrough to the end of Chapter 4 with three
+strategies) · `lint` ✅ · `validate-data` ✅ · browser: Chapter 4 intro, tower and lodge built,
+11 visitors on day one with 4 walking figures, giraffe brought in; 0 console errors.

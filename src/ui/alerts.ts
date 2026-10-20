@@ -45,7 +45,8 @@ export type AlertEvent =
   | EventOf<'journalAdded'>
   | EventOf<'encyclopediaUnlocked'>
   | EventOf<'cropRaid'>
-  | EventOf<'herdPlanDone'>;
+  | EventOf<'herdPlanDone'>
+  | EventOf<'speciesReintroduced'>;
 
 /** Info alerts fade after this many in-game days; warnings stay until resolved or dismissed. */
 export const INFO_LIFETIME_DAYS = 2;
@@ -192,6 +193,23 @@ export function alertFor(state: GameState, event: AlertEvent): AlertChange | nul
           key: `enc:${event.payload.speciesId}`,
           severity: 'info',
           text: t('alert.encyclopedia', { name }),
+          day,
+        },
+      };
+    }
+    case 'speciesReintroduced': {
+      const { speciesId, zoneId, count } = event.payload;
+      return {
+        add: {
+          key: `arrived:${speciesId}`,
+          severity: 'info',
+          text: t('alert.reintroduced', {
+            count,
+            species: speciesDef(speciesId)?.plural ?? speciesId,
+            zone: zoneDef(zoneId)?.name ?? zoneId,
+          }),
+          focus: zoneCentre(state, zoneId),
+          target: { kind: 'animal', zoneId, speciesId },
           day,
         },
       };

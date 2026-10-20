@@ -2,8 +2,8 @@
 import { writeFileSync } from 'node:fs';
 import { hex, PixelCanvas } from '../lib/canvas';
 import { encodePng } from '../lib/png';
-import { elephant, impala, zebra } from './animals';
-import { hyena, lion, vulture } from './predators';
+import { elephant, giraffe, impala, wildebeest, zebra } from './animals';
+import { hyena, leopard, lion, vulture } from './predators';
 import { BUILDING_ART } from './buildings';
 import { ranger, visitor } from './people';
 import { PORTRAIT_IDS, portraitFrames } from './portraits';
@@ -24,6 +24,9 @@ const items = [
   both(hyena, 24),
   both(vulture, 24),
   both(elephant, 48),
+  both(giraffe, 48),
+  both(wildebeest, 24),
+  both(leopard, 24),
   both(ranger, 24),
   both(visitor, 24),
 ];

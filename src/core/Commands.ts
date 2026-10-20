@@ -8,6 +8,7 @@ import { assignStaff, build, cancelBuild, dismissStaff, hire, repairFence } from
 import { examineClue, recordSighting } from '../story/storyCommands';
 import type { GameState, HerdMethod } from './GameState';
 import { cancelHerdPlan, setHerdPlan } from './herdCommands';
+import { reintroduce } from './reintroduce';
 import type { StringKey } from './text';
 
 export type Command =
@@ -26,7 +27,9 @@ export type Command =
   | { type: 'recordSighting'; speciesId: string }
   /** Spec §6.4 herd management (Chapter 3+). */
   | { type: 'setHerdPlan'; zoneId: string; speciesId: string; method: HerdMethod }
-  | { type: 'cancelHerdPlan'; zoneId: string; speciesId: string };
+  | { type: 'cancelHerdPlan'; zoneId: string; speciesId: string }
+  /** Chapter 4+: bring a species in from another reserve. */
+  | { type: 'reintroduce'; speciesId: string };
 
 export type CommandResult =
   { ok: true; state: GameState; events: SimEvent[] } | { ok: false; reason: StringKey };
@@ -92,5 +95,7 @@ export function applyCommand(state: GameState, command: Command): CommandResult 
       return setHerdPlan(state, command.zoneId, command.speciesId, command.method);
     case 'cancelHerdPlan':
       return cancelHerdPlan(state, command.zoneId, command.speciesId);
+    case 'reintroduce':
+      return reintroduce(state, command.speciesId);
   }
 }

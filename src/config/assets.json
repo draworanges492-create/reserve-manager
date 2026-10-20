@@ -36,7 +36,8 @@
     "tree-acacia-1": "assets/sprites/tree-acacia-1.png",
     "tree-marula-0": "assets/sprites/tree-marula-0.png",
     "tree-marula-1": "assets/sprites/tree-marula-1.png",
-    "building-beehive_fence": "assets/sprites/building-beehive_fence.png"
+    "building-beehive_fence": "assets/sprites/building-beehive_fence.png",
+    "building-lodge": "assets/sprites/building-lodge.png"
   },
   "spritesheets": {
     "impala": {
@@ -106,6 +107,21 @@
     },
     "vulture": {
       "path": "assets/sprites/vulture.png",
+      "frameWidth": 48,
+      "frameHeight": 48
+    },
+    "giraffe": {
+      "path": "assets/sprites/giraffe.png",
+      "frameWidth": 96,
+      "frameHeight": 96
+    },
+    "wildebeest": {
+      "path": "assets/sprites/wildebeest.png",
+      "frameWidth": 48,
+      "frameHeight": 48
+    },
+    "leopard": {
+      "path": "assets/sprites/leopard.png",
       "frameWidth": 48,
       "frameHeight": 48
     }

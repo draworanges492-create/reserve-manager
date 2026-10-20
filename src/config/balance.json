@@ -173,5 +173,16 @@
       "walkFrameMs": 320,
       "clickMaxMovePx": 4
     }
+  },
+  "tourism": {
+    "ticketPrice": 10,
+    "towerBonusPerVisitor": 5,
+    "seasonMult": {
+      "dry": 1.2,
+      "wet": 0.8
+    },
+    "rareBonus": 3,
+    "victorShare": 0.3,
+    "historyDays": 30
   }
 }

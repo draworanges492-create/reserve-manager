@@ -32,6 +32,7 @@ describe('daily money (spec §6.7)', () => {
     expect(state.resources.money).toBe(540);
     expect(state.economy.lastDay).toEqual({
       grant: 40,
+      tourism: 0,
       wages: 0,
       wagesUnpaid: 0,
       upkeep: 0,

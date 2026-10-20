@@ -155,6 +155,72 @@
       "chapter": 3,
       "title": "The eastern border",
       "text": "The east side of the reserve is open again, right up to the village fields."
+    },
+    {
+      "id": "chapter_4_start",
+      "chapter": 4,
+      "title": "Growth",
+      "text": "The reserve is alive again. Now it has to pay its way."
+    },
+    {
+      "id": "ch4_visitors",
+      "chapter": 4,
+      "title": "Cars at the gate",
+      "text": "Three cars came today, just to look. Tendai counted them twice."
+    },
+    {
+      "id": "ch4_first_visitors",
+      "chapter": 4,
+      "title": "First visitors",
+      "text": "A little girl saw her first lion from our tower. She asked if she could come back tomorrow."
+    },
+    {
+      "id": "ch4_bring_back",
+      "chapter": 4,
+      "title": "Coming home",
+      "text": "A reserve up north can spare giraffe and wildebeest. Amara is already planning where they'll graze."
+    },
+    {
+      "id": "ch4_victor",
+      "chapter": 4,
+      "title": "Victor Hale",
+      "text": "Victor Hale came in person. Good suit, good teeth, and an offer that sounded too good."
+    },
+    {
+      "id": "ch4_leopard_tracks",
+      "chapter": 4,
+      "title": "Leopard country",
+      "text": "Tracks on the rocks and a kill up a fig tree. Tendai says there are two of them."
+    },
+    {
+      "id": "ch4_leopard_seen",
+      "chapter": 4,
+      "title": "Spotted",
+      "text": "We saw the leopard in daylight. Amara cried a little. So did I."
+    },
+    {
+      "id": "ch4_kito",
+      "chapter": 4,
+      "title": "Kito",
+      "text": "The rangers caught a boy carrying snares. He says a man in a truck pays him. A truck with no lights, on the east road."
+    },
+    {
+      "id": "ch4_rhino",
+      "chapter": 4,
+      "title": "A footprint",
+      "text": "A rhino print by the north fence, wide as a plate. We have told no one."
+    },
+    {
+      "id": "chapter_4_end",
+      "chapter": 4,
+      "title": "Something worth stealing",
+      "text": "Visitors, money, eight species and one rhino. For the first time, this place has something worth stealing."
+    },
+    {
+      "id": "zone_outcrop",
+      "chapter": 4,
+      "title": "The outcrop",
+      "text": "The rocks in the north are ours again. The best view in the reserve, Tendai says."
     }
   ]
 }

@@ -30,7 +30,7 @@ export interface Content {
 const DIETS = ['grazer', 'browser', 'predator', 'scavenger'];
 
 /** Effect ops buildings may use (grows with later phases). */
-const BUILDING_EFFECT_OPS = ['installPump', 'patrolBoost', 'raidGuard'];
+const BUILDING_EFFECT_OPS = ['installPump', 'patrolBoost', 'raidGuard', 'tourismInfra'];
 
 export function checkContent(content: Content, map: TiledMap): string[] {
   const errors: string[] = [];

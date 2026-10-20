@@ -19,7 +19,8 @@ const BUTTON_W = 20;
 const BUTTON_H = 13;
 const PROGRESS_W = 48;
 /** Fixed slot so changing digits don't shuffle the meters. */
-const MONEY_W = 92;
+// Room for "12345 (+123/day)" in Inter without touching the first meter.
+const MONEY_W = 112;
 const SCORES: ScoreId[] = ['ecosystem', 'trust', 'reputation'];
 const SPEED_KEYS = ['1', '2', '3'];
 

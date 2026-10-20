@@ -54,8 +54,13 @@
       "cost": 800,
       "buildDays": 6,
       "unlockChapter": 4,
-      "description": "A lookout for visitors (tourism arrives later).",
-      "effects": []
+      "description": "A lookout over the plains: visitors come to see the animals, and each tower draws more of them.",
+      "effects": [
+        {
+          "op": "tourismInfra",
+          "value": 0.25
+        }
+      ]
     },
     {
       "id": "beehive_fence",
@@ -69,6 +74,21 @@
         {
           "op": "raidGuard",
           "value": 0.1
+        }
+      ]
+    },
+    {
+      "id": "lodge",
+      "name": "Safari lodge",
+      "slotType": "lodge",
+      "cost": 1500,
+      "buildDays": 8,
+      "unlockChapter": 4,
+      "description": "Beds and meals for visitors, so more of them come and stay longer.",
+      "effects": [
+        {
+          "op": "tourismInfra",
+          "value": 0.15
         }
       ]
     }

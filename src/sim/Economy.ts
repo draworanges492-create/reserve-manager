@@ -33,9 +33,10 @@ export function wagesPerDay(state: GameState): number {
 /** Tomorrow's expected money flow if wages get paid (for the HUD "+8/day"). */
 export function expectedLedger(state: GameState): DayLedger {
   const grant = grantPerDay(state);
+  const tourism = state.tourism.lastRevenue;
   const wages = wagesPerDay(state);
   const upkeep = upkeepPerDay(state);
-  return { grant, wages, wagesUnpaid: 0, upkeep, net: grant - wages - upkeep };
+  return { grant, tourism, wages, wagesUnpaid: 0, upkeep, net: grant + tourism - wages - upkeep };
 }
 
 function adjustMorale(member: StaffMember, paid: boolean): StaffMember {
@@ -57,10 +58,12 @@ export const runEconomy: SimStep = (state) => {
   const cfg = BALANCE.economy;
   const events: SimEvent[] = [];
   const grant = grantPerDay(state);
+  // Tourism ran earlier in the tick (step 7) and left today's takings here.
+  const tourism = state.tourism.lastRevenue;
   const upkeep = upkeepPerDay(state);
   const wages = wagesPerDay(state);
 
-  let money = state.resources.money + grant - upkeep;
+  let money = state.resources.money + grant + tourism - upkeep;
   // Wages are only paid if the money is there; otherwise staff go unpaid (spec §6.7 Debt).
   const paid = wages === 0 || money >= wages;
   if (paid) money -= wages;
@@ -77,6 +80,7 @@ export const runEconomy: SimStep = (state) => {
 
   const ledger: DayLedger = {
     grant,
+    tourism,
     wages: paid ? wages : 0,
     wagesUnpaid: paid ? 0 : wages,
     upkeep,
