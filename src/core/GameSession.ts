@@ -21,7 +21,11 @@ export class GameSession {
   /** Whether the clock was paused before dialogue paused it, so we can restore it. */
   private pausedBeforeDialogue: boolean | null = null;
 
-  constructor(private current: GameState) {}
+  constructor(
+    private current: GameState,
+    /** Called after each day tick (spec §4 step 12: autosave). */
+    private readonly onDayEnd: (state: GameState) => void = () => undefined,
+  ) {}
 
   get state(): Readonly<GameState> {
     return this.current;
@@ -36,6 +40,8 @@ export class GameSession {
 
   update(realDeltaMs: number): void {
     if (!this.dialogue) this.startPendingDialogue();
+    const playTimeSeconds = this.current.meta.playTimeSeconds + realDeltaMs / 1000;
+    this.current = { ...this.current, meta: { ...this.current.meta, playTimeSeconds } };
     if (this.dialogue) return; // the world waits while people talk
     const { clock, dayTicks } = advanceClock(this.current.clock, realDeltaMs);
     this.current = { ...this.current, clock };
@@ -43,6 +49,7 @@ export class GameSession {
       const { state, events } = runDayTick(this.current);
       this.current = state;
       this.publish(events);
+      this.onDayEnd(this.saveSnapshot());
     }
   }
 
@@ -54,6 +61,27 @@ export class GameSession {
       this.checkStory();
     }
     return result;
+  }
+
+  /**
+   * The state to write to a save. A conversation in progress isn't part of GameState, so
+   * it's put back at the front of the queue and replays from its start after loading.
+   */
+  saveSnapshot(): GameState {
+    const s = this.current;
+    const clock =
+      this.pausedBeforeDialogue !== null
+        ? { ...s.clock, paused: this.pausedBeforeDialogue }
+        : s.clock;
+    if (!this.dialogue) return { ...s, clock };
+    return {
+      ...s,
+      clock,
+      story: {
+        ...s.story,
+        pendingDialogues: [this.dialogue.dialogueId, ...s.story.pendingDialogues],
+      },
+    };
   }
 
   /** The line on screen, or null when no dialogue is playing. */

@@ -5,6 +5,7 @@ import { computeViewport } from './config/scaling';
 import { BootScene } from './scenes/BootScene';
 import { DialogueScene } from './scenes/DialogueScene';
 import { GameScene } from './scenes/GameScene';
+import { MenuScene } from './scenes/MenuScene';
 import { PreloadScene } from './scenes/PreloadScene';
 import { UIScene } from './scenes/UIScene';
 import { UI_FONT } from './ui/crispText';
@@ -34,7 +35,7 @@ const game = new Phaser.Game({
   },
   input: { activePointers: 2 }, // two fingers for pinch zoom
   // Later scenes render on top: world, then HUD, then dialogue.
-  scene: [BootScene, PreloadScene, GameScene, UIScene, DialogueScene],
+  scene: [BootScene, PreloadScene, MenuScene, GameScene, UIScene, DialogueScene],
 });
 
 window.addEventListener('resize', () => {

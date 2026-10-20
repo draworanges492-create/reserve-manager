@@ -1,15 +1,8 @@
 import Phaser from 'phaser';
 import { ASSETS } from '../config/assets';
 import { GAME_TITLE } from '../config/game';
-import { createGameState } from '../core/GameState';
-import { getSettings } from '../core/Settings';
-import type { TiledMap } from '../core/TiledFormat';
-import { readWorldLayout } from '../core/WorldLayout';
-import { GameSession } from '../core/GameSession';
 import { crispText } from '../ui/crispText';
 import { TEXT_SIZE } from '../ui/theme';
-import { askPlayerName } from '../ui/namePrompt';
-import { setSession } from './session';
 
 const BAR_WIDTH = 200;
 const BAR_COLOR = 0xe8d9a8;
@@ -40,25 +33,6 @@ export class PreloadScene extends Phaser.Scene {
   }
 
   create(): void {
-    const tmj = (this.cache.tilemap.get('reserve') as { data: TiledMap }).data;
-    // New game for now; MenuScene (Phase 8) will offer Continue / load a slot as well.
-    void askPlayerName(document.body).then((playerName) => {
-      // Wall-clock seeding is fine here: only the sim must be deterministic, given its seed.
-      const seed = (Date.now() ^ Math.floor(Math.random() * 0xffffffff)) >>> 0;
-      const state = createGameState({
-        seed,
-        world: readWorldLayout(tmj),
-        playerName,
-        speed: getSettings().defaultSpeed,
-      });
-      const session = new GameSession(state);
-      session.beginStory();
-      setSession(this, session);
-      // Dev-only handle for debugging in the browser console; removed from production builds.
-      if (import.meta.env.DEV) Object.assign(window, { __session: session });
-      this.scene.start('GameScene');
-      this.scene.launch('UIScene');
-      this.scene.launch('DialogueScene');
-    });
+    this.scene.start('MenuScene');
   }
 }

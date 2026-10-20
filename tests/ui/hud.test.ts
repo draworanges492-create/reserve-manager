@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { DEFAULT_SETTINGS } from '../../src/core/Settings';
 import { dateText, dateTooltip, scoreTooltip } from '../../src/ui/hudInfo';
-import { biggestHerd, settingsMenu, speciesMenu } from '../../src/ui/menus';
+import { biggestHerd, type SaveControls, settingsMenu, speciesMenu } from '../../src/ui/menus';
 import { runDayTick } from '../../src/sim/tick';
 import { must, newGame, withPopulation } from '../helpers/newGame';
 
@@ -53,12 +53,22 @@ describe('species menu', () => {
 });
 
 describe('settings menu', () => {
+  const saves = (over: Partial<SaveControls> = {}): SaveControls => ({
+    slots: [
+      { slot: '1', result: { ok: false, error: 'empty' } },
+      { slot: '2', result: { ok: false, error: 'tooNew' } },
+    ],
+    confirming: null,
+    lastSaved: null,
+    failed: null,
+    onSave: () => undefined,
+    onMainMenu: () => undefined,
+    ...over,
+  });
+
   it('cycles values through update()', () => {
     const update = vi.fn();
-    const menu = settingsMenu(DEFAULT_SETTINGS, update, {
-      confirming: false,
-      onClick: () => undefined,
-    });
+    const menu = settingsMenu(DEFAULT_SETTINGS, update, saves());
     const byTitle = (title: string) => menu.rows.find((r) => r.lines[0]?.text === title);
     byTitle('Music volume')?.actions[0]?.onClick();
     byTitle('Colourblind-friendly colours')?.actions[0]?.onClick();
@@ -70,12 +80,20 @@ describe('settings menu', () => {
     ]);
   });
 
-  it('asks before starting a new game', () => {
-    const label = (confirming: boolean) =>
-      settingsMenu(DEFAULT_SETTINGS, () => undefined, {
-        confirming,
-        onClick: () => undefined,
-      }).rows.at(-1)?.actions[0]?.label;
-    expect([label(false), label(true)]).toEqual(['New game', 'Sure?']);
+  it('lists save slots, asks before overwriting, and offers the main menu', () => {
+    const onSave = vi.fn();
+    const menu = settingsMenu(
+      DEFAULT_SETTINGS,
+      () => undefined,
+      saves({ confirming: '2', onSave }),
+    );
+    const slotRows = menu.rows.filter((r) => r.lines[0]?.text.startsWith('Slot'));
+    expect(slotRows.map((r) => [r.lines[0]?.text, r.actions[0]?.label])).toEqual([
+      ['Slot 1: Empty', 'Save'],
+      ['Slot 2: Made by a newer version of the game: update to load it', 'Overwrite?'],
+    ]);
+    slotRows[0]?.actions[0]?.onClick();
+    expect(onSave).toHaveBeenCalledWith('1');
+    expect(menu.rows.at(-1)?.actions[0]?.label).toBe('Main menu');
   });
 });

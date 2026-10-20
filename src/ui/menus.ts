@@ -6,6 +6,8 @@ import { t } from '../core/text';
 import { GAME_SPEEDS, type GameSpeed } from '../config/game';
 import type { PanelLine } from './animalInfo';
 import type { SideContent } from './SidePanel';
+import type { LoadResult, SlotId } from '../core/Save';
+import { slotName, slotText } from './saveInfo';
 
 /** Herd with the most animals, for "Show". */
 export function biggestHerd(
@@ -70,7 +72,7 @@ function nextSpeed(speed: GameSpeed): GameSpeed {
 export function settingsMenu(
   settings: Settings,
   update: (patch: Partial<Settings>) => void,
-  newGame: { confirming: boolean; onClick: () => void },
+  saves: SaveControls,
 ): SideContent {
   const row = (title: string, label: string, onClick: () => void, detail?: string) => ({
     lines: detail ? [{ text: title }, { text: detail }] : [{ text: title }],
@@ -110,12 +112,48 @@ export function settingsMenu(
         lines: [{ text: t('settings.controls') }, { text: t('settings.controlsList') }],
         actions: [],
       },
+      {
+        lines: [{ text: t('settings.saveTitle') }, { text: t('settings.autosaveNote') }],
+        actions: [],
+      },
+      ...saves.slots.map((s) => {
+        const status =
+          saves.lastSaved === s.slot
+            ? t('settings.saved')
+            : saves.failed === s.slot
+              ? t('settings.saveFailed')
+              : null;
+        const label = saves.confirming === s.slot ? t('settings.overwrite') : t('settings.save');
+        return {
+          lines: [
+            {
+              text: t('settings.saveRow', {
+                slot: slotName(s.slot),
+                summary: slotText(s.result).text,
+              }),
+            },
+            ...(status ? [{ text: status, warn: saves.failed === s.slot }] : []),
+          ],
+          actions: [{ label, enabled: true, onClick: () => saves.onSave(s.slot) }],
+        };
+      }),
       row(
-        t('settings.newGame'),
-        newGame.confirming ? t('settings.confirm') : t('settings.newGame'),
-        newGame.onClick,
-        t('settings.newGameDetail'),
+        t('settings.mainMenu'),
+        t('settings.mainMenu'),
+        saves.onMainMenu,
+        t('settings.mainMenuDetail'),
       ),
     ],
   };
+}
+
+/** What the Settings menu needs to offer saving (state lives in UIScene). */
+export interface SaveControls {
+  slots: { slot: SlotId; result: LoadResult }[];
+  /** Slot waiting for a second click to overwrite. */
+  confirming: SlotId | null;
+  lastSaved: SlotId | null;
+  failed: SlotId | null;
+  onSave: (slot: SlotId) => void;
+  onMainMenu: () => void;
 }

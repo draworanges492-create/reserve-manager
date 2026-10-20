@@ -264,12 +264,42 @@ browser: name prompt (typed "Wadsworth", WASD not swallowed) → arrival dialogu
 choices → "The fences" → hover/click the gate (−20) → next day sound, goal ticked, gate
 scene started; tracker and alerts showed; 0 console errors.
 
-**Next — Phase 8 (Save/load & menu):** autosave each day, 3 manual slots, versioned saves
-with migrations, MenuScene (New game / Continue / Load), name prompt moves into it.
-
 **Known issues**
 
 - Waterhole A starts dry so it never raises a "drying up" alert (the Ch 1 tutorial covers it).
 - The dialogue box covers the toolbar while open (it's modal, so nothing is lost).
+- Story text is placeholder quality (D83); open questions D39/D60, D51/D57.
+- Hard tile edges; animals draw over trees; touch untested on a device.
+
+## Phase 8 — Save/load & menu ✅ (2026-10-20)
+
+**Done**
+
+- `core/Save.ts`: versioned save files, migrations (v1 → v2), slot list, latest save,
+  graceful errors (empty / damaged / not a save / too new / storage full).
+- State v2: `meta.playTimeSeconds`.
+- GameSession: play-time tracking, autosave after every day (tick step 12), save snapshot
+  that keeps an in-progress conversation.
+- MenuScene: Continue (with summary of the latest save), New game (name prompt), Load
+  game (autosave + 3 slots with Load / Delete, explanations for unloadable saves).
+- Settings: save to slots 1–3 (overwrite confirmation, "Saved" / failure note), Main menu.
+- `scenes/launch.ts`: new game, load, return to menu; game scenes restart cleanly.
+
+**Checks:** `build` ✅ · `test` ✅ (177; round trip, exact continuation incl. RNG,
+v1 → v2 migration, newer-version refusal, damaged/foreign saves, failed writes,
+mid-conversation save) · `lint` ✅ · `validate-data` ✅ · browser: menu → New game → 4 days →
+Settings → Save slot 1 → **page reload** → Continue: day, money, RNG, herds, fences, staff,
+goals and journal identical; planted "newer version" and damaged saves were listed with
+explanations, couldn't be loaded, and could be deleted; loading twice in a row worked; 0
+console errors. Test saves were cleared from the preview browser afterwards.
+
+**Next — Phase 9 (Polish for Milestone A):** audio (CC0 / generated, muted until first
+interaction), animation polish, encyclopedia (3 species), balance and performance pass,
+bug fixes, itch.io zip, GitHub Pages workflow, README. Milestone A done after that.
+
+**Known issues**
+
+- Waterhole A starts dry so it never raises a "drying up" alert (the Ch 1 tutorial covers it).
+- The dialogue box covers the toolbar while open (it's modal).
 - Story text is placeholder quality (D83); open questions D39/D60, D51/D57.
 - Hard tile edges; animals draw over trees; touch untested on a device.

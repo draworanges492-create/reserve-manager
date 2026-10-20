@@ -31,6 +31,8 @@ import { Tooltip } from '../ui/Tooltip';
 import { TOP_BAR_HEIGHT, TopBar } from '../ui/TopBar';
 import { waterholeTooltip } from '../ui/waterholeTooltip';
 import { placingText } from './BuildingLayer';
+import { returnToMenu, saveTo } from './launch';
+import { listSlots, type LoadResult, localSaveStore, type SlotId } from '../core/Save';
 import { getSession } from './session';
 
 const MARGIN = 6;
@@ -64,7 +66,9 @@ export class UIScene extends Phaser.Scene {
   private infoPanel!: InfoPanel;
   private sidePanel!: SidePanel;
   private alertFeed!: AlertFeed;
-  private readonly alerts = new AlertList();
+  private alerts = new AlertList();
+  /** Session the alerts belong to: a new or loaded game starts with an empty feed. */
+  private alertsFor: GameSession | null = null;
   private toolbar: Button[] = [];
   private banner!: Phaser.GameObjects.Text;
 
@@ -81,7 +85,14 @@ export class UIScene extends Phaser.Scene {
   private selection: Selection | null = null;
   private menu: Menu | null = null;
   private placing: string | null = null;
-  private confirmNewGame = false;
+  /** Save-slot feedback in Settings: which slot awaits "Overwrite?", and the last result. */
+  private saveUi: { confirming: SlotId | null; lastSaved: SlotId | null; failed: SlotId | null } = {
+    confirming: null,
+    lastSaved: null,
+    failed: null,
+  };
+  /** Manual slots, re-read from storage only when Settings opens or after a save. */
+  private manualSlots: { slot: SlotId; result: LoadResult }[] = [];
   /** Text size the HUD was built with; a different setting rebuilds it. */
   private builtTextSize = getSettings().textSize;
 
@@ -91,6 +102,12 @@ export class UIScene extends Phaser.Scene {
 
   create(): void {
     this.session = getSession(this);
+    if (this.alertsFor !== this.session) {
+      this.alerts = new AlertList();
+      this.alertsFor = this.session;
+      this.menu = null;
+      this.placing = null;
+    }
     // Phaser reuses this object on restart, so record the size we're building with now.
     this.builtTextSize = getSettings().textSize;
     this.hover = {
@@ -299,12 +316,10 @@ export class UIScene extends Phaser.Scene {
         return journalMenu(state, this.journalFilter, (f) => (this.journalFilter = f));
       case 'settings':
         return settingsMenu(getSettings(), updateSettings, {
-          confirming: this.confirmNewGame,
-          onClick: () => {
-            // Two clicks, so a stray click can't throw a game away. Saves come in Phase 8.
-            if (this.confirmNewGame) window.location.reload();
-            this.confirmNewGame = true;
-          },
+          ...this.saveUi,
+          slots: this.manualSlots,
+          onSave: (slot) => this.saveToSlot(slot),
+          onMainMenu: () => returnToMenu(this),
         });
       default:
         return null;
@@ -340,10 +355,28 @@ export class UIScene extends Phaser.Scene {
     });
   }
 
+  private refreshSlots(): void {
+    this.manualSlots = listSlots(localSaveStore()).filter((s) => s.slot !== 'auto');
+  }
+
+  /** Empty slots save at once; a used slot asks "Overwrite?" first. */
+  private saveToSlot(slot: SlotId): void {
+    const result = this.manualSlots.find((s) => s.slot === slot)?.result;
+    const used = !!result && (result.ok || result.error !== 'empty');
+    if (used && this.saveUi.confirming !== slot) {
+      this.saveUi = { confirming: slot, lastSaved: null, failed: null };
+      return;
+    }
+    const ok = saveTo(this.session, slot);
+    this.saveUi = { confirming: null, lastSaved: ok ? slot : null, failed: ok ? null : slot };
+    this.refreshSlots();
+  }
+
   private toggleMenu(menu: Menu): void {
     if (this.placing) eventBus.emit('buildModeChanged', { buildingId: null });
     this.menu = this.menu === menu ? null : menu;
-    this.confirmNewGame = false;
+    this.saveUi = { confirming: null, lastSaved: null, failed: null };
+    if (this.menu === 'settings') this.refreshSlots();
   }
 
   /** Close the current selection (each layer clears its own highlight). */
