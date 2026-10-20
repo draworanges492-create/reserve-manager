@@ -1,6 +1,7 @@
 import type Phaser from 'phaser';
 import { crispText } from './crispText';
 import { TEXT_SIZE, UI } from './theme';
+import { viewHeight, viewWidth } from './view';
 
 const OFFSET = 10;
 const PAD = 5;
@@ -28,8 +29,8 @@ export class Tooltip {
     }
     const w = this.text.width + PAD * 2;
     const h = this.text.height + PAD * 2;
-    const x = Math.min(pointerX + OFFSET, this.scene.scale.width - w - 2);
-    const y = Math.min(pointerY + OFFSET, this.scene.scale.height - h - 2);
+    const x = Math.min(pointerX + OFFSET, viewWidth(this.scene) - w - 2);
+    const y = Math.min(pointerY + OFFSET, viewHeight(this.scene) - h - 2);
     this.bg.setPosition(Math.round(x), Math.round(y)).setSize(w, h).setVisible(true);
     this.text.setPosition(Math.round(x + PAD), Math.round(y + PAD)).setVisible(true);
   }

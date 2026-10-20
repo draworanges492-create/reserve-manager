@@ -3,6 +3,7 @@ import { ASSETS } from '../config/assets';
 import { GAME_TITLE } from '../config/game';
 import { crispText } from '../ui/crispText';
 import { TEXT_SIZE } from '../ui/theme';
+import { fitUiCamera, viewHeight, viewWidth } from '../ui/view';
 
 const BAR_WIDTH = 200;
 const BAR_COLOR = 0xe8d9a8;
@@ -14,8 +15,9 @@ export class PreloadScene extends Phaser.Scene {
   }
 
   preload(): void {
-    const cx = this.scale.width / 2;
-    const cy = this.scale.height / 2;
+    fitUiCamera(this);
+    const cx = viewWidth(this) / 2;
+    const cy = viewHeight(this) / 2;
     crispText(this, cx, cy - 12, GAME_TITLE, {
       fontSize: TEXT_SIZE.title,
       fontStyle: 'bold',

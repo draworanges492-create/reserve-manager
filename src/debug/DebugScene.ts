@@ -6,6 +6,7 @@ import { getSession } from '../scenes/session';
 import { Button } from '../ui/Button';
 import { crispText } from '../ui/crispText';
 import { TEXT_SIZE, UI } from '../ui/theme';
+import { fitUiCamera, viewWidth } from '../ui/view';
 
 const WIDTH = 150;
 const BUTTON_H = 13;
@@ -19,6 +20,7 @@ export class DebugScene extends Phaser.Scene {
   }
 
   create(): void {
+    fitUiCamera(this);
     const bg = this.add
       .rectangle(0, 0, WIDTH, 10, 0x000000, 0.75)
       .setOrigin(0)
@@ -64,7 +66,7 @@ export class DebugScene extends Phaser.Scene {
   }
 
   override update(): void {
-    this.root.setPosition(this.scale.width - WIDTH - 6, 30);
+    this.root.setPosition(viewWidth(this) - WIDTH - 6, 30);
     if (!this.root.visible || !this.registry.get('session')) return;
     const s = getSession(this).state;
     this.info.setText(

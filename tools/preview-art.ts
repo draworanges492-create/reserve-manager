@@ -1,40 +1,48 @@
-// Dev aid: writes an 6×-enlarged contact sheet of all placeholder art to the path given.
+// Dev aid: writes an enlarged contact sheet of all placeholder art to the path given:
+// terrain tiles, map buildings, player buildings, waterhole states, then animals and people
+// on three different grounds to judge readability.
 import { writeFileSync } from 'node:fs';
 import { PixelCanvas } from './lib/canvas';
 import { encodePng } from './lib/png';
 import { PAL } from './palette';
+import { drawBuildings } from './placeholders/buildings';
 import { drawSprites } from './placeholders/sprites';
+import { drawStructure } from './placeholders/structures';
 import { drawTile } from './placeholders/tiles';
-import { TILE_NAMES, TILE_SIZE } from './tileset';
+import { drawWaterhole } from './placeholders/water';
+import { BASE_TILES, STRUCTURES, type StructureName } from './tileset';
 
-const SCALE = 6;
+const SCALE = Number(process.argv[3] ?? 4);
 const out = process.argv[2];
-if (!out) throw new Error('usage: tsx tools/preview-art.ts <out.png>');
+if (!out) throw new Error('usage: tsx tools/preview-art.ts <out.png> [scale]');
 
-const sprites = Object.values(drawSprites());
-const cols = 9;
-const cell = 50;
-const rows = Math.ceil(TILE_NAMES.length / cols) + 2;
-const sheet = new PixelCanvas(cols * cell, rows * cell);
+const GAP = 4;
+const rows: PixelCanvas[][] = [
+  BASE_TILES.map((name) => drawTile(name)),
+  (Object.keys(STRUCTURES) as StructureName[]).map((name) => drawStructure(name)),
+  Object.values(drawBuildings()),
+  [drawWaterhole()],
+  Object.values(drawSprites()),
+];
+const grounds = [PAL.grass, PAL.grassDry, PAL.dirt];
+const width = Math.max(...rows.map((r) => r.reduce((w, img) => w + img.width + GAP * 2, GAP)));
+const height = rows.reduce((h, r) => h + Math.max(...r.map((img) => img.height)) + GAP * 3, GAP);
+const sheet = new PixelCanvas(Math.min(width, 900), height);
 sheet.fillRect(0, 0, sheet.width, sheet.height, PAL.uiPanel);
-TILE_NAMES.forEach((name, i) => {
-  const x = (i % cols) * cell + 2;
-  const y = Math.floor(i / cols) * cell + 2;
-  sheet.fillRect(x, y, TILE_SIZE, TILE_SIZE, PAL.grass); // shows transparent deco on grass
-  sheet.blit(drawTile(name), x, y);
-});
-// Sprites on three different grounds to judge readability.
-const grounds = [PAL.grassDry, PAL.grass, PAL.dirt];
-let sx = 2;
-const sy = Math.ceil(TILE_NAMES.length / cols) * cell + 2;
-sprites.forEach((s, i) => {
-  const g = grounds[i % grounds.length] ?? PAL.grass;
-  sheet.fillRect(sx, sy, s.width + 4, Math.max(s.height + 4, 52), g);
-  sheet.blit(s, sx + 2, sy + 2);
-  sx += s.width + 8;
+let y = GAP;
+rows.forEach((row, r) => {
+  let x = GAP;
+  const rowH = Math.max(...row.map((img) => img.height));
+  row.forEach((img, i) => {
+    const ground = r === 4 ? (grounds[i % grounds.length] ?? PAL.grass) : PAL.grass;
+    sheet.fillRect(x, y, img.width + GAP, rowH + GAP, ground);
+    sheet.blit(img, x + GAP / 2, y + GAP / 2);
+    x += img.width + GAP * 2;
+  });
+  y += rowH + GAP * 3;
 });
 const big = new PixelCanvas(sheet.width * SCALE, sheet.height * SCALE);
-for (let y = 0; y < sheet.height; y++)
-  for (let x = 0; x < sheet.width; x++)
-    big.fillRect(x * SCALE, y * SCALE, SCALE, SCALE, sheet.get(x, y));
+for (let py = 0; py < sheet.height; py++)
+  for (let px = 0; px < sheet.width; px++)
+    big.fillRect(px * SCALE, py * SCALE, SCALE, SCALE, sheet.get(px, py));
 writeFileSync(out, encodePng(big.width, big.height, big.data));

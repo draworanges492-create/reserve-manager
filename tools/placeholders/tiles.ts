@@ -1,9 +1,17 @@
 // Placeholder terrain tiles. Ground is muted and unlabelled so animals stay readable
-// (DECISIONS D13/D19); buildings carry a 2-letter label.
+// (DECISIONS D13/D19). Plants are in plants.ts, map buildings in structures.ts.
 import { Rng } from '../../src/core/Rng';
-import { PixelCanvas, sameColor, TRANSPARENT, type Rgba } from '../lib/canvas';
+import { PixelCanvas, type Rgba } from '../lib/canvas';
 import { PAL } from '../palette';
-import { TILE_SIZE as S, type TileName } from '../tileset';
+import {
+  type BaseTileName,
+  STRUCTURES,
+  type StructureName,
+  TILE_SIZE as S,
+  type TileName,
+} from '../tileset';
+import { acacia, boulder, bush, grassTuft, tree } from './plants';
+import { structurePiece } from './structures';
 
 type Speck = readonly [Rgba, number];
 
@@ -55,37 +63,7 @@ function cracks(c: PixelCanvas, rng: Rng, count: number, color: Rgba): PixelCanv
   return c;
 }
 
-function label(c: PixelCanvas, text: string, y: number, color: Rgba = PAL.uiText): PixelCanvas {
-  c.text(text, Math.floor((S - (text.length * 4 - 1)) / 2), y, color);
-  return c;
-}
-
-function tree(): PixelCanvas {
-  const c = new PixelCanvas(S, S);
-  c.fillEllipse(12, 21.5, 8, 2.5, PAL.treeDark);
-  c.fillRect(11, 14, 3, 8, PAL.wood);
-  c.fillEllipse(12, 10, 10, 8, PAL.tree);
-  c.fillEllipse(12, 10, 10, 8, PAL.treeDark, (_x, y) => y >= 13);
-  const rng = new Rng(151);
-  c.recolor((x, y, cur) =>
-    y < 9 && x < 14 && sameColor(cur, PAL.tree) && rng.chance(0.25) ? PAL.grass : null,
-  );
-  return c;
-}
-
-function acacia(): PixelCanvas {
-  const c = new PixelCanvas(S, S);
-  c.fillEllipse(12, 21.5, 7, 2, PAL.treeDark);
-  c.line(12, 21, 10, 9, PAL.wood);
-  c.line(13, 21, 11, 9, PAL.wood);
-  c.line(11, 9, 7, 6, PAL.wood);
-  c.line(11, 9, 16, 6, PAL.wood);
-  c.fillEllipse(12, 5, 11, 3.5, PAL.tree);
-  c.fillEllipse(12, 5, 11, 3.5, PAL.treeDark, (_x, y) => y >= 6);
-  return c;
-}
-
-const DRAWERS: Record<TileName, () => PixelCanvas> = {
+const DRAWERS: Record<BaseTileName, () => PixelCanvas> = {
   grass: () =>
     ground(PAL.grass, 1, [
       [PAL.grassLight, 0.06],
@@ -157,65 +135,9 @@ const DRAWERS: Record<TileName, () => PixelCanvas> = {
     ripples(ground(PAL.waterDeep, 15, [[PAL.water, 0.04]]), new Rng(142), 3, PAL.water),
   tree,
   tree_b: acacia,
-  bush: () => {
-    const c = new PixelCanvas(S, S);
-    c.fillEllipse(12, 16, 7, 5, PAL.tree);
-    c.fillEllipse(12, 16, 7, 5, PAL.treeDark, (_x, y) => y >= 18);
-    return c;
-  },
-  grass_tuft: () => blades(new PixelCanvas(S, S), new Rng(191), 6, PAL.grassLight),
-  boulder: () => {
-    const c = new PixelCanvas(S, S);
-    c.fillEllipse(12, 15, 8, 6, PAL.rock);
-    c.fillEllipse(12, 15, 8, 6, PAL.rockDark, (_x, y) => y >= 17);
-    c.fillEllipse(9, 12, 3, 2, PAL.sand);
-    return c;
-  },
-  hq_office: () => {
-    const c = new PixelCanvas(S, S);
-    c.fillRect(3, 9, 18, 13, PAL.sand);
-    c.fillRect(2, 3, 20, 7, PAL.roof);
-    c.fillRect(2, 9, 20, 1, PAL.wood);
-    c.fillRect(10, 15, 4, 7, PAL.wood);
-    c.fillRect(5, 12, 3, 3, PAL.waterDeep);
-    c.fillRect(16, 12, 3, 3, PAL.waterDeep);
-    return label(c, 'HQ', 4);
-  },
-  ranger_post_ruin: () => {
-    const c = new PixelCanvas(S, S);
-    c.fillRect(4, 10, 16, 12, PAL.rockDark);
-    c.fillRect(3, 6, 10, 4, PAL.roof);
-    c.fillRect(15, 10, 3, 4, TRANSPARENT);
-    cracks(c, new Rng(211), 2, PAL.outline);
-    return label(c, 'RP', 14);
-  },
-  gate: () => {
-    const c = new PixelCanvas(S, S);
-    c.fillRect(1, 4, 3, 18, PAL.wood);
-    c.fillRect(20, 4, 3, 18, PAL.wood);
-    c.line(4, 8, 19, 10, PAL.wood);
-    c.line(4, 9, 19, 11, PAL.wood);
-    c.fillRect(7, 13, 10, 7, PAL.wood);
-    return label(c, 'GT', 14);
-  },
-  hut: () => {
-    const c = new PixelCanvas(S, S);
-    c.fillEllipse(12, 16, 8, 6, PAL.sand);
-    for (let y = 3; y <= 12; y++) {
-      const half = y - 2;
-      c.fillRect(12 - half, y, half * 2, 1, PAL.grassDry);
-    }
-    c.fillRect(11, 17, 3, 5, PAL.dirtDark);
-    return c;
-  },
-  pump_ruin: () => {
-    const c = new PixelCanvas(S, S);
-    c.fillRect(4, 15, 16, 7, PAL.rock);
-    c.line(7, 15, 12, 3, PAL.wood);
-    c.line(17, 15, 12, 3, PAL.wood);
-    c.fillEllipse(12, 9, 3, 3, PAL.rockDark);
-    return label(c, 'PU', 16, PAL.uiPanel);
-  },
+  bush,
+  grass_tuft: grassTuft,
+  boulder,
   collision: () => {
     const c = new PixelCanvas(S, S);
     const magenta = [PAL.debug[0], PAL.debug[1], PAL.debug[2], 160] as const;
@@ -226,5 +148,9 @@ const DRAWERS: Record<TileName, () => PixelCanvas> = {
 };
 
 export function drawTile(name: TileName): PixelCanvas {
-  return DRAWERS[name]();
+  if (name in DRAWERS) return DRAWERS[name as BaseTileName]();
+  const match = /^(.+)_(\d+)$/.exec(name);
+  const structure = match?.[1];
+  if (!match || !structure || !(structure in STRUCTURES)) throw new Error(`no drawer for ${name}`);
+  return structurePiece(structure as StructureName, Number(match[2]));
 }

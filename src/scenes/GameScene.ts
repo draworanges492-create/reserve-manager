@@ -19,6 +19,7 @@ import { SeasonTint } from './map/SeasonTint';
 import { ZoneOverlay } from './map/ZoneOverlay';
 import { getSession } from './session';
 import type { UIScene } from './UIScene';
+import { viewScale } from '../ui/view';
 
 const TILE_LAYERS = [
   ['ground', DEPTH.ground],
@@ -71,7 +72,8 @@ export class GameScene extends Phaser.Scene {
     );
     this.overlay.refreshDegraded((id) => session.state.zones[id]?.vegetation ?? 100);
     this.herds = new HerdLayer(this, map, this.zones, session);
-    this.buildings = new BuildingLayer(this, session, map.tileWidth);
+    const objects = layers[TILE_LAYERS.findIndex(([name]) => name === 'objects')];
+    this.buildings = new BuildingLayer(this, session, map.tileWidth, objects);
     this.fences = new FenceLayer(this, map, session);
     this.clues = new ClueLayer(this, session, map.tileWidth);
     this.staff = new StaffLayer(this, session, this.zones, map.tileWidth, this.herds.blocked);
@@ -190,7 +192,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   private setHovered(zone: ZoneArea | null): void {
-    this.overlay.setHover(zone, this.cameras.main.zoom);
+    this.overlay.setHover(zone, this.cameras.main.zoom / viewScale());
     if (zone === this.hovered) return;
     this.hovered = zone;
     eventBus.emit('zoneHover', { zoneId: zone?.id ?? null });

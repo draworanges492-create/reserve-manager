@@ -33,6 +33,8 @@ export class BuildingLayer {
     private readonly scene: Phaser.Scene,
     private readonly session: GameSession,
     tileSize: number,
+    /** Map buildings layer: an old ruin on a build slot is hidden once something is built. */
+    private readonly objects?: Phaser.Tilemaps.TilemapLayer,
   ) {
     for (const [slotId, slot] of Object.entries(session.state.slots)) {
       const r = slot.rect;
@@ -76,6 +78,19 @@ export class BuildingLayer {
     scene.events.once(Phaser.Scenes.Events.SHUTDOWN, off);
   }
 
+  private showRuin(slotId: string, visible: boolean): void {
+    const rect = this.session.state.slots[slotId]?.rect;
+    if (!rect || !this.objects) return;
+    this.objects.forEachTile(
+      (tile) => tile.setVisible(visible),
+      this,
+      rect.x,
+      rect.y,
+      rect.w,
+      rect.h,
+    );
+  }
+
   update(): void {
     const { slots, clock } = this.session.state;
     for (const [slotId, view] of this.views) {
@@ -86,6 +101,7 @@ export class BuildingLayer {
           view.shown === 'building-scaffold' && key !== null && key !== 'building-scaffold';
         view.shown = key;
         view.sprite.setVisible(!!key);
+        this.showRuin(slotId, !key);
         if (key) view.sprite.setTexture(key);
         if (finished) {
           // A little "ta-da": the building settles into place in a puff of dust.

@@ -5,6 +5,7 @@ import type { PanelContent } from './animalInfo';
 import { Button } from './Button';
 import { crispText } from './crispText';
 import { TEXT_SIZE, UI } from './theme';
+import { viewHeight } from './view';
 
 const WIDTH = 220;
 const PAD = 6;
@@ -90,7 +91,7 @@ export class InfoPanel {
   }
 
   /** Refresh and keep the panel anchored above `bottom` on the left edge. */
-  update(state: GameState, bottom = this.scene.scale.height): void {
+  update(state: GameState, bottom = viewHeight(this.scene)): void {
     if (!this.source) return;
     const content = this.source(state);
     if (!content) return this.hide();

@@ -2,7 +2,7 @@
 // Zones tile the whole map edge to edge, and every zone borders one that unlocks no
 // later than it does, so the playable area grows outward without gaps (DECISIONS D43).
 // That makes zones ~1.6× the spec's "approx." sizes (which only add up to 5,800 tiles).
-import type { TileName } from '../tileset';
+import type { StructureName, TileName } from '../tileset';
 
 export const MAP_WIDTH = 120;
 export const MAP_HEIGHT = 80;
@@ -48,16 +48,16 @@ export const ROADS: Rect[] = [
 export const PARKING: Rect = { x: 61, y: 74, w: 5, h: 4 };
 export const FARMLAND: Rect = { x: 113, y: 34, w: 6, h: 36 };
 
-export const OBJECT_TILES: { tile: TileName; at: Point; solid: boolean }[] = [
-  { tile: 'hq_office', at: { x: 50, y: 72 }, solid: true },
-  { tile: 'ranger_post_ruin', at: { x: 61, y: 71 }, solid: true },
-  { tile: 'gate', at: { x: 56, y: 79 }, solid: false },
-  { tile: 'gate', at: { x: 57, y: 79 }, solid: false },
-  { tile: 'pump_ruin', at: { x: 57, y: 42 }, solid: true },
-  { tile: 'hut', at: { x: 119, y: 38 }, solid: true },
-  { tile: 'hut', at: { x: 119, y: 47 }, solid: true },
-  { tile: 'hut', at: { x: 119, y: 56 }, solid: true },
-  { tile: 'hut', at: { x: 119, y: 66 }, solid: true },
+/** Map buildings (top-left tile). Solid ones block herds. */
+export const STRUCTURE_PLACEMENTS: { structure: StructureName; at: Point; solid: boolean }[] = [
+  { structure: 'hq_office', at: { x: 50, y: 72 }, solid: true },
+  { structure: 'ranger_post_ruin', at: { x: 61, y: 71 }, solid: true },
+  { structure: 'gate', at: { x: 56, y: 78 }, solid: false }, // the road runs through it
+  { structure: 'pump_ruin', at: { x: 57, y: 42 }, solid: true }, // under build slot pump_a
+  { structure: 'hut', at: { x: 118, y: 38 }, solid: true },
+  { structure: 'hut', at: { x: 118, y: 47 }, solid: true },
+  { structure: 'hut', at: { x: 118, y: 56 }, solid: true },
+  { structure: 'hut', at: { x: 118, y: 66 }, solid: true },
 ];
 
 /** Pump slots name the waterhole they feed (`waterholeId`). */

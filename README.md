@@ -58,4 +58,4 @@ progress and agreed deviations are in [docs/PROGRESS.md](docs/PROGRESS.md) and
 ## Credits
 
 All art, music and sound are original placeholder work made for this project. See
-[public/assets/ASSETS.md](public/assets/ASSETS.md). Font: Alegreya (SIL Open Font License).
+[public/assets/ASSETS.md](public/assets/ASSETS.md). Font: Inter (SIL Open Font License).

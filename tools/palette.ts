@@ -1,4 +1,5 @@
-// The project palette (spec §12: ≤32 colours). Every generated pixel uses one of these.
+// The project palette. Every generated pixel uses one of these. Spec §12 asked for ≤32
+// colours; it was widened to 50 for shading and detail after playtest feedback (DECISIONS D104).
 import { hex } from './lib/canvas';
 
 export const PAL = {
@@ -18,17 +19,35 @@ export const PAL = {
   mud: hex('#6f6650'),
   treeDark: hex('#33482c'),
   tree: hex('#43603a'),
+  treeLight: hex('#5d7c45'),
   wood: hex('#6a4a32'),
+  woodDark: hex('#4a3424'),
+  woodLight: hex('#8c6a48'),
   roof: hex('#8b5a3c'),
+  roofDark: hex('#6a4030'),
+  roofLight: hex('#ab7550'),
+  plaster: hex('#ddcfa6'),
+  plasterShade: hex('#b5a37e'),
+  thatch: hex('#c4a35c'),
+  thatchDark: hex('#8f7339'),
+  metal: hex('#a2a8aa'),
+  metalDark: hex('#5f666a'),
+  glass: hex('#9cc4d0'),
+  mudDark: hex('#4f4838'),
   // Animals and people: saturated colours that never appear on the map.
   outline: hex('#1a1410'),
   impala: hex('#d9822b'),
   impalaLight: hex('#f0b46a'),
+  impalaDark: hex('#a95f1f'),
+  grey: hex('#8d8a86'),
   white: hex('#f2f0e6'),
   lionGold: hex('#e8b23a'),
   lionMane: hex('#a0521d'),
+  lionDark: hex('#b98428'),
+  maneDark: hex('#6f3615'),
   elephant: hex('#a79bb5'),
   elephantLight: hex('#c7bdd2'),
+  elephantDark: hex('#7d7192'),
   skin: hex('#c68a5e'),
   red: hex('#d2483a'),
   blue: hex('#3a8ee6'),

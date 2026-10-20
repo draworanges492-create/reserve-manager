@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { computeViewport } from '../../src/config/scaling';
+import { computeRender, computeViewport } from '../../src/config/scaling';
 
 describe('computeViewport', () => {
   it('fills a MacBook Pro 14" browser window at 2×', () => {
@@ -22,5 +22,29 @@ describe('computeViewport', () => {
     const v = computeViewport(1515, 867);
     expect(v.width * v.zoom).toBeLessThanOrEqual(1515);
     expect(v.height * v.zoom).toBeLessThanOrEqual(867);
+  });
+});
+
+describe('computeRender', () => {
+  it('draws a Retina MacBook window at full resolution, 4 device pixels per game pixel', () => {
+    expect(computeRender(1512, 865, 2)).toEqual({
+      scale: 4,
+      canvasWidth: 3024,
+      canvasHeight: 1730,
+    });
+  });
+
+  it('uses one device pixel per screen pixel on a normal display', () => {
+    expect(computeRender(1920, 1080, 1)).toEqual({
+      scale: 3,
+      canvasWidth: 1920,
+      canvasHeight: 1080,
+    });
+  });
+
+  it('never makes a zero-size canvas (hidden window)', () => {
+    const r = computeRender(0, 0, 2);
+    expect(r.canvasWidth).toBeGreaterThan(0);
+    expect(r.canvasHeight).toBeGreaterThan(0);
   });
 });

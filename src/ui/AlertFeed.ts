@@ -5,6 +5,7 @@ import type { Alert, Severity } from './alerts';
 import { Button } from './Button';
 import { crispText } from './crispText';
 import { levelColor, TEXT_SIZE, UI } from './theme';
+import { viewWidth } from './view';
 
 const WIDTH = 176;
 const PAD = 4;
@@ -49,7 +50,7 @@ export class AlertFeed {
 
   /** Show the newest alerts from `top` down on the right edge (hidden while a menu is open). */
   render(alerts: readonly Alert[], top: number, visible: boolean): void {
-    this.root.setVisible(visible).setPosition(this.scene.scale.width - WIDTH - PAD, top);
+    this.root.setVisible(visible).setPosition(viewWidth(this.scene) - WIDTH - PAD, top);
     const shown = alerts.slice(0, MAX_VISIBLE);
     const signature = JSON.stringify([
       shown.map((a) => [a.key, a.text, a.severity]),

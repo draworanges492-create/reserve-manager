@@ -7,6 +7,7 @@ import { Button } from '../ui/Button';
 import { crispText } from '../ui/crispText';
 import { TEXT_SIZE, UI } from '../ui/theme';
 import { getSession } from './session';
+import { fitUiCamera, viewHeight, viewWidth } from '../ui/view';
 
 const MAX_WIDTH = 600;
 const MARGIN = 8;
@@ -38,6 +39,7 @@ export class DialogueScene extends Phaser.Scene {
   }
 
   create(): void {
+    fitUiCamera(this);
     this.blocker = this.add.rectangle(0, 0, 1, 1, 0x000000, 0.25).setOrigin(0).setInteractive();
     this.blocker.on(Phaser.Input.Events.POINTER_DOWN, () => this.onClick());
     this.box = this.add
@@ -112,8 +114,8 @@ export class DialogueScene extends Phaser.Scene {
     this.clearChoices();
     if (view.focus) eventBus.emit('focusRequested', view.focus);
 
-    const w = this.scale.width;
-    const h = this.scale.height;
+    const w = viewWidth(this);
+    const h = viewHeight(this);
     const boxW = Math.min(MAX_WIDTH, w - MARGIN * 2);
     const hasPortrait = !!view.portraitKey && this.textures.exists(view.portraitKey);
     const textX = PAD + (hasPortrait ? PORTRAIT + 4 + PAD : 0);

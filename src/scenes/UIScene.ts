@@ -35,6 +35,7 @@ import { placingText } from './BuildingLayer';
 import { returnToMenu, saveTo } from './launch';
 import { listSlots, type LoadResult, localSaveStore, type SlotId } from '../core/Save';
 import { getSession } from './session';
+import { fitUiCamera, pointerInView, viewHeight, viewWidth } from '../ui/view';
 
 const MARGIN = 6;
 const TOOL_W = 62;
@@ -105,6 +106,7 @@ export class UIScene extends Phaser.Scene {
   }
 
   create(): void {
+    fitUiCamera(this);
     this.session = getSession(this);
     if (this.alertsFor !== this.session) {
       this.alerts = new AlertList();
@@ -152,13 +154,13 @@ export class UIScene extends Phaser.Scene {
     this.createToolbar();
 
     const layout = (): void => {
-      const w = this.scale.width;
+      const w = viewWidth(this);
       zoneLabel.setX(Math.round(w / 2));
       this.banner.setX(Math.round(w / 2));
       this.toolbar.forEach((b, i) =>
         b.setPosition(
           w - MARGIN - (this.toolbar.length - i) * (TOOL_W + 3) + 3,
-          this.scale.height - MARGIN - TOOL_H,
+          viewHeight(this) - MARGIN - TOOL_H,
         ),
       );
       this.topBar.layout();
@@ -171,7 +173,8 @@ export class UIScene extends Phaser.Scene {
     this.input.on(
       Phaser.Input.Events.POINTER_WHEEL,
       (p: Phaser.Input.Pointer, _o: unknown, _dx: number, dy: number) => {
-        if (this.sidePanel.contains(p.x, p.y)) this.sidePanel.scrollBy(dy);
+        const { x, y } = pointerInView(p);
+        if (this.sidePanel.contains(x, y)) this.sidePanel.scrollBy(dy);
       },
     );
 
@@ -237,7 +240,9 @@ export class UIScene extends Phaser.Scene {
    * while GameScene is processing a pointer event wipes GameScene's hits and its
    * hover (over/out) events silently stop working.
    */
-  isPointerOverUI(x: number, y: number): boolean {
+  /** `screenX/Y` are pointer coordinates (device pixels), as Phaser reports them. */
+  isPointerOverUI(screenX: number, screenY: number): boolean {
+    const { x, y } = pointerInView({ x: screenX, y: screenY });
     const onToolbar = this.toolbar.some(
       (b) => x >= b.x && y >= b.y && x <= b.x + TOOL_W && y <= b.y + TOOL_H,
     );
@@ -258,10 +263,10 @@ export class UIScene extends Phaser.Scene {
     this.goalTracker.update(state);
     this.timeOfDay.update(state.clock.dayProgress, getSettings().timeOfDay);
     this.updateTooltip();
-    this.infoPanel.update(state, this.scale.height);
+    this.infoPanel.update(state, viewHeight(this));
 
     const top = TOP_BAR_HEIGHT + MARGIN;
-    const maxHeight = this.scale.height - top - TOOL_H - MARGIN * 3;
+    const maxHeight = viewHeight(this) - top - TOOL_H - MARGIN * 3;
     const content = this.menuContent();
     if (content) this.sidePanel.show(content, top, maxHeight);
     else if (this.sidePanel.visible) this.sidePanel.hide();
@@ -445,7 +450,7 @@ export class UIScene extends Phaser.Scene {
 
   private updateTooltip(): void {
     const { state } = this.session;
-    const p = this.input.activePointer;
+    const p = pointerInView(this.input.activePointer);
     const h = this.hover;
     let lines = hoverTipLines();
     if (!lines.length) {

@@ -17,6 +17,7 @@ import { askPlayerName } from '../ui/namePrompt';
 import { savedAtText, slotName, slotText, summaryText } from '../ui/saveInfo';
 import { TEXT_SIZE, UI } from '../ui/theme';
 import { loadGame, startNewGame } from './launch';
+import { fitUiCamera, viewHeight, viewWidth } from '../ui/view';
 
 const BUTTON_W = 170;
 const BUTTON_H = 20;
@@ -37,6 +38,7 @@ export class MenuScene extends Phaser.Scene {
   }
 
   create(): void {
+    fitUiCamera(this);
     this.view = 'main';
     // The title screen gets the quiet Chapter 1 loop, without the outdoor ambience.
     audio.setMusic('ruin');
@@ -64,8 +66,8 @@ export class MenuScene extends Phaser.Scene {
   private render(): void {
     for (const p of this.parts) p.destroy();
     this.parts = [];
-    const w = this.scale.width;
-    const h = this.scale.height;
+    const w = viewWidth(this);
+    const h = viewHeight(this);
     this.keep(this.add.rectangle(0, 0, w, h, BACKGROUND).setOrigin(0));
     let y = Math.max(24, h * 0.14);
     this.keep(
@@ -81,16 +83,17 @@ export class MenuScene extends Phaser.Scene {
         color: UI.textDim,
       }).setOrigin(0.5, 0),
     );
-    y += 26;
+    y += 18;
+    // The parade stands below the subtitle (sprites are 24 px tall, drawn at 2×).
     PARADE.forEach((key, i) => {
       this.keep(
         this.add
-          .image(w / 2 + (i - 1) * 40, y + 24, key, 0)
+          .image(w / 2 + (i - 1) * 44, y + 48, key, 0)
           .setScale(2)
           .setOrigin(0.5, 1),
       );
     });
-    y += 40;
+    y += 60;
     if (this.view === 'main') this.renderMain(y);
     else this.renderLoad(y);
     if (this.message) {
@@ -125,7 +128,7 @@ export class MenuScene extends Phaser.Scene {
   }
 
   private renderMain(top: number): void {
-    const x = this.scale.width / 2 - BUTTON_W / 2;
+    const x = viewWidth(this) / 2 - BUTTON_W / 2;
     let y = top;
     const latest = latestSlot(localSaveStore());
     this.button(x, y, t('menu.continue'), () => latest && this.loadSlot(latest), !!latest);
@@ -134,7 +137,7 @@ export class MenuScene extends Phaser.Scene {
       const result = readSlot(localSaveStore(), latest);
       if (result.ok) {
         this.keep(
-          crispText(this, this.scale.width / 2, y, summaryText(result.summary), {
+          crispText(this, viewWidth(this) / 2, y, summaryText(result.summary), {
             fontSize: TEXT_SIZE.small,
             color: UI.textDim,
           }).setOrigin(0.5, 0),
@@ -153,7 +156,7 @@ export class MenuScene extends Phaser.Scene {
   }
 
   private renderLoad(top: number): void {
-    const w = this.scale.width;
+    const w = viewWidth(this);
     const rowW = Math.min(ROW_W, w - 24);
     const x = w / 2 - rowW / 2;
     let y = top;

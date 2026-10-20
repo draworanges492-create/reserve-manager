@@ -17,16 +17,34 @@ Columns: 8
 111 102  80	mud
  51  72  44	treeDark
  67  96  58	tree
+ 93 124  69	treeLight
 106  74  50	wood
+ 74  52  36	woodDark
+140 106  72	woodLight
 139  90  60	roof
+106  64  48	roofDark
+171 117  80	roofLight
+221 207 166	plaster
+181 163 126	plasterShade
+196 163  92	thatch
+143 115  57	thatchDark
+162 168 170	metal
+ 95 102 106	metalDark
+156 196 208	glass
+ 79  72  56	mudDark
  26  20  16	outline
 217 130  43	impala
 240 180 106	impalaLight
+169  95  31	impalaDark
+141 138 134	grey
 242 240 230	white
 232 178  58	lionGold
 160  82  29	lionMane
+185 132  40	lionDark
+111  54  21	maneDark
 167 155 181	elephant
 199 189 210	elephantLight
+125 113 146	elephantDark
 198 138  94	skin
 210  72  58	red
  58 142 230	blue

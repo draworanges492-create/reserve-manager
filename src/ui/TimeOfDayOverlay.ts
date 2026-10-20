@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { BALANCE, type TimeOfDayKey } from '../config/balance';
+import { viewHeight, viewWidth } from './view';
 
 const KEYS: TimeOfDayKey[] = BALANCE.render.timeOfDay;
 
@@ -14,7 +15,7 @@ export class TimeOfDayOverlay {
   update(dayProgress: number, enabled = true): void {
     this.rect.setVisible(enabled);
     if (!enabled) return;
-    this.rect.setSize(this.scene.scale.width, this.scene.scale.height);
+    this.rect.setSize(viewWidth(this.scene), viewHeight(this.scene));
     const next = KEYS.findIndex((k) => k.at > dayProgress);
     const b = KEYS[next === -1 ? KEYS.length - 1 : next];
     const a = KEYS[Math.max(0, (next === -1 ? KEYS.length : next) - 1)];

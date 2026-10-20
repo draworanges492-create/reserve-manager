@@ -1,8 +1,9 @@
-import '@fontsource/alegreya/latin-400.css';
-import '@fontsource/alegreya/latin-700.css';
+import '@fontsource/inter/latin-400.css';
+import '@fontsource/inter/latin-600.css';
+import '@fontsource/inter/latin-700.css';
 import Phaser from 'phaser';
 import { audio } from './audio/AudioManager';
-import { computeViewport } from './config/scaling';
+import { computeRender } from './config/scaling';
 import { BootScene } from './scenes/BootScene';
 import { DialogueScene } from './scenes/DialogueScene';
 import { GameScene } from './scenes/GameScene';
@@ -10,6 +11,7 @@ import { MenuScene } from './scenes/MenuScene';
 import { PreloadScene } from './scenes/PreloadScene';
 import { UIScene } from './scenes/UIScene';
 import { UI_FONT } from './ui/crispText';
+import { setViewScale } from './ui/view';
 
 // Phaser draws text to canvas, which silently falls back to another font if ours isn't
 // loaded yet, so wait for both weights before starting.
@@ -18,21 +20,26 @@ await Promise.all([
   document.fonts.load(`bold 10px ${UI_FONT}`),
 ]).catch(() => undefined);
 
-const initial = computeViewport(window.innerWidth, window.innerHeight);
+const render = (): ReturnType<typeof computeRender> =>
+  computeRender(window.innerWidth, window.innerHeight, window.devicePixelRatio || 1);
+const initial = render();
+setViewScale(initial.scale);
 
 const game = new Phaser.Game({
   type: Phaser.AUTO,
   parent: 'game',
-  width: initial.width,
-  height: initial.height,
+  // The canvas has one pixel per device pixel; cameras zoom by viewScale() (DECISIONS D102).
+  width: initial.canvasWidth,
+  height: initial.canvasHeight,
   backgroundColor: '#1d2b1f',
   pixelArt: true,
   roundPixels: true,
   scale: {
-    // NONE + manual zoom/resize: Phaser's FIT mode scales fractionally, which blurs pixel art.
+    // NONE + manual resize: Phaser's FIT mode scales fractionally, which blurs pixel art.
+    // CSS size = canvas size / devicePixelRatio = the window.
     mode: Phaser.Scale.NONE,
     autoCenter: Phaser.Scale.CENTER_BOTH,
-    zoom: initial.zoom,
+    zoom: 1 / (window.devicePixelRatio || 1),
   },
   input: { activePointers: 2 }, // two fingers for pinch zoom
   // Later scenes render on top: world, then HUD, then dialogue.
@@ -40,11 +47,12 @@ const game = new Phaser.Game({
 });
 
 window.addEventListener('resize', () => {
-  const { zoom, width, height } = computeViewport(window.innerWidth, window.innerHeight);
+  const next = render();
+  setViewScale(next.scale); // before resize(): its RESIZE listeners read the new scale
   // Resize first, then zoom: setZoom re-centres the canvas, and must see the new size.
   // (The other order left a stale margin that pushed part of the game off-screen.)
-  game.scale.resize(width, height);
-  game.scale.setZoom(zoom);
+  game.scale.resize(next.canvasWidth, next.canvasHeight);
+  game.scale.setZoom(1 / (window.devicePixelRatio || 1));
   game.scale.refresh();
 });
 

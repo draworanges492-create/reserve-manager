@@ -11,6 +11,7 @@ import { dateText, dateTooltip, scoreTooltip } from './hudInfo';
 import { WARN_COLOR } from './InfoPanel';
 import { Meter } from './Meter';
 import { TEXT_SIZE, UI } from './theme';
+import { viewWidth } from './view';
 
 export const TOP_BAR_HEIGHT = 20;
 const PAD = 4;
@@ -93,7 +94,7 @@ export class TopBar {
 
   /** True if a screen point (game pixels) is on the bar. */
   contains(x: number, y: number): boolean {
-    return x >= 0 && x <= this.scene.scale.width && y >= 0 && y <= TOP_BAR_HEIGHT;
+    return x >= 0 && x <= viewWidth(this.scene) && y >= 0 && y <= TOP_BAR_HEIGHT;
   }
 
   /** Tooltip for the date, money or a meter under the pointer (buttons have their own). */
@@ -109,7 +110,7 @@ export class TopBar {
 
   /** Re-position for the current canvas width. */
   layout(): void {
-    const width = this.scene.scale.width;
+    const width = viewWidth(this.scene);
     this.bg.setSize(width, TOP_BAR_HEIGHT);
     this.bg.input?.hitArea.setSize(width, TOP_BAR_HEIGHT);
     const buttons = [this.pauseButton, ...this.speedButtons];

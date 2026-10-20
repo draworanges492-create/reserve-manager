@@ -1,6 +1,6 @@
 // Builds the five tile layers from the layout, deterministically from MAP_SEED.
 import { Rng } from '../../src/core/Rng';
-import { gid, type TileName } from '../tileset';
+import { gid, structureTiles, type TileName } from '../tileset';
 import {
   DECO,
   FARMLAND,
@@ -9,7 +9,7 @@ import {
   MAP_SEED,
   MAP_WIDTH as W,
   BUILD_SLOTS,
-  OBJECT_TILES,
+  STRUCTURE_PLACEMENTS,
   PARKING,
   riverCenter,
   ROADS,
@@ -108,24 +108,24 @@ export function buildTerrain(): TileLayers {
     }
   }
 
-  // Waterhole beds: the water itself is a sprite whose look follows the level (Phase 3).
+  // Waterholes are sprites that draw their own bank, mud and water (Phase 3, D104), so the
+  // ground under them stays as it is; only keep decoration off it.
   for (const { at } of WATERHOLES) {
-    for (let dy = -3; dy <= 3; dy++) {
-      for (let dx = -3; dx <= 3; dx++) {
-        const d2 = dx * dx + dy * dy;
-        if (d2 <= 5) setGround(at.x + dx, at.y + dy, 'dry_bed');
-        else if (d2 <= 8) setGround(at.x + dx, at.y + dy, 'sand');
-      }
-    }
+    for (let dy = -3; dy <= 3; dy++)
+      for (let dx = -3; dx <= 3; dx++)
+        if (dx * dx + dy * dy <= 10 && inMap(at.x + dx, at.y + dy))
+          keepClear.add(index(at.x + dx, at.y + dy));
   }
 
   for (const road of ROADS) fillRect(road, 'road');
   fillRect(PARKING, 'parking');
 
-  for (const { tile, at, solid } of OBJECT_TILES) {
-    layers.objects[index(at.x, at.y)] = gid(tile);
-    keepClear.add(index(at.x, at.y));
-    if (solid) layers.collision[index(at.x, at.y)] = gid('collision');
+  for (const { structure, at, solid } of STRUCTURE_PLACEMENTS) {
+    for (const { tile, x, y } of structureTiles(structure, at.x, at.y)) {
+      layers.objects[index(x, y)] = gid(tile);
+      keepClear.add(index(x, y));
+      if (solid) layers.collision[index(x, y)] = gid('collision');
+    }
   }
   for (const { rect } of BUILD_SLOTS) {
     for (let y = rect.y; y < rect.y + rect.h; y++)

@@ -10,6 +10,7 @@ import {
 } from '../../config/game';
 import { getSettings } from '../../core/Settings';
 import { type Bounds, minZoomIndex, nextZoomIndex, scrollToKeepPoint } from './cameraMath';
+import { viewScale } from '../../ui/view';
 
 type Direction = 'up' | 'down' | 'left' | 'right';
 
@@ -81,7 +82,7 @@ export class CameraController {
     const p = this.scene.input.activePointer;
     const edgeScroll = getSettings().edgeScroll;
     if (edgeScroll && this.pointerInside && !p.wasTouch && !p.isDown && !this.isOverUI(p)) {
-      const m = CAMERA_EDGE_SCROLL_MARGIN;
+      const m = CAMERA_EDGE_SCROLL_MARGIN * viewScale();
       if (p.x < m) dx = -1;
       else if (p.x > cam.width - m) dx = 1;
       if (p.y < m) dy = -1;
@@ -89,7 +90,7 @@ export class CameraController {
     }
 
     if (dx === 0 && dy === 0) return;
-    const distance = (CAMERA_PAN_SPEED * deltaMs) / 1000 / cam.zoom;
+    const distance = (CAMERA_PAN_SPEED * viewScale() * deltaMs) / 1000 / cam.zoom;
     cam.setScroll(cam.scrollX + dx * distance, cam.scrollY + dy * distance);
     this.onChange();
   }
@@ -101,13 +102,20 @@ export class CameraController {
     this.enforceMinZoom();
   }
 
+  /** Camera zoom in device pixels per world pixel: the zoom step × the screen scale. */
   private zoom(): number {
-    return CAMERA_ZOOM_STEPS[this.zoomIndex] ?? 1;
+    return (CAMERA_ZOOM_STEPS[this.zoomIndex] ?? 1) * viewScale();
   }
 
   private minIndex(): number {
     const cam = this.scene.cameras.main;
-    return minZoomIndex(CAMERA_ZOOM_STEPS, cam.width, cam.height, this.bounds);
+    // Steps are in game pixels, so compare against the view size in game pixels.
+    return minZoomIndex(
+      CAMERA_ZOOM_STEPS,
+      cam.width / viewScale(),
+      cam.height / viewScale(),
+      this.bounds,
+    );
   }
 
   private enforceMinZoom(): void {

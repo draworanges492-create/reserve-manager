@@ -4,6 +4,7 @@ import { Button } from './Button';
 import { crispText } from './crispText';
 import { WARN_COLOR } from './InfoPanel';
 import { TEXT_SIZE, UI } from './theme';
+import { viewWidth } from './view';
 
 export interface RowAction {
   label: string;
@@ -86,7 +87,7 @@ export class SidePanel {
   /** Show `content` at the right edge, from `top`, at most `maxHeight` tall (then it scrolls). */
   show(content: SideContent, top: number, maxHeight: number): void {
     const wasHidden = !this.root.visible;
-    this.root.setVisible(true).setPosition(this.scene.scale.width - WIDTH - PAD, top);
+    this.root.setVisible(true).setPosition(viewWidth(this.scene) - WIDTH - PAD, top);
     if (wasHidden || maxHeight !== this.maxHeight) {
       this.maxHeight = maxHeight;
       this.signature = ''; // re-layout for the new size

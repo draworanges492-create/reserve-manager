@@ -330,3 +330,15 @@ errors. Test saves cleared afterwards.
 - Open questions D39/D60, D51/D57/D99.
 - Hard tile edges; animals draw over trees; touch untested on a device.
 - No screenshots in the README yet; the repo has no GitHub remote, so Pages hasn't run.
+
+### Milestone A follow-up: readability and art (2026-10-20, user feedback)
+
+- Text is now drawn at full screen resolution in Inter (D102, D103).
+- All art redrawn with shading and detail; palette widened to 50 colours (D104).
+- Map buildings are multi-tile pictures; the pump ruin disappears under a new pump (D105).
+- Fixed: the title-screen animals overlapped the subtitle; a hidden or zero-size window
+  could fail to start WebGL.
+
+**Checks:** `build` ✅ · `test` ✅ (184) · `lint` ✅ · `validate-data` ✅ · browser: title,
+HUD and dialogue text sharp; HQ, ruin, gate, pump ruin, trees, waterhole (dry and full) and
+zebras checked at close zoom; 0 console errors.
