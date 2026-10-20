@@ -59,6 +59,14 @@ type Migration = (state: Record<string, unknown>) => Record<string, unknown>;
 /** MIGRATIONS[v] upgrades a version-v state to v + 1. Never edit one once released. */
 const MIGRATIONS: Record<number, Migration> = {
   1: (s) => ({ ...s, version: 2, meta: { playTimeSeconds: 0 } }),
+  // v3 added the encyclopedia: anything already living in the reserve counts as seen.
+  2: (s) => {
+    const populations = (s.populations ?? {}) as Record<string, Record<string, number>>;
+    const seen = new Set<string>();
+    for (const herd of Object.values(populations))
+      for (const [id, n] of Object.entries(herd)) if (n > 0) seen.add(id);
+    return { ...s, version: 3, encyclopedia: [...seen].sort() };
+  },
 };
 
 export function summarize(state: GameState, savedAt: string): SaveSummary {

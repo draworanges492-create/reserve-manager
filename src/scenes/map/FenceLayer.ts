@@ -4,6 +4,7 @@ import { fenceRepairable } from '../../core/buildCommands';
 import { eventBus } from '../../core/EventBus';
 import type { FenceStatus } from '../../core/GameState';
 import type { GameSession } from '../../core/GameSession';
+import { dustPuff } from '../../ui/fx';
 import { DEPTH } from '../depth';
 import { objectProp, objectsIn } from './mapObjects';
 
@@ -78,6 +79,11 @@ export class FenceLayer {
       this.segments.push({ id, from, to, hit });
     }
     this.update();
+    const off = eventBus.on('fenceRepaired', ({ segmentId }) => {
+      const s = this.segments.find((seg) => seg.id === segmentId);
+      if (s) dustPuff(scene, (s.from.x + s.to.x) / 2, (s.from.y + s.to.y) / 2, DEPTH.effects);
+    });
+    scene.events.once(Phaser.Scenes.Events.SHUTDOWN, off);
   }
 
   update(): void {

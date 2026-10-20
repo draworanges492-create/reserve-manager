@@ -68,6 +68,7 @@ export type GameEvents = {
   staffHover: { staffId: string | null };
   /** Story (spec §9). */
   journalAdded: { entryId: string };
+  encyclopediaUnlocked: { speciesId: string };
   goalCompleted: { goalId: string; chapter: number };
   chapterStarted: { chapter: number };
   fenceRepairStarted: { segmentId: string };

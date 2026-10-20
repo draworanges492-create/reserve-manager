@@ -1,6 +1,7 @@
 import '@fontsource/alegreya/latin-400.css';
 import '@fontsource/alegreya/latin-700.css';
 import Phaser from 'phaser';
+import { audio } from './audio/AudioManager';
 import { computeViewport } from './config/scaling';
 import { BootScene } from './scenes/BootScene';
 import { DialogueScene } from './scenes/DialogueScene';
@@ -47,5 +48,16 @@ window.addEventListener('resize', () => {
   game.scale.refresh();
 });
 
-// Dev-only handle for debugging in the browser console; removed from production builds.
-if (import.meta.env.DEV) Object.assign(window, { __game: game });
+// Browsers only allow sound after the player does something (spec §11: muted until the
+// first interaction), so the audio engine starts on the first click, tap or key press.
+for (const type of ['pointerdown', 'keydown'] as const) {
+  window.addEventListener(type, () => audio.unlock(), { once: true, capture: true });
+}
+
+// Dev-only: console handle and the backtick debug overlay (spec §13). Both are removed from
+// production builds, because Vite drops this whole branch there.
+if (import.meta.env.DEV) {
+  Object.assign(window, { __game: game });
+  const { DebugScene } = await import('./debug/DebugScene');
+  game.scene.add('DebugScene', DebugScene, true);
+}

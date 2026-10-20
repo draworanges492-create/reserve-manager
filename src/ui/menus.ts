@@ -1,5 +1,5 @@
 // Content for the Species, Journal and Settings menus (pure, so it can be tested).
-import { SPECIES, zoneDef } from '../core/content';
+import { SPECIES, speciesDef, zoneDef } from '../core/content';
 import type { GameState } from '../core/GameState';
 import { nextVolume, type Settings } from '../core/Settings';
 import { t } from '../core/text';
@@ -22,29 +22,41 @@ export function biggestHerd(
   return best;
 }
 
+function reserveTotal(state: GameState, speciesId: string): number {
+  return Object.values(state.populations).reduce((sum, h) => sum + (h[speciesId] ?? 0), 0);
+}
+
+function whereText(state: GameState, speciesId: string): string {
+  const herds = Object.entries(state.populations)
+    .filter(([, h]) => (h[speciesId] ?? 0) > 0)
+    .map(([zoneId, h]) => `${zoneDef(zoneId)?.name ?? zoneId} ${Math.round(h[speciesId] ?? 0)}`);
+  return herds.length ? herds.join(', ') : t('species.none');
+}
+
 export function speciesMenu(
   state: GameState,
   onShow: (zoneId: string, speciesId: string) => void,
+  onRead: (speciesId: string) => void,
 ): SideContent {
   const present = SPECIES.filter((s) => biggestHerd(state, s.id));
   return {
     title: t('species.title'),
     intro: [{ text: t('species.intro', { n: present.length }) }],
     rows: SPECIES.map((s) => {
-      const herds = Object.entries(state.populations)
-        .filter(([, h]) => (h[s.id] ?? 0) > 0)
-        .map(([zoneId, h]) => `${zoneDef(zoneId)?.name ?? zoneId} ${Math.round(h[s.id] ?? 0)}`);
-      const total = Object.values(state.populations).reduce((sum, h) => sum + (h[s.id] ?? 0), 0);
-      const where = herds.length ? herds.join(', ') : t('species.none');
+      // Spec §7.6: unseen species stay a mystery until spotted.
+      if (!state.encyclopedia.includes(s.id)) {
+        return {
+          lines: [{ text: t('species.unseen') }, { text: t('species.unseenHint') }],
+          actions: [],
+        };
+      }
+      const total = reserveTotal(state, s.id);
       const lines: PanelLine[] = [
         { text: t('species.row', { name: s.name, count: Math.round(total) }) },
-        { text: t('species.where', { diet: t(`diet.${s.diet}`), where }) },
+        { text: t('species.where', { diet: t(`diet.${s.diet}`), where: whereText(state, s.id) }) },
       ];
       if (total > 0 && total < s.minViable) {
-        lines.push({
-          text: t('animal.status.critical', { min: s.minViable }),
-          warn: true,
-        } as never);
+        lines.push({ text: t('animal.status.critical', { min: s.minViable }), warn: true });
       }
       const herd = biggestHerd(state, s.id);
       return {
@@ -55,9 +67,47 @@ export function speciesMenu(
             enabled: !!herd,
             onClick: () => herd && onShow(herd.zoneId, s.id),
           },
+          { label: t('species.read'), enabled: true, onClick: () => onRead(s.id) },
         ],
       };
     }),
+  };
+}
+
+/** One encyclopedia page (spec §7.6): diet, status, numbers, and unverified field notes. */
+export function encyclopediaEntry(
+  state: GameState,
+  speciesId: string,
+  onBack: () => void,
+): SideContent | null {
+  const s = speciesDef(speciesId);
+  if (!s) return null;
+  return {
+    title: s.name,
+    rows: [
+      {
+        lines: [
+          { text: t('encyclopedia.diet', { diet: t(`diet.${s.diet}`) }) },
+          { text: t('encyclopedia.population', { count: Math.round(reserveTotal(state, s.id)) }) },
+          { text: t('encyclopedia.where', { where: whereText(state, s.id) }) },
+          { text: t('encyclopedia.minViable', { n: s.minViable }) },
+          { text: t('encyclopedia.status') },
+        ],
+        actions: [{ label: t('encyclopedia.back'), enabled: true, onClick: onBack }],
+      },
+      {
+        lines: [
+          { text: t('encyclopedia.factsTitle') },
+          // Spec §0 rule 8: facts stay marked until the user verifies them.
+          ...s.facts.map((f) => ({
+            text: f.verified ? f.text : t('encyclopedia.factUnverified', { text: f.text }),
+            warn: !f.verified,
+          })),
+          { text: t('encyclopedia.factsNote') },
+        ],
+        actions: [],
+      },
+    ],
   };
 }
 

@@ -5,7 +5,7 @@ import { GAME_SPEEDS, type GameSpeed } from '../config/game';
 import type { SimEvent } from '../sim/types';
 import { clampLevel, waterVisualState } from '../sim/Water';
 import { assignStaff, build, cancelBuild, dismissStaff, hire, repairFence } from './buildCommands';
-import { examineClue } from '../story/storyCommands';
+import { examineClue, recordSighting } from '../story/storyCommands';
 import type { GameState } from './GameState';
 import type { StringKey } from './text';
 
@@ -21,7 +21,8 @@ export type Command =
   | { type: 'assignStaff'; staffId: string; zoneId: string | null }
   | { type: 'dismissStaff'; staffId: string }
   | { type: 'repairFence'; segmentId: string }
-  | { type: 'examineClue'; clueId: string };
+  | { type: 'examineClue'; clueId: string }
+  | { type: 'recordSighting'; speciesId: string };
 
 export type CommandResult =
   { ok: true; state: GameState; events: SimEvent[] } | { ok: false; reason: StringKey };
@@ -81,5 +82,7 @@ export function applyCommand(state: GameState, command: Command): CommandResult 
       return repairFence(state, command.segmentId);
     case 'examineClue':
       return examineClue(state, command.clueId);
+    case 'recordSighting':
+      return recordSighting(state, command.speciesId);
   }
 }

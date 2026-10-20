@@ -130,3 +130,18 @@ describe('clues (Chapter 2 investigation)', () => {
     ).toHaveLength(2);
   });
 });
+
+describe('encyclopedia sightings (spec §7.6)', () => {
+  it('unlock once per species', () => {
+    const first = applyCommand(begin(), { type: 'recordSighting', speciesId: 'lion' });
+    expect(first.ok && first.state.encyclopedia).toEqual(['lion']);
+    expect(first.ok && first.events).toEqual([
+      { type: 'encyclopediaUnlocked', payload: { speciesId: 'lion' } },
+    ]);
+    if (!first.ok) return;
+    expect(applyCommand(first.state, { type: 'recordSighting', speciesId: 'lion' })).toEqual({
+      ok: false,
+      reason: 'command.alreadySeen',
+    });
+  });
+});

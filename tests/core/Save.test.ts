@@ -77,11 +77,28 @@ describe('versions (Phase 8 acceptance: mismatch handled gracefully)', () => {
     const current = played(3);
     const v1State: Record<string, unknown> = { ...current, version: 1 };
     delete v1State.meta;
+    delete v1State.encyclopedia;
     const json = JSON.stringify({ format: SAVE_FORMAT, version: 1, summary: {}, state: v1State });
     const loaded = load(json);
-    expect(loaded.version).toBe(2);
+    expect(loaded.version).toBe(3);
     expect(loaded.meta).toEqual({ playTimeSeconds: 0 });
-    expect({ ...loaded, meta: current.meta, version: current.version }).toEqual(current);
+    expect({
+      ...loaded,
+      meta: current.meta,
+      version: current.version,
+      encyclopedia: current.encyclopedia,
+    }).toEqual(current);
+  });
+
+  it('migrates a version-2 save: animals already in the reserve count as seen', () => {
+    const current = played(3);
+    const v2State: Record<string, unknown> = { ...current, version: 2 };
+    delete v2State.encyclopedia;
+    const loaded = load(
+      JSON.stringify({ format: SAVE_FORMAT, version: 2, summary: {}, state: v2State }),
+    );
+    expect(loaded.version).toBe(3);
+    expect(loaded.encyclopedia).toEqual(['impala', 'lion', 'zebra']);
   });
 
   it('refuses a save from a newer version instead of guessing', () => {

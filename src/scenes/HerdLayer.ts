@@ -7,6 +7,8 @@ import { AnimalGroupSprite } from '../entities/AnimalGroupSprite';
 import { type Rect, spriteCountFor } from '../entities/herdMath';
 import { objectProp, objectsIn, type ZoneArea } from './map/mapObjects';
 
+/** How often (ms) to check which species are on screen, for encyclopedia sightings. */
+const SIGHTING_CHECK_MS = 500;
 /** Animals keep this far (px) from a waterhole's centre so they don't stand in the pool. */
 const POOL_RADIUS_PX = 40;
 
@@ -23,6 +25,7 @@ export class HerdLayer {
   /** True where nobody can walk (deep water, rocks, buildings, waterhole pools). */
   readonly blocked: (x: number, y: number) => boolean;
   private hovered: string | null = null;
+  private sinceSightingCheck = 0;
   private selected: string | null = null;
 
   constructor(
@@ -73,6 +76,7 @@ export class HerdLayer {
   }
 
   update(deltaMs: number): void {
+    this.checkSightings(deltaMs);
     const { clock, populations } = this.session.state;
     const timeScale = clock.paused ? 0 : clock.speed;
     const max = BALANCE.render.maxAnimalSpritesPerZone;
@@ -82,6 +86,21 @@ export class HerdLayer {
           this.groups.get(`${zoneId}:${speciesId}`) ?? this.createGroup(zoneId, speciesId);
         group?.setCount(spriteCountFor(count, max));
         group?.update(deltaMs, timeScale);
+      }
+    }
+  }
+
+  /** Spec §7.6: the first time a species' herd is on screen, its encyclopedia entry unlocks. */
+  private checkSightings(deltaMs: number): void {
+    this.sinceSightingCheck += deltaMs;
+    if (this.sinceSightingCheck < SIGHTING_CHECK_MS) return;
+    this.sinceSightingCheck = 0;
+    const seen = this.session.state.encyclopedia;
+    const view = this.scene.cameras.main.worldView;
+    for (const [key, group] of this.groups) {
+      const speciesId = key.split(':')[1] ?? '';
+      if (!seen.includes(speciesId) && group.visibleIn(view)) {
+        this.session.dispatch({ type: 'recordSighting', speciesId });
       }
     }
   }

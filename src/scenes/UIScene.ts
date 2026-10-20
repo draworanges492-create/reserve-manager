@@ -21,7 +21,7 @@ import {
 import { hoverTipLines } from '../ui/hoverTip';
 import { InfoPanel } from '../ui/InfoPanel';
 import { GoalTracker } from '../ui/GoalTracker';
-import { settingsMenu, speciesMenu } from '../ui/menus';
+import { encyclopediaEntry, settingsMenu, speciesMenu } from '../ui/menus';
 import { fenceTooltip, type JournalFilter, journalMenu } from '../ui/storyInfo';
 import { fencesBlocking } from '../story/StoryManager';
 import { SidePanel } from '../ui/SidePanel';
@@ -30,6 +30,7 @@ import { TimeOfDayOverlay } from '../ui/TimeOfDayOverlay';
 import { Tooltip } from '../ui/Tooltip';
 import { TOP_BAR_HEIGHT, TopBar } from '../ui/TopBar';
 import { waterholeTooltip } from '../ui/waterholeTooltip';
+import { bindGameAudio, updateGameAudio } from '../audio/hooks';
 import { placingText } from './BuildingLayer';
 import { returnToMenu, saveTo } from './launch';
 import { listSlots, type LoadResult, localSaveStore, type SlotId } from '../core/Save';
@@ -49,6 +50,7 @@ const ALERT_EVENTS: AlertEvent['type'][] = [
   'seasonChanged',
   'goalCompleted',
   'journalAdded',
+  'encyclopediaUnlocked',
 ];
 
 type Menu = 'build' | 'staff' | 'species' | 'journal' | 'settings';
@@ -82,6 +84,8 @@ export class UIScene extends Phaser.Scene {
   } = { waterhole: null, animal: null, slot: null, staff: null, fence: null, clue: null };
   private goalTracker!: GoalTracker;
   private journalFilter: JournalFilter = 'all';
+  /** Species whose encyclopedia page is open in the Species panel. */
+  private encyclopediaPage: string | null = null;
   private selection: Selection | null = null;
   private menu: Menu | null = null;
   private placing: string | null = null;
@@ -219,7 +223,9 @@ export class UIScene extends Phaser.Scene {
         if (s.textSize !== this.builtTextSize) this.scene.restart();
       }),
     ];
+    const offAudio = bindGameAudio();
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+      offAudio();
       offs.forEach((off) => off());
       this.scale.off(Phaser.Scale.Events.RESIZE, layout);
     });
@@ -248,6 +254,7 @@ export class UIScene extends Phaser.Scene {
   override update(): void {
     const { state } = this.session;
     this.topBar.update();
+    updateGameAudio(state);
     this.goalTracker.update(state);
     this.timeOfDay.update(state.clock.dayProgress, getSettings().timeOfDay);
     this.updateTooltip();
@@ -307,11 +314,23 @@ export class UIScene extends Phaser.Scene {
       case 'staff':
         return staffMenu(state, dispatch);
       case 'species':
-        return speciesMenu(state, (zoneId, speciesId) => {
-          const r = state.zones[zoneId]?.rect;
-          if (r) eventBus.emit('focusRequested', { x: r.x + r.w / 2, y: r.y + r.h / 2 });
-          eventBus.emit('animalSelected', { group: { zoneId, speciesId } });
-        });
+        if (this.encyclopediaPage) {
+          const page = encyclopediaEntry(
+            state,
+            this.encyclopediaPage,
+            () => (this.encyclopediaPage = null),
+          );
+          if (page) return page;
+        }
+        return speciesMenu(
+          state,
+          (zoneId, speciesId) => {
+            const r = state.zones[zoneId]?.rect;
+            if (r) eventBus.emit('focusRequested', { x: r.x + r.w / 2, y: r.y + r.h / 2 });
+            eventBus.emit('animalSelected', { group: { zoneId, speciesId } });
+          },
+          (speciesId) => (this.encyclopediaPage = speciesId),
+        );
       case 'journal':
         return journalMenu(state, this.journalFilter, (f) => (this.journalFilter = f));
       case 'settings':
@@ -375,6 +394,7 @@ export class UIScene extends Phaser.Scene {
   private toggleMenu(menu: Menu): void {
     if (this.placing) eventBus.emit('buildModeChanged', { buildingId: null });
     this.menu = this.menu === menu ? null : menu;
+    this.encyclopediaPage = null;
     this.saveUi = { confirming: null, lastSaved: null, failed: null };
     if (this.menu === 'settings') this.refreshSlots();
   }

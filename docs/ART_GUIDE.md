@@ -78,3 +78,11 @@ All face **right** (the game mirrors them). Frames sit side by side in one strip
 Still to come (later phases): wildebeest 24, giraffe 48, leopard 24, rhino 48; fence
 crew / tracker / vet / culling team;
 lodge; 9-slice UI panels.
+
+## Effects and sound
+
+- `sprites/fx-dust.png` (4×4, sand tones): dust puff particle; `fx-drop.png`: water drop.
+- There are no audio files: music, ambience and effects are synthesized in `src/audio/`
+  (D95). To use recordings instead, put them in `public/assets/audio/`, list them in
+  `ASSETS.md`, and make `AudioManager` play them. The `sfx('…')` / `setMusic(…)` callers
+  stay the same.

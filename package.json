@@ -1,7 +1,7 @@
 {
   "name": "reserve-manager",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -14,7 +14,8 @@
     "gen:placeholders": "tsx tools/generate-placeholders.ts",
     "gen:map": "tsx tools/generate-map.ts",
     "preview:art": "tsx tools/preview-art.ts",
-    "sim:balance": "tsx tools/sim-balance.ts"
+    "sim:balance": "tsx tools/sim-balance.ts",
+    "package:itch": "npm run build && rm -rf release && mkdir -p release && cd dist && zip -qr ../release/reserve-manager-web.zip ."
   },
   "dependencies": {
     "@fontsource/alegreya": "^5.3.0",

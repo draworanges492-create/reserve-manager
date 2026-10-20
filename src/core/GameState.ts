@@ -10,9 +10,9 @@ import type { TileRect, WorldLayout } from './WorldLayout';
 /** Bump when the shape changes; Save.ts (Phase 8) migrates older saves. */
 /**
  * Bump when the saved shape changes, and add a migration in core/Save.ts.
- * v1: up to Phase 7 · v2: adds meta.playTimeSeconds.
+ * v1: up to Phase 7 · v2: adds meta.playTimeSeconds · v3: adds encyclopedia.
  */
-export const STATE_VERSION = 2;
+export const STATE_VERSION = 3;
 
 export interface ClockState {
   /** Days elapsed since the start, from 0. Calendar values derive from this (sim/Seasons). */
@@ -168,6 +168,8 @@ export interface GameState {
   relationships: Record<string, number>;
   journal: JournalEntry[];
   meta: { /** Real seconds spent in this game (shown on save slots). */ playTimeSeconds: number };
+  /** Species the player has seen (spec §7.6: entries unlock on first sighting). */
+  encyclopedia: string[];
   /** Spec §6.8, each 0–100. */
   scores: Record<ScoreId, number>;
   scoreHistory: ScoreChange[];
@@ -251,6 +253,7 @@ function baseState({ seed, world, playerName = '', speed = 1 }: NewGameOptions):
     relationships: {},
     journal: [],
     meta: { playTimeSeconds: 0 },
+    encyclopedia: [],
     scores: {
       ecosystem: 0, // filled in by createGameState
       trust: BALANCE.scores.trustStart,

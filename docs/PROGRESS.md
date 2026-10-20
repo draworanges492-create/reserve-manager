@@ -293,13 +293,40 @@ goals and journal identical; planted "newer version" and damaged saves were list
 explanations, couldn't be loaded, and could be deleted; loading twice in a row worked; 0
 console errors. Test saves were cleared from the preview browser afterwards.
 
-**Next — Phase 9 (Polish for Milestone A):** audio (CC0 / generated, muted until first
-interaction), animation polish, encyclopedia (3 species), balance and performance pass,
-bug fixes, itch.io zip, GitHub Pages workflow, README. Milestone A done after that.
-
 **Known issues**
 
 - Waterhole A starts dry so it never raises a "drying up" alert (the Ch 1 tutorial covers it).
 - The dialogue box covers the toolbar while open (it's modal).
 - Story text is placeholder quality (D83); open questions D39/D60, D51/D57.
 - Hard tile edges; animals draw over trees; touch untested on a device.
+
+## Phase 9 — Polish for Milestone A ✅ (2026-10-20)
+
+**Done**
+
+- Audio (D95): synthesized music (2 loops, crossfaded by chapter), day/night ambience, 6
+  effects, all following the volume settings; silent until the first interaction.
+- Encyclopedia (D96): entries for impala, zebra and lion in the Species menu; state v3 with migration.
+- Debug overlay (D97), dev builds only.
+- Polish (D98): fades, building-finished pop and dust, fence dust, alerts slide in.
+- Balance (D99): gentler decline when the reserve is neglected.
+- Bug fix: resizing the window after leaving the title screen threw an error (text from a
+  stopped scene was still being resized).
+- Release (D100): `npm run package:itch`, GitHub Pages workflow, README, version 0.1.0.
+
+**Checks:** `build` ✅ (D101: 1.7 MB, 370 KB gzipped JS) · `test` ✅ (181) · `lint` ✅ ·
+`validate-data` ✅ · browser (dev): new game, chapter 2 pump built (goal ticked), fence
+repaired (dust emitter created and cleaned up), window resize, 0 console errors · browser
+(production build): new game plays, backtick does nothing, no dev handles, 0 console
+errors. Test saves cleared afterwards.
+
+**Milestone A is complete. Next: your playtest.** Then Phase 10 per the spec.
+
+**Known issues**
+
+- Waterhole A starts dry so it never raises a "drying up" alert (the Ch 1 tutorial covers it).
+- The dialogue box covers the toolbar while open (it's modal).
+- Story and encyclopedia text are placeholder quality and unverified (D83, D96).
+- Open questions D39/D60, D51/D57/D99.
+- Hard tile edges; animals draw over trees; touch untested on a device.
+- No screenshots in the README yet; the repo has no GitHub remote, so Pages hasn't run.

@@ -84,6 +84,15 @@ function scaffold(): PixelCanvas {
   return finish(c);
 }
 
+/** Dust puff particle for finished buildings and mended fences. */
+export function drawDust(): PixelCanvas {
+  const c = new PixelCanvas(4, 4);
+  c.fillRect(1, 0, 2, 4, PAL.sand);
+  c.fillRect(0, 1, 4, 2, PAL.sand);
+  c.set(1, 1, PAL.grassDry);
+  return c;
+}
+
 /** Key → image. Keys must match src/config/assets.json and buildings.json ids. */
 export function drawBuildings(): Record<string, PixelCanvas> {
   return {

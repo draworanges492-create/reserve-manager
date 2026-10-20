@@ -5,7 +5,7 @@ import { dirname, join, relative } from 'node:path';
 import { PixelCanvas } from './lib/canvas';
 import { encodePng, isPlaceholderFile, PLACEHOLDER_MARKER } from './lib/png';
 import { PAL } from './palette';
-import { drawBuildings } from './placeholders/buildings';
+import { drawBuildings, drawDust } from './placeholders/buildings';
 import { drawIcons } from './placeholders/icons';
 import { drawClueMarker, drawPortraits } from './placeholders/portraits';
 import { drawSprites } from './placeholders/sprites';
@@ -79,6 +79,7 @@ for (const [name, canvas] of Object.entries(drawBuildings()))
   writePng(`sprites/${name}.png`, canvas);
 writePng('sprites/bucket.png', drawBucket());
 writePng('sprites/clue-marker.png', drawClueMarker());
+writePng('sprites/fx-dust.png', drawDust());
 for (const [name, canvas] of Object.entries(drawPortraits()))
   writePng(`portraits/${name}.png`, canvas);
 writePng('sprites/fx-drop.png', drawDrop());

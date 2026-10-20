@@ -9,6 +9,7 @@ import {
   type SlotId,
 } from '../core/Save';
 import { t } from '../core/text';
+import { audio } from '../audio/AudioManager';
 import { Button } from '../ui/Button';
 import { crispText } from '../ui/crispText';
 import { WARN_COLOR } from '../ui/InfoPanel';
@@ -37,9 +38,13 @@ export class MenuScene extends Phaser.Scene {
 
   create(): void {
     this.view = 'main';
+    // The title screen gets the quiet Chapter 1 loop, without the outdoor ambience.
+    audio.setMusic('ruin');
+    audio.setAmbience('none');
     this.message = '';
     this.busy = false;
     this.render();
+    this.cameras.main.fadeIn(300);
     this.scale.on(Phaser.Scale.Events.RESIZE, this.render, this);
     this.input.keyboard?.on('keydown-ENTER', () => {
       const latest = latestSlot(localSaveStore());

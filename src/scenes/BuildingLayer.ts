@@ -5,6 +5,7 @@ import { eventBus } from '../core/EventBus';
 import type { GameSession } from '../core/GameSession';
 import { t } from '../core/text';
 import { validSlotsFor } from '../ui/economyInfo';
+import { dustPuff } from '../ui/fx';
 import { DEPTH } from './depth';
 
 const BAR_W = 36;
@@ -29,7 +30,7 @@ export class BuildingLayer {
   private placing: string | null = null;
 
   constructor(
-    scene: Phaser.Scene,
+    private readonly scene: Phaser.Scene,
     private readonly session: GameSession,
     tileSize: number,
   ) {
@@ -81,9 +82,22 @@ export class BuildingLayer {
       const b = slots[slotId]?.building;
       const key = b ? (b.daysLeft > 0 ? 'building-scaffold' : `building-${b.buildingId}`) : null;
       if (key !== view.shown) {
+        const finished =
+          view.shown === 'building-scaffold' && key !== null && key !== 'building-scaffold';
         view.shown = key;
         view.sprite.setVisible(!!key);
         if (key) view.sprite.setTexture(key);
+        if (finished) {
+          // A little "ta-da": the building settles into place in a puff of dust.
+          dustPuff(this.scene, view.sprite.x, view.sprite.y - 2, DEPTH.effects, 16);
+          view.sprite.setScale(1, 0.8);
+          this.scene.tweens.add({
+            targets: view.sprite,
+            scaleY: 1,
+            duration: 300,
+            ease: 'Back.easeOut',
+          });
+        }
       }
       view.bar.clear();
       if (b && b.daysLeft > 0) {

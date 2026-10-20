@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { audio } from '../audio/AudioManager';
 import { crispText } from './crispText';
 import { clearHoverTip, setHoverTip } from './hoverTip';
 import { TEXT_SIZE, UI } from './theme';
@@ -57,7 +58,9 @@ export class Button extends Phaser.GameObjects.Container {
     });
     if (tip) this.once(Phaser.GameObjects.Events.DESTROY, () => clearHoverTip(tip));
     this.bg.on(Phaser.Input.Events.POINTER_DOWN, () => {
-      if (this.enabled) opts.onClick();
+      if (!this.enabled) return;
+      audio.sfx('click');
+      opts.onClick();
     });
     scene.add.existing(this);
   }

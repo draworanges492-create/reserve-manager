@@ -1,5 +1,6 @@
 // Story-side player commands (spec §4 Commands).
 import type { CommandResult } from '../core/Commands';
+import { speciesDef } from '../core/content';
 import type { GameState } from '../core/GameState';
 import { allHold } from './conditions';
 import { chapterDef } from './content';
@@ -25,5 +26,16 @@ export function examineClue(state: GameState, clueId: string): CommandResult {
       story: { ...state.story, pendingDialogues: [...state.story.pendingDialogues, clue.dialogue] },
     },
     events: [],
+  };
+}
+
+/** Spec §7.6: a species' encyclopedia entry unlocks the first time it's seen. */
+export function recordSighting(state: GameState, speciesId: string): CommandResult {
+  if (!speciesDef(speciesId)) return { ok: false, reason: 'command.unknownSpecies' };
+  if (state.encyclopedia.includes(speciesId)) return { ok: false, reason: 'command.alreadySeen' };
+  return {
+    ok: true,
+    state: { ...state, encyclopedia: [...state.encyclopedia, speciesId] },
+    events: [{ type: 'encyclopediaUnlocked', payload: { speciesId } }],
   };
 }

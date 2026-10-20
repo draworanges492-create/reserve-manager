@@ -1,7 +1,14 @@
 import { describe, expect, it, vi } from 'vitest';
 import { DEFAULT_SETTINGS } from '../../src/core/Settings';
 import { dateText, dateTooltip, scoreTooltip } from '../../src/ui/hudInfo';
-import { biggestHerd, type SaveControls, settingsMenu, speciesMenu } from '../../src/ui/menus';
+import type { GameState } from '../../src/core/GameState';
+import {
+  biggestHerd,
+  encyclopediaEntry,
+  type SaveControls,
+  settingsMenu,
+  speciesMenu,
+} from '../../src/ui/menus';
 import { runDayTick } from '../../src/sim/tick';
 import { must, newGame, withPopulation } from '../helpers/newGame';
 
@@ -26,9 +33,48 @@ describe('top bar text', () => {
   });
 });
 
+const seenAll = (state: GameState): GameState => ({
+  ...state,
+  encyclopedia: ['impala', 'zebra', 'lion'],
+});
+
 describe('species menu', () => {
+  it('hides species that have not been seen yet', () => {
+    const rows = speciesMenu(
+      { ...newGame(), encyclopedia: ['zebra'] },
+      () => undefined,
+      () => undefined,
+    ).rows;
+    expect(rows.map((r) => r.lines[0]?.text)).toEqual([
+      '??? · Not seen yet',
+      'Zebra · 24',
+      '??? · Not seen yet',
+    ]);
+    expect(rows[1]?.actions.map((a) => a.label)).toEqual(['Show', 'Read']);
+  });
+
+  it('opens an encyclopedia page with unverified facts clearly marked', () => {
+    const onBack = vi.fn();
+    const page = encyclopediaEntry(newGame(), 'impala', onBack);
+    expect(page?.title).toBe('Impala');
+    expect(page?.rows[0]?.lines.map((l) => l.text)).toEqual([
+      'Diet: Grazer',
+      'In the reserve: 80',
+      'Where: Central Plains 80',
+      'Smallest herd that can still breed here: 6',
+      'Conservation status: to be verified',
+    ]);
+    expect(page?.rows[1]?.lines[1]).toEqual({ text: 'TODO: verify (unverified)', warn: true });
+    page?.rows[0]?.actions[0]?.onClick();
+    expect(onBack).toHaveBeenCalled();
+  });
+
   it('lists every species with where they are, and finds the biggest herd', () => {
-    const menu = speciesMenu(newGame(), () => undefined);
+    const menu = speciesMenu(
+      seenAll(newGame()),
+      () => undefined,
+      () => undefined,
+    );
     expect(menu.rows.map((r) => r.lines[0]?.text)).toEqual([
       'Impala · 80',
       'Zebra · 24',
@@ -45,7 +91,11 @@ describe('species menu', () => {
       'zebra',
       0,
     );
-    const rows = speciesMenu(state, () => undefined).rows;
+    const rows = speciesMenu(
+      seenAll(state),
+      () => undefined,
+      () => undefined,
+    ).rows;
     expect(rows[2]?.lines.at(-1)?.warn).toBe(true);
     expect(rows[1]?.lines[1]?.text).toBe('Grazer · None left in the reserve');
     expect(must(rows[1]?.actions[0]).enabled).toBe(false);

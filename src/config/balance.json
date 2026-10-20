@@ -40,8 +40,8 @@
     "maxLevel": 100
   },
   "population": {
-    "overshootDeathRate": 0.05,
-    "noWaterFactor": 0.3
+    "overshootDeathRate": 0.035,
+    "noWaterFactor": 0.45
   },
   "economy": {
     "startMoney": 500,

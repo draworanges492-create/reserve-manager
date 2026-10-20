@@ -26,13 +26,19 @@ export function crispText(
     ...style,
   });
   const sync = (): void => {
+    // A stopped scene can leave a destroyed label behind; touching its canvas would throw.
+    if (!label.scene || !label.canvas) return;
     label.setResolution(scene.scale.zoom * window.devicePixelRatio);
   };
   sync();
+  // The scale manager is game-wide, so the listener must go when the label or its scene does.
+  const off = (): void => {
+    scene.scale.off(Phaser.Scale.Events.RESIZE, sync);
+    scene.events.off(Phaser.Scenes.Events.SHUTDOWN, off);
+  };
   scene.scale.on(Phaser.Scale.Events.RESIZE, sync);
-  label.once(Phaser.GameObjects.Events.DESTROY, () =>
-    scene.scale.off(Phaser.Scale.Events.RESIZE, sync),
-  );
+  label.once(Phaser.GameObjects.Events.DESTROY, off);
+  scene.events.once(Phaser.Scenes.Events.SHUTDOWN, off);
   return label;
 }
 

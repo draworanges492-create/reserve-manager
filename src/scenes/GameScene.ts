@@ -29,6 +29,7 @@ const TILE_LAYERS = [
 /** Where the camera starts: between HQ and Waterhole A, in tiles. */
 const START_VIEW_TILE = { x: 56, y: 60 };
 const FOCUS_PAN_MS = 500;
+const FADE_MS = 400;
 
 /** The world view: tilemap, zones, fences, waterholes and herds. Drives the sim clock. */
 export class GameScene extends Phaser.Scene {
@@ -86,6 +87,7 @@ export class GameScene extends Phaser.Scene {
       // Safe here (unlike isOverUI): it re-runs this scene's own hit test with identical results.
       (pointer) => this.input.hitTestPointer(pointer).some((o) => o.getData('blocksDrag') === true),
     );
+    this.cameras.main.fadeIn(FADE_MS);
     this.cameras.main.centerOn(
       START_VIEW_TILE.x * map.tileWidth,
       START_VIEW_TILE.y * map.tileHeight,

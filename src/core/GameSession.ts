@@ -9,7 +9,10 @@ import {
   startDialogue,
   viewOf,
 } from '../story/DialogueRunner';
+import { chapterDef } from '../story/content';
+import { applyEffects } from '../story/effects';
 import { afterDialogue, evaluateStory, startChapter } from '../story/StoryManager';
+import type { Effect } from '../story/types';
 import { advanceClock } from './Clock';
 import { applyCommand, type Command, type CommandResult } from './Commands';
 import { debugAddMoney, debugSetChapter } from './Debug';
@@ -122,6 +125,32 @@ export class GameSession {
 
   debugAddMoney(amount: number): void {
     this.current = debugAddMoney(this.current, amount);
+  }
+
+  /** Run `days` day ticks now (skips waiting; conversations still queue). */
+  debugAdvanceDays(days: number): void {
+    for (let i = 0; i < days; i++) {
+      const { state, events } = runDayTick(this.current);
+      this.current = state;
+      this.publish(events);
+    }
+  }
+
+  /** Apply story effects directly (spawn animals, set a flag, …). */
+  debugApplyEffects(effects: Effect[]): void {
+    const { state, events } = applyEffects(this.current, effects);
+    this.current = state;
+    this.publish(events);
+    this.checkStory();
+  }
+
+  /** Mark every goal of the current chapter done, so its completion scene plays. */
+  debugCompleteChapterGoals(): void {
+    const chapter = chapterDef(this.current.chapter.current);
+    if (!chapter) return;
+    const done = new Set([...this.current.story.goalsDone, ...chapter.goals.map((g) => g.id)]);
+    this.current = { ...this.current, story: { ...this.current.story, goalsDone: [...done] } };
+    this.checkStory();
   }
 
   private checkStory(): void {

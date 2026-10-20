@@ -42,7 +42,8 @@ export type AlertEvent =
   | EventOf<'buildingCompleted'>
   | EventOf<'seasonChanged'>
   | EventOf<'goalCompleted'>
-  | EventOf<'journalAdded'>;
+  | EventOf<'journalAdded'>
+  | EventOf<'encyclopediaUnlocked'>;
 
 /** Info alerts fade after this many in-game days; warnings stay until resolved or dismissed. */
 export const INFO_LIFETIME_DAYS = 2;
@@ -181,6 +182,17 @@ export function alertFor(state: GameState, event: AlertEvent): AlertChange | nul
             },
           }
         : null;
+    }
+    case 'encyclopediaUnlocked': {
+      const name = speciesDef(event.payload.speciesId)?.name ?? event.payload.speciesId;
+      return {
+        add: {
+          key: `enc:${event.payload.speciesId}`,
+          severity: 'info',
+          text: t('alert.encyclopedia', { name }),
+          day,
+        },
+      };
     }
     case 'seasonChanged':
       return {

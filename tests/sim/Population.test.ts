@@ -1,3 +1,4 @@
+import { BALANCE } from '../../src/config/balance';
 import { describe, expect, it } from 'vitest';
 import { speciesDef } from '../../src/core/content';
 import { Rng } from '../../src/core/Rng';
@@ -30,7 +31,10 @@ describe('carryingCapacity (spec §6.3)', () => {
     const area = must(newGame().zones.plains).area;
     const withWater = carryingCapacity(watered(), 'plains', impala);
     expect(withWater).toBeCloseTo(area * 0.12 * 0.55, 5);
-    expect(carryingCapacity(newGame(), 'plains', impala)).toBeCloseTo(withWater * 0.3, 5); // A dry
+    expect(carryingCapacity(newGame(), 'plains', impala)).toBeCloseTo(
+      withWater * BALANCE.population.noWaterFactor,
+      5,
+    ); // A dry
     expect(carryingCapacity(withVegetation(watered(), 'plains', 0), 'plains', impala)).toBe(0);
   });
 

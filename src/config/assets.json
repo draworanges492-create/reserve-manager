@@ -30,7 +30,8 @@
     "icon-settings": "assets/ui/icon-settings.png",
     "clue-marker": "assets/sprites/clue-marker.png",
     "icon-goal-open": "assets/ui/icon-goal-open.png",
-    "icon-goal-done": "assets/ui/icon-goal-done.png"
+    "icon-goal-done": "assets/ui/icon-goal-done.png",
+    "fx-dust": "assets/sprites/fx-dust.png"
   },
   "spritesheets": {
     "impala": {

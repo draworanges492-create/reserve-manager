@@ -89,6 +89,11 @@ export class AnimalGroupSprite {
     if (this.highlighted) this.drawRing();
   }
 
+  /** True if any member stands inside `view` (world px), i.e. the player can see this herd. */
+  visibleIn(view: Phaser.Geom.Rectangle): boolean {
+    return this.members.some((m) => view.contains(m.sprite.x, m.sprite.y));
+  }
+
   destroy(): void {
     this.setCount(0);
     this.ring.destroy();
