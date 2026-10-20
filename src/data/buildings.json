@@ -56,6 +56,21 @@
       "unlockChapter": 4,
       "description": "A lookout for visitors (tourism arrives later).",
       "effects": []
+    },
+    {
+      "id": "beehive_fence",
+      "name": "Beehive fence",
+      "slotType": "fence",
+      "cost": 250,
+      "buildDays": 3,
+      "unlockChapter": 3,
+      "description": "Hives hung along the elephants' path to the village. Elephants avoid the bees, so crop raids almost stop.",
+      "effects": [
+        {
+          "op": "raidGuard",
+          "value": 0.1
+        }
+      ]
     }
   ]
 }

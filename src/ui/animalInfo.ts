@@ -1,5 +1,9 @@
 // Text for herd hover labels and the info panel (pure, so it can be tested).
-import { SPECIES, speciesDef, zoneDef } from '../core/content';
+import { BALANCE } from '../config/balance';
+import type { Command } from '../core/Commands';
+import { SPECIES, speciesDef, staffRole, zoneDef } from '../core/content';
+import type { HerdMethod } from '../core/GameState';
+import { dailyRemoval, planKey, planStaff } from '../sim/HerdPlans';
 import type { GameState } from '../core/GameState';
 import { t } from '../core/text';
 import { seasonOf } from '../sim/Seasons';
@@ -60,6 +64,8 @@ export function animalPanelContent(
   state: GameState,
   zoneId: string,
   speciesId: string,
+  /** When given, the panel offers herd-plan buttons (Chapter 3+). */
+  dispatch?: (command: Command) => unknown,
 ): PanelContent | null {
   const species = speciesDef(speciesId);
   if (!species) return null;
@@ -73,12 +79,13 @@ export function animalPanelContent(
     lines.push({
       text: t('animal.population', {
         count,
-        change: signedCount(log.births - log.starved - eaten),
+        change: signedCount(log.births - log.starved - eaten - (log.removed ?? 0)),
       }),
     });
     const parts: string[] = [];
     if (log.births) parts.push(t('animal.born', { n: log.births }));
     if (log.starved) parts.push(t('animal.starved', { n: log.starved }));
+    if (log.removed) parts.push(t('animal.removed', { n: log.removed }));
     for (const [predatorId, n] of Object.entries(log.eatenBy)) {
       if (n)
         parts.push(
@@ -123,12 +130,56 @@ export function animalPanelContent(
     lines.push({ text: t('animal.status.stable') });
   }
 
+  const herd = herdPlanSection(state, zoneId, speciesId, dispatch);
   return {
     title: species.name,
     subtitle: zoneDef(zoneId)?.name ?? zoneId,
     portrait: species.spriteKey,
-    lines,
+    lines: [...lines, ...herd.lines],
+    ...(herd.actions.length ? { actions: herd.actions } : {}),
   };
+}
+
+/** Spec §6.4: the herd's management plan, and buttons to change it (Chapter 3+). */
+function herdPlanSection(
+  state: GameState,
+  zoneId: string,
+  speciesId: string,
+  dispatch?: (command: Command) => unknown,
+): { lines: PanelLine[]; actions: NonNullable<PanelContent['actions']> } {
+  if (state.chapter.current < BALANCE.herds.unlockChapter) return { lines: [], actions: [] };
+  const plan = state.herdPlans[planKey(zoneId, speciesId)];
+  const lines: PanelLine[] = [];
+  if (plan) {
+    const staff = planStaff(state, plan);
+    lines.push({ text: t(`herd.plan.${plan.method}`, { target: plan.target }) });
+    if (!staff.has)
+      lines.push({
+        text: t('herd.needsStaff', { role: staffRole(staff.role)?.name ?? staff.role }),
+        warn: true,
+      });
+    else if (plan.method !== 'contraception') {
+      const n = populationOf(state, zoneId, speciesId);
+      lines.push({ text: t('herd.pace', { n: dailyRemoval(state, plan, n) }) });
+    }
+  } else {
+    lines.push({ text: t('herd.noPlan') });
+  }
+  if (!dispatch) return { lines, actions: [] };
+  const set = (method: HerdMethod) => () =>
+    dispatch({ type: 'setHerdPlan', zoneId, speciesId, method });
+  const step = BALANCE.herds.stepSize;
+  const actions: NonNullable<PanelContent['actions']> = [
+    { label: t('herd.cull', { n: step }), onClick: set('cull') },
+    { label: t('herd.relocate', { n: step }), onClick: set('relocate') },
+    { label: t('herd.contraception'), onClick: set('contraception') },
+  ];
+  if (plan)
+    actions.push({
+      label: t('herd.stop'),
+      onClick: () => dispatch({ type: 'cancelHerdPlan', zoneId, speciesId }),
+    });
+  return { lines, actions };
 }
 
 export function zonePanelContent(state: GameState, zoneId: string): PanelContent | null {

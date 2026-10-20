@@ -14,13 +14,25 @@ export function upkeepPerDay(state: GameState): number {
   }, 0);
 }
 
+/**
+ * Base grant plus any story grants switched on by flags (e.g. Amara's research funding from
+ * Chapter 3, D112).
+ */
+export function grantPerDay(state: GameState): number {
+  const cfg = BALANCE.economy;
+  return cfg.storyGrants.reduce(
+    (sum, g) => sum + (state.flags[g.flag] ? g.perDay : 0),
+    cfg.dailyGrant,
+  );
+}
+
 export function wagesPerDay(state: GameState): number {
   return state.staff.reduce((sum, s) => sum + (staffRole(s.role)?.wage ?? 0), 0);
 }
 
 /** Tomorrow's expected money flow if wages get paid (for the HUD "+8/day"). */
 export function expectedLedger(state: GameState): DayLedger {
-  const grant = BALANCE.economy.dailyGrant;
+  const grant = grantPerDay(state);
   const wages = wagesPerDay(state);
   const upkeep = upkeepPerDay(state);
   return { grant, wages, wagesUnpaid: 0, upkeep, net: grant - wages - upkeep };
@@ -44,7 +56,7 @@ function adjustMorale(member: StaffMember, paid: boolean): StaffMember {
 export const runEconomy: SimStep = (state) => {
   const cfg = BALANCE.economy;
   const events: SimEvent[] = [];
-  const grant = cfg.dailyGrant;
+  const grant = grantPerDay(state);
   const upkeep = upkeepPerDay(state);
   const wages = wagesPerDay(state);
 

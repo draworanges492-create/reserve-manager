@@ -1,5 +1,5 @@
-// Spec Phase 7 acceptance: a new player can play from the start to the end of Chapter 2
-// with no dead ends. Drives the real GameSession like an attentive player, trying
+// Spec Phase 7 / Phase 10 acceptance: a new player can play from the start to the end of
+// the last written chapter with no dead ends. Drives the real GameSession like an attentive player, trying
 // different dialogue choices on each run.
 import { describe, expect, it } from 'vitest';
 import { GameSession } from '../../src/core/GameSession';
@@ -15,13 +15,15 @@ const strategies: Record<string, Strategy> = {
   alternate: (o, step) => o[step % o.length],
 };
 const DAY_MS = 120_000;
-const MAX_DAYS = 150;
+const MAX_DAYS = 400;
+/** The chapter whose completion ends the run. */
+const LAST = 3;
 
 function play(strategy: Strategy): GameState {
   const session = new GameSession({ ...newGame(7), playerName: 'Sam' });
   session.beginStory();
   let step = 0;
-  for (let day = 0; day < MAX_DAYS && !session.state.flags.chapter_2_complete; day++) {
+  for (let day = 0; day < MAX_DAYS && !session.state.flags[`chapter_${LAST}_complete`]; day++) {
     // Finish every queued conversation, picking choices by strategy.
     for (let guard = 0; guard < 500 && session.dialogueView; guard++) {
       const offered = session.dialogueView.choices.map((c) => c.index);
@@ -48,16 +50,45 @@ function play(strategy: Strategy): GameState {
           session.dispatch({ type: 'repairFence', segmentId: id });
       }
     }
+    if (session.state.chapter.current >= 3) playChapter3(session);
     // A day passes (if a conversation is waiting it starts instead; the loop above plays it).
     session.update(DAY_MS);
   }
   return session.state;
 }
 
+/** Chapter 3: staff for the chosen plan, push the impala target down, mend and guard the border. */
+function playChapter3(session: GameSession): void {
+  const st = () => session.state;
+  if (st().flags.ch3_plan_chosen) {
+    const method = st().flags.plan_cull
+      ? 'cull'
+      : st().flags.plan_relocate
+        ? 'relocate'
+        : 'contraception';
+    const role = method === 'cull' ? 'culling_team' : 'vet';
+    if (!st().staff.some((s) => s.role === role)) session.dispatch({ type: 'hire', role });
+    const plan = st().herdPlans['plains:impala'];
+    if (!plan || plan.target > 70)
+      session.dispatch({ type: 'setHerdPlan', zoneId: 'plains', speciesId: 'impala', method });
+  }
+  if (st().flags.ch3_border_chosen) {
+    if (st().fences.east_border_w0?.status === 'broken')
+      session.dispatch({ type: 'repairFence', segmentId: 'east_border_w0' });
+    if (st().flags.border_beehive)
+      session.dispatch({ type: 'build', slotId: 'beehive_east', buildingId: 'beehive_fence' });
+  }
+}
+
 function summary(state: GameState): string {
   return JSON.stringify({
     chapter: state.chapter.current,
     day: state.clock.day,
+    flags: Object.keys(state.flags).filter((k) => state.flags[k]),
+    plains: state.populations.plains,
+    veg: state.zones.plains?.vegetation,
+    trust: state.scores.trust,
+    plans: state.herdPlans,
     goalsDone: state.story.goalsDone,
     streaks: state.story.goalStreaks,
     pending: state.story.pendingDialogues,
@@ -65,12 +96,13 @@ function summary(state: GameState): string {
   });
 }
 
-describe('playthrough: start to end of Chapter 2 (Phase 7 acceptance)', () => {
+describe('playthrough: start to end of the last written chapter (Phase 7/10 acceptance)', () => {
   for (const [name, strategy] of Object.entries(strategies)) {
     it(`completes with "${name}" dialogue choices`, () => {
       const state = play(strategy);
       expect(state.flags.chapter_1_complete, summary(state)).toBe(true);
       expect(state.flags.chapter_2_complete, summary(state)).toBe(true);
+      expect(state.flags.chapter_3_complete, summary(state)).toBe(true);
       expect(state.flags.ch2_mystery_solved).toBe(true);
       // Nothing left waiting: every scene that was queued got played.
       expect(state.story.pendingDialogues).toEqual([]);
@@ -84,6 +116,10 @@ describe('playthrough: start to end of Chapter 2 (Phase 7 acceptance)', () => {
           'mystery',
           'pump_running',
           'chapter_2_end',
+          'ch3_wanjiru',
+          'ch3_plan',
+          'ch3_border',
+          'chapter_3_end',
         ]),
       );
     });

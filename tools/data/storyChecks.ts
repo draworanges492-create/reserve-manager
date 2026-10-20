@@ -84,6 +84,20 @@ export function checkStory(content: StoryContent, refs: StoryRefs): string[] {
       case 'zoneOpen':
         if (!zoneIds.includes(c.zoneId)) fail(where, `unknown zone "${c.zoneId}"`);
         return;
+      case 'counterAtLeast':
+      case 'daysInChapter':
+      case 'speciesPresent':
+        return;
+      case 'scoreAtLeast':
+        if (!['ecosystem', 'trust', 'reputation'].includes(c.score))
+          fail(where, `unknown score "${c.score}"`);
+        return;
+      case 'vegetationAtLeast':
+        if (!zoneIds.includes(c.zone)) fail(where, `unknown zone "${c.zone}"`);
+        return;
+      case 'populationAtLeast':
+        if (!refs.species.includes(c.species)) fail(where, `unknown species "${c.species}"`);
+        return;
       case 'not':
         checkCondition(where, c.condition);
         return;
@@ -119,6 +133,11 @@ export function checkStory(content: StoryContent, refs: StoryRefs): string[] {
         return;
       case 'relationship':
         if (!characterIds.includes(e.character)) fail(where, `unknown character "${e.character}"`);
+        return;
+      case 'counter':
+        return;
+      case 'breakFence':
+        if (!refs.fences.includes(e.segmentId)) fail(where, `unknown fence "${e.segmentId}"`);
         return;
       case 'journal':
         if (!journalIds.includes(e.entry))

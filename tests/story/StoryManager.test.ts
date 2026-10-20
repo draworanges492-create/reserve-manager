@@ -6,8 +6,10 @@ import {
   afterDialogue,
   evaluateStory,
   fencesBlocking,
+  lastChapterId,
   startChapter,
 } from '../../src/story/StoryManager';
+import { chapterDef } from '../../src/story/content';
 import { visibleClues } from '../../src/story/storyCommands';
 import { must, newGame, withLevel } from '../helpers/newGame';
 
@@ -62,10 +64,11 @@ describe('goals', () => {
   });
 
   it('after the last written chapter, keeps playing without advancing', () => {
-    const state = { ...begin(), chapter: { current: 2 } };
-    const after = afterDialogue(state, 'ch02_complete').state;
-    expect(after.chapter.current).toBe(2);
-    expect(after.flags).toMatchObject({ chapter_2_complete: true, story_paused: true });
+    const last = lastChapterId();
+    const state = { ...begin(), chapter: { current: last, startDay: 0 } };
+    const after = afterDialogue(state, must(chapterDef(last)).completionDialogue).state;
+    expect(after.chapter.current).toBe(last);
+    expect(after.flags).toMatchObject({ [`chapter_${last}_complete`]: true, story_paused: true });
   });
 });
 

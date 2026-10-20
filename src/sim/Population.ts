@@ -3,6 +3,7 @@ import { BALANCE } from '../config/balance';
 import { SPECIES, type SpeciesDef } from '../core/content';
 import type { GameState, PopulationChange } from '../core/GameState';
 import type { Rng } from '../core/Rng';
+import { birthFactor } from './HerdPlans';
 import { zoneHasWater } from './Water';
 import type { SimEvent, SimStep } from './types';
 
@@ -86,7 +87,8 @@ function expectedChange(
       eatenBy[predatorId] = predators * killsPerPredator(predator, species.id, n);
   }
   return {
-    births: Math.max(0, growth),
+    // A contraception plan slows births (spec §6.4).
+    births: Math.max(0, growth) * birthFactor(state, zoneId, species.id),
     starved: Math.max(0, -growth) + overshoot,
     eatenBy,
     capacity,

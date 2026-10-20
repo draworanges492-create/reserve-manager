@@ -62,6 +62,19 @@ function applyOne(state: GameState, e: Effect, events: SimEvent[]): GameState {
       const next = Math.max(-RELATIONSHIP_LIMIT, Math.min(RELATIONSHIP_LIMIT, current + e.value));
       return { ...state, relationships: { ...state.relationships, [e.character]: next } };
     }
+    case 'counter':
+      return {
+        ...state,
+        counters: { ...state.counters, [e.counter]: (state.counters[e.counter] ?? 0) + e.value },
+      };
+    case 'breakFence': {
+      const fence = state.fences[e.segmentId];
+      if (!fence) return state;
+      return {
+        ...state,
+        fences: { ...state.fences, [e.segmentId]: { ...fence, status: 'broken', daysLeft: 0 } },
+      };
+    }
     case 'journal':
       if (state.journal.some((j) => j.entryId === e.entry)) return state;
       events.push({ type: 'journalAdded', payload: { entryId: e.entry } });

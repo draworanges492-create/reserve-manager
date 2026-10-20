@@ -49,7 +49,13 @@
     "upkeepRate": 0.05,
     "upkeepPeriodDays": 30,
     "cancelRefund": 0.5,
-    "netHistoryDays": 30
+    "netHistoryDays": 30,
+    "storyGrants": [
+      {
+        "flag": "ch3_counted",
+        "perDay": 60
+      }
+    ]
   },
   "fences": {
     "repairCost": 20,
@@ -80,6 +86,30 @@
   },
   "story": {
     "startChapter": 1
+  },
+  "herds": {
+    "unlockChapter": 3,
+    "stepSize": 10,
+    "cullPerTeamPerDay": 4,
+    "relocatePerVetPerDay": 2,
+    "relocateCostPerAnimal": 15,
+    "contraceptionCostPerDay": 6,
+    "contraceptionBirthFactor": 0.5,
+    "cullTrustPerAnimal": 0.3,
+    "cullReputationPerAnimal": 0.2,
+    "relocateTrustPerAnimal": 0.1,
+    "relocateReputationPerAnimal": 0.15
+  },
+  "cropRaids": {
+    "baseChance": 0.12,
+    "hungryMult": 1.5,
+    "hungryBelow": 45,
+    "fenceMult": 0.4,
+    "cooldownDays": 3,
+    "breakFenceChance": 0.5,
+    "trustLoss": 4,
+    "compensationCost": 60,
+    "compensatedTrustLoss": 1
   },
   "render": {
     "maxAnimalSpritesPerZone": 12,

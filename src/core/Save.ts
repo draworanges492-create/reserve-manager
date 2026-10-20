@@ -83,6 +83,19 @@ const MIGRATIONS: Record<number, Migration> = {
     populations.plains = plains;
     return { ...s, version: 4, populations };
   },
+  // v5 (Phase 10): when the chapter began, herd plans and story counters.
+  4: (s) => {
+    const clock = (s.clock ?? {}) as { day?: number };
+    const chapter = (s.chapter ?? {}) as { current?: number; startDay?: number };
+    return {
+      ...s,
+      version: 5,
+      // Unknown for old saves: count the current chapter as starting today.
+      chapter: { current: chapter.current ?? 1, startDay: chapter.startDay ?? clock.day ?? 0 },
+      herdPlans: s.herdPlans ?? {},
+      counters: s.counters ?? {},
+    };
+  },
 };
 
 export function summarize(state: GameState, savedAt: string): SaveSummary {

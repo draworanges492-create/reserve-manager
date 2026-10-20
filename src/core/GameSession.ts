@@ -42,6 +42,7 @@ export class GameSession {
   }
 
   update(realDeltaMs: number): void {
+    this.resumeStory();
     if (!this.dialogue) this.startPendingDialogue();
     const playTimeSeconds = this.current.meta.playTimeSeconds + realDeltaMs / 1000;
     this.current = { ...this.current, meta: { ...this.current.meta, playTimeSeconds } };
@@ -115,11 +116,30 @@ export class GameSession {
   }
 
   /**
+   * A save made when the story ran out (end of the last written chapter) picks the story
+   * up again once a newer version of the game has the next chapter.
+   */
+  private resumeStory(): void {
+    const { flags, chapter } = this.current;
+    if (!flags.story_paused || !chapterDef(chapter.current + 1)) return;
+    const { state, events } = startChapter(
+      { ...this.current, flags: { ...flags, story_paused: false } },
+      chapter.current + 1,
+    );
+    this.current = state;
+    this.publish(events);
+  }
+
+  /**
    * Dev tools only (debug overlay / console): jump chapters, add money. Not a player
-   * command, so it skips validation; announces zone changes so the map redraws.
+   * command, so it skips validation; announces zone changes so the map redraws. The
+   * chapter starts properly (intro scene, goals) so it can be played from there.
    */
   debugJumpToChapter(chapter: number): void {
     this.current = debugSetChapter(this.current, chapter);
+    const { state, events } = startChapter(this.current, chapter);
+    this.current = state;
+    this.publish(events);
     eventBus.emit('zonesChanged', {});
   }
 

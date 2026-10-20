@@ -1,5 +1,6 @@
+import { withWorldUpdates } from '../../src/core/GameState';
 import { describe, expect, it } from 'vitest';
-import { newGame } from '../helpers/newGame';
+import { newGame, WORLD } from '../helpers/newGame';
 
 describe('createGameState', () => {
   const state = newGame(123, 'Sam');
@@ -28,5 +29,18 @@ describe('starting populations', () => {
     expect(newGame().populations).toEqual({
       plains: { impala: 80, zebra: 24, lion: 4, elephant: 6, hyena: 5, vulture: 8 },
     });
+  });
+});
+
+describe('withWorldUpdates', () => {
+  it('adds build slots and fences that are new on the map, keeping everything else', () => {
+    const current = newGame();
+    const oldSlots = Object.fromEntries(
+      Object.entries(current.slots).filter(([id]) => id !== 'beehive_east'),
+    );
+    const old = { ...current, slots: oldSlots };
+    const updated = withWorldUpdates(old, WORLD);
+    expect(updated.slots.beehive_east).toEqual({ ...WORLD.slots.beehive_east, building: null });
+    expect(updated).toEqual(current);
   });
 });

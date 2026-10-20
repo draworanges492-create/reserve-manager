@@ -11,9 +11,10 @@ import type { TileRect, WorldLayout } from './WorldLayout';
 /**
  * Bump when the saved shape changes, and add a migration in core/Save.ts.
  * v1: up to Phase 7 · v2: adds meta.playTimeSeconds · v3: adds encyclopedia ·
- * v4: elephants, hyenas and vultures join the reserve (D107).
+ * v4: elephants, hyenas and vultures join the reserve (D107) ·
+ * v5: chapter.startDay, herd plans and counters (Phase 10).
  */
-export const STATE_VERSION = 4;
+export const STATE_VERSION = 5;
 
 export interface ClockState {
   /** Days elapsed since the start, from 0. Calendar values derive from this (sim/Seasons). */
@@ -121,6 +122,19 @@ export interface PopulationChange {
   eatenBy: Record<string, number>;
   /** Carrying capacity used that day. */
   capacity: number;
+  /** Animals removed by a herd plan that day (culled or relocated). */
+  removed?: number;
+}
+
+export type HerdMethod = 'cull' | 'relocate' | 'contraception';
+
+/** Spec §6.4: a management plan for one herd, worked through day by day by the staff. */
+export interface HerdPlan {
+  zoneId: string;
+  speciesId: string;
+  method: HerdMethod;
+  /** The plan ends once the herd is at or below this many. */
+  target: number;
 }
 
 export type PumpState = 'none' | 'working' | 'broken';
@@ -144,7 +158,8 @@ export interface GameState {
   rngState: number;
   playerName: string;
   clock: ClockState;
-  chapter: { current: number };
+  /** `startDay`: the day the current chapter began (for "a few days in" story beats). */
+  chapter: { current: number; startDay: number };
   zones: Record<string, ZoneState>;
   waterholes: Record<string, WaterholeState>;
   /** Animal counts per zone, then per species: populations[zoneId][speciesId]. */
@@ -174,6 +189,10 @@ export interface GameState {
   /** Spec §6.8, each 0–100. */
   scores: Record<ScoreId, number>;
   scoreHistory: ScoreChange[];
+  /** Spec §6.4 herd plans, keyed `${zoneId}:${speciesId}`. */
+  herdPlans: Record<string, HerdPlan>;
+  /** Running tallies the story and events read (crop raids, animals relocated, …). */
+  counters: Record<string, number>;
 }
 
 export interface NewGameOptions {
@@ -204,7 +223,7 @@ function baseState({ seed, world, playerName = '', speed = 1 }: NewGameOptions):
     rngState: seed >>> 0,
     playerName,
     clock: { day: 0, dayProgress: 0, speed, paused: false },
-    chapter: { current: chapter },
+    chapter: { current: chapter, startDay: 0 },
     zones: Object.fromEntries(
       zonesData.zones.map((z) => {
         const rect = rectOf(z.id);
@@ -261,6 +280,8 @@ function baseState({ seed, world, playerName = '', speed = 1 }: NewGameOptions):
       reputation: BALANCE.scores.reputationStart,
     },
     scoreHistory: [],
+    herdPlans: {},
+    counters: {},
   };
 }
 
@@ -272,4 +293,18 @@ function startingPopulations(): GameState['populations'] {
     }
   }
   return populations;
+}
+
+/**
+ * A save made with an older map lacks build slots and fences added since (e.g. the beehive
+ * fence spot in Phase 10). Add any that are missing, empty / broken; nothing is removed.
+ */
+export function withWorldUpdates(state: GameState, world: WorldLayout): GameState {
+  const slots = { ...state.slots };
+  for (const [id, slot] of Object.entries(world.slots))
+    if (!(id in slots)) slots[id] = { ...slot, building: null };
+  const fences = { ...state.fences };
+  for (const [id, f] of Object.entries(world.fences))
+    if (!(id in fences)) fences[id] = { ...f, status: 'broken', daysLeft: 0 };
+  return { ...state, slots, fences };
 }

@@ -12,7 +12,7 @@ const PAD = 6;
 const PORTRAIT = 40;
 const CLOSE_SIZE = 14;
 const LINE_GAP = 2;
-const MAX_LINES = 8;
+const MAX_LINES = 10;
 const ACTION_H = 14;
 export const WARN_COLOR = '#ff9b7a';
 
@@ -133,8 +133,9 @@ export class InfoPanel {
       this.actionSignature = signature;
       for (const b of this.actions) b.destroy();
       this.actions = actions.map((a, i) => {
-        const button = new Button(this.scene, PAD + i * 90, 0, {
-          width: 86,
+        // Two buttons per row; more wrap onto further rows.
+        const button = new Button(this.scene, PAD + (i % 2) * 106, 0, {
+          width: 102,
           height: ACTION_H,
           label: a.label,
           onClick: () => a.onClick(),
@@ -144,8 +145,8 @@ export class InfoPanel {
       });
     }
     if (!this.actions.length) return y - PAD;
-    for (const b of this.actions) b.setY(y);
-    return y + ACTION_H + LINE_GAP;
+    this.actions.forEach((b, i) => b.setY(y + Math.floor(i / 2) * (ACTION_H + LINE_GAP)));
+    return y + Math.ceil(this.actions.length / 2) * (ACTION_H + LINE_GAP);
   }
 
   /** Shows a crisp (whole-number scaled) portrait; returns where text should start. */

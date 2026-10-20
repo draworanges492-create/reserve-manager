@@ -95,6 +95,66 @@
       "chapter": 2,
       "title": "Two letters",
       "text": "An ecologist wants to count our impala. And someone called V. Hale wants to be our partner."
+    },
+    {
+      "id": "chapter_3_start",
+      "chapter": 3,
+      "title": "Too many mouths",
+      "text": "Water brought the herds back. Now there are more impala than the plains can feed."
+    },
+    {
+      "id": "ch3_amara",
+      "chapter": 3,
+      "title": "Dr. Okafor",
+      "text": "Amara arrived with a clipboard and two tally counters. She counts everything, including my mistakes."
+    },
+    {
+      "id": "ch3_wanjiru",
+      "chapter": 3,
+      "title": "Wanjiru",
+      "text": "Our elephants ate three families' maize. Wanjiru came to the gate and told me exactly what she thought of that."
+    },
+    {
+      "id": "ch3_plan",
+      "chapter": 3,
+      "title": "The plan",
+      "text": "We argued until midnight about the impala. I made the call. Now I have to live with it."
+    },
+    {
+      "id": "ch3_border",
+      "chapter": 3,
+      "title": "The village",
+      "text": "I walked to the village and gave Wanjiru my answer. She said her people watch what we do, not what we say."
+    },
+    {
+      "id": "ch3_plan_done",
+      "chapter": 3,
+      "title": "Down to size",
+      "text": "The impala are down to what the land can carry. The grass has a chance now."
+    },
+    {
+      "id": "ch3_snare",
+      "chapter": 3,
+      "title": "New wire",
+      "text": "Tendai found a line of snares in the woodland. New wire. Somebody is organised, and somebody is paying."
+    },
+    {
+      "id": "chapter_3_end",
+      "chapter": 3,
+      "title": "A season's work",
+      "text": "Green at the edges again. Amara is staying. Tendai says it's time for visitors."
+    },
+    {
+      "id": "zone_woodland",
+      "chapter": 3,
+      "title": "The woodland",
+      "text": "The woodland fence is mended. Shade, birdsong, and a lot of places to hide."
+    },
+    {
+      "id": "zone_east_border",
+      "chapter": 3,
+      "title": "The eastern border",
+      "text": "The east side of the reserve is open again, right up to the village fields."
     }
   ]
 }

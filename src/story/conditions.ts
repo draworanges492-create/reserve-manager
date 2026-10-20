@@ -2,6 +2,19 @@
 import type { GameState } from '../core/GameState';
 import type { Condition } from './types';
 
+/** Animals of a species across every zone. */
+export function totalOf(state: GameState, speciesId: string): number {
+  return Object.values(state.populations).reduce((n, herd) => n + (herd[speciesId] ?? 0), 0);
+}
+
+/** How many species have at least one animal in the reserve. */
+export function speciesPresent(state: GameState): number {
+  const present = new Set<string>();
+  for (const herd of Object.values(state.populations))
+    for (const [id, n] of Object.entries(herd)) if (n > 0) present.add(id);
+  return present.size;
+}
+
 export function holds(state: GameState, c: Condition): boolean {
   switch (c.op) {
     case 'flag':
@@ -33,6 +46,18 @@ export function holds(state: GameState, c: Condition): boolean {
       );
     case 'netPositive':
       return (state.economy.lastDay?.net ?? 0) > 0;
+    case 'vegetationAtLeast':
+      return (state.zones[c.zone]?.vegetation ?? 0) >= c.min;
+    case 'scoreAtLeast':
+      return state.scores[c.score] >= c.min;
+    case 'counterAtLeast':
+      return (state.counters[c.counter] ?? 0) >= c.min;
+    case 'daysInChapter':
+      return state.clock.day - state.chapter.startDay >= c.min;
+    case 'speciesPresent':
+      return speciesPresent(state) >= c.min;
+    case 'populationAtLeast':
+      return totalOf(state, c.species) >= c.min;
     case 'not':
       return !holds(state, c.condition);
   }

@@ -363,3 +363,21 @@ The player's save was backed up before testing and restored afterwards.
 **Known issues**
 
 - Vultures stand on the ground; no circling flight yet.
+
+## Phase 10 — Chapter 3 "Too Many Mouths" ✅ (2026-10-20)
+
+**Done**
+
+- Herd management (D113): cull / relocate / contraception plans per herd, worked by a
+  culling team or vet; herd panel buttons and status; births halved by contraception.
+- Elephant crop raids (D111), compensation policy, beehive fence (new building, slot and
+  art), raid alerts.
+- Story: Chapter 3 script (D115), research grant (D112), new story conditions
+  (`vegetationAtLeast`, `scoreAtLeast`, `counterAtLeast`, `daysInChapter`,
+  `speciesPresent`, `populationAtLeast`) and effects (`counter`, `breakFence`).
+- Saves: state v5; older saves gain new map slots and continue the story (D114).
+
+**Checks:** `build` ✅ · `test` ✅ (201, including the playthrough to the end of Chapter 3
+with three choice strategies) · `lint` ✅ · `validate-data` ✅ · browser: Chapter 3 intro →
+count → first raid → plan and border choices; herd panel with plan buttons; beehive fence
+built; 0 console errors. The player's save was backed up and restored.

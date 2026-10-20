@@ -43,7 +43,9 @@ export type AlertEvent =
   | EventOf<'seasonChanged'>
   | EventOf<'goalCompleted'>
   | EventOf<'journalAdded'>
-  | EventOf<'encyclopediaUnlocked'>;
+  | EventOf<'encyclopediaUnlocked'>
+  | EventOf<'cropRaid'>
+  | EventOf<'herdPlanDone'>;
 
 /** Info alerts fade after this many in-game days; warnings stay until resolved or dismissed. */
 export const INFO_LIFETIME_DAYS = 2;
@@ -190,6 +192,35 @@ export function alertFor(state: GameState, event: AlertEvent): AlertChange | nul
           key: `enc:${event.payload.speciesId}`,
           severity: 'info',
           text: t('alert.encyclopedia', { name }),
+          day,
+        },
+      };
+    }
+    case 'cropRaid': {
+      const { compensated, fenceBroken } = event.payload;
+      const text = t(compensated ? 'alert.cropRaidPaid' : 'alert.cropRaid');
+      return {
+        add: {
+          key: 'cropRaid',
+          severity: 'warning',
+          text: fenceBroken ? `${text} ${t('alert.fenceBrokenByElephants')}` : text,
+          focus: { x: 84, y: 50 },
+          day,
+        },
+      };
+    }
+    case 'herdPlanDone': {
+      const { zoneId, speciesId, method } = event.payload;
+      return {
+        add: {
+          key: `plan:${zoneId}:${speciesId}`,
+          severity: 'info',
+          text: t(`alert.planDone.${method}`, {
+            species: speciesDef(speciesId)?.plural ?? speciesId,
+            zone: zoneDef(zoneId)?.name ?? zoneId,
+          }),
+          focus: zoneCentre(state, zoneId),
+          target: { kind: 'animal', zoneId, speciesId },
           day,
         },
       };

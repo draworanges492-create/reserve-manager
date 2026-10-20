@@ -17,6 +17,16 @@ export type Condition =
   | { op: 'goalStreak'; goalId: string; min: number }
   /** Yesterday's money in exceeded money out. */
   | { op: 'netPositive' }
+  /** Phase 10+: land, scores, tallies and pacing. */
+  | { op: 'vegetationAtLeast'; zone: string; min: number }
+  | { op: 'scoreAtLeast'; score: 'ecosystem' | 'trust' | 'reputation'; min: number }
+  | { op: 'counterAtLeast'; counter: string; min: number }
+  /** Whole days since the current chapter began. */
+  | { op: 'daysInChapter'; min: number }
+  /** Species with at least one animal anywhere in the reserve. */
+  | { op: 'speciesPresent'; min: number }
+  /** Animals of one species across all zones. */
+  | { op: 'populationAtLeast'; species: string; min: number }
   | { op: 'not'; condition: Condition };
 
 /**
@@ -35,7 +45,10 @@ export type Effect =
   | { op: 'unlockZone'; zone: string }
   | { op: 'spawnEvent'; id: string }
   | { op: 'relationship'; character: string; value: number }
-  | { op: 'journal'; entry: string };
+  | { op: 'journal'; entry: string }
+  /** Phase 10+: add to a story tally; knock a fence down (e.g. elephants break through). */
+  | { op: 'counter'; counter: string; value: number }
+  | { op: 'breakFence'; segmentId: string };
 
 export type Expression = 'neutral' | 'happy' | 'worried' | 'angry';
 

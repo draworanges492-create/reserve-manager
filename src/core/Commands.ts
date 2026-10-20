@@ -6,7 +6,8 @@ import type { SimEvent } from '../sim/types';
 import { clampLevel, waterVisualState } from '../sim/Water';
 import { assignStaff, build, cancelBuild, dismissStaff, hire, repairFence } from './buildCommands';
 import { examineClue, recordSighting } from '../story/storyCommands';
-import type { GameState } from './GameState';
+import type { GameState, HerdMethod } from './GameState';
+import { cancelHerdPlan, setHerdPlan } from './herdCommands';
 import type { StringKey } from './text';
 
 export type Command =
@@ -22,7 +23,10 @@ export type Command =
   | { type: 'dismissStaff'; staffId: string }
   | { type: 'repairFence'; segmentId: string }
   | { type: 'examineClue'; clueId: string }
-  | { type: 'recordSighting'; speciesId: string };
+  | { type: 'recordSighting'; speciesId: string }
+  /** Spec §6.4 herd management (Chapter 3+). */
+  | { type: 'setHerdPlan'; zoneId: string; speciesId: string; method: HerdMethod }
+  | { type: 'cancelHerdPlan'; zoneId: string; speciesId: string };
 
 export type CommandResult =
   { ok: true; state: GameState; events: SimEvent[] } | { ok: false; reason: StringKey };
@@ -84,5 +88,9 @@ export function applyCommand(state: GameState, command: Command): CommandResult 
       return examineClue(state, command.clueId);
     case 'recordSighting':
       return recordSighting(state, command.speciesId);
+    case 'setHerdPlan':
+      return setHerdPlan(state, command.zoneId, command.speciesId, command.method);
+    case 'cancelHerdPlan':
+      return cancelHerdPlan(state, command.zoneId, command.speciesId);
   }
 }

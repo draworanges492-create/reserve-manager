@@ -2,7 +2,9 @@
 import type { GameState } from '../core/GameState';
 import { Rng } from '../core/Rng';
 import { runConstruction } from './Construction';
+import { runCropRaids } from './CropRaids';
 import { runEconomy } from './Economy';
+import { runHerdPlans } from './HerdPlans';
 import { runPopulation } from './Population';
 import { runStory } from '../story/StoryManager';
 import { runScores } from './Scores';
@@ -15,7 +17,8 @@ import type { SimEvent, SimStep, StepResult } from './types';
  * Spec §4 order: 1 Seasons → 2 Water → 3 Vegetation → 4 Population → 5 Culling →
  * 6 Poaching → 7 Tourism → 8 Economy → 9 Scores → 10 Events → 11 Story → 12 Autosave
  * (autosave is done by GameSession, outside the pure tick).
- * Steps are added here as their phases land. Construction progress runs just before
+ * Steps are added here as their phases land: herd plans (step 5) and crop raids (part of
+ * step 10, Events) arrived in Phase 10. Construction progress runs just before
  * Economy so a building finished today already costs upkeep.
  */
 const STEPS: readonly SimStep[] = [
@@ -23,9 +26,11 @@ const STEPS: readonly SimStep[] = [
   runWater,
   runVegetation,
   runPopulation,
+  runHerdPlans,
   runConstruction,
   runEconomy,
   runScores,
+  runCropRaids,
   runStory,
 ];
 

@@ -52,6 +52,8 @@ const ALERT_EVENTS: AlertEvent['type'][] = [
   'goalCompleted',
   'journalAdded',
   'encyclopediaUnlocked',
+  'cropRaid',
+  'herdPlanDone',
 ];
 
 type Menu = 'build' | 'staff' | 'species' | 'journal' | 'settings';
@@ -426,7 +428,7 @@ export class UIScene extends Phaser.Scene {
     const state = this.session.state;
     if (selection.kind === 'animal') {
       const { zoneId, speciesId } = selection.group;
-      this.infoPanel.show((s) => animalPanelContent(s, zoneId, speciesId), state);
+      this.infoPanel.show((s) => animalPanelContent(s, zoneId, speciesId, dispatch), state);
     } else if (selection.kind === 'zone') {
       this.infoPanel.show((s) => zonePanelContent(s, selection.zoneId), state);
     } else {

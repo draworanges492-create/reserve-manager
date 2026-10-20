@@ -1,6 +1,6 @@
 // Starting, loading and leaving a game: wires a GameSession to the scenes and to autosave.
 import type Phaser from 'phaser';
-import { createGameState, type GameState } from '../core/GameState';
+import { createGameState, type GameState, withWorldUpdates } from '../core/GameState';
 import { GameSession } from '../core/GameSession';
 import { localSaveStore, readSlot, type SlotId, writeSlot } from '../core/Save';
 import { getSettings } from '../core/Settings';
@@ -34,13 +34,16 @@ function run(scene: Phaser.Scene, state: GameState, fresh: boolean): void {
   scene.scene.launch('DialogueScene');
 }
 
+function worldOf(scene: Phaser.Scene): ReturnType<typeof readWorldLayout> {
+  return readWorldLayout((scene.cache.tilemap.get('reserve') as { data: TiledMap }).data);
+}
+
 export function startNewGame(scene: Phaser.Scene, playerName: string): void {
-  const tmj = (scene.cache.tilemap.get('reserve') as { data: TiledMap }).data;
   // Wall-clock seeding is fine here: only the sim must be deterministic, given its seed.
   const seed = (Date.now() ^ Math.floor(Math.random() * 0xffffffff)) >>> 0;
   const state = createGameState({
     seed,
-    world: readWorldLayout(tmj),
+    world: worldOf(scene),
     playerName,
     speed: getSettings().defaultSpeed,
   });
@@ -50,7 +53,7 @@ export function startNewGame(scene: Phaser.Scene, playerName: string): void {
 /** Load a slot; returns the error if it can't be loaded. */
 export function loadGame(scene: Phaser.Scene, slot: SlotId): ReturnType<typeof readSlot> {
   const result = readSlot(localSaveStore(), slot);
-  if (result.ok) run(scene, result.state, false);
+  if (result.ok) run(scene, withWorldUpdates(result.state, worldOf(scene)), false);
   return result;
 }
 

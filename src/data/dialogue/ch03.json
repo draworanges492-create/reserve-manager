@@ -1,0 +1,943 @@
+{
+  "dialogues": [
+    {
+      "id": "ch03_intro",
+      "nodes": {
+        "start": {
+          "speaker": "narrator",
+          "text": "Chapter 3: Too Many Mouths.",
+          "next": "n1"
+        },
+        "n1": {
+          "speaker": "narrator",
+          "text": "The rains came and went. With water in the ground again, the herds did what herds do.",
+          "effects": [
+            {
+              "op": "population",
+              "species": "impala",
+              "zone": "plains",
+              "value": 60
+            },
+            {
+              "op": "vegetation",
+              "zone": "plains",
+              "value": -25
+            }
+          ],
+          "next": "n2"
+        },
+        "n2": {
+          "speaker": "tendai",
+          "portrait": "worried",
+          "text": "Look at them, {player}. Impala from fence to fence. A year ago I would have wept for joy.",
+          "focus": {
+            "x": 56,
+            "y": 46
+          },
+          "next": "n3"
+        },
+        "n3": {
+          "speaker": "tendai",
+          "portrait": "worried",
+          "text": "Now look at the grass. You can see the ground through it.",
+          "next": "n4"
+        },
+        "n4": {
+          "speaker": "narrator",
+          "text": "A dusty car rattles up to the gate. A woman climbs out with a clipboard, binoculars and a sun hat that has seen better decades.",
+          "focus": {
+            "x": 57,
+            "y": 76
+          },
+          "next": "n5"
+        },
+        "n5": {
+          "speaker": "amara",
+          "portrait": "happy",
+          "text": "Dr. Amara Okafor. I wrote to you. I have been counting your impala from the road for the last ten kilometres.",
+          "effects": [
+            {
+              "op": "relationship",
+              "character": "amara",
+              "value": 5
+            },
+            {
+              "op": "journal",
+              "entry": "ch3_amara"
+            }
+          ],
+          "next": "n6"
+        },
+        "n6": {
+          "speaker": "amara",
+          "portrait": "worried",
+          "text": "I lost count somewhere after a hundred and twenty.",
+          "next": "n7"
+        },
+        "n7": {
+          "speaker": "player",
+          "text": "…",
+          "choices": [
+            {
+              "text": "Welcome. We could use the help.",
+              "next": "help",
+              "effects": [
+                {
+                  "op": "relationship",
+                  "character": "amara",
+                  "value": 5
+                }
+              ]
+            },
+            {
+              "text": "That many? Is that bad?",
+              "next": "bad"
+            }
+          ]
+        },
+        "help": {
+          "speaker": "amara",
+          "portrait": "happy",
+          "text": "Good. Then we start with numbers, not feelings.",
+          "next": "count"
+        },
+        "bad": {
+          "speaker": "amara",
+          "text": "On land this size, with grass this thin? It is a lot. Let us count properly before anyone panics.",
+          "next": "count"
+        },
+        "count": {
+          "speaker": "amara",
+          "text": "Tomorrow at first light, we count. Every herd. Then we decide what to do.",
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch03_count",
+      "nodes": {
+        "start": {
+          "speaker": "narrator",
+          "text": "Dawn. Amara walks the plains with a tally counter in each hand.",
+          "focus": {
+            "x": 52,
+            "y": 44
+          },
+          "next": "n1"
+        },
+        "n1": {
+          "speaker": "amara",
+          "text": "Click on a herd and you will see what I see: how many there are, how many the land can feed, and why the number moved yesterday.",
+          "next": "n2"
+        },
+        "n2": {
+          "speaker": "amara",
+          "portrait": "worried",
+          "text": "The plains can feed maybe eighty impala right now. You have far more. Some will starve, and they will take the grass down with them.",
+          "next": "n3"
+        },
+        "n3": {
+          "speaker": "tendai",
+          "text": "The lions and the hyenas take their share. They always have.",
+          "next": "n4"
+        },
+        "n4": {
+          "speaker": "amara",
+          "text": "They do. But a few lions cannot eat their way through a boom this size. Not fast enough to save the grass.",
+          "next": "n5"
+        },
+        "n5": {
+          "speaker": "tendai",
+          "portrait": "angry",
+          "text": "So it is guns, is it? I spent eight years keeping guns out of this place.",
+          "next": "n6"
+        },
+        "n6": {
+          "speaker": "amara",
+          "text": "I did not say guns. I said we need a plan. There is more than one kind.",
+          "next": "n7"
+        },
+        "n7": {
+          "speaker": "amara",
+          "portrait": "happy",
+          "text": "One good thing: my university pays a research grant while I work here. Sixty a day. Spend it on people who can carry out a plan.",
+          "next": "n8"
+        },
+        "n8": {
+          "speaker": "narrator",
+          "text": "Before anyone can say more, a ranger’s radio crackles. Something about the east fence. Something about elephants.",
+          "effects": [
+            {
+              "op": "setFlag",
+              "flag": "ch3_counted"
+            },
+            {
+              "op": "setFlag",
+              "flag": "raids_active"
+            }
+          ],
+          "next": "n9"
+        },
+        "n9": {
+          "speaker": "tendai",
+          "portrait": "worried",
+          "text": "That will be the village fields. I will go and look. You had better come too, tomorrow.",
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch03_first_raid",
+      "nodes": {
+        "start": {
+          "speaker": "narrator",
+          "text": "By noon there is a crowd at the main gate.",
+          "focus": {
+            "x": 57,
+            "y": 77
+          },
+          "next": "n1"
+        },
+        "n1": {
+          "speaker": "narrator",
+          "text": "At the front stands a tall woman in a bright headwrap, arms folded.",
+          "next": "n2"
+        },
+        "n2": {
+          "speaker": "wanjiru",
+          "portrait": "angry",
+          "text": "You are Ruth’s grandchild. I am Wanjiru. I speak for the village on your eastern side.",
+          "effects": [
+            {
+              "op": "journal",
+              "entry": "ch3_wanjiru"
+            }
+          ],
+          "next": "n3"
+        },
+        "n3": {
+          "speaker": "wanjiru",
+          "portrait": "angry",
+          "text": "Last night your elephants walked through your fence and ate half a season of maize. Three families’ fields. Gone.",
+          "next": "n4"
+        },
+        "n4": {
+          "speaker": "wanjiru",
+          "text": "When Ruth was alive, we had an understanding. Since she died, nobody answers for anything that comes out of this reserve.",
+          "next": "n5"
+        },
+        "n5": {
+          "speaker": "player",
+          "text": "…",
+          "choices": [
+            {
+              "text": "I’m sorry. We will make this right.",
+              "next": "sorry",
+              "effects": [
+                {
+                  "op": "relationship",
+                  "character": "wanjiru",
+                  "value": 5
+                },
+                {
+                  "op": "trust",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "text": "Elephants are wild animals. We can’t control them.",
+              "next": "wild",
+              "effects": [
+                {
+                  "op": "relationship",
+                  "character": "wanjiru",
+                  "value": -8
+                }
+              ]
+            },
+            {
+              "text": "What was Ruth’s understanding?",
+              "next": "ruth",
+              "effects": [
+                {
+                  "op": "relationship",
+                  "character": "wanjiru",
+                  "value": 3
+                }
+              ]
+            }
+          ]
+        },
+        "sorry": {
+          "speaker": "wanjiru",
+          "text": "Sorry fills no granary. But it is a start.",
+          "next": "end"
+        },
+        "wild": {
+          "speaker": "wanjiru",
+          "portrait": "angry",
+          "text": "Then why keep them behind a fence at all? Either they are yours, or they are not.",
+          "next": "end"
+        },
+        "ruth": {
+          "speaker": "wanjiru",
+          "text": "She mended fences. She gave our young people work. And when her animals ate our crops, she paid. Every time.",
+          "next": "end"
+        },
+        "end": {
+          "speaker": "wanjiru",
+          "text": "Come to the village when you have a real answer. I will not come to this gate twice.",
+          "effects": [
+            {
+              "op": "setFlag",
+              "flag": "ch3_met_wanjiru"
+            }
+          ],
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch03_argument",
+      "nodes": {
+        "start": {
+          "speaker": "narrator",
+          "text": "That evening the office is crowded. Tendai leans by the door, Amara spreads maps across Ruth’s desk.",
+          "focus": {
+            "x": 51,
+            "y": 73
+          },
+          "next": "n1"
+        },
+        "n1": {
+          "speaker": "amara",
+          "text": "Two problems. The impala are eating the plains bare, and the elephants are leaving to eat the village. They are connected: hungry elephants wander.",
+          "next": "n2"
+        },
+        "n2": {
+          "speaker": "amara",
+          "text": "For the impala, I would cull. Quickly, properly, and the meat goes to the village. It is what the numbers say.",
+          "next": "n3"
+        },
+        "n3": {
+          "speaker": "tendai",
+          "portrait": "angry",
+          "text": "Numbers. Ruth never shot an animal in thirty years.",
+          "next": "n4"
+        },
+        "n4": {
+          "speaker": "tendai",
+          "text": "Move them. There are reserves up north that would take impala. Or let the predators do their work, and give it time.",
+          "next": "n5"
+        },
+        "n5": {
+          "speaker": "amara",
+          "text": "Moving animals costs money and needs a vet. Contraception is slow, but it is kind. Culling is fast. It is not kind.",
+          "next": "n6"
+        },
+        "n6": {
+          "speaker": "amara",
+          "text": "It is your reserve, {player}. Whatever you choose, I will help you do it well.",
+          "next": "n7"
+        },
+        "n7": {
+          "speaker": "player",
+          "text": "…",
+          "choices": [
+            {
+              "text": "We cull. The meat goes to the village.",
+              "next": "cull",
+              "effects": [
+                {
+                  "op": "setFlag",
+                  "flag": "plan_cull"
+                },
+                {
+                  "op": "relationship",
+                  "character": "amara",
+                  "value": 8
+                },
+                {
+                  "op": "relationship",
+                  "character": "tendai",
+                  "value": -8
+                },
+                {
+                  "op": "relationship",
+                  "character": "wanjiru",
+                  "value": 4
+                }
+              ]
+            },
+            {
+              "text": "We relocate them. We find them a new home.",
+              "next": "relocate",
+              "effects": [
+                {
+                  "op": "setFlag",
+                  "flag": "plan_relocate"
+                },
+                {
+                  "op": "relationship",
+                  "character": "tendai",
+                  "value": 6
+                },
+                {
+                  "op": "relationship",
+                  "character": "amara",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "text": "Contraception. Slow, but we do no harm.",
+              "next": "contra",
+              "effects": [
+                {
+                  "op": "setFlag",
+                  "flag": "plan_contraception"
+                },
+                {
+                  "op": "relationship",
+                  "character": "tendai",
+                  "value": 4
+                },
+                {
+                  "op": "relationship",
+                  "character": "amara",
+                  "value": -2
+                }
+              ]
+            }
+          ]
+        },
+        "cull": {
+          "speaker": "tendai",
+          "portrait": "worried",
+          "text": "Then do it quietly, and do it once.",
+          "next": "n9"
+        },
+        "n9": {
+          "speaker": "narrator",
+          "text": "Hire a culling team (Staff, H), then click the impala and press Cull. Each press lowers the target by ten.",
+          "next": "end"
+        },
+        "relocate": {
+          "speaker": "amara",
+          "text": "Then hire a vet and start saving. Every animal we move costs money.",
+          "next": "n11"
+        },
+        "n11": {
+          "speaker": "narrator",
+          "text": "Hire a vet (Staff, H), then click the impala and press Relocate. Each press lowers the target by ten.",
+          "next": "end"
+        },
+        "contra": {
+          "speaker": "amara",
+          "text": "It will take a season to show. The grass will have to hold out until then.",
+          "next": "n13"
+        },
+        "n13": {
+          "speaker": "narrator",
+          "text": "Hire a vet (Staff, H), then click the impala and press Contraception. Fewer calves are born while it runs.",
+          "next": "end"
+        },
+        "end": {
+          "speaker": "tendai",
+          "text": "And the village? Wanjiru will not wait long.",
+          "effects": [
+            {
+              "op": "setFlag",
+              "flag": "ch3_plan_chosen"
+            },
+            {
+              "op": "journal",
+              "entry": "ch3_plan"
+            }
+          ],
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch03_border",
+      "nodes": {
+        "start": {
+          "speaker": "narrator",
+          "text": "The next morning you walk the east road to the village. Wanjiru meets you at the edge of the trampled fields.",
+          "focus": {
+            "x": 108,
+            "y": 52
+          },
+          "next": "n1"
+        },
+        "n1": {
+          "speaker": "wanjiru",
+          "text": "Well? What is the real answer?",
+          "next": "n2"
+        },
+        "n2": {
+          "speaker": "player",
+          "text": "…",
+          "choices": [
+            {
+              "text": "A beehive fence along the elephants’ path, built with your beekeepers.",
+              "next": "bees",
+              "effects": [
+                {
+                  "op": "setFlag",
+                  "flag": "border_beehive"
+                },
+                {
+                  "op": "relationship",
+                  "character": "wanjiru",
+                  "value": 10
+                },
+                {
+                  "op": "trust",
+                  "value": 3
+                }
+              ]
+            },
+            {
+              "text": "When our elephants take your crops, the reserve pays. Every time.",
+              "next": "pay",
+              "effects": [
+                {
+                  "op": "setFlag",
+                  "flag": "policy_compensation"
+                },
+                {
+                  "op": "relationship",
+                  "character": "wanjiru",
+                  "value": 6
+                },
+                {
+                  "op": "trust",
+                  "value": 2
+                }
+              ]
+            },
+            {
+              "text": "We will mend the fence properly. That should hold them.",
+              "next": "fence",
+              "effects": [
+                {
+                  "op": "setFlag",
+                  "flag": "border_fence"
+                },
+                {
+                  "op": "relationship",
+                  "character": "wanjiru",
+                  "value": -3
+                }
+              ]
+            }
+          ]
+        },
+        "bees": {
+          "speaker": "wanjiru",
+          "portrait": "happy",
+          "text": "Bees! That was Ruth’s idea too, before the money ran out. Elephants hate them. And the honey sells.",
+          "next": "n4"
+        },
+        "n4": {
+          "speaker": "narrator",
+          "text": "Build the beehive fence on its marked spot at the east edge of the plains (Build, B).",
+          "next": "end"
+        },
+        "pay": {
+          "speaker": "wanjiru",
+          "text": "Paid. Every time. I will hold you to that.",
+          "next": "n6"
+        },
+        "n6": {
+          "speaker": "narrator",
+          "text": "From now on, each raid costs money instead of most of the village’s trust.",
+          "next": "end"
+        },
+        "fence": {
+          "speaker": "wanjiru",
+          "portrait": "worried",
+          "text": "Ruth mended that fence a hundred times. The elephants knocked it down a hundred and one.",
+          "next": "n8"
+        },
+        "n8": {
+          "speaker": "narrator",
+          "text": "A mended fence slows the raids, but elephants can still break it.",
+          "next": "end"
+        },
+        "end": {
+          "speaker": "wanjiru",
+          "text": "Then we will see. My people are watching what you do, not what you say.",
+          "effects": [
+            {
+              "op": "setFlag",
+              "flag": "ch3_border_chosen"
+            },
+            {
+              "op": "journal",
+              "entry": "ch3_border"
+            }
+          ],
+          "next": "n10"
+        },
+        "n10": {
+          "speaker": "tendai",
+          "text": "The fence between the plains and the east border is down anyway. Mend it and we can work on this side of the reserve too.",
+          "focus": {
+            "x": 84,
+            "y": 50
+          },
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch03_beehive_built",
+      "nodes": {
+        "start": {
+          "speaker": "narrator",
+          "text": "The first log hives hang along the wire. By evening they hum.",
+          "focus": {
+            "x": 81,
+            "y": 53
+          },
+          "next": "n1"
+        },
+        "n1": {
+          "speaker": "wanjiru",
+          "portrait": "happy",
+          "text": "My grandson sat under that fence all afternoon, waiting for an elephant to try it. None came.",
+          "effects": [
+            {
+              "op": "relationship",
+              "character": "wanjiru",
+              "value": 5
+            },
+            {
+              "op": "trust",
+              "value": 3
+            }
+          ],
+          "next": "n2"
+        },
+        "n2": {
+          "speaker": "tendai",
+          "portrait": "happy",
+          "text": "Ruth would have laughed until she cried.",
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch03_hint_staff",
+      "nodes": {
+        "start": {
+          "speaker": "tendai",
+          "text": "Amara keeps asking who is going to carry out this plan of yours.",
+          "next": "n1"
+        },
+        "n1": {
+          "speaker": "tendai",
+          "text": "A cull needs a culling team; moving animals or contraception needs a vet. Hire them from the Staff panel (H), then click the impala.",
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch03_plan_done",
+      "nodes": {
+        "start": {
+          "speaker": "amara",
+          "portrait": "happy",
+          "text": "That is the target. The impala are down to what the plains can carry.",
+          "focus": {
+            "x": 52,
+            "y": 44
+          },
+          "branch": [
+            {
+              "conditions": [
+                {
+                  "op": "flag",
+                  "flag": "plan_cull"
+                }
+              ],
+              "next": "cull"
+            },
+            {
+              "conditions": [
+                {
+                  "op": "flag",
+                  "flag": "plan_relocate"
+                }
+              ],
+              "next": "relocate"
+            }
+          ],
+          "next": "contra"
+        },
+        "cull": {
+          "speaker": "tendai",
+          "portrait": "worried",
+          "text": "I took the meat to the village myself. Wanjiru did not thank me. But she did not send it back either.",
+          "effects": [
+            {
+              "op": "relationship",
+              "character": "wanjiru",
+              "value": 3
+            }
+          ],
+          "next": "end"
+        },
+        "relocate": {
+          "speaker": "tendai",
+          "portrait": "happy",
+          "text": "The last truck left at dawn. Off to a new home up north. I waved at it like a fool.",
+          "next": "end"
+        },
+        "contra": {
+          "speaker": "amara",
+          "text": "Fewer calves this season, and the herd is settling. Slow, but it is working.",
+          "next": "end"
+        },
+        "end": {
+          "speaker": "amara",
+          "text": "Now the grass has a chance. Give it time, and keep the water up.",
+          "effects": [
+            {
+              "op": "journal",
+              "entry": "ch3_plan_done"
+            }
+          ],
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch03_woodland",
+      "nodes": {
+        "start": {
+          "speaker": "narrator",
+          "text": "The woodland is cool and quiet after the plains. Tendai stops beside a thorn tree.",
+          "focus": {
+            "x": 92,
+            "y": 20
+          },
+          "next": "n1"
+        },
+        "n1": {
+          "speaker": "tendai",
+          "portrait": "angry",
+          "text": "Look. A wire snare. New wire, not a spot of rust on it.",
+          "next": "n2"
+        },
+        "n2": {
+          "speaker": "tendai",
+          "portrait": "worried",
+          "text": "This is not some hungry boy after a meal. Somebody set a whole line of these, right on the game paths.",
+          "next": "n3"
+        },
+        "n3": {
+          "speaker": "player",
+          "text": "…",
+          "choices": [
+            {
+              "text": "Someone organised did this.",
+              "next": "organised"
+            },
+            {
+              "text": "Could it be someone from the village?",
+              "next": "village",
+              "effects": [
+                {
+                  "op": "relationship",
+                  "character": "tendai",
+                  "value": -2
+                }
+              ]
+            }
+          ]
+        },
+        "organised": {
+          "speaker": "tendai",
+          "text": "Organised, and paid. We will need more rangers out here.",
+          "next": "end"
+        },
+        "village": {
+          "speaker": "tendai",
+          "text": "Maybe. But village boys do not buy steel cable by the drum.",
+          "next": "end"
+        },
+        "end": {
+          "speaker": "tendai",
+          "text": "I will pull these. Keep your eyes open, {player}. This is not finished.",
+          "effects": [
+            {
+              "op": "setFlag",
+              "flag": "found_snare"
+            },
+            {
+              "op": "journal",
+              "entry": "ch3_snare"
+            }
+          ],
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch03_hint_border",
+      "nodes": {
+        "start": {
+          "speaker": "tendai",
+          "text": "The fence between the plains and the east border is still down. Click it to mend it, and the east side of the reserve opens up.",
+          "focus": {
+            "x": 84,
+            "y": 50
+          },
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch03_hint_grass",
+      "nodes": {
+        "start": {
+          "speaker": "amara",
+          "portrait": "worried",
+          "text": "The grass is slow to come back. A wet season will help, and so will fewer mouths. Click the plains to see how it is doing.",
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch03_complete",
+      "nodes": {
+        "start": {
+          "speaker": "narrator",
+          "text": "The plains are green at the edges again.",
+          "focus": {
+            "x": 56,
+            "y": 46
+          },
+          "next": "n1"
+        },
+        "n1": {
+          "speaker": "amara",
+          "portrait": "happy",
+          "text": "Grass above half, herds the land can carry, and a village that is still talking to us. That is a good season’s work.",
+          "next": "n2"
+        },
+        "n2": {
+          "speaker": "amara",
+          "text": "I would like to stay, if you will have me. There is a lot here worth counting.",
+          "next": "n3"
+        },
+        "n3": {
+          "speaker": "player",
+          "text": "…",
+          "choices": [
+            {
+              "text": "Welcome to the team, Amara.",
+              "next": "team",
+              "effects": [
+                {
+                  "op": "relationship",
+                  "character": "amara",
+                  "value": 5
+                }
+              ]
+            },
+            {
+              "text": "Only if you promise to argue with Tendai less.",
+              "next": "argue",
+              "effects": [
+                {
+                  "op": "relationship",
+                  "character": "amara",
+                  "value": 2
+                },
+                {
+                  "op": "relationship",
+                  "character": "tendai",
+                  "value": 3
+                }
+              ]
+            }
+          ]
+        },
+        "team": {
+          "speaker": "amara",
+          "portrait": "happy",
+          "text": "Then I had better find somewhere to sleep that is not the car.",
+          "next": "village"
+        },
+        "argue": {
+          "speaker": "tendai",
+          "portrait": "happy",
+          "text": "She will not. But she is usually right, which is worse.",
+          "next": "village"
+        },
+        "village": {
+          "speaker": "narrator",
+          "text": "A message comes from the village.",
+          "effects": [
+            {
+              "op": "setFlag",
+              "flag": "ch3_amara_stays"
+            }
+          ],
+          "branch": [
+            {
+              "conditions": [
+                {
+                  "op": "scoreAtLeast",
+                  "score": "trust",
+                  "min": 55
+                }
+              ],
+              "next": "ally"
+            }
+          ],
+          "next": "wary"
+        },
+        "ally": {
+          "speaker": "wanjiru",
+          "portrait": "happy",
+          "text": "My people have stopped saying “your” elephants. Now it is just “the” elephants. That is progress.",
+          "effects": [
+            {
+              "op": "relationship",
+              "character": "wanjiru",
+              "value": 5
+            },
+            {
+              "op": "setFlag",
+              "flag": "wanjiru_ally"
+            }
+          ],
+          "next": "next"
+        },
+        "wary": {
+          "speaker": "wanjiru",
+          "text": "The village is watching. Keep your promises and we will keep ours.",
+          "next": "next"
+        },
+        "next": {
+          "speaker": "tendai",
+          "text": "People in town were asking about the reserve last week. Real tourists, {player}. With cameras.",
+          "next": "n10"
+        },
+        "n10": {
+          "speaker": "tendai",
+          "portrait": "happy",
+          "text": "Maybe it is time we gave them something to look at.",
+          "next": null
+        }
+      }
+    }
+  ]
+}

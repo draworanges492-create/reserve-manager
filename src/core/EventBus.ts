@@ -88,6 +88,16 @@ export type GameEvents = {
   animalSelected: { group: AnimalGroupRef | null };
   /** Player clicked open ground in a zone to open its info panel (null closes it). */
   zoneSelected: { zoneId: string | null };
+  /** Herd management (spec §6.4): a plan was set, changed or cancelled. */
+  herdPlanChanged: { zoneId: string; speciesId: string };
+  /** A herd plan reached its target. */
+  herdPlanDone: {
+    zoneId: string;
+    speciesId: string;
+    method: 'cull' | 'relocate' | 'contraception';
+  };
+  /** Elephants raided the village's crops (D111). */
+  cropRaid: { compensated: boolean; fenceBroken: boolean };
   /** A command failed; UI shows the reason near where the player acted. */
   commandFailed: { reason: StringKey; worldX?: number; worldY?: number };
 };

@@ -141,7 +141,7 @@ export function startChapter(input: GameState, chapterId: number): StoryResult {
   const events: SimEvent[] = [{ type: 'chapterStarted', payload: { chapter: chapterId } }];
   let state: GameState = {
     ...input,
-    chapter: { current: chapterId },
+    chapter: { current: chapterId, startDay: input.clock.day },
     story: { ...input.story, goalStreaks: {}, completionQueued: false },
   };
   const chapter = chapterDef(chapterId);

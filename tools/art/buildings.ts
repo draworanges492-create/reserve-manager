@@ -198,6 +198,39 @@ function scaffold(): string {
   ].join('');
 }
 
+/** Beehive fence: log hives hung on a wire between posts, a few bees about. */
+function beehiveFence(): string {
+  const hive = (x: number, y: number): string =>
+    shaded(`M${x},${y} L${x + 6},${y} L${x + 6},${y + 4} L${x},${y + 4} Z`, WOOD, {
+      rim: [0, 0.8],
+      extra:
+        line(x, y + 1.3, x + 6, y + 1.3, WOOD.dark, 0.3) +
+        line(x, y + 2.7, x + 6, y + 2.7, WOOD.dark, 0.3) +
+        dot(x + 5.2, y + 2, 0.6, '#2a1d14'),
+    }) + rect(x - 0.5, y - 0.8, 7, 1, THATCH.mid);
+  const bees = [
+    [14, 20],
+    [16, 18],
+    [31, 22],
+    [33, 19],
+    [24, 15],
+  ].map(
+    ([x, y]) => dot(x ?? 0, y ?? 0, 0.5, '#e8c45a') + dot((x ?? 0) + 0.5, y ?? 0, 0.3, '#2a1d14'),
+  );
+  return [
+    fill(ellipse(24, 44, 22, 2.4), SHADE),
+    ...[3, 23, 43].map((x) => post(x, 22, 21.5, 2)),
+    limb('M4,24 Q14,28 24,24 Q34,28 44,24', METAL.dark, 0.5, 0),
+    line(13.5, 26.2, 13.5, 28.5, METAL.dark, 0.4),
+    line(33.5, 26.2, 33.5, 28.5, METAL.dark, 0.4),
+    hive(10.5, 28.5),
+    hive(30.5, 28.5),
+    ...bees,
+    fill(ellipse(8, 42.6, 3, 1.4), '#6d8546'),
+    fill(ellipse(39, 42.8, 3.4, 1.4), '#8fa05a'),
+  ].join('');
+}
+
 /** Key → drawing. Keys must match src/config/assets.json and buildings.json ids. */
 export const BUILDING_ART: Record<string, () => string> = {
   'building-borehole_pump': boreholePump,
@@ -205,4 +238,5 @@ export const BUILDING_ART: Record<string, () => string> = {
   'building-ranger_post': rangerPost,
   'building-observation_tower': tower,
   'building-scaffold': scaffold,
+  'building-beehive_fence': beehiveFence,
 };

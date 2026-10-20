@@ -89,6 +89,8 @@ export const BUILD_SLOTS: {
   { id: 'post_woodland', slotType: 'post', zoneId: 'woodland', rect: { x: 86, y: 14, w: 2, h: 2 } },
   { id: 'post_east', slotType: 'post', zoneId: 'east_border', rect: { x: 104, y: 48, w: 2, h: 2 } },
   { id: 'lodge_hq', slotType: 'lodge', zoneId: 'hq', rect: { x: 42, y: 72, w: 3, h: 3 } },
+  // Where the elephants cross towards the village fields (Chapter 3, D111).
+  { id: 'beehive_east', slotType: 'fence', zoneId: 'plains', rect: { x: 80, y: 52, w: 2, h: 2 } },
 ];
 
 export const SPAWNS: { kind: string; at: Point; species?: string }[] = [

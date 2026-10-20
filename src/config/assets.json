@@ -35,7 +35,8 @@
     "tree-acacia-0": "assets/sprites/tree-acacia-0.png",
     "tree-acacia-1": "assets/sprites/tree-acacia-1.png",
     "tree-marula-0": "assets/sprites/tree-marula-0.png",
-    "tree-marula-1": "assets/sprites/tree-marula-1.png"
+    "tree-marula-1": "assets/sprites/tree-marula-1.png",
+    "building-beehive_fence": "assets/sprites/building-beehive_fence.png"
   },
   "spritesheets": {
     "impala": {

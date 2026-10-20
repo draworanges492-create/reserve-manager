@@ -10,7 +10,7 @@ export function debugSetChapter(state: GameState, chapter: number): GameState {
     const zone = zones[def.id];
     if (zone && def.unlockChapter <= chapter) zones[def.id] = { ...zone, unlocked: true };
   }
-  return { ...state, chapter: { current: chapter }, zones };
+  return { ...state, chapter: { ...state.chapter, current: chapter }, zones };
 }
 
 /** Add (or remove, if negative) money. */

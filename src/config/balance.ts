@@ -64,6 +64,8 @@ export interface Balance {
     cancelRefund: number;
     /** How many days of net income to remember (Ch 2 goal: positive 5 days running). */
     netHistoryDays: number;
+    /** Extra daily income while a story flag is set (D112). */
+    storyGrants: { flag: string; perDay: number }[];
   };
   fences: {
     /** Spec §7.1: patching a fence segment by hand costs 20 and takes time. */
@@ -98,6 +100,38 @@ export interface Balance {
     quitAfterUnpaidDays: number;
   };
   story: { startChapter: number };
+  /** Spec §6.4 herd management (Chapter 3 onwards). */
+  herds: {
+    unlockChapter: number;
+    /** Animals each "Cull" / "Relocate" button press takes off the herd's target. */
+    stepSize: number;
+    cullPerTeamPerDay: number;
+    relocatePerVetPerDay: number;
+    relocateCostPerAnimal: number;
+    contraceptionCostPerDay: number;
+    /** Births are multiplied by this while a contraception plan runs. */
+    contraceptionBirthFactor: number;
+    /** Score changes per animal culled, scaled by the species' charisma. */
+    cullTrustPerAnimal: number;
+    cullReputationPerAnimal: number;
+    relocateTrustPerAnimal: number;
+    relocateReputationPerAnimal: number;
+  };
+  /** Elephants raiding village crops (Chapter 3 onwards, D111). */
+  cropRaids: {
+    baseChance: number;
+    /** Hungrier elephants raid more: chance × this when the plains grass is below `hungryBelow`. */
+    hungryMult: number;
+    hungryBelow: number;
+    /** While the plains–east border fence stands and the border zone is still closed. */
+    fenceMult: number;
+    cooldownDays: number;
+    /** Chance a raid knocks the plains–east border fence down. */
+    breakFenceChance: number;
+    trustLoss: number;
+    compensationCost: number;
+    compensatedTrustLoss: number;
+  };
   render: {
     maxAnimalSpritesPerZone: number;
     seasonTint: Record<Season, string>;

@@ -377,6 +377,239 @@
         }
       ],
       "completionDialogue": "ch02_complete"
+    },
+    {
+      "id": 3,
+      "title": "Too Many Mouths",
+      "introDialogue": "ch03_intro",
+      "goals": [
+        {
+          "id": "g3_plan",
+          "text": "Carry out your plan for the impala",
+          "conditions": [
+            {
+              "op": "flag",
+              "flag": "herd_plan_done"
+            }
+          ]
+        },
+        {
+          "id": "g3_grass",
+          "text": "Get the plains grass back above 50%",
+          "conditions": [
+            {
+              "op": "flag",
+              "flag": "ch3_counted"
+            },
+            {
+              "op": "vegetationAtLeast",
+              "zone": "plains",
+              "min": 50
+            }
+          ]
+        },
+        {
+          "id": "g3_trust",
+          "text": "Keep community trust at 40+ for 5 days ({n}/{days})",
+          "conditions": [
+            {
+              "op": "flag",
+              "flag": "ch3_border_chosen"
+            },
+            {
+              "op": "scoreAtLeast",
+              "score": "trust",
+              "min": 40
+            }
+          ],
+          "days": 5
+        },
+        {
+          "id": "g3_border",
+          "text": "Mend the fence between the plains and the east border",
+          "conditions": [
+            {
+              "op": "flag",
+              "flag": "ch3_border_chosen"
+            },
+            {
+              "op": "fenceRepaired",
+              "segmentId": "east_border_w0"
+            }
+          ]
+        }
+      ],
+      "unlocks": {
+        "zones": ["woodland", "east_border"],
+        "buildings": ["beehive_fence"],
+        "staff": ["tracker", "vet", "culling_team"]
+      },
+      "scriptedEvents": [
+        {
+          "id": "s3_count",
+          "when": [
+            {
+              "op": "daysInChapter",
+              "min": 1
+            }
+          ],
+          "dialogue": "ch03_count"
+        },
+        {
+          "id": "s3_raid",
+          "when": [
+            {
+              "op": "flag",
+              "flag": "crop_raid_happened"
+            }
+          ],
+          "dialogue": "ch03_first_raid"
+        },
+        {
+          "id": "s3_argument",
+          "when": [
+            {
+              "op": "flag",
+              "flag": "ch3_met_wanjiru"
+            },
+            {
+              "op": "daysInChapter",
+              "min": 3
+            }
+          ],
+          "dialogue": "ch03_argument"
+        },
+        {
+          "id": "s3_border",
+          "when": [
+            {
+              "op": "flag",
+              "flag": "ch3_plan_chosen"
+            },
+            {
+              "op": "daysInChapter",
+              "min": 4
+            }
+          ],
+          "dialogue": "ch03_border"
+        },
+        {
+          "id": "s3_beehive",
+          "when": [
+            {
+              "op": "buildingWorking",
+              "buildingId": "beehive_fence"
+            }
+          ],
+          "dialogue": "ch03_beehive_built"
+        },
+        {
+          "id": "s3_hint_staff",
+          "when": [
+            {
+              "op": "flag",
+              "flag": "ch3_plan_chosen"
+            },
+            {
+              "op": "daysInChapter",
+              "min": 8
+            },
+            {
+              "op": "not",
+              "condition": {
+                "op": "flag",
+                "flag": "herd_plan_done"
+              }
+            },
+            {
+              "op": "not",
+              "condition": {
+                "op": "staffCount",
+                "role": "culling_team",
+                "min": 1
+              }
+            },
+            {
+              "op": "not",
+              "condition": {
+                "op": "staffCount",
+                "role": "vet",
+                "min": 1
+              }
+            }
+          ],
+          "dialogue": "ch03_hint_staff"
+        },
+        {
+          "id": "s3_plan_done",
+          "when": [
+            {
+              "op": "flag",
+              "flag": "herd_plan_done"
+            },
+            {
+              "op": "flag",
+              "flag": "ch3_plan_chosen"
+            }
+          ],
+          "dialogue": "ch03_plan_done"
+        },
+        {
+          "id": "s3_woodland",
+          "when": [
+            {
+              "op": "zoneOpen",
+              "zoneId": "woodland"
+            }
+          ],
+          "dialogue": "ch03_woodland"
+        },
+        {
+          "id": "s3_hint_border",
+          "when": [
+            {
+              "op": "flag",
+              "flag": "ch3_border_chosen"
+            },
+            {
+              "op": "daysInChapter",
+              "min": 10
+            },
+            {
+              "op": "not",
+              "condition": {
+                "op": "fenceRepaired",
+                "segmentId": "east_border_w0"
+              }
+            }
+          ],
+          "dialogue": "ch03_hint_border"
+        },
+        {
+          "id": "s3_hint_grass",
+          "when": [
+            {
+              "op": "flag",
+              "flag": "herd_plan_done"
+            },
+            {
+              "op": "daysInChapter",
+              "min": 20
+            },
+            {
+              "op": "not",
+              "condition": {
+                "op": "vegetationAtLeast",
+                "zone": "plains",
+                "min": 50
+              }
+            }
+          ],
+          "dialogue": "ch03_hint_grass"
+        }
+      ],
+      "clues": [],
+      "completionDialogue": "ch03_complete"
     }
   ]
 }

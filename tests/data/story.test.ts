@@ -1,25 +1,18 @@
 import { describe, expect, it } from 'vitest';
 import { CHAPTERS, CHARACTERS, DIALOGUES, JOURNAL } from '../../src/story/content';
 import type { Dialogue } from '../../src/story/types';
+import { BUILDINGS, SPECIES, STAFF_ROLES, ZONE_DEFS } from '../../src/core/content';
+import { WORLD } from '../helpers/newGame';
 import { checkStory, type StoryRefs } from '../../tools/data/storyChecks';
 
+// The real game data and map, so every chapter's references are checked.
 const refs: StoryRefs = {
-  zones: [
-    { id: 'hq', unlockChapter: 1, rect: { x: 36, y: 68, w: 48, h: 12 } },
-    { id: 'plains', unlockChapter: 1, rect: { x: 36, y: 32, w: 48, h: 36 } },
-    { id: 'river', unlockChapter: 2, rect: { x: 0, y: 32, w: 36, h: 48 } },
-  ],
-  species: ['impala', 'zebra', 'lion'],
-  buildings: [
-    { id: 'borehole_pump', unlockChapter: 2 },
-    { id: 'ranger_post', unlockChapter: 2 },
-  ],
-  staffRoles: [
-    { id: 'ranger', unlockChapter: 1 },
-    { id: 'fence_crew', unlockChapter: 2 },
-  ],
-  waterholes: ['waterhole_a', 'waterhole_b'],
-  fences: ['hq_gate', 'river_e0', 'river_e1'],
+  zones: ZONE_DEFS.map((z) => ({ ...z, rect: WORLD.zones[z.id] })),
+  species: SPECIES.map((s) => s.id),
+  buildings: BUILDINGS.map((b) => ({ id: b.id, unlockChapter: b.unlockChapter })),
+  staffRoles: STAFF_ROLES.map((r) => ({ id: r.id, unlockChapter: r.unlockChapter })),
+  waterholes: Object.keys(WORLD.waterholes),
+  fences: Object.keys(WORLD.fences),
   events: [],
 };
 const content = {
@@ -30,7 +23,7 @@ const content = {
 };
 
 describe('story content checks', () => {
-  it('pass for the shipped Chapters 1–2', () => {
+  it('pass for every shipped chapter', () => {
     expect(checkStory(content, refs)).toEqual([]);
   });
 

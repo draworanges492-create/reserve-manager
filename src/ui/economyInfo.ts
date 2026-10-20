@@ -21,7 +21,8 @@ const signed = (n: number): string => (n > 0 ? `+${round1(n)}` : n < 0 ? `−${r
 export function moneyText(state: GameState): { text: string; warn: boolean } {
   const money = Math.floor(state.resources.money);
   if (state.economy.inDebt) return { text: `${money} · ${t('money.inDebt')}`, warn: true };
-  const net = expectedLedger(state).net;
+  // Whole numbers in the top bar: decimals made the label run into the meters.
+  const net = Math.round(expectedLedger(state).net);
   return { text: t('money.perDay', { money, net: signed(net) }), warn: net < 0 };
 }
 
