@@ -9,6 +9,14 @@ export const BASE_WIDTH = 640;
 export const BASE_HEIGHT = 360;
 export const TILE_SIZE = 24;
 
+/**
+ * Texture pixels per world pixel for world art (tiles, animals, buildings, people): art is
+ * drawn with twice the detail of the 24 px grid and shown at half scale (DECISIONS D106).
+ */
+export const ART_SCALE = 2;
+/** Scale to give a world sprite so its texture shows at world size. */
+export const WORLD_ART = 1 / ART_SCALE;
+
 /** Real seconds per in-game day at 1× speed. */
 export const DAY_LENGTH_SECONDS = 120;
 /** Running speeds; pause is a separate flag so un-pausing returns to the last speed. */
@@ -21,7 +29,11 @@ export type GameSpeed = (typeof GAME_SPEEDS)[number];
  * MacBook, and 0.5× gives an overview (DECISIONS D14).
  */
 export const CAMERA_ZOOM_STEPS = [0.5, 1, 2, 3] as const;
-export const CAMERA_DEFAULT_ZOOM_INDEX = 1;
+/**
+ * The camera may show this many tiles beyond the unlocked area, so border fences aren't
+ * stuck at the very edge of the screen (DECISIONS D108).
+ */
+export const CAMERA_BORDER_MARGIN_TILES = 1.5;
 /** Keyboard / edge-scroll pan speed in screen game-pixels per second. */
 export const CAMERA_PAN_SPEED = 420;
 /** Mouse within this many game pixels of the edge scrolls the map. */

@@ -24,7 +24,7 @@ replaced one file at a time. Sizes follow DECISIONS D12 (24 px tiles).
 
 ## Terrain tileset — `public/assets/tilesets/terrain.png`
 
-24×24 tiles, 8 columns, **1 px margin and 2 px spacing** holding a copy of each tile's edge
+24×24 world tiles drawn as 48×48 images (2× detail), 8 columns, **1 px margin and 2 px spacing** holding a copy of each tile's edge
 pixels (stops seams when the camera is between pixels). Order matters: the map refers to
 tiles by position.
 
@@ -67,35 +67,50 @@ To replace one with real art, draw the whole building at its full size and cut i
 | hut              | 2×2          | thatched rondavel (village, outside the fence)          |
 | pump_ruin        | 2×2          | broken windmill pump; hidden once a pump is built on it |
 
-Lighting for all art: from the top left. Each material has a light, mid and dark tone in the
-palette (e.g. `treeLight` / `tree` / `treeDark`, `roofLight` / `roof` / `roofDark`), 50 colours
-in all (D104).
+Lighting for all art: from the top left. Each material has a light, mid and dark tone
+(e.g. leaves, bark, roof, plaster).
+
+### Detail level (DECISIONS D106)
+
+World art is drawn at **2× detail**: every texture has two pixels per world pixel and the
+game shows it at half scale. A 24 px tile is a 48×48 image; a 24 px animal frame is 48×48.
+Replacement art must follow the same rule (draw at double size, keep it crisp pixel art).
+The placeholders are written as vector shapes in `tools/art/*.ts`, rendered without
+anti-aliasing and given a 1-pixel dark outline (`tools/art/raster.ts`). Preview them with
+`npm run preview:art -- out.png 4 animals|scenery|built|water|portraits`.
 
 Wanted later: edge/transition tiles between ground types (grass↔dry, grass↔rock,
 bank↔water) — the placeholder map has hard tile edges.
 
 ## Sprites — `public/assets/sprites/`
 
-All face **right** (the game mirrors them). Frames sit side by side in one strip.
+All face **right** (the game mirrors them). Frames sit side by side in one strip. Sizes are
+the image sizes (2× detail); the world size is half.
 
-| Key       | Frame size | Frames   | Notes                                  |
-| --------- | ---------- | -------- | -------------------------------------- |
-| impala    | 24×24      | 2 (walk) | Milestone A                            |
-| zebra     | 24×24      | 2 (walk) | Milestone A                            |
-| lion      | 24×24      | 2 (walk) | Milestone A                            |
-| elephant  | 48×48      | 2 (walk) | v1.0; size reference for large animals |
-| ranger    | 24×24      | 2 (walk) | staff                                  |
-| visitor   | 24×24      | 2 (walk) | tourists                               |
-| shadow-sm | 20×6       | 1        | under 24 px sprites                    |
-| shadow-lg | 40×10      | 1        | under 48 px sprites                    |
+| Key         | Frame size | Frames   | Notes                                |
+| ----------- | ---------- | -------- | ------------------------------------ |
+| impala      | 48×48      | 2 (walk) |                                      |
+| zebra       | 48×48      | 2 (walk) |                                      |
+| lion        | 48×48      | 2 (walk) |                                      |
+| hyena       | 48×48      | 2 (walk) | spotted hyena, sloping back          |
+| vulture     | 48×48      | 2        | standing / wings half open (hopping) |
+| elephant    | 96×96      | 2 (walk) | size reference for large animals     |
+| ranger      | 48×48      | 2 (walk) | staff                                |
+| visitor     | 48×48      | 2 (walk) | tourists                             |
+| shadow-sm   | 40×12      | 1        | under 24 px animals                  |
+| shadow-lg   | 80×20      | 1        | under 48 px animals                  |
+| waterhole   | 192×192    | 4        | clear, muddy, drying, dry            |
+| building-\* | 96×96      | 1        | player buildings, outlined           |
 
-Still to come (later phases): wildebeest 24, giraffe 48, leopard 24, rhino 48; fence
-crew / tracker / vet / culling team;
-lodge; 9-slice UI panels.
+Portraits (`public/assets/portraits/`) are 144×144 per frame, four frames: neutral, happy,
+worried, angry.
+
+Still to come (later phases): wildebeest, giraffe, leopard, rhino; fence crew / tracker /
+vet / culling team; lodge; 9-slice UI panels.
 
 ## Effects and sound
 
-- `sprites/fx-dust.png` (4×4, sand tones): dust puff particle; `fx-drop.png`: water drop.
+- `sprites/fx-dust.png` (8×8, sand tones): dust puff particle; `fx-drop.png` (6×6): water drop.
 - There are no audio files: music, ambience and effects are synthesized in `src/audio/`
   (D95). To use recordings instead, put them in `public/assets/audio/`, list them in
   `ASSETS.md`, and make `AudioManager` play them. The `sfx('…')` / `setMusic(…)` callers

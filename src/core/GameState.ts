@@ -10,9 +10,10 @@ import type { TileRect, WorldLayout } from './WorldLayout';
 /** Bump when the shape changes; Save.ts (Phase 8) migrates older saves. */
 /**
  * Bump when the saved shape changes, and add a migration in core/Save.ts.
- * v1: up to Phase 7 · v2: adds meta.playTimeSeconds · v3: adds encyclopedia.
+ * v1: up to Phase 7 · v2: adds meta.playTimeSeconds · v3: adds encyclopedia ·
+ * v4: elephants, hyenas and vultures join the reserve (D107).
  */
-export const STATE_VERSION = 3;
+export const STATE_VERSION = 4;
 
 export interface ClockState {
   /** Days elapsed since the start, from 0. Calendar values derive from this (sim/Seasons). */

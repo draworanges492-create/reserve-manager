@@ -98,6 +98,8 @@ export function animalPanelContent(
   if (log) {
     if (species.diet === 'predator') {
       lines.push({ text: t('animal.capacity.predator', { k: capacity }) });
+    } else if (species.diet === 'scavenger') {
+      lines.push({ text: t('animal.capacity.scavenger', { k: capacity }) });
     } else {
       const water = zoneHasWater(state, zoneId) ? t('animal.water.near') : t('animal.water.none');
       const veg = Math.round(state.zones[zoneId]?.vegetation ?? 0);

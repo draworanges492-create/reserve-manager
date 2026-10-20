@@ -4,6 +4,7 @@ import { eventBus } from '../../core/EventBus';
 import type { GameSession } from '../../core/GameSession';
 import { visibleClues } from '../../story/storyCommands';
 import { DEPTH } from '../depth';
+import { WORLD_ART } from '../../config/game';
 
 const BOB_PX = 3;
 
@@ -33,6 +34,7 @@ export class ClueLayer {
       const y = clue.at.y * this.tileSize;
       const marker = this.scene.add
         .image(x, y, 'clue-marker')
+        .setScale(WORLD_ART)
         .setDepth(DEPTH.effects)
         .setInteractive({ useHandCursor: true });
       marker.setData('blocksDrag', true);

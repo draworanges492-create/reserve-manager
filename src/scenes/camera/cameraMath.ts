@@ -38,15 +38,45 @@ export function unionBounds(rects: readonly Bounds[]): Bounds | null {
 }
 
 /**
- * Lowest zoom-step index whose view still fits inside the bounds, so zooming out can
- * never show land beyond them. Falls back to the closest-in step if none fits.
+ * The zoom levels on offer: first the one that fits the whole area on screen (the bird's-eye
+ * view, DECISIONS D108), then every fixed step that zooms in further than that.
  */
-export function minZoomIndex(
+export function zoomLevels(
   steps: readonly number[],
   viewWidth: number,
   viewHeight: number,
   bounds: Bounds,
-): number {
-  const fits = steps.findIndex((z) => viewWidth / z <= bounds.w && viewHeight / z <= bounds.h);
-  return fits === -1 ? steps.length - 1 : fits;
+): number[] {
+  const fit = Math.min(viewWidth / bounds.w, viewHeight / bounds.h, ...steps.slice(-1));
+  // Skip fixed steps barely closer than the fit: they'd feel like a wasted scroll.
+  return [fit, ...steps.filter((z) => z > fit * 1.1)];
+}
+
+/** Index of the level closest to `zoom`. */
+export function nearestLevel(levels: readonly number[], zoom: number): number {
+  let best = 0;
+  levels.forEach((z, i) => {
+    if (Math.abs(Math.log(z / zoom)) < Math.abs(Math.log((levels[best] ?? z) / zoom))) best = i;
+  });
+  return best;
+}
+
+/**
+ * Camera bounds for a view of `viewWidth × viewHeight` world pixels: the area itself, grown
+ * evenly on any side where the view is bigger, so a zoomed-out view stays centred on it.
+ */
+export function centredBounds(bounds: Bounds, viewWidth: number, viewHeight: number): Bounds {
+  const w = Math.max(bounds.w, viewWidth);
+  const h = Math.max(bounds.h, viewHeight);
+  return { x: bounds.x - (w - bounds.w) / 2, y: bounds.y - (h - bounds.h) / 2, w, h };
+}
+
+/** Grow a rectangle by `margin` on every side. */
+export function padBounds(bounds: Bounds, margin: number): Bounds {
+  return {
+    x: bounds.x - margin,
+    y: bounds.y - margin,
+    w: bounds.w + margin * 2,
+    h: bounds.h + margin * 2,
+  };
 }

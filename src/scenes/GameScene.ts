@@ -7,7 +7,8 @@ import { WaterholeSprite } from '../entities/WaterholeSprite';
 import { showFloatingText } from '../ui/FloatingText';
 import { seasonOf } from '../sim/Seasons';
 import { CameraController } from './camera/CameraController';
-import { type Bounds, unionBounds } from './camera/cameraMath';
+import { ART_SCALE, CAMERA_BORDER_MARGIN_TILES } from '../config/game';
+import { type Bounds, padBounds, unionBounds } from './camera/cameraMath';
 import { DEPTH } from './depth';
 import { BuildingLayer } from './BuildingLayer';
 import { HerdLayer } from './HerdLayer';
@@ -34,6 +35,7 @@ const FADE_MS = 400;
 
 /** The world view: tilemap, zones, fences, waterholes and herds. Drives the sim clock. */
 export class GameScene extends Phaser.Scene {
+  private smoothArt = false;
   private zones: ZoneArea[] = [];
   private hovered: ZoneArea | null = null;
   private overlay!: ZoneOverlay;
@@ -54,12 +56,37 @@ export class GameScene extends Phaser.Scene {
     const session = getSession(this);
     const map = this.make.tilemap({ key: 'reserve' });
     const tilesetName = Object.keys(ASSETS.tilesets)[0] ?? '';
-    const tileset = map.addTilesetImage(tilesetName, ASSETS.tilesets[tilesetName]);
+    // The map's grid is 24 px but its art is drawn at ART_SCALE× detail (DECISIONS D106), so
+    // the visible layers live on a twin tilemap with the art's tile size, scaled back down.
+    // Game logic (collision, zones, objects) keeps using `map`.
+    const source = map.tilesets[0];
+    if (!source) throw new Error('Map has no tileset');
+    const art = this.make.tilemap({
+      tileWidth: source.tileWidth,
+      tileHeight: source.tileHeight,
+      width: map.width,
+      height: map.height,
+    });
+    const tileset = art.addTilesetImage(
+      tilesetName,
+      ASSETS.tilesets[tilesetName],
+      source.tileWidth,
+      source.tileHeight,
+      source.tileMargin,
+      source.tileSpacing,
+      source.firstgid,
+    );
     if (!tileset) throw new Error(`Tileset "${tilesetName}" failed to load`);
     const layers = TILE_LAYERS.map(([name, depth]) => {
-      const layer = map.createLayer(name, tileset);
-      if (!layer) throw new Error(`Map is missing tile layer "${name}"`);
-      return layer.setDepth(depth);
+      const data = map.getLayer(name)?.data;
+      const layer = art.createBlankLayer(name, tileset);
+      if (!data || !layer) throw new Error(`Map is missing tile layer "${name}"`);
+      layer.putTilesAt(
+        data.map((row) => row.map((tile) => tile.index)),
+        0,
+        0,
+      );
+      return layer.setScale(map.tileWidth / source.tileWidth).setDepth(depth);
     });
 
     const seasonTint = new SeasonTint(this, layers, seasonOf(session.state.clock.day));
@@ -152,6 +179,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   override update(_time: number, delta: number): void {
+    this.smoothWhenZoomedOut();
     getSession(this).update(delta);
     for (const w of this.waterholes) w.update();
     this.herds.update(delta);
@@ -162,19 +190,41 @@ export class GameScene extends Phaser.Scene {
     this.cameraController.update(delta);
   }
 
-  /** World-pixel rectangle around every unlocked zone: the camera stays inside it. */
+  /**
+   * Pixel art is sampled crisply, but once the bird's-eye view shrinks it below one screen
+   * pixel per texel, crisp sampling flickers; smooth sampling looks right there (D108).
+   */
+  private smoothWhenZoomedOut(): void {
+    const smooth = this.cameras.main.zoom < ART_SCALE;
+    if (smooth === this.smoothArt) return;
+    this.smoothArt = smooth;
+    const mode = smooth ? Phaser.Textures.FilterMode.LINEAR : Phaser.Textures.FilterMode.NEAREST;
+    for (const key of [
+      ...Object.values(ASSETS.tilesets),
+      ...Object.keys(ASSETS.spritesheets),
+      ...Object.keys(ASSETS.images),
+    ]) {
+      if (key.startsWith('icon-') || key.startsWith('portrait-')) continue;
+      if (this.textures.exists(key)) this.textures.get(key).setFilter(mode);
+    }
+  }
+
+  /** World-pixel rectangle around every unlocked zone, plus a margin: the camera stays inside. */
   private unlockedBounds(tileSize: number): Bounds {
     const open = Object.values(getSession(this).state.zones)
       .filter((z) => z.unlocked)
       .map((z) => z.rect);
     const tiles = unionBounds(open);
     if (!tiles) throw new Error('No unlocked zones');
-    return {
-      x: tiles.x * tileSize,
-      y: tiles.y * tileSize,
-      w: tiles.w * tileSize,
-      h: tiles.h * tileSize,
-    };
+    return padBounds(
+      {
+        x: tiles.x * tileSize,
+        y: tiles.y * tileSize,
+        w: tiles.w * tileSize,
+        h: tiles.h * tileSize,
+      },
+      CAMERA_BORDER_MARGIN_TILES * tileSize,
+    );
   }
 
   private isOverUI(pointer: Phaser.Input.Pointer): boolean {

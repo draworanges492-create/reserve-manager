@@ -61,7 +61,7 @@ describe('zone panel text', () => {
       expect.stringMatching(/^Grass per day: \+\d\.\d regrowth, −\d\.\d grazing \(Dry season\)$/),
       'Water nearby: Yes',
       'Ranger coverage: 0%',
-      'Animals: 80 impala · 24 zebras · 4 lions',
+      'Animals: 80 impala · 24 zebras · 4 lions · 6 elephants · 5 hyenas · 8 vultures',
     ]);
   });
 

@@ -31,7 +31,8 @@ export function vegetationBreakdown(
   const v = zone.vegetation;
   const regrowth = cfg.regrowRate * cfg.seasonMult[season] * ((cfg.maxLevel - v) / cfg.maxLevel);
   const herd = state.populations[zoneId] ?? {};
-  const eaten = SPECIES.filter((s) => s.diet === 'grazer').reduce(
+  // Grazers and browsers (elephants eat both grass and trees) all count against vegetation.
+  const eaten = SPECIES.filter((s) => s.diet === 'grazer' || s.diet === 'browser').reduce(
     (sum, s) => sum + (herd[s.id] ?? 0) * s.grazeRate,
     0,
   );

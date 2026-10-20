@@ -1,3 +1,4 @@
+import { SPECIES } from '../../src/core/content';
 import { describe, expect, it, vi } from 'vitest';
 import { DEFAULT_SETTINGS } from '../../src/core/Settings';
 import { dateText, dateTooltip, scoreTooltip } from '../../src/ui/hudInfo';
@@ -35,7 +36,7 @@ describe('top bar text', () => {
 
 const seenAll = (state: GameState): GameState => ({
   ...state,
-  encyclopedia: ['impala', 'zebra', 'lion'],
+  encyclopedia: SPECIES.map((s) => s.id),
 });
 
 describe('species menu', () => {
@@ -48,6 +49,9 @@ describe('species menu', () => {
     expect(rows.map((r) => r.lines[0]?.text)).toEqual([
       '??? · Not seen yet',
       'Zebra · 24',
+      '??? · Not seen yet',
+      '??? · Not seen yet',
+      '??? · Not seen yet',
       '??? · Not seen yet',
     ]);
     expect(rows[1]?.actions.map((a) => a.label)).toEqual(['Show', 'Read']);
@@ -79,6 +83,9 @@ describe('species menu', () => {
       'Impala · 80',
       'Zebra · 24',
       'Lion · 4',
+      'African elephant · 6',
+      'Spotted hyena · 5',
+      'White-backed vulture · 8',
     ]);
     expect(menu.rows[0]?.lines[1]?.text).toBe('Grazer · Central Plains 80');
     expect(biggestHerd(newGame(), 'zebra')).toEqual({ zoneId: 'plains', count: 24 });

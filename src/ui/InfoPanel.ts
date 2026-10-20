@@ -157,9 +157,9 @@ export class InfoPanel {
     if (this.portrait.texture.key !== key) {
       this.portrait.setTexture(key, 0);
       const frame = this.scene.textures.getFrame(key, 0);
-      this.portrait.setScale(
-        Math.max(1, Math.floor(PORTRAIT / Math.max(frame.width, frame.height))),
-      );
+      // Exact fit: portraits are drawn at 2× detail, so this is a whole number of screen
+      // pixels per texel at every display scale.
+      this.portrait.setScale(PORTRAIT / Math.max(frame.width, frame.height));
     }
     this.portrait.setPosition(PAD + PORTRAIT / 2, PAD + PORTRAIT / 2).setVisible(true);
     return PAD * 2 + PORTRAIT;

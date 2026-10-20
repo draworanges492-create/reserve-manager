@@ -67,6 +67,22 @@ const MIGRATIONS: Record<number, Migration> = {
       for (const [id, n] of Object.entries(herd)) if (n > 0) seen.add(id);
     return { ...s, version: 3, encyclopedia: [...seen].sort() };
   },
+  // v4 added elephants, hyenas and vultures (D107): games started earlier get the same
+  // starting groups on the Central Plains. Numbers are fixed here, not read from
+  // species.json, so this migration never changes meaning.
+  3: (s) => {
+    const populations = { ...((s.populations ?? {}) as Record<string, Record<string, number>>) };
+    const has = (id: string) => Object.values(populations).some((herd) => id in herd);
+    const plains = { ...(populations.plains ?? {}) };
+    for (const [id, n] of [
+      ['elephant', 6],
+      ['hyena', 5],
+      ['vulture', 8],
+    ] as const)
+      if (!has(id)) plains[id] = n;
+    populations.plains = plains;
+    return { ...s, version: 4, populations };
+  },
 };
 
 export function summarize(state: GameState, savedAt: string): SaveSummary {

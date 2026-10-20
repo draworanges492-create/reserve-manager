@@ -3,15 +3,33 @@
 import { Rng } from '../../src/core/Rng';
 import { PixelCanvas, type Rgba } from '../lib/canvas';
 import { PAL } from '../palette';
+import { structureImage } from '../art';
+import { acacia, boulder, bush, grassTuft, tree } from '../art/plants';
+import { raster } from '../art/raster';
 import {
   type BaseTileName,
   STRUCTURES,
   type StructureName,
-  TILE_SIZE as S,
+  TILE_ART as S,
+  TILE_SIZE,
   type TileName,
 } from '../tileset';
-import { acacia, boulder, bush, grassTuft, tree } from './plants';
-import { structurePiece } from './structures';
+
+/** Size factor from the old 24 px drawing to the 2× tile. */
+const K = S / TILE_SIZE;
+const plant = (draw: () => string) => (): PixelCanvas =>
+  raster(draw(), '', TILE_SIZE, TILE_SIZE, { outline: false });
+
+/** One 2×-detail tile of a map building; `index` = row × width + column. */
+function structurePiece(name: StructureName, index: number): PixelCanvas {
+  const { w, h } = STRUCTURES[name];
+  const full = structureImage(name, w * TILE_SIZE, h * TILE_SIZE);
+  const ox = (index % w) * S;
+  const oy = Math.floor(index / w) * S;
+  const piece = new PixelCanvas(S, S);
+  for (let y = 0; y < S; y++) for (let x = 0; x < S; x++) piece.set(x, y, full.get(ox + x, oy + y));
+  return piece;
+}
 
 type Speck = readonly [Rgba, number];
 
@@ -36,7 +54,7 @@ function blades(c: PixelCanvas, rng: Rng, count: number, color: Rgba): PixelCanv
   for (let i = 0; i < count; i++) {
     const x = rng.int(3, S - 4);
     const y = rng.int(8, S - 3);
-    c.line(x, y, x + rng.int(-1, 1), y - rng.int(2, 4), color);
+    c.line(x, y, x + rng.int(-1, 1) * K, y - rng.int(2, 4) * K, color);
   }
   return c;
 }
@@ -45,7 +63,7 @@ function ripples(c: PixelCanvas, rng: Rng, count: number, color: Rgba): PixelCan
   for (let i = 0; i < count; i++) {
     const x = rng.int(1, S - 5);
     const y = rng.int(2, S - 3);
-    c.line(x, y, x + 2, y, color);
+    c.line(x, y, x + 2 * K, y, color);
   }
   return c;
 }
@@ -54,7 +72,7 @@ function cracks(c: PixelCanvas, rng: Rng, count: number, color: Rgba): PixelCanv
   for (let i = 0; i < count; i++) {
     let x = rng.int(2, S - 3);
     let y = rng.int(2, S - 3);
-    for (let step = 0; step < 7; step++) {
+    for (let step = 0; step < 7 * K; step++) {
       c.set(x, y, color);
       x = Math.min(S - 1, Math.max(0, x + rng.int(-1, 1)));
       y = Math.min(S - 1, Math.max(0, y + rng.int(-1, 1)));
@@ -118,14 +136,15 @@ const DRAWERS: Record<BaseTileName, () => PixelCanvas> = {
   farmland: () => {
     const c = ground(PAL.dirt, 11, [[PAL.dirtDark, 0.05]]);
     for (let y = 0; y < S; y++) {
-      if (y % 6 === 1 || y % 6 === 2) c.fillRect(0, y, S, 1, PAL.grassDry);
-      if (y % 6 === 4) c.fillRect(0, y, S, 1, PAL.dirtDark);
+      const row = y % (6 * K);
+      if (row >= K && row < 3 * K) c.fillRect(0, y, S, 1, PAL.grassDry);
+      if (row >= 4 * K && row < 5 * K) c.fillRect(0, y, S, 1, PAL.dirtDark);
     }
     return c;
   },
   parking: () => {
     const c = ground(PAL.rock, 12, [[PAL.rockDark, 0.08]]);
-    c.fillRect(11, 3, 1, 18, PAL.sand);
+    c.fillRect(11 * K, 3 * K, K, 18 * K, PAL.sand);
     return c;
   },
   dry_bed: () => cracks(ground(PAL.dirt, 13, [[PAL.sand, 0.08]]), new Rng(131), 4, PAL.dirtDark),
@@ -133,11 +152,11 @@ const DRAWERS: Record<BaseTileName, () => PixelCanvas> = {
     ripples(ground(PAL.water, 14, [[PAL.waterLight, 0.03]]), new Rng(141), 3, PAL.waterLight),
   water_deep: () =>
     ripples(ground(PAL.waterDeep, 15, [[PAL.water, 0.04]]), new Rng(142), 3, PAL.water),
-  tree,
-  tree_b: acacia,
-  bush,
-  grass_tuft: grassTuft,
-  boulder,
+  tree: plant(tree),
+  tree_b: plant(acacia),
+  bush: plant(bush),
+  grass_tuft: plant(grassTuft),
+  boulder: plant(boulder),
   collision: () => {
     const c = new PixelCanvas(S, S);
     const magenta = [PAL.debug[0], PAL.debug[1], PAL.debug[2], 160] as const;

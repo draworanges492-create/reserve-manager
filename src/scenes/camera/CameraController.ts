@@ -1,6 +1,5 @@
 import Phaser from 'phaser';
 import {
-  CAMERA_DEFAULT_ZOOM_INDEX,
   CAMERA_EDGE_SCROLL_MARGIN,
   CAMERA_PAN_SPEED,
   CAMERA_PINCH_STEP,
@@ -9,7 +8,14 @@ import {
   CAMERA_ZOOM_STEPS,
 } from '../../config/game';
 import { getSettings } from '../../core/Settings';
-import { type Bounds, minZoomIndex, nextZoomIndex, scrollToKeepPoint } from './cameraMath';
+import {
+  type Bounds,
+  centredBounds,
+  nearestLevel,
+  nextZoomIndex,
+  scrollToKeepPoint,
+  zoomLevels,
+} from './cameraMath';
 import { viewScale } from '../../ui/view';
 
 type Direction = 'up' | 'down' | 'left' | 'right';
@@ -17,11 +23,12 @@ type Direction = 'up' | 'down' | 'left' | 'right';
 /**
  * Camera input (spec §5 + DECISIONS D4): drag-pan with mouse or one finger, WASD/arrows,
  * edge scroll (mouse only), wheel/trackpad zoom and two-finger pinch zoom, in integer-friendly
- * steps. The camera is clamped to the unlocked zones, and can't zoom out far enough to see
- * past them (DECISIONS D44).
+ * steps. The camera is clamped to the unlocked zones plus a small margin, and zooms out
+ * as far as a view of the whole area (DECISIONS D44, D108).
  */
 export class CameraController {
-  private zoomIndex = CAMERA_DEFAULT_ZOOM_INDEX;
+  /** Zoom in game pixels per world pixel; the camera's zoom is this × viewScale(). */
+  private zoomStep = 1;
   private wheelAccum = 0;
   private lastWheelStep = 0;
   private pinchStartDistance: number | null = null;
@@ -44,10 +51,10 @@ export class CameraController {
     const cam = scene.cameras.main;
     cam.setRoundPixels(true);
     this.setBounds(bounds);
-    // A bigger window shows more map at the same zoom, which may now see past the bounds.
-    scene.scale.on(Phaser.Scale.Events.RESIZE, this.enforceMinZoom, this);
+    // A different window size changes which zoom fits the whole area.
+    scene.scale.on(Phaser.Scale.Events.RESIZE, this.applyZoom, this);
     scene.events.once(Phaser.Scenes.Events.SHUTDOWN, () =>
-      scene.scale.off(Phaser.Scale.Events.RESIZE, this.enforceMinZoom, this),
+      scene.scale.off(Phaser.Scale.Events.RESIZE, this.applyZoom, this),
     );
 
     const input = scene.input;
@@ -98,19 +105,13 @@ export class CameraController {
   /** Change the area the camera may show (e.g. when a zone unlocks). */
   setBounds(bounds: Bounds): void {
     this.bounds = bounds;
-    this.scene.cameras.main.setBounds(bounds.x, bounds.y, bounds.w, bounds.h);
-    this.enforceMinZoom();
+    this.applyZoom();
   }
 
-  /** Camera zoom in device pixels per world pixel: the zoom step × the screen scale. */
-  private zoom(): number {
-    return (CAMERA_ZOOM_STEPS[this.zoomIndex] ?? 1) * viewScale();
-  }
-
-  private minIndex(): number {
+  /** Zoom levels in game pixels per world pixel: fit-everything first (DECISIONS D108). */
+  private levels(): number[] {
     const cam = this.scene.cameras.main;
-    // Steps are in game pixels, so compare against the view size in game pixels.
-    return minZoomIndex(
+    return zoomLevels(
       CAMERA_ZOOM_STEPS,
       cam.width / viewScale(),
       cam.height / viewScale(),
@@ -118,27 +119,43 @@ export class CameraController {
     );
   }
 
-  private enforceMinZoom(): void {
-    this.zoomIndex = Math.max(this.zoomIndex, this.minIndex());
-    this.scene.cameras.main.setZoom(this.zoom());
+  /** Re-apply the zoom (after a resize or new bounds), keeping the closest available level. */
+  private applyZoom(): void {
+    const levels = this.levels();
+    const level = levels[nearestLevel(levels, this.zoomStep)] ?? 1;
+    this.zoomStep = level;
+    this.setCameraZoom(level);
     this.onChange();
   }
 
-  private stepZoom(direction: 1 | -1, screenX: number, screenY: number): void {
-    const next = Math.max(
-      this.minIndex(),
-      nextZoomIndex(this.zoomIndex, direction, CAMERA_ZOOM_STEPS.length),
-    );
-    if (next === this.zoomIndex) return;
+  /** Set the camera zoom (device px per world px) and re-centre the bounds for that view. */
+  private setCameraZoom(level: number): void {
     const cam = this.scene.cameras.main;
-    const oldZoom = this.zoom();
-    this.zoomIndex = next;
-    const newZoom = this.zoom();
+    const zoom = level * viewScale();
+    const b = centredBounds(this.bounds, cam.width / zoom, cam.height / zoom);
+    cam.setZoom(zoom).setBounds(b.x, b.y, b.w, b.h);
+  }
+
+  private stepZoom(direction: 1 | -1, screenX: number, screenY: number): void {
+    const levels = this.levels();
+    const current = nearestLevel(levels, this.zoomStep);
+    const next = nextZoomIndex(current, direction, levels.length);
+    const level = levels[next];
+    if (next === current || level === undefined) return;
+    const cam = this.scene.cameras.main;
+    const oldZoom = cam.zoom;
+    this.zoomStep = level;
+    const newZoom = level * viewScale();
     const scrollX = scrollToKeepPoint(cam.scrollX, cam.width, screenX, oldZoom, newZoom);
     const scrollY = scrollToKeepPoint(cam.scrollY, cam.height, screenY, oldZoom, newZoom);
-    cam.setZoom(newZoom);
+    this.setCameraZoom(level);
     cam.setScroll(scrollX, scrollY);
     this.onChange();
+  }
+
+  /** Current zoom level in game pixels per world pixel (1 = normal). */
+  get level(): number {
+    return this.zoomStep;
   }
 
   private onPointerMove(pointer: Phaser.Input.Pointer): void {

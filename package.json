@@ -13,7 +13,7 @@
     "validate-data": "tsx tools/validate-data.ts",
     "gen:placeholders": "tsx tools/generate-placeholders.ts",
     "gen:map": "tsx tools/generate-map.ts",
-    "preview:art": "tsx tools/preview-art.ts",
+    "preview:art": "tsx tools/art/preview.ts",
     "sim:balance": "tsx tools/sim-balance.ts",
     "package:itch": "npm run build && rm -rf release && mkdir -p release && cd dist && zip -qr ../release/reserve-manager-web.zip ."
   },
@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@resvg/resvg-js": "^2.6.2",
     "@types/node": "^26.6.5",
     "eslint": "^10.13.0",
     "eslint-config-prettier": "^10.1.8",

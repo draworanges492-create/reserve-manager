@@ -1,5 +1,8 @@
 // Terrain tileset layout, shared by the placeholder generator and the map generator.
-import { TILE_SIZE } from '../src/config/game';
+import { ART_SCALE, TILE_SIZE } from '../src/config/game';
+
+/** Tile size in the tileset image: world tiles are drawn at ART_SCALE× detail (D106). */
+export const TILE_ART = TILE_SIZE * ART_SCALE;
 
 /** Single-tile terrain and decoration. */
 export const BASE_TILES = [
@@ -75,8 +78,7 @@ export const TILESET_SPACING = 2;
 
 export function tilesetSize(count = TILE_NAMES.length): { width: number; height: number } {
   const rows = Math.ceil(count / TILESET_COLUMNS);
-  const span = (n: number): number =>
-    2 * TILESET_MARGIN + n * TILE_SIZE + (n - 1) * TILESET_SPACING;
+  const span = (n: number): number => 2 * TILESET_MARGIN + n * TILE_ART + (n - 1) * TILESET_SPACING;
   return { width: span(TILESET_COLUMNS), height: span(rows) };
 }
 

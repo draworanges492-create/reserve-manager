@@ -5,6 +5,7 @@ import type { GameSession } from '../core/GameSession';
 import { pickSpot, type Rect, stepToward } from '../entities/herdMath';
 import { DEPTH } from './depth';
 import type { ZoneArea } from './map/mapObjects';
+import { WORLD_ART } from '../config/game';
 
 /** Patrol pace in game px/s at 1× — brisker than grazing animals. */
 const WALK_SPEED = 12;
@@ -72,10 +73,12 @@ export class StaffLayer {
     const key = staffRole(roleId)?.spriteKey ?? 'ranger';
     const shadow = this.scene.add
       .image(start.x, start.y - 1, 'shadow-sm')
+      .setScale(WORLD_ART)
       .setDepth(DEPTH.actors - 1);
     const sprite = this.scene.add
       .sprite(start.x, start.y, key, 0)
       .setOrigin(0.5, 1)
+      .setScale(WORLD_ART)
       .setInteractive({ useHandCursor: true });
     sprite.on(Phaser.Input.Events.POINTER_OVER, () => eventBus.emit('staffHover', { staffId: id }));
     sprite.on(Phaser.Input.Events.POINTER_OUT, () =>

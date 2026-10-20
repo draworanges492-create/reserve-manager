@@ -12,7 +12,7 @@
       "sightingValue": 1.0,
       "poachingValue": 0.2,
       "charisma": 0.4,
-      "predators": ["lion"],
+      "predators": ["lion", "hyena"],
       "prey": [],
       "startPopulation": {
         "plains": 80
@@ -38,7 +38,7 @@
       "sightingValue": 1.5,
       "poachingValue": 0.3,
       "charisma": 0.6,
-      "predators": ["lion"],
+      "predators": ["lion", "hyena"],
       "prey": [],
       "startPopulation": {
         "plains": 24
@@ -83,6 +83,103 @@
       },
       "huntHalfSaturation": 20,
       "predationEfficiency": 0.04
+    },
+    {
+      "id": "elephant",
+      "name": "African elephant",
+      "plural": "elephants",
+      "diet": "browser",
+      "r": 0.004,
+      "habitatDensity": 0.012,
+      "grazeRate": 0.2,
+      "minViable": 3,
+      "sightingValue": 5.0,
+      "poachingValue": 1.0,
+      "charisma": 1.0,
+      "predators": [],
+      "prey": [],
+      "startPopulation": {
+        "plains": 6
+      },
+      "targetN": 8,
+      "spriteKey": "elephant",
+      "facts": [
+        {
+          "text": "TODO: verify — elephants push over and break trees, which opens up woodland into grassland for grazers.",
+          "verified": false
+        },
+        {
+          "text": "TODO: verify — elephants dig for water in dry riverbeds, and other animals drink from the holes.",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "id": "hyena",
+      "name": "Spotted hyena",
+      "plural": "hyenas",
+      "diet": "predator",
+      "r": 0.012,
+      "habitatDensity": 0,
+      "grazeRate": 0,
+      "minViable": 3,
+      "sightingValue": 2.0,
+      "poachingValue": 0.1,
+      "charisma": 0.3,
+      "predators": [],
+      "prey": ["impala", "zebra"],
+      "startPopulation": {
+        "plains": 5
+      },
+      "targetN": 5,
+      "spriteKey": "hyena",
+      "killsPerDay": {
+        "impala": 0.04,
+        "zebra": 0.01
+      },
+      "huntHalfSaturation": 20,
+      "predationEfficiency": 0.08,
+      "facts": [
+        {
+          "text": "TODO: verify — spotted hyenas hunt most of their own food rather than only scavenging.",
+          "verified": false
+        },
+        {
+          "text": "TODO: verify — their strong jaws crush bone, so they eat parts of a carcass other animals leave.",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "id": "vulture",
+      "name": "White-backed vulture",
+      "plural": "vultures",
+      "diet": "scavenger",
+      "r": 0.01,
+      "habitatDensity": 0,
+      "grazeRate": 0,
+      "minViable": 3,
+      "sightingValue": 1.5,
+      "poachingValue": 0.1,
+      "charisma": 0.4,
+      "predators": [],
+      "prey": [],
+      "startPopulation": {
+        "plains": 8
+      },
+      "targetN": 10,
+      "spriteKey": "vulture",
+      "carrionEfficiency": 16,
+      "facts": [
+        {
+          "text": "TODO: verify — vultures clean up carcasses quickly, which helps stop diseases spreading to other animals.",
+          "verified": false
+        },
+        {
+          "text": "TODO: verify — vultures are often poisoned when poachers lace carcasses to avoid being spotted.",
+          "verified": false
+        }
+      ]
     }
   ]
 }

@@ -25,6 +25,8 @@ describe('createGameState', () => {
 
 describe('starting populations', () => {
   it('come from species.json startPopulation', () => {
-    expect(newGame().populations).toEqual({ plains: { impala: 80, zebra: 24, lion: 4 } });
+    expect(newGame().populations).toEqual({
+      plains: { impala: 80, zebra: 24, lion: 4, elephant: 6, hyena: 5, vulture: 8 },
+    });
   });
 });

@@ -80,7 +80,7 @@ describe('versions (Phase 8 acceptance: mismatch handled gracefully)', () => {
     delete v1State.encyclopedia;
     const json = JSON.stringify({ format: SAVE_FORMAT, version: 1, summary: {}, state: v1State });
     const loaded = load(json);
-    expect(loaded.version).toBe(3);
+    expect(loaded.version).toBe(4);
     expect(loaded.meta).toEqual({ playTimeSeconds: 0 });
     expect({
       ...loaded,
@@ -97,8 +97,31 @@ describe('versions (Phase 8 acceptance: mismatch handled gracefully)', () => {
     const loaded = load(
       JSON.stringify({ format: SAVE_FORMAT, version: 2, summary: {}, state: v2State }),
     );
-    expect(loaded.version).toBe(3);
-    expect(loaded.encyclopedia).toEqual(['impala', 'lion', 'zebra']);
+    expect(loaded.version).toBe(4);
+    expect(loaded.encyclopedia).toEqual([
+      'elephant',
+      'hyena',
+      'impala',
+      'lion',
+      'vulture',
+      'zebra',
+    ]);
+  });
+
+  it('migrates a version-3 save: the new species join the plains, nothing else changes', () => {
+    const current = played(3);
+    const plains = Object.fromEntries(
+      Object.entries(current.populations.plains ?? {}).filter(
+        ([id]) => !['elephant', 'hyena', 'vulture'].includes(id),
+      ),
+    );
+    const v3State = { ...current, version: 3, populations: { ...current.populations, plains } };
+    const loaded = load(
+      JSON.stringify({ format: SAVE_FORMAT, version: 3, summary: {}, state: v3State }),
+    );
+    expect(loaded.version).toBe(4);
+    expect(loaded.populations.plains).toEqual({ ...plains, elephant: 6, hyena: 5, vulture: 8 });
+    expect({ ...loaded, populations: current.populations }).toEqual({ ...current, version: 4 });
   });
 
   it('refuses a save from a newer version instead of guessing', () => {

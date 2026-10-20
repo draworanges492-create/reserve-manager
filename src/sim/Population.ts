@@ -20,6 +20,19 @@ export function stochasticRound(x: number, rng: Rng): number {
 export function carryingCapacity(state: GameState, zoneId: string, species: SpeciesDef): number {
   const zone = state.zones[zoneId];
   if (!zone) return 0;
+  if (species.diet === 'scavenger') {
+    // Scavengers live on the dead: the animals expected to starve or be killed here each day
+    // (smooth, unlike yesterday's actual count, which is often zero) (DECISIONS D107).
+    const herd = state.populations[zoneId] ?? {};
+    let carcasses = 0;
+    for (const other of SPECIES) {
+      const n = herd[other.id];
+      if (n === undefined || other.diet === 'scavenger') continue;
+      const exp = expectedChange(state, zoneId, other, n);
+      carcasses += exp.starved + Object.values(exp.eatenBy).reduce((a, b) => a + b, 0);
+    }
+    return carcasses * (species.carrionEfficiency ?? 0);
+  }
   if (species.diet === 'predator') {
     const herd = state.populations[zoneId] ?? {};
     return species.prey.reduce(

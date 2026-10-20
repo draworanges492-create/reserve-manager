@@ -21,9 +21,10 @@ describe('vegetationBreakdown (spec §6.2)', () => {
     expect(vegetationBreakdown(withVegetation(empty(), 'plains', 100), 'plains').regrowth).toBe(0);
   });
 
-  it('counts grazers only, spread over the zone area', () => {
-    const state = newGame(); // 80 impala × 0.02 + 24 zebra × 0.04 = 2.56; lions don't graze
-    const expected = (2.56 * 250) / must(state.zones.plains).area;
+  it('counts grazers and browsers only, spread over the zone area', () => {
+    // 80 impala × 0.02 + 24 zebra × 0.04 + 6 elephants × 0.2 = 3.76; predators don't graze.
+    const state = newGame();
+    const expected = (3.76 * 250) / must(state.zones.plains).area;
     expect(vegetationBreakdown(state, 'plains').grazing).toBeCloseTo(expected, 5);
   });
 });

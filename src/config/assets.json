@@ -36,63 +36,73 @@
   "spritesheets": {
     "impala": {
       "path": "assets/sprites/impala.png",
-      "frameWidth": 24,
-      "frameHeight": 24
-    },
-    "zebra": {
-      "path": "assets/sprites/zebra.png",
-      "frameWidth": 24,
-      "frameHeight": 24
-    },
-    "lion": {
-      "path": "assets/sprites/lion.png",
-      "frameWidth": 24,
-      "frameHeight": 24
-    },
-    "elephant": {
-      "path": "assets/sprites/elephant.png",
       "frameWidth": 48,
       "frameHeight": 48
     },
-    "ranger": {
-      "path": "assets/sprites/ranger.png",
-      "frameWidth": 24,
-      "frameHeight": 24
+    "zebra": {
+      "path": "assets/sprites/zebra.png",
+      "frameWidth": 48,
+      "frameHeight": 48
     },
-    "visitor": {
-      "path": "assets/sprites/visitor.png",
-      "frameWidth": 24,
-      "frameHeight": 24
+    "lion": {
+      "path": "assets/sprites/lion.png",
+      "frameWidth": 48,
+      "frameHeight": 48
     },
-    "waterhole": {
-      "path": "assets/sprites/waterhole.png",
+    "elephant": {
+      "path": "assets/sprites/elephant.png",
       "frameWidth": 96,
       "frameHeight": 96
     },
+    "ranger": {
+      "path": "assets/sprites/ranger.png",
+      "frameWidth": 48,
+      "frameHeight": 48
+    },
+    "visitor": {
+      "path": "assets/sprites/visitor.png",
+      "frameWidth": 48,
+      "frameHeight": 48
+    },
+    "waterhole": {
+      "path": "assets/sprites/waterhole.png",
+      "frameWidth": 192,
+      "frameHeight": 192
+    },
     "portrait-tendai": {
       "path": "assets/portraits/portrait-tendai.png",
-      "frameWidth": 72,
-      "frameHeight": 72
+      "frameWidth": 144,
+      "frameHeight": 144
     },
     "portrait-amara": {
       "path": "assets/portraits/portrait-amara.png",
-      "frameWidth": 72,
-      "frameHeight": 72
+      "frameWidth": 144,
+      "frameHeight": 144
     },
     "portrait-wanjiru": {
       "path": "assets/portraits/portrait-wanjiru.png",
-      "frameWidth": 72,
-      "frameHeight": 72
+      "frameWidth": 144,
+      "frameHeight": 144
     },
     "portrait-victor": {
       "path": "assets/portraits/portrait-victor.png",
-      "frameWidth": 72,
-      "frameHeight": 72
+      "frameWidth": 144,
+      "frameHeight": 144
     },
     "portrait-kito": {
       "path": "assets/portraits/portrait-kito.png",
-      "frameWidth": 72,
-      "frameHeight": 72
+      "frameWidth": 144,
+      "frameHeight": 144
+    },
+    "hyena": {
+      "path": "assets/sprites/hyena.png",
+      "frameWidth": 48,
+      "frameHeight": 48
+    },
+    "vulture": {
+      "path": "assets/sprites/vulture.png",
+      "frameWidth": 48,
+      "frameHeight": 48
     }
   },
   "tilemaps": {

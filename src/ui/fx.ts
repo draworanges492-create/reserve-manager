@@ -1,4 +1,5 @@
 import type Phaser from 'phaser';
+import { WORLD_ART } from '../config/game';
 
 const DUST_COUNT = 10;
 
@@ -17,7 +18,7 @@ export function dustPuff(
       gravityY: 40,
       lifespan: 600,
       alpha: { start: 0.9, end: 0 },
-      scale: { start: 1, end: 0.6 },
+      scale: { start: WORLD_ART, end: WORLD_ART * 0.6 },
       emitting: false,
     })
     .setDepth(depth);

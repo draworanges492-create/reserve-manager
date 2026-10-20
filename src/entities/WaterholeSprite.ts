@@ -4,6 +4,7 @@ import { eventBus } from '../core/EventBus';
 import type { GameSession } from '../core/GameSession';
 import { DEPTH } from '../scenes/depth';
 import { waterVisualState, type WaterVisualState } from '../sim/Water';
+import { WORLD_ART } from '../config/game';
 
 const FRAME: Record<WaterVisualState, number> = { clear: 0, muddy: 1, drying: 2, dry: 3 };
 /** Clickable area: an ellipse a little larger than the full pool (frame is 96×96). */
@@ -33,7 +34,10 @@ export class WaterholeSprite {
     const x = hole.x * tileSize;
     const y = hole.y * tileSize;
 
-    this.sprite = scene.add.sprite(x, y, 'waterhole', 0).setDepth(DEPTH.waterholes);
+    this.sprite = scene.add
+      .sprite(x, y, 'waterhole', 0)
+      .setScale(WORLD_ART)
+      .setDepth(DEPTH.waterholes);
     // Pressing here pumps water, so it must not start a camera drag.
     this.sprite.setData('blocksDrag', true);
     this.sprite.setInteractive({
@@ -47,11 +51,13 @@ export class WaterholeSprite {
         angle: { min: 210, max: 330 },
         gravityY: 160,
         lifespan: 450,
+        scale: WORLD_ART,
         emitting: false,
       })
       .setDepth(DEPTH.effects);
     this.bucket = scene.add
       .image(x + 10, y - 10, 'bucket')
+      .setScale(WORLD_ART)
       .setDepth(DEPTH.effects)
       .setAlpha(0);
 

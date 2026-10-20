@@ -5,15 +5,12 @@ import { dirname, join, relative } from 'node:path';
 import { PixelCanvas } from './lib/canvas';
 import { encodePng, isPlaceholderFile, PLACEHOLDER_MARKER } from './lib/png';
 import { PAL } from './palette';
-import { drawBuildings, drawDust } from './placeholders/buildings';
 import { drawIcons } from './placeholders/icons';
-import { drawClueMarker, drawPortraits } from './placeholders/portraits';
-import { drawSprites } from './placeholders/sprites';
+import { drawWorldArt } from './art';
 import { drawTile } from './placeholders/tiles';
-import { drawBucket, drawDrop, drawWaterhole } from './placeholders/water';
 import {
+  TILE_ART,
   TILE_NAMES,
-  TILE_SIZE,
   TILESET_COLUMNS,
   TILESET_MARGIN,
   TILESET_SPACING,
@@ -40,14 +37,14 @@ function writePng(rel: string, canvas: PixelCanvas): void {
 function buildTileset(): PixelCanvas {
   const { width, height } = tilesetSize();
   const sheet = new PixelCanvas(width, height);
-  const last = TILE_SIZE - 1;
+  const last = TILE_ART - 1;
   TILE_NAMES.forEach((name, i) => {
     const tile = drawTile(name);
-    const px = TILESET_MARGIN + (i % TILESET_COLUMNS) * (TILE_SIZE + TILESET_SPACING);
-    const py = TILESET_MARGIN + Math.floor(i / TILESET_COLUMNS) * (TILE_SIZE + TILESET_SPACING);
+    const px = TILESET_MARGIN + (i % TILESET_COLUMNS) * (TILE_ART + TILESET_SPACING);
+    const py = TILESET_MARGIN + Math.floor(i / TILESET_COLUMNS) * (TILE_ART + TILESET_SPACING);
     // Copy the tile plus a 1 px extruded border of its own edge pixels.
-    for (let y = -1; y <= TILE_SIZE; y++) {
-      for (let x = -1; x <= TILE_SIZE; x++) {
+    for (let y = -1; y <= TILE_ART; y++) {
+      for (let x = -1; x <= TILE_ART; x++) {
         const src = tile.get(Math.min(last, Math.max(0, x)), Math.min(last, Math.max(0, y)));
         sheet.set(px + x, py + y, src);
       }
@@ -72,16 +69,8 @@ function paletteGpl(): string {
 }
 
 writePng('tilesets/terrain.png', buildTileset());
-for (const [name, canvas] of Object.entries(drawSprites())) writePng(`sprites/${name}.png`, canvas);
 for (const [name, canvas] of Object.entries(drawIcons())) writePng(`ui/${name}.png`, canvas);
-writePng('sprites/waterhole.png', drawWaterhole());
-for (const [name, canvas] of Object.entries(drawBuildings()))
-  writePng(`sprites/${name}.png`, canvas);
-writePng('sprites/bucket.png', drawBucket());
-writePng('sprites/clue-marker.png', drawClueMarker());
-writePng('sprites/fx-dust.png', drawDust());
-for (const [name, canvas] of Object.entries(drawPortraits()))
-  writePng(`portraits/${name}.png`, canvas);
-writePng('sprites/fx-drop.png', drawDrop());
+// Animals, people, waterhole, buildings, portraits and effects (DECISIONS D106).
+for (const [path, canvas] of Object.entries(drawWorldArt())) writePng(path, canvas);
 write('palette.gpl', Buffer.from(paletteGpl()));
 console.log(`palette: ${Object.keys(PAL).length} colours`);

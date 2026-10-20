@@ -140,6 +140,8 @@ export class DialogueScene extends Phaser.Scene {
       this.portrait
         .setTexture(view.portraitKey, EXPRESSION_FRAME[view.expression] ?? 0)
         .setPosition(x + PAD + 2, y + PAD + 2);
+      // Portraits are drawn at 2× detail; fit them to the frame exactly.
+      this.portrait.setScale(PORTRAIT / this.portrait.frame.width);
     }
     this.name.setText(view.speakerName).setPosition(x + textX, y + PAD);
     this.body.setPosition(x + textX, y + PAD + (view.speakerName ? 16 : 2));

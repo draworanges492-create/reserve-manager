@@ -24,6 +24,7 @@ import {
   type TiledTileLayer,
 } from '../src/core/TiledFormat';
 import {
+  TILE_ART,
   TILE_NAMES,
   TILE_SIZE as T,
   TILESET_COLUMNS,
@@ -173,8 +174,10 @@ const map: TiledMap = {
       image: '../tilesets/terrain.png',
       imagewidth: sheet.width,
       imageheight: sheet.height,
-      tilewidth: T,
-      tileheight: T,
+      // The art is drawn at ART_SCALE× detail, so the tileset's tiles are bigger than the
+      // map grid; the game scales the layers back down (DECISIONS D106).
+      tilewidth: TILE_ART,
+      tileheight: TILE_ART,
       margin: TILESET_MARGIN,
       spacing: TILESET_SPACING,
       columns: TILESET_COLUMNS,

@@ -65,7 +65,10 @@ describe('population dynamics', () => {
 
   it('loses prey to predators, and hunting slows as prey thins', () => {
     const { state } = runPopulation(watered(newGame()), new Rng(1));
-    expect(Object.keys(must(state.populationLog.plains?.impala).eatenBy)).toEqual(['lion']);
+    expect(Object.keys(must(state.populationLog.plains?.impala).eatenBy)).toEqual([
+      'lion',
+      'hyena',
+    ]);
     expect(killsPerPredator(lion, 'impala', 200)).toBeGreaterThan(
       killsPerPredator(lion, 'impala', 10),
     );

@@ -6,9 +6,9 @@ import { must, newGame, withLevel, withPopulation } from '../helpers/newGame';
 
 describe('Ecosystem Health (spec §6.8)', () => {
   it('weights grass 40%, viable species 40%, watered zones 20% over open zones', () => {
-    // Open: HQ (40) and plains (55) → 47.5 grass; 3/3 species viable; no water (A at 5).
+    // Open: HQ (40) and plains (55) → 47.5 grass; 6/6 species viable; no water (A at 5).
     const b = ecosystemBreakdown(newGame());
-    expect(b).toMatchObject({ viableSpecies: 3, totalSpecies: 3, wateredZones: 0, openZones: 2 });
+    expect(b).toMatchObject({ viableSpecies: 6, totalSpecies: 6, wateredZones: 0, openZones: 2 });
     expect(b.vegetation).toBeCloseTo(47.5, 6);
     expect(b.score).toBeCloseTo(0.4 * 47.5 + 0.4 * 100 + 0, 6);
   });
@@ -17,7 +17,7 @@ describe('Ecosystem Health (spec §6.8)', () => {
     const watered = ecosystemBreakdown(withLevel(newGame(), 'waterhole_a', 60));
     expect(watered.wateredZones).toBe(1); // plains only: HQ is 22.5 tiles from A, out of range
     const fewLions = ecosystemBreakdown(withPopulation(newGame(), 'plains', 'lion', 2));
-    expect(fewLions.viableSpecies).toBe(2);
+    expect(fewLions.viableSpecies).toBe(5);
   });
 });
 

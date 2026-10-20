@@ -16,7 +16,7 @@ export function waterholeDef(id: string): WaterholeDef | undefined {
   return waterholesData.waterholes.find((w) => w.id === id);
 }
 
-export type Diet = 'grazer' | 'browser' | 'predator';
+export type Diet = 'grazer' | 'browser' | 'predator' | 'scavenger';
 
 export interface SpeciesDef {
   id: string;
@@ -46,6 +46,8 @@ export interface SpeciesDef {
   huntHalfSaturation?: number;
   /** Predators only: predators supported per prey animal (spec §6.3 K_predator). */
   predationEfficiency?: number;
+  /** Scavengers only: animals supported per carcass left in the zone each day (D107). */
+  carrionEfficiency?: number;
   /** Must stay `verified: false` until the user checks them against a source (spec §0 rule 8). */
   facts: { text: string; verified: boolean }[];
 }

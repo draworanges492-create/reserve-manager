@@ -3,6 +3,7 @@ import { BALANCE } from '../config/balance';
 import { eventBus } from '../core/EventBus';
 import { DEPTH } from '../scenes/depth';
 import { pickSpot, type Rect, stepToward } from './herdMath';
+import { ART_SCALE, WORLD_ART } from '../config/game';
 
 const CFG = BALANCE.render.animals;
 const RING_COLOR = 0xe8d9a8;
@@ -103,11 +104,14 @@ export class AnimalGroupSprite {
     const { scene, opts } = this;
     const at = this.spotNearCentre() ?? this.centre;
     const shadowKey =
-      scene.textures.getFrame(opts.textureKey, 0).width > 24 ? 'shadow-lg' : 'shadow-sm';
-    const shadow = scene.add.image(at.x, at.y - 1, shadowKey);
+      scene.textures.getFrame(opts.textureKey, 0).width > 24 * ART_SCALE
+        ? 'shadow-lg'
+        : 'shadow-sm';
+    const shadow = scene.add.image(at.x, at.y - 1, shadowKey).setScale(WORLD_ART);
     const sprite = scene.add
       .sprite(at.x, at.y, opts.textureKey, 0)
       .setOrigin(0.5, 1)
+      .setScale(WORLD_ART)
       .setFlipX(Math.random() < 0.5);
     // Click target: the body, not the transparent corners of the frame.
     const w = sprite.width;
@@ -216,7 +220,7 @@ export class AnimalGroupSprite {
   private drawRing(): void {
     this.ring.clear().lineStyle(1, RING_COLOR, 0.9);
     for (const m of this.members) {
-      this.ring.strokeEllipse(m.sprite.x, m.sprite.y - 1, m.sprite.width * 0.8, 7);
+      this.ring.strokeEllipse(m.sprite.x, m.sprite.y - 1, m.sprite.displayWidth * 0.8, 7);
     }
   }
 }

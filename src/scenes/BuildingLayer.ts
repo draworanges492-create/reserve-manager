@@ -7,6 +7,7 @@ import { t } from '../core/text';
 import { validSlotsFor } from '../ui/economyInfo';
 import { dustPuff } from '../ui/fx';
 import { DEPTH } from './depth';
+import { WORLD_ART } from '../config/game';
 
 const BAR_W = 36;
 const BAR_H = 3;
@@ -42,6 +43,7 @@ export class BuildingLayer {
       const sprite = scene.add
         .image(px.x + px.w / 2, px.y + px.h, 'building-scaffold')
         .setOrigin(0.5, 1)
+        .setScale(WORLD_ART)
         .setDepth(DEPTH.actors + (px.y + px.h) / 10000)
         .setVisible(false)
         .setInteractive({ useHandCursor: true });
@@ -106,10 +108,10 @@ export class BuildingLayer {
         if (finished) {
           // A little "ta-da": the building settles into place in a puff of dust.
           dustPuff(this.scene, view.sprite.x, view.sprite.y - 2, DEPTH.effects, 16);
-          view.sprite.setScale(1, 0.8);
+          view.sprite.setScale(WORLD_ART, WORLD_ART * 0.8);
           this.scene.tweens.add({
             targets: view.sprite,
-            scaleY: 1,
+            scaleY: WORLD_ART,
             duration: 300,
             ease: 'Back.easeOut',
           });

@@ -342,3 +342,22 @@ errors. Test saves cleared afterwards.
 **Checks:** `build` ✅ · `test` ✅ (184) · `lint` ✅ · `validate-data` ✅ · browser: title,
 HUD and dialogue text sharp; HQ, ruin, gate, pump ruin, trees, waterhole (dry and full) and
 zebras checked at close zoom; 0 console errors.
+
+### Second playtest follow-up: models, camera, ecosystem (2026-10-20, user feedback)
+
+- All art redrawn at 2× detail as finer pixel art (D106): animals, people, trees, bushes,
+  map buildings, player buildings, waterhole, effects and portraits.
+- New species: elephant, spotted hyena, white-backed vulture (D107); state v4 migration.
+- Zoom out to a bird's-eye view of the whole explorable area; a margin keeps border fences
+  away from the screen edge (D108).
+
+**Checks:** `build` ✅ · `test` ✅ (189) · `lint` ✅ · `validate-data` ✅ · `sim:balance` (2
+years, with and without player) ✅ · browser: the player's existing v3 save loaded and
+gained the new species; bird's-eye view shows HQ + plains in one frame; close-ups of
+elephants, lions, vultures, ranger, HQ, ruin, gate and Tendai's portrait; 0 console errors.
+The player's save was backed up before testing and restored afterwards.
+
+**Known issues**
+
+- Trees are one tile, so they look small next to elephants.
+- Vultures stand on the ground; no circling flight yet.

@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { GAME_TITLE } from '../config/game';
+import { GAME_TITLE, WORLD_ART } from '../config/game';
 import {
   deleteSlot,
   latestSlot,
@@ -89,7 +89,7 @@ export class MenuScene extends Phaser.Scene {
       this.keep(
         this.add
           .image(w / 2 + (i - 1) * 44, y + 48, key, 0)
-          .setScale(2)
+          .setScale(2 * WORLD_ART)
           .setOrigin(0.5, 1),
       );
     });
