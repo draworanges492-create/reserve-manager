@@ -1,6 +1,6 @@
 # Story plan: Chapters 3–5
 
-Draft for discussion (2026-10-20). It builds on the spec's chapter table (§9.2) and on the
+**Approved by you on 2026-10-20**, with the decisions below settled as proposed. It builds on the spec's chapter table (§9.2) and on the
 threads Chapters 1–2 already set up. Things that differ from the spec, or that you need to
 decide, are listed under **Decisions** at the end. Nothing here is built yet.
 
@@ -165,18 +165,13 @@ push them, and each gets its own epilogue slide.
 About 120–180 dialogue lines per chapter, as in Chapters 1–2: one phase each (Phases
 10–12), each followed by your playtest.
 
-## Decisions
+## Decisions (settled 2026-10-20)
 
-1. **Elephants as the crop raiders (Ch 3).** The spec has impala causing the crop
-   raids. I'd make it the elephants: impala strip the grass (Amara's problem), elephants
-   raid crops (Wanjiru's problem). Two problems, two characters. OK?
-2. **Species target in Ch 4.** The spec's goal "6 species present" is already met now that
-   we have six. I'd raise it to 8 (adding leopard plus giraffe or wildebeest).
-3. **How culling is shown.** Off-screen and reported in text (numbers and the journal),
-   never shown. Is that the tone you want?
-4. **Hale's fate.** The three outcomes above (expose / deal / lock-down). Do you want a
-   fourth, e.g. turning him into an investor who reforms?
-5. **Kito.** Can he be hired as a ranger after his confession (a redemption path), or
-   should he only ever be an informant?
-6. **Vultures' gameplay role** (carcass cleanup and disease, Ch 5) answers open
-   question D107. OK to build it then rather than now?
+1. Elephants raid the village crops (Wanjiru's problem); impala overgraze (Amara's problem).
+2. Chapter 4 needs **8 species** present: the six we have plus leopard and giraffe or
+   wildebeest.
+3. Culling happens off-screen and is reported only in text (numbers and journal).
+4. Hale has three outcomes: expose, deal or lock-down. No fourth.
+5. Kito stays an informant (talked to or handed to the police); he is not hireable.
+6. Vultures' gameplay role (carcass cleanup, disease risk, poisoning) is built in
+   Chapter 5.
