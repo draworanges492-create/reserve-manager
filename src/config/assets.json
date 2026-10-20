@@ -31,7 +31,11 @@
     "clue-marker": "assets/sprites/clue-marker.png",
     "icon-goal-open": "assets/ui/icon-goal-open.png",
     "icon-goal-done": "assets/ui/icon-goal-done.png",
-    "fx-dust": "assets/sprites/fx-dust.png"
+    "fx-dust": "assets/sprites/fx-dust.png",
+    "tree-acacia-0": "assets/sprites/tree-acacia-0.png",
+    "tree-acacia-1": "assets/sprites/tree-acacia-1.png",
+    "tree-marula-0": "assets/sprites/tree-marula-0.png",
+    "tree-marula-1": "assets/sprites/tree-marula-1.png"
   },
   "spritesheets": {
     "impala": {

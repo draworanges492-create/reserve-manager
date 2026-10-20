@@ -81,6 +81,7 @@ export const OBJECT_LAYERS = [
   'build_slots',
   'fence_segments',
   'poacher_entries',
+  'trees',
 ] as const;
 export const SLOT_TYPES = ['tower', 'post', 'pump', 'lodge'] as const;
 export const SPAWN_KINDS = ['animal', 'visitor', 'staff'] as const;

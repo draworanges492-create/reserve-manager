@@ -21,8 +21,6 @@ export const BASE_TILES = [
   'dry_bed',
   'water_shallow',
   'water_deep',
-  'tree',
-  'tree_b',
   'bush',
   'grass_tuft',
   'boulder',

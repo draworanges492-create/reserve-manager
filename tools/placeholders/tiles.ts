@@ -4,7 +4,7 @@ import { Rng } from '../../src/core/Rng';
 import { PixelCanvas, type Rgba } from '../lib/canvas';
 import { PAL } from '../palette';
 import { structureImage } from '../art';
-import { acacia, boulder, bush, grassTuft, tree } from '../art/plants';
+import { boulder, bush, grassTuft } from '../art/plants';
 import { raster } from '../art/raster';
 import {
   type BaseTileName,
@@ -152,8 +152,6 @@ const DRAWERS: Record<BaseTileName, () => PixelCanvas> = {
     ripples(ground(PAL.water, 14, [[PAL.waterLight, 0.03]]), new Rng(141), 3, PAL.waterLight),
   water_deep: () =>
     ripples(ground(PAL.waterDeep, 15, [[PAL.water, 0.04]]), new Rng(142), 3, PAL.water),
-  tree: plant(tree),
-  tree_b: plant(acacia),
   bush: plant(bush),
   grass_tuft: plant(grassTuft),
   boulder: plant(boulder),

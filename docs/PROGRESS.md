@@ -207,7 +207,7 @@ errors.
 **Known issues**
 
 - Open questions D39/D60 (unlock chapters, build times), D51/D57 (predation, neglect).
-- Hard tile edges; animals draw over trees; touch untested on a device.
+- Hard tile edges; touch untested on a device.
 
 ## Phase 6 — UI pass ✅ (2026-10-19)
 
@@ -235,7 +235,7 @@ alert click both panned the camera; tooltips correct; real alerts appeared from 
 **Known issues**
 
 - Open questions D39/D60 (unlock chapters, build times), D51/D57 (predation, neglect).
-- Hard tile edges; animals draw over trees; touch untested on a device.
+- Hard tile edges; touch untested on a device.
 
 ## Phase 7 — Dialogue & Chapters 1–2 ✅ (2026-10-19)
 
@@ -269,7 +269,7 @@ scene started; tracker and alerts showed; 0 console errors.
 - Waterhole A starts dry so it never raises a "drying up" alert (the Ch 1 tutorial covers it).
 - The dialogue box covers the toolbar while open (it's modal, so nothing is lost).
 - Story text is placeholder quality (D83); open questions D39/D60, D51/D57.
-- Hard tile edges; animals draw over trees; touch untested on a device.
+- Hard tile edges; touch untested on a device.
 
 ## Phase 8 — Save/load & menu ✅ (2026-10-20)
 
@@ -298,7 +298,7 @@ console errors. Test saves were cleared from the preview browser afterwards.
 - Waterhole A starts dry so it never raises a "drying up" alert (the Ch 1 tutorial covers it).
 - The dialogue box covers the toolbar while open (it's modal).
 - Story text is placeholder quality (D83); open questions D39/D60, D51/D57.
-- Hard tile edges; animals draw over trees; touch untested on a device.
+- Hard tile edges; touch untested on a device.
 
 ## Phase 9 — Polish for Milestone A ✅ (2026-10-20)
 
@@ -328,7 +328,7 @@ errors. Test saves cleared afterwards.
 - The dialogue box covers the toolbar while open (it's modal).
 - Story and encyclopedia text are placeholder quality and unverified (D83, D96).
 - Open questions D39/D60, D51/D57/D99.
-- Hard tile edges; animals draw over trees; touch untested on a device.
+- Hard tile edges; touch untested on a device.
 - No screenshots in the README yet; the repo has no GitHub remote, so Pages hasn't run.
 
 ### Milestone A follow-up: readability and art (2026-10-20, user feedback)
@@ -357,7 +357,9 @@ gained the new species; bird's-eye view shows HQ + plains in one frame; close-up
 elephants, lions, vultures, ranger, HQ, ruin, gate and Tendai's portrait; 0 console errors.
 The player's save was backed up before testing and restored afterwards.
 
+- Big trees: acacias and marulas are now sprites in scale with the elephants, depth-sorted
+  with the animals (D109).
+
 **Known issues**
 
-- Trees are one tile, so they look small next to elephants.
 - Vultures stand on the ground; no circling flight yet.

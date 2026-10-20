@@ -8,14 +8,14 @@ const tintOf = (season: Season): Phaser.Display.Color =>
 
 /**
  * Seasons change the terrain's colour (warm and dusty when dry, greener when wet).
- * Only tile layers are tinted, so animals keep their colours (DECISIONS D13).
+ * Only the land is tinted (tile layers and trees), so animals keep their colours (D13).
  */
 export class SeasonTint {
   private current: Phaser.Display.Color;
 
   constructor(
     private readonly scene: Phaser.Scene,
-    private readonly layers: Phaser.Tilemaps.TilemapLayer[],
+    private readonly layers: { setTint(color: number): unknown }[],
     season: Season,
   ) {
     this.current = tintOf(season);

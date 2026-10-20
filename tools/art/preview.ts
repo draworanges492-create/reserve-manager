@@ -7,9 +7,10 @@ import { hyena, lion, vulture } from './predators';
 import { BUILDING_ART } from './buildings';
 import { ranger, visitor } from './people';
 import { PORTRAIT_IDS, portraitFrames } from './portraits';
-import { acacia, boulder, bush, grassTuft, tree } from './plants';
+import { boulder, bush, grassTuft } from './plants';
 import { raster, sheet } from './raster';
 import { STRUCTURE_ART } from './structures';
+import { TREE_ART, TREE_SIZES, TREE_VARIANTS, type TreeKind } from './trees';
 import { WATERHOLE_FRAMES } from './water';
 
 const out = process.argv[2];
@@ -27,9 +28,7 @@ const items = [
   both(visitor, 24),
 ];
 const scenery = [
-  ...[tree, acacia, bush, boulder, grassTuft].map((f) =>
-    raster(f(), '', 24, 24, { outline: false }),
-  ),
+  ...[bush, boulder, grassTuft].map((f) => raster(f(), '', 24, 24, { outline: false })),
   ...Object.values(STRUCTURE_ART).map((f, i) =>
     raster(f(), '', i === 0 ? 72 : 48, 48, { outline: false }),
   ),
@@ -41,6 +40,18 @@ if (which === 'scenery') items.splice(0, items.length, ...scenery);
 if (which === 'built') items.splice(0, items.length, ...built);
 if (which === 'portraits')
   items.splice(0, items.length, ...PORTRAIT_IDS.map((id) => sheet(portraitFrames(id), 72, 72)));
+if (which === 'trees')
+  items.splice(
+    0,
+    items.length,
+    both(elephant, 48),
+    ...(Object.keys(TREE_ART) as TreeKind[]).flatMap((k) =>
+      Array.from({ length: TREE_VARIANTS }, (_, v) =>
+        raster(TREE_ART[k](v), '', TREE_SIZES[k].w, TREE_SIZES[k].h, { outline: false }),
+      ),
+    ),
+    both(impala, 24),
+  );
 if (which === 'water') items.splice(0, items.length, ...water);
 const grounds = ['#7d8a52', '#a39a62', '#8a6f4e'].map((c) => hex(c));
 const pad = 4;

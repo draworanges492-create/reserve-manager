@@ -136,6 +136,17 @@ const objectsByLayer: Record<(typeof OBJECT_LAYERS)[number], TiledObject[]> = {
   ),
   fence_segments: fenceSegments(),
   poacher_entries: POACHER_ENTRIES.map((p, i) => point(p, `entry_${i}`, 'poacher_entry', {})),
+  // Big trees (D109): a point at the bottom middle of the trunk's tile, where the sprite stands.
+  trees: terrain.trees.map((t, i) =>
+    obj({
+      x: (t.x + 0.5) * T,
+      y: (t.y + 1) * T,
+      name: `tree_${i}`,
+      type: 'tree',
+      point: true,
+      properties: props({ kind: t.kind, variant: String(t.variant) }),
+    }),
+  ),
 };
 
 const objectLayer = (name: (typeof OBJECT_LAYERS)[number]): TiledObjectLayer => ({

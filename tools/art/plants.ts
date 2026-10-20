@@ -10,7 +10,6 @@ export const LEAF: Ramp & { glint: string; deep: string } = {
   dark: '#3d5a2f',
   deep: '#2c4224',
 };
-const BARK: Ramp = { light: '#8c6a48', mid: '#6a4a32', dark: '#4a3424' };
 const STONE: Ramp = { light: '#a8a397', mid: '#827d70', dark: '#5e5a52' };
 
 export function shadow(cx: number, cy: number, rx: number, ry: number): string {
@@ -47,35 +46,6 @@ export function foliage(
     out.push(fill(ellipse(x, y, r, r * 0.85), color));
   }
   return out.join('');
-}
-
-/** Round, leafy tree (e.g. a marula). */
-export function tree(): string {
-  return [
-    shadow(13, 21.8, 8.5, 1.8),
-    shaded('M10.8,22 C11.2,19 11.4,15 11.2,12 L13.6,12 C13.4,15 13.6,19 14.2,22 Z', BARK, {
-      rim: [0.5, 0],
-      light: 'M11.4,12 L12,12 L11.9,21.5 L11.3,21.5 Z',
-    }),
-    limb('M12.6,15 C14,13.6 15.2,12.4 16.4,10.6', BARK.mid, 0.7, 0),
-    limb('M12,14.4 C10.8,13 9.8,12 8.8,10.6', BARK.dark, 0.6, 0),
-    foliage(12.2, 8.6, 10.2, 7.6, 151, 46),
-  ].join('');
-}
-
-/** Flat-topped umbrella acacia on a forked trunk. */
-export function acacia(): string {
-  return [
-    shadow(12.5, 22, 9, 1.6),
-    limb('M12.4,22 C12.2,18 11.6,15 11.2,12.6', BARK.mid, 1.3, 0),
-    limb('M12.8,21.8 C12.6,18.4 12.2,15.6 11.8,13', BARK.dark, 0.5, 0),
-    limb('M11.3,13 C9.6,11 8,9.6 6.2,8.4', BARK.mid, 0.7, 0),
-    limb('M11.6,13.4 C13.4,11.2 15.4,9.8 17.6,8.6', BARK.dark, 0.7, 0),
-    limb('M11.4,12.6 C11.6,10.6 12,9.4 12.4,8', BARK.mid, 0.55, 0),
-    limb('M11.9,21.6 C11.7,18 11.3,15.4 11,13', BARK.light, 0.35, 0),
-    fill(ellipse(12, 7.8, 11.4, 2.5), LEAF.deep),
-    foliage(11.8, 6, 10.6, 2.6, 7, 60),
-  ].join('');
 }
 
 export function bush(): string {

@@ -16,6 +16,8 @@ export const TILE_SIZE = 24;
 export const ART_SCALE = 2;
 /** Scale to give a world sprite so its texture shows at world size. */
 export const WORLD_ART = 1 / ART_SCALE;
+/** Big tree sprites: world px between the trunk's base and the bottom of the image (shadow). */
+export const TREE_FOOT_PX = 5.4;
 
 /** Real seconds per in-game day at 1× speed. */
 export const DAY_LENGTH_SECONDS = 120;

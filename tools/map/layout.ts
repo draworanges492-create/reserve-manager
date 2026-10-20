@@ -2,6 +2,7 @@
 // Zones tile the whole map edge to edge, and every zone borders one that unlocks no
 // later than it does, so the playable area grows outward without gaps (DECISIONS D43).
 // That makes zones ~1.6× the spec's "approx." sizes (which only add up to 5,800 tiles).
+import type { TreeKind } from '../art/trees';
 import type { StructureName, TileName } from '../tileset';
 
 export const MAP_WIDTH = 120;
@@ -112,25 +113,30 @@ export const POACHER_ENTRIES: Point[] = [
 /** Gate opening in the HQ south fence, in tiles along y = hq bottom edge. */
 export const GATE_SPAN = { from: 55, to: 59 };
 
-/** Decoration chance per tile, by zone ('none' = unzoned bush). Scaled by noise for clumping. */
-export const DECO: Record<string, { tile: TileName; p: number }[]> = {
+/**
+ * Decoration chance per tile, by zone ('none' = unzoned bush), scaled by noise for clumping.
+ * `tile` decorations go in the vegetation_deco layer; `tree`s become sprites (D109).
+ */
+export type Deco = ({ tile: TileName } | { tree: TreeKind }) & { p: number };
+
+export const DECO: Record<string, Deco[]> = {
   woodland: [
-    { tile: 'tree', p: 0.2 },
-    { tile: 'tree_b', p: 0.08 },
+    { tree: 'marula', p: 0.2 },
+    { tree: 'acacia', p: 0.08 },
     { tile: 'bush', p: 0.08 },
   ],
   north: [
-    { tile: 'tree_b', p: 0.05 },
+    { tree: 'acacia', p: 0.05 },
     { tile: 'bush', p: 0.05 },
     { tile: 'grass_tuft', p: 0.05 },
   ],
   river: [
-    { tile: 'tree', p: 0.06 },
+    { tree: 'marula', p: 0.06 },
     { tile: 'bush', p: 0.08 },
     { tile: 'grass_tuft', p: 0.06 },
   ],
   plains: [
-    { tile: 'tree_b', p: 0.012 },
+    { tree: 'acacia', p: 0.012 },
     { tile: 'bush', p: 0.025 },
     { tile: 'grass_tuft', p: 0.06 },
   ],
@@ -139,13 +145,13 @@ export const DECO: Record<string, { tile: TileName; p: number }[]> = {
     { tile: 'bush', p: 0.04 },
   ],
   east_border: [
-    { tile: 'tree', p: 0.03 },
+    { tree: 'marula', p: 0.03 },
     { tile: 'bush', p: 0.04 },
   ],
   hq: [{ tile: 'grass_tuft', p: 0.03 }],
   none: [
     { tile: 'bush', p: 0.08 },
-    { tile: 'tree', p: 0.04 },
+    { tree: 'marula', p: 0.04 },
     { tile: 'grass_tuft', p: 0.04 },
   ],
 };

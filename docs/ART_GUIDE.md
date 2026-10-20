@@ -45,13 +45,11 @@ tiles by position.
 | 12  | dry_bed          | ground          | cracked mud (unused on the map now) |
 | 13  | water_shallow    | water           | walkable                            |
 | 14  | water_deep       | water           | blocks movement                     |
-| 15  | tree             | vegetation_deco | round canopy, transparent bg        |
-| 16  | tree_b           | vegetation_deco | acacia                              |
-| 17  | bush             | vegetation_deco |                                     |
-| 18  | grass_tuft       | vegetation_deco |                                     |
-| 19  | boulder          | vegetation_deco | blocks movement                     |
-| 20  | collision        | collision       | debug marker, layer is hidden       |
-| 21+ | structure pieces | objects         | see below                           |
+| 15  | bush             | vegetation_deco |                                     |
+| 16  | grass_tuft       | vegetation_deco |                                     |
+| 17  | boulder          | vegetation_deco | blocks movement                     |
+| 18  | collision        | collision       | debug marker, layer is hidden       |
+| 19+ | structure pieces | objects         | see below                           |
 
 ### Map buildings (multi-tile structures, DECISIONS D105)
 
@@ -104,6 +102,9 @@ the image sizes (2× detail); the world size is half.
 
 Portraits (`public/assets/portraits/`) are 144×144 per frame, four frames: neutral, happy,
 worried, angry.
+
+| tree-acacia-0/1 | 194×172 | 1 | big tree sprite; trunk base 5.4 world px above the bottom |
+| tree-marula-0/1 | 152×162 | 1 | big tree sprite, same anchor |
 
 Still to come (later phases): wildebeest, giraffe, leopard, rhino; fence crew / tracker /
 vet / culling team; lodge; 9-slice UI panels.

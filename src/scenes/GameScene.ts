@@ -18,6 +18,7 @@ import { StaffLayer } from './StaffLayer';
 import { readZones, type ZoneArea } from './map/mapObjects';
 import { SeasonTint } from './map/SeasonTint';
 import { ZoneOverlay } from './map/ZoneOverlay';
+import { TreeLayer } from './map/TreeLayer';
 import { getSession } from './session';
 import type { UIScene } from './UIScene';
 import { viewScale } from '../ui/view';
@@ -89,7 +90,12 @@ export class GameScene extends Phaser.Scene {
       return layer.setScale(map.tileWidth / source.tileWidth).setDepth(depth);
     });
 
-    const seasonTint = new SeasonTint(this, layers, seasonOf(session.state.clock.day));
+    const trees = new TreeLayer(this, map);
+    const seasonTint = new SeasonTint(
+      this,
+      [...layers, ...trees.images],
+      seasonOf(session.state.clock.day),
+    );
     this.zones = readZones(map);
     this.overlay = new ZoneOverlay(
       this,

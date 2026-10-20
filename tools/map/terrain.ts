@@ -1,5 +1,6 @@
 // Builds the five tile layers from the layout, deterministically from MAP_SEED.
 import { Rng } from '../../src/core/Rng';
+import { TREE_VARIANTS, type TreeKind } from '../art/trees';
 import { gid, structureTiles, type TileName } from '../tileset';
 import {
   DECO,
@@ -56,7 +57,18 @@ function valueNoise(rng: Rng, cell: number): (x: number, y: number) => number {
   };
 }
 
-export function buildTerrain(): TileLayers {
+/** A big tree, by the tile its trunk stands on. */
+export interface TreeSpot {
+  kind: TreeKind;
+  x: number;
+  y: number;
+  variant: number;
+}
+
+/** Minimum distance (tiles, each axis) between two big trees. */
+const TREE_SPACING = 3;
+
+export function buildTerrain(): TileLayers & { trees: TreeSpot[] } {
   const rng = new Rng(MAP_SEED);
   const groundNoise = valueNoise(rng, 6);
   const decoNoise = valueNoise(rng, 5);
@@ -68,6 +80,7 @@ export function buildTerrain(): TileLayers {
     objects: empty(),
     collision: empty(),
   };
+  const trees: TreeSpot[] = [];
   /** Tiles where decoration must not go (paths, water, buildings, slots). */
   const keepClear = new Set<number>();
 
@@ -140,16 +153,24 @@ export function buildTerrain(): TileLayers {
       const density = 0.4 + 1.2 * decoNoise(x, y);
       const roll = rng.next();
       let acc = 0;
-      for (const { tile, p } of options) {
-        acc += p * density;
-        if (roll < acc) {
-          layers.vegetation_deco[index(x, y)] = gid(tile);
-          if (tile === 'boulder') layers.collision[index(x, y)] = gid('collision');
-          break;
+      for (const deco of options) {
+        acc += deco.p * density;
+        if (roll >= acc) continue;
+        if ('tree' in deco) {
+          // Big trees need room: none within TREE_SPACING tiles of another (D109).
+          const crowded = trees.some(
+            (t) => Math.abs(t.x - x) < TREE_SPACING && Math.abs(t.y - y) < TREE_SPACING,
+          );
+          if (!crowded)
+            trees.push({ kind: deco.tree, x, y, variant: trees.length % TREE_VARIANTS });
+        } else {
+          layers.vegetation_deco[index(x, y)] = gid(deco.tile);
+          if (deco.tile === 'boulder') layers.collision[index(x, y)] = gid('collision');
         }
+        break;
       }
     }
   }
 
-  return layers;
+  return { ...layers, trees };
 }
