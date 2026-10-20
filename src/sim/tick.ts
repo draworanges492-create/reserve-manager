@@ -5,6 +5,7 @@ import { runConstruction } from './Construction';
 import { runCropRaids } from './CropRaids';
 import { runEconomy } from './Economy';
 import { runHerdPlans } from './HerdPlans';
+import { runPoaching } from './Poaching';
 import { runPopulation } from './Population';
 import { runStory } from '../story/StoryManager';
 import { runScores } from './Scores';
@@ -28,6 +29,7 @@ const STEPS: readonly SimStep[] = [
   runVegetation,
   runPopulation,
   runHerdPlans,
+  runPoaching,
   runTourism,
   runConstruction,
   runEconomy,

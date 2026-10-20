@@ -75,7 +75,7 @@ export function zoneDef(id: string): ZoneDef | undefined {
 }
 
 export interface BuildingEffect {
-  op: 'installPump' | 'patrolBoost' | 'raidGuard' | 'tourismInfra';
+  op: 'installPump' | 'patrolBoost' | 'raidGuard' | 'tourismInfra' | 'cameraWatch';
   pumpKind?: 'borehole' | 'solar';
   value?: number;
 }

@@ -81,6 +81,9 @@ export interface Balance {
     reputationStart: number;
     /** Share of the gap to its target that Reputation closes each day (slow-moving). */
     reputationDriftPerDay: number;
+    /** Trust below this creeps back up by trustRecoveryPerDay (D123). */
+    trustRest: number;
+    trustRecoveryPerDay: number;
     /** Spec §6.8 "jobs created" (DECISIONS D70). */
     trustPerHire: number;
     trustPerDismissal: number;
@@ -125,9 +128,43 @@ export interface Balance {
     seasonMult: Record<Season, number>;
     /** Added to attraction while a leopard is in the reserve and has been seen. */
     rareBonus: number;
+    /** Most visitors a day: a base for day trips, plus room per tower and for the lodge (D123). */
+    capacityBase: number;
+    capacityPerTower: number;
+    capacityLodge: number;
     /** Victor's cut of ticket money if the player took his lodge deal. */
     victorShare: number;
     historyDays: number;
+  };
+  /** Chapter 5 drought (D121). */
+  drought: {
+    decayMult: number;
+    /** Pump output while the borehole hasn't been deepened. */
+    pumpMult: number;
+    deepenCost: number;
+    truckCost: number;
+    truckAmount: number;
+  };
+  /** Spec §6.5 poaching (Chapter 5, D122). */
+  poaching: {
+    /** Pressure 0–100 per zone while the ring is active. */
+    pressure: Record<string, number>;
+    baseChance: number;
+    /** Multipliers after the Hale choice. */
+    lockdownMult: number;
+    exposedMult: number;
+    dealMult: number;
+    /** Chance a poisoned carcass is left, and how many vultures it kills. */
+    poisonChance: number;
+    poisonKills: { min: number; max: number };
+    maxCatchChance: number;
+  };
+  /** Carcass disease when vultures are too few to clean up (D122). */
+  disease: {
+    vulturesNeeded: number;
+    chance: number;
+    /** Share of grazers lost in the zone. */
+    loss: number;
   };
   /** Elephants raiding village crops (Chapter 3 onwards, D111). */
   cropRaids: {

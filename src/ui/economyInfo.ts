@@ -228,19 +228,40 @@ export function buildingPanelContent(
   }
   lines.push({ text: def.description });
   const refund = Math.floor(def.cost * BALANCE.economy.cancelRefund);
+  const actions: NonNullable<PanelContent['actions']> =
+    b.daysLeft > 0
+      ? [
+          {
+            label: t('building.cancel', { n: refund }),
+            onClick: () => dispatch({ type: 'cancelBuild', slotId }),
+          },
+        ]
+      : [];
+  // Chapter 5 drought (D121): pumps can be deepened, and water trucked in.
+  const holeId = slot.waterholeId;
+  if (b.daysLeft === 0 && holeId && state.chapter.current >= 5) {
+    const deepened = state.flags[`deepened_${holeId}`] === true;
+    if (state.flags.drought)
+      lines.push({
+        text: t(deepened ? 'building.deepened' : 'building.halfOutput'),
+        warn: !deepened,
+      });
+    if (!deepened)
+      actions.push({
+        label: t('building.deepen', { cost: BALANCE.drought.deepenCost }),
+        onClick: () => dispatch({ type: 'deepenBorehole', waterholeId: holeId }),
+      });
+    if (state.flags.drought)
+      actions.push({
+        label: t('building.truck', { cost: BALANCE.drought.truckCost }),
+        onClick: () => dispatch({ type: 'truckWater', waterholeId: holeId }),
+      });
+  }
   return {
     title: def.name,
     subtitle: zoneName(slot.zoneId),
     portrait: `building-${def.id}`,
     lines,
-    actions:
-      b.daysLeft > 0
-        ? [
-            {
-              label: t('building.cancel', { n: refund }),
-              onClick: () => dispatch({ type: 'cancelBuild', slotId }),
-            },
-          ]
-        : [],
+    actions,
   };
 }

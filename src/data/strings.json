@@ -282,5 +282,18 @@
   "species.bringIn": "Bring in ({cost})",
   "species.canBringIn": "{name} · could come from another reserve",
   "species.canBringInHint": "{count} animals to the {zone}, needs a vet",
-  "alert.reintroduced": "{count} {species} arrived in the {zone}."
+  "alert.reintroduced": "{count} {species} arrived in the {zone}.",
+  "water.drought": "Drought: no rain, faster drying, pump at half (deepen the borehole)",
+  "water.droughtDeepened": "Drought: no rain, faster drying (borehole deepened)",
+  "command.needsPump": "Needs a working pump here first.",
+  "command.alreadyDeepened": "This borehole is already deepened.",
+  "command.notInDrought": "Only needed during the drought.",
+  "alert.poached": "Poachers killed {count} {species} in the {zone}.",
+  "alert.vulturesPoisoned": "They poisoned the carcass: {n} vultures dead.",
+  "alert.poacherCaught": "Rangers caught a poacher in the {zone}. That's evidence.",
+  "alert.disease": "Disease is spreading among grazers in the {zone}: too few vultures to clean up carcasses.",
+  "building.deepen": "Deepen borehole ({cost})",
+  "building.truck": "Truck in water ({cost})",
+  "building.deepened": "Borehole deepened: full output in the drought.",
+  "building.halfOutput": "Drought: this pump is at half output until the borehole is deepened."
 }

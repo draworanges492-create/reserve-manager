@@ -46,7 +46,10 @@ export type AlertEvent =
   | EventOf<'encyclopediaUnlocked'>
   | EventOf<'cropRaid'>
   | EventOf<'herdPlanDone'>
-  | EventOf<'speciesReintroduced'>;
+  | EventOf<'speciesReintroduced'>
+  | EventOf<'poachingIncident'>
+  | EventOf<'poacherCaught'>
+  | EventOf<'diseaseOutbreak'>;
 
 /** Info alerts fade after this many in-game days; warnings stay until resolved or dismissed. */
 export const INFO_LIFETIME_DAYS = 2;
@@ -193,6 +196,52 @@ export function alertFor(state: GameState, event: AlertEvent): AlertChange | nul
           key: `enc:${event.payload.speciesId}`,
           severity: 'info',
           text: t('alert.encyclopedia', { name }),
+          day,
+        },
+      };
+    }
+    case 'poachingIncident': {
+      const { zoneId, speciesId, count, vultures } = event.payload;
+      const zone = zoneDef(zoneId)?.name ?? zoneId;
+      // Mid-sentence: "1 impala", "1 African elephant" (keep proper adjectives capitalised).
+      const name = speciesDef(speciesId)?.name ?? speciesId;
+      const species =
+        count === 1
+          ? name.replace(/^(?!African)\w/, (c) => c.toLowerCase())
+          : (speciesDef(speciesId)?.plural ?? speciesId);
+      const text = t('alert.poached', { count, species, zone });
+      return {
+        add: {
+          key: `poached:${zoneId}`,
+          severity: 'critical',
+          text: vultures ? `${text} ${t('alert.vulturesPoisoned', { n: vultures })}` : text,
+          focus: zoneCentre(state, zoneId),
+          target: { kind: 'zone', zoneId },
+          day,
+        },
+      };
+    }
+    case 'poacherCaught': {
+      const zone = zoneDef(event.payload.zoneId)?.name ?? event.payload.zoneId;
+      return {
+        add: {
+          key: 'caught',
+          severity: 'info',
+          text: t('alert.poacherCaught', { zone }),
+          focus: zoneCentre(state, event.payload.zoneId),
+          day,
+        },
+      };
+    }
+    case 'diseaseOutbreak': {
+      const zone = zoneDef(event.payload.zoneId)?.name ?? event.payload.zoneId;
+      return {
+        add: {
+          key: `disease:${event.payload.zoneId}`,
+          severity: 'warning',
+          text: t('alert.disease', { zone }),
+          focus: zoneCentre(state, event.payload.zoneId),
+          target: { kind: 'zone', zoneId: event.payload.zoneId },
           day,
         },
       };

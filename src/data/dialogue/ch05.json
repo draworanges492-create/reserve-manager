@@ -1,0 +1,633 @@
+{
+  "dialogues": [
+    {
+      "id": "ch05_intro",
+      "nodes": {
+        "start": {
+          "speaker": "narrator",
+          "text": "Chapter 5: Pressure.",
+          "next": "n1"
+        },
+        "n1": {
+          "speaker": "narrator",
+          "text": "The rains do not come. Week after week the sky stays white and the wind brings dust instead of clouds.",
+          "effects": [
+            {
+              "op": "setFlag",
+              "flag": "drought"
+            },
+            {
+              "op": "setFlag",
+              "flag": "poaching_ring"
+            },
+            {
+              "op": "journal",
+              "entry": "ch5_drought"
+            }
+          ],
+          "next": "n2"
+        },
+        "n2": {
+          "speaker": "amara",
+          "portrait": "worried",
+          "text": "The water table is dropping. The boreholes are sucking air half the time. Our pumps are giving half what they did.",
+          "focus": {
+            "x": 58,
+            "y": 43
+          },
+          "next": "n3"
+        },
+        "n3": {
+          "speaker": "tendai",
+          "text": "Then we go deeper. It costs, but a deeper borehole keeps pumping when the shallow ones fail.",
+          "next": "n4"
+        },
+        "n4": {
+          "speaker": "narrator",
+          "text": "Click a pump and deepen its borehole. In an emergency you can truck water in, but it is expensive.",
+          "next": "n5"
+        },
+        "n5": {
+          "speaker": "tendai",
+          "portrait": "worried",
+          "text": "And keep the rangers close. Dry years bring hungry people, and worse than hungry people.",
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch05_letter",
+      "nodes": {
+        "start_route": {
+          "speaker": "narrator",
+          "text": "",
+          "branch": [
+            {
+              "conditions": [
+                {
+                  "op": "flag",
+                  "flag": "victor_lodge"
+                }
+              ],
+              "next": "partner"
+            },
+            {
+              "conditions": [
+                {
+                  "op": "flag",
+                  "flag": "victor_cold"
+                }
+              ],
+              "next": "cold"
+            }
+          ],
+          "next": "plain"
+        },
+        "start": {
+          "speaker": "narrator",
+          "text": "A letter on thick cream paper, delivered by hand.",
+          "effects": [
+            {
+              "op": "journal",
+              "entry": "ch5_buyout"
+            },
+            {
+              "op": "setFlag",
+              "flag": "ch5_letter_read"
+            }
+          ],
+          "next": "start_route"
+        },
+        "partner": {
+          "speaker": "victor",
+          "text": "Dear partner. A drought like this ruins small reserves. Sell me the northern land and the lodge stays full, whatever the weather. Think of it as insurance.",
+          "next": "end"
+        },
+        "cold": {
+          "speaker": "victor",
+          "portrait": "angry",
+          "text": "You asked about a pump. I have thought about that question a great deal. Sell me the north, and nobody needs to ask any more questions. You have one month.",
+          "next": "end"
+        },
+        "plain": {
+          "speaker": "victor",
+          "text": "I am offering a generous price for the northern land, before the drought makes it worthless. My offer stands for one month.",
+          "next": "end"
+        },
+        "end": {
+          "speaker": "tendai",
+          "portrait": "angry",
+          "text": "The north. Of course he wants the north. Ask yourself why, {player}.",
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch05_carcass",
+      "nodes": {
+        "start": {
+          "speaker": "narrator",
+          "text": "The rangers radio in at dawn. You find them standing around a carcass, hats in their hands.",
+          "focus": {
+            "x": 56,
+            "y": 46
+          },
+          "next": "n1"
+        },
+        "n1": {
+          "speaker": "tendai",
+          "portrait": "angry",
+          "text": "Shot. They took what they came for and left the rest to rot. And look around it.",
+          "next": "n2"
+        },
+        "n2": {
+          "speaker": "narrator",
+          "text": "Dead vultures lie in a ring around the body. A dozen at least.",
+          "effects": [
+            {
+              "op": "journal",
+              "entry": "ch5_poison"
+            }
+          ],
+          "next": "n3"
+        },
+        "n3": {
+          "speaker": "amara",
+          "portrait": "worried",
+          "text": "Poison. They lace the carcass so the vultures die before they can circle. Circling vultures tell rangers where a kill is.",
+          "next": "n4"
+        },
+        "n4": {
+          "speaker": "amara",
+          "portrait": "worried",
+          "text": "And without vultures, carcasses rot where they lie. That is how disease spreads through a herd.",
+          "next": "n5"
+        },
+        "n5": {
+          "speaker": "tendai",
+          "text": "Rangers in every zone that matters. And eyes on the fence lines: cameras, day and night.",
+          "next": "n6"
+        },
+        "n6": {
+          "speaker": "narrator",
+          "text": "Assign rangers to zones (Staff, H) and build camera posts on the marked spots (Build, B). Caught poachers and camera footage both count as evidence.",
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch05_caught",
+      "nodes": {
+        "start": {
+          "speaker": "tendai",
+          "portrait": "happy",
+          "text": "Got one. Wire, a rifle with no serial number, and a phone full of numbers. That is evidence, {player}.",
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch05_kito",
+      "nodes": {
+        "start_route": {
+          "speaker": "narrator",
+          "text": "",
+          "branch": [
+            {
+              "conditions": [
+                {
+                  "op": "flag",
+                  "flag": "kito_talked"
+                }
+              ],
+              "next": "friend"
+            }
+          ],
+          "next": "scared"
+        },
+        "start": {
+          "speaker": "narrator",
+          "text": "Kito is waiting by the gate before sunrise, hood up, looking over his shoulder.",
+          "focus": {
+            "x": 57,
+            "y": 77
+          },
+          "next": "start_route"
+        },
+        "friend": {
+          "speaker": "kito",
+          "text": "Tendai was kind to me. So I will tell you. All of it.",
+          "effects": [
+            {
+              "op": "relationship",
+              "character": "kito",
+              "value": 5
+            }
+          ],
+          "next": "tell"
+        },
+        "scared": {
+          "speaker": "kito",
+          "portrait": "worried",
+          "text": "They let me out on bail. I should not be here. But my mother says Ruth once paid for her hospital, so I owe you this.",
+          "next": "tell"
+        },
+        "tell": {
+          "speaker": "kito",
+          "portrait": "worried",
+          "text": "It is not hungry men from the village. It is a ring. Trucks, rifles, buyers overseas. They pay boys like me to carry and keep quiet.",
+          "next": "n4"
+        },
+        "n4": {
+          "speaker": "kito",
+          "portrait": "worried",
+          "text": "The trucks come in on the east road with no lights. The same road, the same trucks, as the night the old pump died.",
+          "next": "n5"
+        },
+        "n5": {
+          "speaker": "tendai",
+          "portrait": "angry",
+          "text": "They cut the pipe so Ruth would run dry and sell. And when she would not, they waited for her to die.",
+          "next": "n6"
+        },
+        "n6": {
+          "speaker": "kito",
+          "text": "The man who pays the drivers wears good shoes. They call him Mr H.",
+          "effects": [
+            {
+              "op": "setFlag",
+              "flag": "kito_confessed"
+            },
+            {
+              "op": "counter",
+              "counter": "evidence",
+              "value": 1
+            },
+            {
+              "op": "journal",
+              "entry": "ch5_kito"
+            }
+          ],
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch05_north",
+      "nodes": {
+        "start": {
+          "speaker": "narrator",
+          "text": "The northern fence is mended. Beyond it lies the wildest land in the reserve.",
+          "focus": {
+            "x": 24,
+            "y": 16
+          },
+          "next": "n1"
+        },
+        "n1": {
+          "speaker": "amara",
+          "portrait": "happy",
+          "text": "There. By the thorn thicket. Do not move.",
+          "effects": [
+            {
+              "op": "population",
+              "species": "rhino",
+              "zone": "north",
+              "value": 2
+            },
+            {
+              "op": "journal",
+              "entry": "ch5_rhino"
+            }
+          ],
+          "next": "n2"
+        },
+        "n2": {
+          "speaker": "narrator",
+          "text": "A black rhino steps out of the bushes, ears swivelling. Behind her, half-hidden, a calf.",
+          "next": "n3"
+        },
+        "n3": {
+          "speaker": "tendai",
+          "portrait": "worried",
+          "text": "A mother and calf. Now we know what Hale wants with the north.",
+          "next": "n4"
+        },
+        "n4": {
+          "speaker": "tendai",
+          "text": "Rangers up here, {player}. As many as we can pay for.",
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch05_rain",
+      "nodes": {
+        "start": {
+          "speaker": "narrator",
+          "text": "In the night, thunder. By morning the dry riverbeds are running brown and loud.",
+          "effects": [
+            {
+              "op": "setFlag",
+              "flag": "drought",
+              "value": false
+            },
+            {
+              "op": "setFlag",
+              "flag": "drought_over"
+            },
+            {
+              "op": "journal",
+              "entry": "ch5_rain"
+            }
+          ],
+          "next": "n1"
+        },
+        "n1": {
+          "speaker": "tendai",
+          "portrait": "happy",
+          "text": "Rain. I had started to forget the smell of it.",
+          "next": "n2"
+        },
+        "n2": {
+          "speaker": "amara",
+          "text": "The grass will come back fast now. We held on. That is what matters.",
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch05_hale",
+      "nodes": {
+        "start": {
+          "speaker": "narrator",
+          "text": "The silver car is at the gate again. This time Victor Hale does not get out until you walk over.",
+          "focus": {
+            "x": 57,
+            "y": 77
+          },
+          "next": "n1"
+        },
+        "n1": {
+          "speaker": "victor",
+          "text": "My offer expires today. I am told you have been collecting photographs. And a boy’s story.",
+          "next": "n2"
+        },
+        "n2": {
+          "speaker": "victor",
+          "portrait": "happy",
+          "text": "Photographs fade. Boys change their stories. Land is forever. Sign, and we can both forget all this.",
+          "next": "n3"
+        },
+        "n3": {
+          "speaker": "player",
+          "text": "…",
+          "choices": [
+            {
+              "text": "Hand everything to the police. All of it.",
+              "next": "expose",
+              "effects": [
+                {
+                  "op": "setFlag",
+                  "flag": "hale_exposed"
+                },
+                {
+                  "op": "setFlag",
+                  "flag": "hale_resolved"
+                },
+                {
+                  "op": "setFlag",
+                  "flag": "victor_lodge",
+                  "value": false
+                },
+                {
+                  "op": "reputation",
+                  "value": 15
+                },
+                {
+                  "op": "trust",
+                  "value": 5
+                },
+                {
+                  "op": "relationship",
+                  "character": "tendai",
+                  "value": 10
+                },
+                {
+                  "op": "relationship",
+                  "character": "wanjiru",
+                  "value": 5
+                },
+                {
+                  "op": "relationship",
+                  "character": "victor",
+                  "value": -50
+                }
+              ]
+            },
+            {
+              "text": "Sell him the north. Take the money and keep quiet.",
+              "next": "deal",
+              "effects": [
+                {
+                  "op": "setFlag",
+                  "flag": "hale_deal"
+                },
+                {
+                  "op": "setFlag",
+                  "flag": "hale_resolved"
+                },
+                {
+                  "op": "money",
+                  "value": 4000
+                },
+                {
+                  "op": "trust",
+                  "value": -15
+                },
+                {
+                  "op": "reputation",
+                  "value": -10
+                },
+                {
+                  "op": "relationship",
+                  "character": "tendai",
+                  "value": -20
+                },
+                {
+                  "op": "relationship",
+                  "character": "amara",
+                  "value": -10
+                },
+                {
+                  "op": "relationship",
+                  "character": "wanjiru",
+                  "value": -10
+                }
+              ]
+            },
+            {
+              "text": "Refuse, and seal the reserve: fences, patrols, nobody in or out without our say.",
+              "next": "lock",
+              "effects": [
+                {
+                  "op": "setFlag",
+                  "flag": "hale_lockdown"
+                },
+                {
+                  "op": "setFlag",
+                  "flag": "hale_resolved"
+                },
+                {
+                  "op": "money",
+                  "value": -500
+                },
+                {
+                  "op": "trust",
+                  "value": -10
+                },
+                {
+                  "op": "reputation",
+                  "value": 3
+                },
+                {
+                  "op": "relationship",
+                  "character": "wanjiru",
+                  "value": -10
+                },
+                {
+                  "op": "relationship",
+                  "character": "tendai",
+                  "value": 4
+                }
+              ]
+            }
+          ]
+        },
+        "expose": {
+          "speaker": "narrator",
+          "text": "Three days later the police stop a truck with no lights on the east road. Two days after that, they come for Victor Hale.",
+          "next": "n5"
+        },
+        "n5": {
+          "speaker": "tendai",
+          "portrait": "happy",
+          "text": "Ruth would have liked to see that. So would I. I did, actually.",
+          "next": "end"
+        },
+        "deal": {
+          "speaker": "victor",
+          "portrait": "happy",
+          "text": "A sensible decision. My lawyers will be in touch.",
+          "next": "n7"
+        },
+        "n7": {
+          "speaker": "tendai",
+          "portrait": "angry",
+          "text": "I hope the money keeps you warm, {player}. It will not keep that rhino alive.",
+          "next": "end"
+        },
+        "lock": {
+          "speaker": "narrator",
+          "text": "Within a month the reserve is ringed in new wire. The poachers stay out. So does everyone else.",
+          "next": "n9"
+        },
+        "n9": {
+          "speaker": "wanjiru",
+          "portrait": "angry",
+          "text": "Our children used to walk to school along that road. Now they walk around your fence.",
+          "next": "end"
+        },
+        "end": {
+          "speaker": "narrator",
+          "text": "The silver car leaves for the last time.",
+          "effects": [
+            {
+              "op": "journal",
+              "entry": "ch5_hale"
+            }
+          ],
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch05_hint_pumps",
+      "nodes": {
+        "start": {
+          "speaker": "tendai",
+          "text": "The pumps are only giving half. Click a pump and deepen its borehole before the waterholes go dry.",
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch05_hint_evidence",
+      "nodes": {
+        "start": {
+          "speaker": "tendai",
+          "text": "We need proof that will stand up in court: caught poachers, camera footage. More rangers in the zones they hit, and cameras on the fence lines.",
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch05_complete",
+      "nodes": {
+        "start_route": {
+          "speaker": "narrator",
+          "text": "",
+          "branch": [
+            {
+              "conditions": [
+                {
+                  "op": "populationAtLeast",
+                  "species": "rhino",
+                  "min": 1
+                }
+              ],
+              "next": "rhino"
+            }
+          ],
+          "next": "loss"
+        },
+        "start": {
+          "speaker": "narrator",
+          "text": "The drought is over. The wire is quiet. From the tower, at dusk, the visitors fall silent.",
+          "focus": {
+            "x": 45,
+            "y": 37
+          },
+          "next": "start_route"
+        },
+        "rhino": {
+          "speaker": "narrator",
+          "text": "A black rhino walks down to the waterhole to drink, her calf close behind.",
+          "next": "n2"
+        },
+        "n2": {
+          "speaker": "amara",
+          "portrait": "happy",
+          "text": "Do you know how many people will never see that? And we get to see it from our own tower.",
+          "next": "end"
+        },
+        "loss": {
+          "speaker": "narrator",
+          "text": "The waterhole is empty of rhinos. The poachers got there first.",
+          "next": "n4"
+        },
+        "n4": {
+          "speaker": "amara",
+          "portrait": "worried",
+          "text": "We will keep looking. Rhinos have walked in from the north before.",
+          "next": "end"
+        },
+        "end": {
+          "speaker": "tendai",
+          "text": "Ruth built this place to last. Whatever comes next, {player}, it will be your choices people remember.",
+          "next": null
+        }
+      }
+    }
+  ]
+}

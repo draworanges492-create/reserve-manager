@@ -234,7 +234,7 @@ function beehiveFence(): string {
 /** Safari lodge (72×72, a 3×3 slot): stone base, big thatched roof, a deck with chairs. */
 function lodge(): string {
   const straw = Array.from({ length: 70 }, (_, i) => {
-    const x = 6 + (i % 35) * 1.75;
+    const x = 10 + (i % 35) * 1.5;
     const top = 6 + Math.abs(x - 36) * 0.35;
     return line(
       x,
@@ -281,6 +281,28 @@ function lodge(): string {
   ].join('');
 }
 
+/** Camera post: a pole with a solar panel, a camera box and a blinking light. */
+function cameraPost(): string {
+  return [
+    fill(ellipse(24, 44, 10, 2), SHADE),
+    rect(22.5, 12, 3, 32, METAL.mid),
+    rect(22.5, 12, 1, 32, METAL.light),
+    rect(24.5, 12, 1, 32, METAL.dark),
+    // Solar panel on top, angled to the sun.
+    fill('M15,10 L31,8 L32,13 L16,15 Z', METAL.dark),
+    fill('M16,10.6 L30.4,8.8 L31.2,12.4 L16.8,14.2 Z', '#2c4a66'),
+    line(20.8, 9.8, 21.6, 13.6, GLASS, 0.4),
+    line(25.6, 9.2, 26.4, 13, GLASS, 0.4),
+    // Camera box with lens and a red light.
+    shaded('M25,20 L33,20 L33,25 L25,25 Z', METAL, { rim: [0.8, 0] }),
+    fill(ellipse(33.4, 22.5, 1.6, 1.6), '#1e1a16'),
+    dot(33.4, 22.5, 0.6, GLASS),
+    dot(26.4, 21, 0.6, RED),
+    rect(19, 30, 3.5, 5, METAL.dark),
+    rect(19.4, 30.6, 2.6, 1.2, '#5ad06a'),
+  ].join('');
+}
+
 /** Key → drawing. Keys must match src/config/assets.json and buildings.json ids. */
 export const BUILDING_ART: Record<string, () => string> = {
   'building-borehole_pump': boreholePump,
@@ -290,4 +312,5 @@ export const BUILDING_ART: Record<string, () => string> = {
   'building-scaffold': scaffold,
   'building-beehive_fence': beehiveFence,
   'building-lodge': lodge,
+  'building-camera_post': cameraPost,
 };

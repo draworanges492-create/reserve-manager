@@ -82,7 +82,9 @@
     "reputationDriftPerDay": 0.02,
     "trustPerHire": 1,
     "trustPerDismissal": -2,
-    "historyLength": 8
+    "historyLength": 8,
+    "trustRest": 40,
+    "trustRecoveryPerDay": 0.1
   },
   "story": {
     "startChapter": 1
@@ -101,13 +103,13 @@
     "relocateReputationPerAnimal": 0.15
   },
   "cropRaids": {
-    "baseChance": 0.12,
+    "baseChance": 0.1,
     "hungryMult": 1.5,
     "hungryBelow": 45,
     "fenceMult": 0.4,
     "cooldownDays": 3,
     "breakFenceChance": 0.5,
-    "trustLoss": 4,
+    "trustLoss": 3,
     "compensationCost": 60,
     "compensatedTrustLoss": 1
   },
@@ -183,6 +185,42 @@
     },
     "rareBonus": 3,
     "victorShare": 0.3,
-    "historyDays": 30
+    "historyDays": 30,
+    "capacityBase": 6,
+    "capacityPerTower": 4,
+    "capacityLodge": 12
+  },
+  "drought": {
+    "decayMult": 1.5,
+    "pumpMult": 0.5,
+    "deepenCost": 300,
+    "truckCost": 80,
+    "truckAmount": 40
+  },
+  "poaching": {
+    "pressure": {
+      "plains": 30,
+      "north": 60,
+      "woodland": 45,
+      "outcrop": 40,
+      "east_border": 30,
+      "river": 20,
+      "hq": 0
+    },
+    "baseChance": 0.25,
+    "lockdownMult": 0.3,
+    "exposedMult": 0.2,
+    "poisonChance": 0.5,
+    "poisonKills": {
+      "min": 2,
+      "max": 4
+    },
+    "maxCatchChance": 0.9,
+    "dealMult": 0.5
+  },
+  "disease": {
+    "vulturesNeeded": 4,
+    "chance": 0.06,
+    "loss": 0.08
   }
 }

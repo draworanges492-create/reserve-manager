@@ -17,7 +17,7 @@ const strategies: Record<string, Strategy> = {
 const DAY_MS = 120_000;
 const MAX_DAYS = 400;
 /** The chapter whose completion ends the run. */
-const LAST = 4;
+const LAST = 5;
 
 function play(strategy: Strategy): GameState {
   const session = new GameSession({ ...newGame(7), playerName: 'Sam' });
@@ -52,6 +52,7 @@ function play(strategy: Strategy): GameState {
     }
     if (session.state.chapter.current >= 3) playChapter3(session);
     if (session.state.chapter.current >= 4) playChapter4(session);
+    if (session.state.chapter.current >= 5) playChapter5(session);
     // A day passes (if a conversation is waiting it starts instead; the loop above plays it).
     session.update(DAY_MS);
   }
@@ -68,7 +69,8 @@ function playChapter3(session: GameSession): void {
         ? 'relocate'
         : 'contraception';
     const role = method === 'cull' ? 'culling_team' : 'vet';
-    if (!st().staff.some((s) => s.role === role)) session.dispatch({ type: 'hire', role });
+    if (!st().flags.herd_plan_done && !st().staff.some((s) => s.role === role))
+      session.dispatch({ type: 'hire', role });
     const plan = st().herdPlans['plains:impala'];
     if (!st().flags.herd_plan_done && (!plan || plan.target > 70))
       session.dispatch({ type: 'setHerdPlan', zoneId: 'plains', speciesId: 'impala', method });
@@ -100,6 +102,28 @@ function playChapter4(session: GameSession): void {
     session.dispatch({ type: 'recordSighting', speciesId: 'leopard' });
 }
 
+/** Chapter 5: deepen the boreholes, keep water up, rangers and cameras, open the north. */
+function playChapter5(session: GameSession): void {
+  const st = () => session.state;
+  for (const [id, hole] of Object.entries(st().waterholes)) {
+    if (hole.pumpState === 'working') session.dispatch({ type: 'deepenBorehole', waterholeId: id });
+    if (st().flags.drought && hole.level < 25 && st().zones[hole.zoneId]?.unlocked)
+      session.dispatch({ type: 'truckWater', waterholeId: id });
+  }
+  for (const slotId of ['camera_north', 'camera_east'])
+    session.dispatch({ type: 'build', slotId, buildingId: 'camera_post' });
+  const patrolled = ['plains', 'north', 'woodland'].filter((z) => st().zones[z]?.unlocked);
+  for (const zoneId of patrolled) {
+    if (st().staff.some((s) => s.role === 'ranger' && s.zoneId === zoneId)) continue;
+    session.dispatch({ type: 'hire', role: 'ranger' });
+    const fresh = st().staff.find((s) => s.role === 'ranger' && s.zoneId === null);
+    if (fresh) session.dispatch({ type: 'assignStaff', staffId: fresh.id, zoneId });
+  }
+  if (st().resources.money > 200)
+    for (const id of fencesBlocking(st(), 'north'))
+      session.dispatch({ type: 'repairFence', segmentId: id });
+}
+
 function summary(state: GameState): string {
   return JSON.stringify({
     chapter: state.chapter.current,
@@ -112,6 +136,8 @@ function summary(state: GameState): string {
     visitors: state.tourism.visitorsHistory.reduce((a, b) => a + b, 0),
     species: Object.keys(state.populations.plains ?? {}).length,
     rep: state.scores.reputation,
+    counters: state.counters,
+    staff: state.staff.map((m) => `${m.role}@${m.zoneId ?? '-'}`),
     goalsDone: state.story.goalsDone,
     streaks: state.story.goalStreaks,
     pending: state.story.pendingDialogues,
@@ -127,6 +153,8 @@ describe('playthrough: start to end of the last written chapter (Phase 7/10 acce
       expect(state.flags.chapter_2_complete, summary(state)).toBe(true);
       expect(state.flags.chapter_3_complete, summary(state)).toBe(true);
       expect(state.flags.chapter_4_complete, summary(state)).toBe(true);
+      expect(state.flags.chapter_5_complete, summary(state)).toBe(true);
+      expect(state.flags.hale_resolved).toBe(true);
       expect(state.flags.ch2_mystery_solved).toBe(true);
       // Nothing left waiting: every scene that was queued got played.
       expect(state.story.pendingDialogues).toEqual([]);
@@ -148,6 +176,9 @@ describe('playthrough: start to end of the last written chapter (Phase 7/10 acce
           'ch4_kito',
           'ch4_rhino',
           'chapter_4_end',
+          'ch5_kito',
+          'ch5_hale',
+          'chapter_5_end',
         ]),
       );
     });

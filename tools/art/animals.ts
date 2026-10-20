@@ -268,3 +268,45 @@ export function wildebeest(frame: Frame): string {
     dot(19.4, 10.2, 0.35, '#0e0c0a'),
   ].join('');
 }
+
+const RHINO: Ramp = { light: '#a49c94', mid: '#857d76', dark: '#5f5852' };
+const HORN_RHINO = '#cbbfa8';
+
+/** Black rhino: heavy body, two horns, hooked lip (48×48 world, like the elephant). */
+export function rhino(frame: Frame): string {
+  const a = frame === 0;
+  const body =
+    'M8,28 C8,21 13,17.6 21,17.4 C27,17.2 32,18 34.6,21 C36.8,23.6 36.4,28.6 33.6,31 C29.6,33.8 20,34 14,33.2 C10.4,32.7 8,31 8,28 Z';
+  const head =
+    'M33,22 C34.4,19.6 38,19.2 41,21 C43.4,22.4 44.6,25 44,27 C43.6,28.6 42.2,29 41,28.6 C38.6,27.8 35.4,27 33.6,25.6 Z';
+  const stump = (x: number, lean: number, ramp: Ramp) =>
+    shaded(
+      `M${x},30 L${x + 4.6},30 L${x + 4.6 + lean},41.6 C${x + 4 + lean},42.6 ${x + 0.6 + lean},42.6 ${x + lean},41.6 Z`,
+      ramp,
+      { rim: [0.8, 0] },
+    ) + [0.8, 2.3, 3.8].map((t) => dot(x + lean + t, 41.9, 0.45, '#cfc6b8')).join('');
+  const folds = [16, 22, 28]
+    .map((x) => limb(`M${x},19.6 C${x - 0.6},23 ${x - 0.4},27 ${x + 0.4},31`, RHINO.dark, 0.45, 0))
+    .join('');
+  return [
+    stump(13, a ? 1.2 : -1.2, { light: '#857d76', mid: '#6e6760', dark: '#4e4842' }),
+    stump(27, a ? -1.2 : 1.2, { light: '#857d76', mid: '#6e6760', dark: '#4e4842' }),
+    limb('M8.4,25 C7,27 6.6,29 7,31', RHINO.mid, 0.7, 0),
+    fill(ellipse(7, 31.6, 0.6, 1.1), '#3a3632'),
+    shaded(body, RHINO, {
+      rim: [1.2, 1.2],
+      light: 'M11,22 C15,19 23,18.4 30,19.6 C23,20.2 16,21 11,22 Z',
+      extra: folds,
+    }),
+    stump(10, a ? -1.2 : 1.2, RHINO),
+    stump(24, a ? 1.2 : -1.2, RHINO),
+    shaded(head, RHINO, { rim: [0.8, 0.8], light: ellipse(37, 21.4, 2.4, 0.9) }),
+    // Two horns, the front one longer; a pointed, hooked upper lip; a small ear.
+    fill('M40.6,21.4 C41.4,17.6 42.4,15.4 43.6,14.4 C43.4,17 43.2,19.6 42.8,22 Z', HORN_RHINO),
+    fill('M38.2,20.8 C38.6,19 39.2,18 39.8,17.6 C39.8,18.8 39.8,20 39.6,21 Z', HORN_RHINO),
+    fill('M43.6,26.6 C44.6,27 45.2,27.8 44.8,28.6 C44.2,28.4 43.6,28 43.2,27.4 Z', RHINO.dark),
+    fill(ellipse(34.6, 20.4, 1.1, 1.6), RHINO.mid),
+    fill(ellipse(34.7, 20.6, 0.5, 0.9), RHINO.dark),
+    dot(37.8, 23.4, 0.45, '#1a1614'),
+  ].join('');
+}

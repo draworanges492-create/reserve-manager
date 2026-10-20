@@ -789,6 +789,175 @@
         }
       ],
       "completionDialogue": "ch04_complete"
+    },
+    {
+      "id": 5,
+      "title": "Pressure",
+      "introDialogue": "ch05_intro",
+      "goals": [
+        {
+          "id": "g5_pumps",
+          "text": "Deepen every borehole pump",
+          "conditions": [
+            {
+              "op": "pumpsDeepened"
+            }
+          ]
+        },
+        {
+          "id": "g5_drought",
+          "text": "Get through the drought",
+          "conditions": [
+            {
+              "op": "flag",
+              "flag": "drought_over"
+            }
+          ]
+        },
+        {
+          "id": "g5_cameras",
+          "text": "Put up 2 camera posts",
+          "conditions": [
+            {
+              "op": "buildingCount",
+              "buildingId": "camera_post",
+              "min": 2
+            }
+          ]
+        },
+        {
+          "id": "g5_hale",
+          "text": "Deal with Victor Hale",
+          "conditions": [
+            {
+              "op": "flag",
+              "flag": "hale_resolved"
+            }
+          ]
+        }
+      ],
+      "unlocks": {
+        "zones": ["north"],
+        "buildings": ["camera_post"],
+        "staff": []
+      },
+      "scriptedEvents": [
+        {
+          "id": "s5_letter",
+          "when": [
+            {
+              "op": "daysInChapter",
+              "min": 3
+            }
+          ],
+          "dialogue": "ch05_letter"
+        },
+        {
+          "id": "s5_carcass",
+          "when": [
+            {
+              "op": "flag",
+              "flag": "poaching_happened"
+            }
+          ],
+          "dialogue": "ch05_carcass"
+        },
+        {
+          "id": "s5_caught",
+          "when": [
+            {
+              "op": "flag",
+              "flag": "poacher_caught"
+            }
+          ],
+          "dialogue": "ch05_caught"
+        },
+        {
+          "id": "s5_kito",
+          "when": [
+            {
+              "op": "daysInChapter",
+              "min": 8
+            },
+            {
+              "op": "flag",
+              "flag": "ch5_letter_read"
+            }
+          ],
+          "dialogue": "ch05_kito"
+        },
+        {
+          "id": "s5_north",
+          "when": [
+            {
+              "op": "zoneOpen",
+              "zoneId": "north"
+            }
+          ],
+          "dialogue": "ch05_north"
+        },
+        {
+          "id": "s5_rain",
+          "when": [
+            {
+              "op": "daysInChapter",
+              "min": 30
+            }
+          ],
+          "dialogue": "ch05_rain"
+        },
+        {
+          "id": "s5_hale",
+          "when": [
+            {
+              "op": "counterAtLeast",
+              "counter": "evidence",
+              "min": 3
+            },
+            {
+              "op": "flag",
+              "flag": "kito_confessed"
+            }
+          ],
+          "dialogue": "ch05_hale"
+        },
+        {
+          "id": "s5_hint_pumps",
+          "when": [
+            {
+              "op": "daysInChapter",
+              "min": 5
+            },
+            {
+              "op": "not",
+              "condition": {
+                "op": "pumpsDeepened"
+              }
+            }
+          ],
+          "dialogue": "ch05_hint_pumps"
+        },
+        {
+          "id": "s5_hint_evidence",
+          "when": [
+            {
+              "op": "daysInChapter",
+              "min": 20
+            },
+            {
+              "op": "not",
+              "condition": {
+                "op": "counterAtLeast",
+                "counter": "evidence",
+                "min": 3
+              }
+            }
+          ],
+          "dialogue": "ch05_hint_evidence"
+        }
+      ],
+      "clues": [],
+      "completionDialogue": "ch05_complete"
     }
   ]
 }

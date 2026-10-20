@@ -2,7 +2,7 @@
 // Paths are relative to public/assets and must match src/config/assets.json.
 import type { PixelCanvas } from '../lib/canvas';
 import type { StructureName } from '../tileset';
-import { elephant, type Frame, giraffe, impala, wildebeest, zebra } from './animals';
+import { elephant, type Frame, giraffe, impala, rhino, wildebeest, zebra } from './animals';
 import { BUILDING_ART } from './buildings';
 import { bucket, clueMarker, drop, dust, shadowArt } from './fx';
 import { ranger, visitor } from './people';
@@ -24,6 +24,7 @@ export function drawWorldArt(): Record<string, PixelCanvas> {
     'sprites/vulture.png': walk(vulture, 24),
     'sprites/elephant.png': walk(elephant, 48),
     'sprites/giraffe.png': walk(giraffe, 48),
+    'sprites/rhino.png': walk(rhino, 48),
     'sprites/wildebeest.png': walk(wildebeest, 24),
     'sprites/leopard.png': walk(leopard, 24),
     'sprites/ranger.png': walk(ranger, 24),

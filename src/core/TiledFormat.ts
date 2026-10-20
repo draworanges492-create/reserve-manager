@@ -83,5 +83,5 @@ export const OBJECT_LAYERS = [
   'poacher_entries',
   'trees',
 ] as const;
-export const SLOT_TYPES = ['tower', 'post', 'pump', 'lodge', 'fence'] as const;
+export const SLOT_TYPES = ['tower', 'post', 'pump', 'lodge', 'fence', 'camera'] as const;
 export const SPAWN_KINDS = ['animal', 'visitor', 'staff'] as const;

@@ -96,6 +96,10 @@ export type GameEvents = {
     speciesId: string;
     method: 'cull' | 'relocate' | 'contraception';
   };
+  /** Chapter 5 poaching ring (D122). */
+  poachingIncident: { zoneId: string; speciesId: string; count: number; vultures: number };
+  poacherCaught: { zoneId: string };
+  diseaseOutbreak: { zoneId: string };
   /** A species was brought in from another reserve (Chapter 4+). */
   speciesReintroduced: { speciesId: string; zoneId: string; count: number };
   /** Elephants raided the village's crops (D111). */

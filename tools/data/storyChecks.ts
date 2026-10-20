@@ -34,6 +34,19 @@ export interface StoryRefs {
 const EXPRESSIONS = ['neutral', 'happy', 'worried', 'angry'];
 const FIXED_SPEAKERS = ['player', 'narrator'];
 
+/** Flags set by the simulation or commands rather than story effects ("x*" = prefix). */
+const SIM_FLAGS = [
+  'chapter_*',
+  'story_paused',
+  'crop_raid_happened',
+  'herd_plan_done',
+  'poaching_happened',
+  'poacher_caught',
+  'vultures_poisoned',
+  'deepened_*',
+  'reintroduced_*',
+];
+
 export function checkStory(content: StoryContent, refs: StoryRefs): string[] {
   const errors: string[] = [];
   const fail = (where: string, msg: string): void => {
@@ -88,6 +101,11 @@ export function checkStory(content: StoryContent, refs: StoryRefs): string[] {
       case 'daysInChapter':
       case 'speciesPresent':
       case 'visitorsPerMonth':
+      case 'pumpsDeepened':
+        return;
+      case 'buildingCount':
+        if (!refs.buildings.some((b) => b.id === c.buildingId))
+          fail(where, `unknown building "${c.buildingId}"`);
         return;
       case 'seen':
         if (!refs.species.includes(c.species)) fail(where, `unknown species "${c.species}"`);
@@ -189,6 +207,9 @@ export function checkStory(content: StoryContent, refs: StoryRefs): string[] {
         for (const cond of c.conditions ?? []) checkCondition(at, cond);
       }
       for (const b of n.branch ?? []) for (const cond of b.conditions) checkCondition(at, cond);
+      // A branching node is routing only: the runner never shows its text or applies its effects.
+      if (n.branch && (n.text.trim() || n.effects?.length))
+        fail(at, 'branching node has text or effects, which would be skipped');
     }
     const reached = new Set<string>(['start']);
     const stack = ['start'];
@@ -275,5 +296,44 @@ export function checkStory(content: StoryContent, refs: StoryRefs): string[] {
     if (!ids.includes(j.chapter))
       fail('journal.json', `"${j.id}" belongs to unknown chapter ${j.chapter}`);
   }
+  // Every flag a condition waits for must be set by some story effect, or by the sim / a
+  // command (SIM_FLAGS). Otherwise that goal or scene can never happen.
+  const setByStory = new Set<string>();
+  const effectsOf = (list: readonly Effect[] | undefined) => {
+    for (const e of list ?? []) if (e.op === 'setFlag' && e.value !== false) setByStory.add(e.flag);
+  };
+  for (const d of content.dialogues)
+    for (const n of Object.values(d.nodes)) {
+      effectsOf(n.effects);
+      for (const c of n.choices ?? []) effectsOf(c.effects);
+    }
+  for (const ch of content.chapters) for (const clue of ch.clues) setByStory.add(clue.flag);
+  const waitedFor: [string, string][] = [];
+  const collect = (where: string, c: Condition): void => {
+    if (c.op === 'flag' && c.value !== false) waitedFor.push([where, c.flag]);
+    if (c.op === 'not') collect(where, c.condition);
+  };
+  for (const ch of content.chapters) {
+    for (const g of ch.goals)
+      for (const c of g.conditions) collect(`chapter ${ch.id} goal "${g.id}"`, c);
+    for (const e of ch.scriptedEvents)
+      for (const c of e.when) collect(`chapter ${ch.id} event "${e.id}"`, c);
+    for (const clue of ch.clues)
+      for (const c of clue.visibleWhen) collect(`chapter ${ch.id} clue "${clue.id}"`, c);
+  }
+  for (const d of content.dialogues)
+    for (const [id, n] of Object.entries(d.nodes)) {
+      for (const b of n.branch ?? [])
+        for (const c of b.conditions) collect(`dialogue "${d.id}" node "${id}"`, c);
+      for (const ch of n.choices ?? [])
+        for (const c of ch.conditions ?? []) collect(`dialogue "${d.id}" node "${id}"`, c);
+    }
+  for (const [where, flag] of waitedFor)
+    if (
+      !setByStory.has(flag) &&
+      !SIM_FLAGS.some((f) => (f.endsWith('*') ? flag.startsWith(f.slice(0, -1)) : f === flag))
+    )
+      fail(where, `waits for flag "${flag}", which nothing sets`);
+
   return errors;
 }

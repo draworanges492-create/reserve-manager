@@ -283,6 +283,34 @@
           "verified": false
         }
       ]
+    },
+    {
+      "id": "rhino",
+      "name": "Black rhino",
+      "plural": "rhinos",
+      "diet": "browser",
+      "r": 0.004,
+      "habitatDensity": 0.004,
+      "grazeRate": 0.12,
+      "minViable": 2,
+      "sightingValue": 8.0,
+      "poachingValue": 1.0,
+      "charisma": 1.0,
+      "predators": [],
+      "prey": [],
+      "startPopulation": {},
+      "targetN": 4,
+      "spriteKey": "rhino",
+      "facts": [
+        {
+          "text": "TODO: verify — black rhinos browse on bushes and low branches, using a hooked, pointed upper lip.",
+          "verified": false
+        },
+        {
+          "text": "TODO: verify — black rhinos are critically endangered, mainly because of poaching for their horn.",
+          "verified": false
+        }
+      ]
     }
   ]
 }

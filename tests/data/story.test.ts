@@ -73,3 +73,26 @@ describe('clue checks', () => {
     );
   });
 });
+
+describe('flag checks', () => {
+  it('catch a goal waiting for a flag nothing ever sets', () => {
+    const chapters = CHAPTERS.map((c) =>
+      c.id === 5
+        ? {
+            ...c,
+            goals: [
+              ...c.goals,
+              {
+                id: 'g_never',
+                text: 'Never',
+                conditions: [{ op: 'flag' as const, flag: 'nobody_sets_this' }],
+              },
+            ],
+          }
+        : c,
+    );
+    expect(checkStory({ ...content, chapters }, refs)).toEqual(
+      expect.arrayContaining([expect.stringContaining('waits for flag "nobody_sets_this"')]),
+    );
+  });
+});

@@ -30,6 +30,9 @@ export type Condition =
   /** Phase 11+: visitors over the last 30 days; a species' encyclopedia entry is unlocked. */
   | { op: 'visitorsPerMonth'; min: number }
   | { op: 'seen'; species: string }
+  /** Phase 12+: every working pump's borehole is deepened (at least one); N of a building. */
+  | { op: 'pumpsDeepened' }
+  | { op: 'buildingCount'; buildingId: string; min: number }
   | { op: 'not'; condition: Condition };
 
 /**

@@ -37,7 +37,8 @@
     "tree-marula-0": "assets/sprites/tree-marula-0.png",
     "tree-marula-1": "assets/sprites/tree-marula-1.png",
     "building-beehive_fence": "assets/sprites/building-beehive_fence.png",
-    "building-lodge": "assets/sprites/building-lodge.png"
+    "building-lodge": "assets/sprites/building-lodge.png",
+    "building-camera_post": "assets/sprites/building-camera_post.png"
   },
   "spritesheets": {
     "impala": {
@@ -124,6 +125,11 @@
       "path": "assets/sprites/leopard.png",
       "frameWidth": 48,
       "frameHeight": 48
+    },
+    "rhino": {
+      "path": "assets/sprites/rhino.png",
+      "frameWidth": 96,
+      "frameHeight": 96
     }
   },
   "tilemaps": {

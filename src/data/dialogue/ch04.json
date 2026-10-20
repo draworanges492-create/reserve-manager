@@ -595,9 +595,9 @@
           "text": "The reserve pays for itself now, nearly. I did not think I would see that.",
           "next": "n2"
         },
-        "n2": {
-          "speaker": "tendai",
-          "text": "Money brings people. People bring eyes. Some of those eyes are looking at our rhino.",
+        "n2_route": {
+          "speaker": "narrator",
+          "text": "",
           "branch": [
             {
               "conditions": [
@@ -619,6 +619,11 @@
             }
           ],
           "next": "plain"
+        },
+        "n2": {
+          "speaker": "tendai",
+          "text": "Money brings people. People bring eyes. Some of those eyes are looking at our rhino.",
+          "next": "n2_route"
         },
         "lodge": {
           "speaker": "tendai",

@@ -55,6 +55,9 @@ const ALERT_EVENTS: AlertEvent['type'][] = [
   'cropRaid',
   'herdPlanDone',
   'speciesReintroduced',
+  'poachingIncident',
+  'poacherCaught',
+  'diseaseOutbreak',
 ];
 
 type Menu = 'build' | 'staff' | 'species' | 'journal' | 'settings';

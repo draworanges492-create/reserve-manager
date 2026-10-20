@@ -221,6 +221,66 @@
       "chapter": 4,
       "title": "The outcrop",
       "text": "The rocks in the north are ours again. The best view in the reserve, Tendai says."
+    },
+    {
+      "id": "chapter_5_start",
+      "chapter": 5,
+      "title": "Pressure",
+      "text": "No rain. The boreholes cough and the waterholes shrink a little more every day."
+    },
+    {
+      "id": "ch5_drought",
+      "chapter": 5,
+      "title": "Drought",
+      "text": "Amara says the water table is falling. Tendai says the last drought like this was the year Ruth nearly lost everything."
+    },
+    {
+      "id": "ch5_buyout",
+      "chapter": 5,
+      "title": "An offer",
+      "text": "Hale wants to buy the north, with a deadline. Tendai asked me why he wants the north. I think I know."
+    },
+    {
+      "id": "ch5_poison",
+      "chapter": 5,
+      "title": "Poison",
+      "text": "A carcass ringed with dead vultures. They poison the kill so the birds can't give it away."
+    },
+    {
+      "id": "ch5_kito",
+      "chapter": 5,
+      "title": "Mr H.",
+      "text": "Kito told us everything. A ring, trucks on the east road, the night the pump died. The man who pays them is called Mr H."
+    },
+    {
+      "id": "ch5_rhino",
+      "chapter": 5,
+      "title": "Mother and calf",
+      "text": "A black rhino and her calf in the north. The most precious thing on this land, and the most hunted."
+    },
+    {
+      "id": "ch5_rain",
+      "chapter": 5,
+      "title": "Rain",
+      "text": "Thunder in the night. The riverbeds run brown. We held on."
+    },
+    {
+      "id": "ch5_hale",
+      "chapter": 5,
+      "title": "The last visit",
+      "text": "Victor Hale came for his answer. He got one."
+    },
+    {
+      "id": "chapter_5_end",
+      "chapter": 5,
+      "title": "After the storm",
+      "text": "The drought is over and Hale is gone, one way or another. Whatever we built here, it's ours to keep now."
+    },
+    {
+      "id": "zone_north",
+      "chapter": 5,
+      "title": "The northern reach",
+      "text": "The north fence is mended. The wildest land in the reserve is ours again."
     }
   ]
 }

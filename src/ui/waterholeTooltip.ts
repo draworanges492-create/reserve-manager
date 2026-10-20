@@ -4,7 +4,7 @@ import { waterholeDef } from '../core/content';
 import type { GameState } from '../core/GameState';
 import { t } from '../core/text';
 import { seasonOf } from '../sim/Seasons';
-import { waterBreakdown, waterVisualState } from '../sim/Water';
+import { droughtFor, waterBreakdown, waterVisualState } from '../sim/Water';
 
 /** "+3", "−8", "0" (true minus sign for legibility). */
 export function signed(n: number): string {
@@ -18,7 +18,8 @@ export function waterholeTooltip(state: GameState, id: string): string[] {
   const hole = state.waterholes[id];
   if (!hole) return [];
   const season = seasonOf(state.clock.day);
-  const why = waterBreakdown(hole, season);
+  const drought = droughtFor(state, id);
+  const why = waterBreakdown(hole, season, BALANCE.water, drought);
   const level = Math.round(hole.level);
   const lines = [
     t('water.title', {
@@ -34,6 +35,7 @@ export function waterholeTooltip(state: GameState, id: string): string[] {
   ];
   if (why.rain) lines.push(t('water.rain', { value: signed(why.rain) }));
   if (why.pump) lines.push(t('water.pump', { value: signed(why.pump) }));
+  if (drought.active) lines.push(t(drought.deepened ? 'water.droughtDeepened' : 'water.drought'));
   lines.push(t('water.net', { value: signed(why.net) }));
 
   const dryBelow = BALANCE.water.stateThresholds.drying;

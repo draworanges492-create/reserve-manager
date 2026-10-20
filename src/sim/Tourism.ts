@@ -46,8 +46,23 @@ export function hasTower(state: GameState): boolean {
 export function visitorsToday(state: GameState): number {
   if (!state.flags.tourism_open) return 0;
   const season = BALANCE.tourism.seasonMult[seasonOf(state.clock.day)];
-  return Math.floor(
+  const demand = Math.floor(
     attraction(state) * infrastructure(state) * (state.scores.reputation / 100) * season,
+  );
+  return Math.min(demand, capacity(state));
+}
+
+/** Most visitors a day the reserve can take: day trips, plus room per tower and the lodge (D123). */
+export function capacity(state: GameState): number {
+  const cfg = BALANCE.tourism;
+  const built = (id: string) =>
+    Object.values(state.slots).filter(
+      (s) => s.building?.buildingId === id && s.building.daysLeft === 0,
+    ).length;
+  return (
+    cfg.capacityBase +
+    built('observation_tower') * cfg.capacityPerTower +
+    built('lodge') * cfg.capacityLodge
   );
 }
 

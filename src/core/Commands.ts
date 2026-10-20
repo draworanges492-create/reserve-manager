@@ -9,6 +9,7 @@ import { examineClue, recordSighting } from '../story/storyCommands';
 import type { GameState, HerdMethod } from './GameState';
 import { cancelHerdPlan, setHerdPlan } from './herdCommands';
 import { reintroduce } from './reintroduce';
+import { deepenBorehole, truckWater } from './droughtCommands';
 import type { StringKey } from './text';
 
 export type Command =
@@ -29,7 +30,10 @@ export type Command =
   | { type: 'setHerdPlan'; zoneId: string; speciesId: string; method: HerdMethod }
   | { type: 'cancelHerdPlan'; zoneId: string; speciesId: string }
   /** Chapter 4+: bring a species in from another reserve. */
-  | { type: 'reintroduce'; speciesId: string };
+  | { type: 'reintroduce'; speciesId: string }
+  /** Chapter 5 drought. */
+  | { type: 'deepenBorehole'; waterholeId: string }
+  | { type: 'truckWater'; waterholeId: string };
 
 export type CommandResult =
   { ok: true; state: GameState; events: SimEvent[] } | { ok: false; reason: StringKey };
@@ -97,5 +101,9 @@ export function applyCommand(state: GameState, command: Command): CommandResult 
       return cancelHerdPlan(state, command.zoneId, command.speciesId);
     case 'reintroduce':
       return reintroduce(state, command.speciesId);
+    case 'deepenBorehole':
+      return deepenBorehole(state, command.waterholeId);
+    case 'truckWater':
+      return truckWater(state, command.waterholeId);
   }
 }

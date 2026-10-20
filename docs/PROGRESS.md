@@ -397,3 +397,20 @@ built; 0 console errors. The player's save was backed up and restored.
 **Checks:** `build` ✅ · `test` ✅ (208, playthrough to the end of Chapter 4 with three
 strategies) · `lint` ✅ · `validate-data` ✅ · browser: Chapter 4 intro, tower and lodge built,
 11 visitors on day one with 4 walking figures, giraffe brought in; 0 console errors.
+
+## Phase 12 — Chapter 5 "Pressure" ✅ (2026-10-20)
+
+**Done**
+
+- Drought (D121): pump output, deepening, water trucks; pump panel actions.
+- Poaching ring (D122): incidents, catches, camera posts and evidence, poisoned vultures,
+  carcass disease; alerts.
+- Black rhino in the North; camera post building; story (D124) through Hale's fate.
+- Balance (D123) and new story checks (D125).
+
+**Checks:** `build` ✅ · `test` ✅ (214; playthrough start → end of Chapter 5 with three
+strategies, about 100 game days, rhinos alive, Trust 36–59) · `lint` ✅ · `validate-data` ✅ ·
+browser: Chapter 5 drought, pump panel, poaching alerts, camera post, Hale scene; 0 console
+errors on a fresh load. The player's save was backed up and restored.
+
+**Next:** Chapter 6 "Legacy" and the endings (Phase 13), to be planned with you.

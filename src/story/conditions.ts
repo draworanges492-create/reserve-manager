@@ -63,6 +63,18 @@ export function holds(state: GameState, c: Condition): boolean {
       return visitorsPerMonth(state) >= c.min;
     case 'seen':
       return state.encyclopedia.includes(c.species);
+    case 'pumpsDeepened': {
+      const pumped = Object.entries(state.waterholes).filter(
+        ([, h]) => h.pumpState === 'working' && state.zones[h.zoneId]?.unlocked,
+      );
+      return pumped.length > 0 && pumped.every(([id]) => state.flags[`deepened_${id}`]);
+    }
+    case 'buildingCount':
+      return (
+        Object.values(state.slots).filter(
+          (s) => s.building?.buildingId === c.buildingId && s.building.daysLeft === 0,
+        ).length >= c.min
+      );
     case 'not':
       return !holds(state, c.condition);
   }

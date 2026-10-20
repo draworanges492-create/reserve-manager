@@ -5,10 +5,11 @@ import ch01 from '../data/dialogue/ch01.json';
 import ch02 from '../data/dialogue/ch02.json';
 import ch03 from '../data/dialogue/ch03.json';
 import ch04 from '../data/dialogue/ch04.json';
+import ch05 from '../data/dialogue/ch05.json';
 import journalData from '../data/journal.json';
 import type { Chapter, Character, Dialogue, JournalTemplate } from './types';
 
-const DIALOGUE_FILES: { dialogues: unknown[] }[] = [ch01, ch02, ch03, ch04];
+const DIALOGUE_FILES: { dialogues: unknown[] }[] = [ch01, ch02, ch03, ch04, ch05];
 
 export const DIALOGUES: readonly Dialogue[] = DIALOGUE_FILES.flatMap(
   (f) => f.dialogues as Dialogue[],

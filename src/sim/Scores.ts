@@ -86,9 +86,15 @@ export const runScores: SimStep = (state) => {
     state.scores.reputation +
       (target - state.scores.reputation) * BALANCE.scores.reputationDriftPerDay,
   );
+  // Community Trust slowly recovers towards its resting level: grudges fade (D123).
+  const { trustRest, trustRecoveryPerDay } = BALANCE.scores;
+  const trust =
+    state.scores.trust < trustRest
+      ? Math.min(trustRest, state.scores.trust + trustRecoveryPerDay)
+      : state.scores.trust;
   // Daily recalculations aren't logged as "changes": tooltips show their parts instead.
   return {
-    state: { ...state, scores: { ...state.scores, ecosystem, reputation } },
+    state: { ...state, scores: { ...state.scores, ecosystem, reputation, trust } },
     events,
   };
 };

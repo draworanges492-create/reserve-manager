@@ -91,6 +91,15 @@ export const BUILD_SLOTS: {
   { id: 'lodge_hq', slotType: 'lodge', zoneId: 'hq', rect: { x: 42, y: 72, w: 3, h: 3 } },
   // Where the elephants cross towards the village fields (Chapter 3, D111).
   { id: 'beehive_east', slotType: 'fence', zoneId: 'plains', rect: { x: 80, y: 52, w: 2, h: 2 } },
+  // Camera posts watching where poachers come in (Chapter 5): the north fence and the east road.
+  { id: 'camera_north', slotType: 'camera', zoneId: 'plains', rect: { x: 46, y: 33, w: 2, h: 2 } },
+  { id: 'camera_east', slotType: 'camera', zoneId: 'plains', rect: { x: 81, y: 60, w: 2, h: 2 } },
+  {
+    id: 'camera_woodland',
+    slotType: 'camera',
+    zoneId: 'woodland',
+    rect: { x: 96, y: 28, w: 2, h: 2 },
+  },
 ];
 
 export const SPAWNS: { kind: string; at: Point; species?: string }[] = [

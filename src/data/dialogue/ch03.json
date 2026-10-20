@@ -649,14 +649,9 @@
     {
       "id": "ch03_plan_done",
       "nodes": {
-        "start": {
-          "speaker": "amara",
-          "portrait": "happy",
-          "text": "That is the target. The impala are down to what the plains can carry.",
-          "focus": {
-            "x": 52,
-            "y": 44
-          },
+        "start_route": {
+          "speaker": "narrator",
+          "text": "",
           "branch": [
             {
               "conditions": [
@@ -678,6 +673,16 @@
             }
           ],
           "next": "contra"
+        },
+        "start": {
+          "speaker": "amara",
+          "portrait": "happy",
+          "text": "That is the target. The impala are down to what the plains can carry.",
+          "focus": {
+            "x": 52,
+            "y": 44
+          },
+          "next": "start_route"
         },
         "cull": {
           "speaker": "tendai",
@@ -881,15 +886,9 @@
           "text": "She will not. But she is usually right, which is worse.",
           "next": "village"
         },
-        "village": {
+        "village_route": {
           "speaker": "narrator",
-          "text": "A message comes from the village.",
-          "effects": [
-            {
-              "op": "setFlag",
-              "flag": "ch3_amara_stays"
-            }
-          ],
+          "text": "",
           "branch": [
             {
               "conditions": [
@@ -903,6 +902,17 @@
             }
           ],
           "next": "wary"
+        },
+        "village": {
+          "speaker": "narrator",
+          "text": "A message comes from the village.",
+          "effects": [
+            {
+              "op": "setFlag",
+              "flag": "ch3_amara_stays"
+            }
+          ],
+          "next": "village_route"
         },
         "ally": {
           "speaker": "wanjiru",

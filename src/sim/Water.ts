@@ -31,16 +31,35 @@ export interface WaterBreakdown {
   net: number;
 }
 
+/** Chapter 5 drought (spec §6.1, D121): faster evaporation, no rain, pumps at half. */
+export interface DroughtState {
+  active: boolean;
+  /** The borehole feeding this waterhole has been deepened, so its pump runs at full. */
+  deepened: boolean;
+}
+
+export const NO_DROUGHT: DroughtState = { active: false, deepened: false };
+
+export function droughtFor(state: GameState, waterholeId: string): DroughtState {
+  return {
+    active: state.flags.drought === true,
+    deepened: state.flags[`deepened_${waterholeId}`] === true,
+  };
+}
+
 export function waterBreakdown(
   hole: WaterholeState,
   season: Season,
   cfg: WaterConfig = BALANCE.water,
+  drought: DroughtState = NO_DROUGHT,
 ): WaterBreakdown {
-  const seasonMult = cfg.seasonDecayMult[season];
+  const d = BALANCE.drought;
+  const seasonMult = cfg.seasonDecayMult[season] * (drought.active ? d.decayMult : 1);
   const evaporation = -cfg.decayPerDay * seasonMult;
-  const rain = cfg.rainPerDay[season];
-  const pump =
+  const rain = drought.active ? 0 : cfg.rainPerDay[season];
+  const pumpFull =
     hole.pumpState === 'working' && hole.pumpKind ? cfg.pumpRefillPerDay[hole.pumpKind] : 0;
+  const pump = drought.active && !drought.deepened ? pumpFull * d.pumpMult : pumpFull;
   return { evaporation, seasonMult, rain, pump, net: evaporation + rain + pump };
 }
 
@@ -80,7 +99,9 @@ export const runWater: SimStep = (state) => {
   const events: SimEvent[] = [];
   const waterholes: GameState['waterholes'] = {};
   for (const [id, hole] of Object.entries(state.waterholes)) {
-    const level = clampLevel(hole.level + waterBreakdown(hole, season).net);
+    const level = clampLevel(
+      hole.level + waterBreakdown(hole, season, BALANCE.water, droughtFor(state, id)).net,
+    );
     const before = waterVisualState(hole.level);
     const after = waterVisualState(level);
     if (before !== after)
