@@ -1,0 +1,398 @@
+{
+  "dialogues": [
+    {
+      "id": "ch06_intro",
+      "nodes": {
+        "start": {
+          "speaker": "narrator",
+          "text": "Chapter 6: Legacy.",
+          "next": "n1"
+        },
+        "n1": {
+          "speaker": "narrator",
+          "text": "A year to the day since you first walked through Ruth’s gate.",
+          "focus": {
+            "x": 57,
+            "y": 76
+          },
+          "effects": [
+            {
+              "op": "journal",
+              "entry": "ch6_legacy"
+            }
+          ],
+          "next": "n2"
+        },
+        "n2_route": {
+          "speaker": "narrator",
+          "text": "",
+          "branch": [
+            {
+              "conditions": [
+                {
+                  "op": "flag",
+                  "flag": "hale_deal"
+                }
+              ],
+              "next": "deal"
+            },
+            {
+              "conditions": [
+                {
+                  "op": "flag",
+                  "flag": "hale_lockdown"
+                }
+              ],
+              "next": "lock"
+            }
+          ],
+          "next": "free"
+        },
+        "n2": {
+          "speaker": "tendai",
+          "text": "I am getting old, {player}. One of these days I will hang up this hat for good.",
+          "next": "n2_route"
+        },
+        "deal": {
+          "speaker": "tendai",
+          "portrait": "worried",
+          "text": "Even with Hale’s men on our northern fence, I want to see this place the way Ruth dreamed it before I go.",
+          "next": "goal"
+        },
+        "lock": {
+          "speaker": "tendai",
+          "text": "Behind all this new wire, I still want to see this place the way Ruth dreamed it before I go.",
+          "next": "goal"
+        },
+        "free": {
+          "speaker": "tendai",
+          "portrait": "happy",
+          "text": "With Hale gone, I want to see this place the way Ruth dreamed it before I go.",
+          "next": "goal"
+        },
+        "goal": {
+          "speaker": "tendai",
+          "text": "Every animal that belongs here. Every fence ours. And not one more animal lost to a snare.",
+          "next": "n7"
+        },
+        "n7": {
+          "speaker": "amara",
+          "text": "In numbers: all ten species living here, the ecosystem healthy for days on end, every zone open, a month without poaching, and a name people trust.",
+          "next": "n8"
+        },
+        "n8": {
+          "speaker": "narrator",
+          "text": "Max out your reserve: the goals are in the tracker. Any species that has died out can be bought back from the Species menu (K).",
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch06_wanjiru",
+      "nodes": {
+        "start_route": {
+          "speaker": "narrator",
+          "text": "",
+          "branch": [
+            {
+              "conditions": [
+                {
+                  "op": "scoreAtLeast",
+                  "score": "trust",
+                  "min": 55
+                }
+              ],
+              "next": "warm"
+            }
+          ],
+          "next": "cool"
+        },
+        "start": {
+          "speaker": "narrator",
+          "text": "Wanjiru comes up the east road on foot.",
+          "focus": {
+            "x": 84,
+            "y": 60
+          },
+          "next": "start_route"
+        },
+        "warm": {
+          "speaker": "wanjiru",
+          "portrait": "happy",
+          "text": "The council has a proposal. Our young people want to train as rangers. They know every path out there better than any truck driver.",
+          "next": "n2"
+        },
+        "n2": {
+          "speaker": "wanjiru",
+          "portrait": "happy",
+          "text": "Ruth always said the reserve needs the village and the village needs the reserve. I used to think she was being polite.",
+          "effects": [
+            {
+              "op": "trust",
+              "value": 5
+            },
+            {
+              "op": "relationship",
+              "character": "wanjiru",
+              "value": 5
+            },
+            {
+              "op": "setFlag",
+              "flag": "village_rangers"
+            }
+          ],
+          "next": "end"
+        },
+        "cool": {
+          "speaker": "wanjiru",
+          "text": "My grandson asks me what is behind your fence. I tell him: animals, and people who do not come to the village any more.",
+          "next": "n4"
+        },
+        "n4": {
+          "speaker": "wanjiru",
+          "text": "It is not too late to change that, {player}. But it is getting later.",
+          "next": "end"
+        },
+        "end": {
+          "speaker": "narrator",
+          "text": "She stays for tea, and leaves before dark.",
+          "effects": [
+            {
+              "op": "journal",
+              "entry": "ch6_wanjiru"
+            }
+          ],
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch06_kito",
+      "nodes": {
+        "start_route": {
+          "speaker": "narrator",
+          "text": "",
+          "branch": [
+            {
+              "conditions": [
+                {
+                  "op": "flag",
+                  "flag": "kito_talked"
+                }
+              ],
+              "next": "free"
+            }
+          ],
+          "next": "jail"
+        },
+        "start": {
+          "speaker": "narrator",
+          "text": "The post brings a letter in careful handwriting.",
+          "next": "start_route"
+        },
+        "free": {
+          "speaker": "kito",
+          "portrait": "happy",
+          "text": "My mother is well again. I have a job at the clinic in town. I tell the boys there what happens to people who carry snares.",
+          "next": "n2"
+        },
+        "n2": {
+          "speaker": "kito",
+          "portrait": "happy",
+          "text": "Tell Tendai the tea was terrible. And thank you.",
+          "effects": [
+            {
+              "op": "relationship",
+              "character": "kito",
+              "value": 5
+            }
+          ],
+          "next": "end"
+        },
+        "jail": {
+          "speaker": "kito",
+          "portrait": "worried",
+          "text": "They let me go after the trial. I testified about the trucks. I am sorry for the snares. I hope the rhino is still there.",
+          "next": "end"
+        },
+        "end": {
+          "speaker": "tendai",
+          "text": "Hm. Good lad.",
+          "effects": [
+            {
+              "op": "journal",
+              "entry": "ch6_kito"
+            }
+          ],
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch06_all_species",
+      "nodes": {
+        "start": {
+          "speaker": "amara",
+          "portrait": "happy",
+          "text": "Ten species. Grazers, browsers, hunters, scavengers. It is a whole ecosystem again, {player}. Look at it.",
+          "focus": {
+            "x": 56,
+            "y": 46
+          },
+          "effects": [
+            {
+              "op": "reputation",
+              "value": 5
+            },
+            {
+              "op": "journal",
+              "entry": "ch6_all_species"
+            }
+          ],
+          "next": "n1"
+        },
+        "n1": {
+          "speaker": "tendai",
+          "portrait": "happy",
+          "text": "Ruth had a list of these on her office wall. I took it down when the last giraffe went. I think I will put it back up.",
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch06_quiet",
+      "nodes": {
+        "start": {
+          "speaker": "tendai",
+          "portrait": "happy",
+          "text": "Fifteen days without a snare, a shot or a poisoned bird. I had forgotten what quiet sounds like.",
+          "effects": [
+            {
+              "op": "journal",
+              "entry": "ch6_quiet"
+            }
+          ],
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch06_hint_species",
+      "nodes": {
+        "start": {
+          "speaker": "amara",
+          "text": "We are still missing some of the reserve’s species. If any have died out here, the Species menu (K) has offers from other reserves.",
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch06_hint_zones",
+      "nodes": {
+        "start": {
+          "speaker": "tendai",
+          "text": "Some of the reserve is still behind broken fences. Mend them and every zone will be ours again.",
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch06_hint_eco",
+      "nodes": {
+        "start": {
+          "speaker": "amara",
+          "text": "Ecosystem Health comes from three things: green grass, every species doing well, and water in every zone. Hover the leaf meter to see which one is holding us back.",
+          "next": null
+        }
+      }
+    },
+    {
+      "id": "ch06_complete",
+      "nodes": {
+        "start": {
+          "speaker": "narrator",
+          "text": "Dusk at the tower. Everyone is here.",
+          "focus": {
+            "x": 45,
+            "y": 37
+          },
+          "next": "n1"
+        },
+        "n1": {
+          "speaker": "amara",
+          "portrait": "happy",
+          "text": "I ran the numbers one more time this morning. I have never seen a reserve recover this fast. Never.",
+          "next": "n2"
+        },
+        "n2": {
+          "speaker": "tendai",
+          "text": "Ruth gave me this hat the day she hired me. Thirty-two years ago.",
+          "next": "n3"
+        },
+        "n3": {
+          "speaker": "tendai",
+          "portrait": "happy",
+          "text": "It is yours now, {player}. It always was going to be. Ruth just did not live to hand it over.",
+          "effects": [
+            {
+              "op": "setFlag",
+              "flag": "tendai_hat"
+            }
+          ],
+          "next": "n4"
+        },
+        "n4": {
+          "speaker": "player",
+          "text": "…",
+          "choices": [
+            {
+              "text": "Thank you, Tendai. For staying, all those years.",
+              "next": "thanks",
+              "effects": [
+                {
+                  "op": "relationship",
+                  "character": "tendai",
+                  "value": 5
+                }
+              ]
+            },
+            {
+              "text": "Only if you promise not to retire just yet.",
+              "next": "stay",
+              "effects": [
+                {
+                  "op": "relationship",
+                  "character": "tendai",
+                  "value": 5
+                }
+              ]
+            }
+          ]
+        },
+        "thanks": {
+          "speaker": "tendai",
+          "portrait": "happy",
+          "text": "Somebody had to keep the gate shut.",
+          "next": "end"
+        },
+        "stay": {
+          "speaker": "tendai",
+          "portrait": "happy",
+          "text": "Hm. Maybe one more season. Somebody has to keep you out of trouble.",
+          "next": "end"
+        },
+        "end": {
+          "speaker": "narrator",
+          "text": "Below the tower, the herds move down to the water as the light goes.",
+          "effects": [
+            {
+              "op": "journal",
+              "entry": "ch6_end"
+            }
+          ],
+          "next": null
+        }
+      }
+    }
+  ]
+}

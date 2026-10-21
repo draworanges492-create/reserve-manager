@@ -413,4 +413,18 @@ strategies, about 100 game days, rhinos alive, Trust 36–59) · `lint` ✅ · `
 browser: Chapter 5 drought, pump panel, poaching alerts, camera post, Hale scene; 0 console
 errors on a fresh load. The player's save was backed up and restored.
 
-**Next:** Chapter 6 "Legacy" and the endings (Phase 13), to be planned with you.
+## Phase 13 — Chapter 6 "Legacy" and endings ✅ (2026-10-21)
+
+**Done**
+
+- Chapter 6 (D126): max out the reserve (10 species, Ecosystem 80+, every zone, 30 days
+  without poaching, Reputation 60+); species buy-back (D127).
+- Endings (D128) and the epilogue (D129): decision slides, ending, credits, then free play.
+
+**Checks:** `build` ✅ · `test` ✅ (219; playthrough from the start to the epilogue with three
+strategies: about 135 game days, reaching Thriving, Fortress and Thriving) · `lint` ✅ ·
+`validate-data` ✅ · browser: Chapter 6 completion → epilogue, all 8 slides, Keep playing →
+free play; 0 console errors. The player's save was backed up and restored.
+
+**The story is complete.** Next (your plan): Easter eggs and a journal revamp, then
+Phase 14 release polish.

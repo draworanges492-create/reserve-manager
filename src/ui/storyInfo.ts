@@ -27,6 +27,7 @@ export interface TrackerContent {
 
 export function trackerContent(state: GameState): TrackerContent {
   const chapter = chapterDef(state.chapter.current);
+  if (state.flags.game_complete) return { title: t('story.legacy'), goals: [] };
   if (!chapter || state.flags.story_paused) return { title: t('story.freePlay'), goals: [] };
   return {
     title: t('story.chapter', { n: chapter.id, title: chapter.title }),

@@ -33,6 +33,10 @@ export type Condition =
   /** Phase 12+: every working pump's borehole is deepened (at least one); N of a building. */
   | { op: 'pumpsDeepened' }
   | { op: 'buildingCount'; buildingId: string; min: number }
+  /** Phase 13: how many zones are open; whole days since a counter holding a day number
+   * (or since the chapter began, if it is unset or older). */
+  | { op: 'zonesOpen'; min: number }
+  | { op: 'daysSince'; counter: string; min: number }
   | { op: 'not'; condition: Condition };
 
 /**

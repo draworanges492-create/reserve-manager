@@ -6,7 +6,11 @@ import type { GameState } from '../core/GameState';
 import type { SimEvent, SimStep } from '../sim/types';
 import { allHold } from './conditions';
 import { chapterDef, CHAPTERS, journalTemplate } from './content';
+import { chooseEnding } from './Ending';
 import type { Goal } from './types';
+
+/** The story's last chapter: finishing it triggers the ending and epilogue. */
+export const FINAL_CHAPTER = 6;
 
 export interface StoryResult {
   state: GameState;
@@ -161,10 +165,18 @@ export function afterDialogue(state: GameState, dialogueId: string): StoryResult
   let next = addJournal(state, `chapter_${chapter.id}_end`, events);
   const following = chapterDef(chapter.id + 1);
   if (!following) {
-    // Last written chapter (Milestone A ends after Chapter 2): free play continues.
+    // Last written chapter: free play continues. After the final chapter (6), the ending is
+    // chosen now and the epilogue shows next (spec §9.3, D126).
+    const final = chapter.id >= FINAL_CHAPTER;
+    const ending = final ? chooseEnding(next) : null;
     next = {
       ...next,
-      flags: { ...next.flags, [`chapter_${chapter.id}_complete`]: true, story_paused: true },
+      flags: {
+        ...next.flags,
+        [`chapter_${chapter.id}_complete`]: true,
+        story_paused: true,
+        ...(ending ? { [`ending_${ending}`]: true, epilogue_ready: true } : {}),
+      },
     };
     return { state: next, events };
   }

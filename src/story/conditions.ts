@@ -75,6 +75,12 @@ export function holds(state: GameState, c: Condition): boolean {
           (s) => s.building?.buildingId === c.buildingId && s.building.daysLeft === 0,
         ).length >= c.min
       );
+    case 'zonesOpen':
+      return Object.values(state.zones).filter((z) => z.unlocked).length >= c.min;
+    case 'daysSince': {
+      const since = Math.max(state.counters[c.counter] ?? -Infinity, state.chapter.startDay);
+      return state.clock.day - since >= c.min;
+    }
     case 'not':
       return !holds(state, c.condition);
   }

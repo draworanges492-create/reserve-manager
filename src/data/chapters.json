@@ -958,6 +958,180 @@
       ],
       "clues": [],
       "completionDialogue": "ch05_complete"
+    },
+    {
+      "id": 6,
+      "title": "Legacy",
+      "introDialogue": "ch06_intro",
+      "goals": [
+        {
+          "id": "g6_species",
+          "text": "Have all 10 species living in the reserve",
+          "conditions": [
+            {
+              "op": "speciesPresent",
+              "min": 10
+            }
+          ]
+        },
+        {
+          "id": "g6_eco",
+          "text": "Keep Ecosystem Health at 80+ for 10 days ({n}/{days})",
+          "conditions": [
+            {
+              "op": "scoreAtLeast",
+              "score": "ecosystem",
+              "min": 80
+            }
+          ],
+          "days": 10
+        },
+        {
+          "id": "g6_zones",
+          "text": "Open every zone of the reserve",
+          "conditions": [
+            {
+              "op": "zonesOpen",
+              "min": 7
+            }
+          ]
+        },
+        {
+          "id": "g6_secure",
+          "text": "Go 30 days without losing an animal to poachers",
+          "conditions": [
+            {
+              "op": "daysSince",
+              "counter": "lastPoachDay",
+              "min": 30
+            }
+          ]
+        },
+        {
+          "id": "g6_rep",
+          "text": "Reach a Reputation of 60",
+          "conditions": [
+            {
+              "op": "scoreAtLeast",
+              "score": "reputation",
+              "min": 60
+            }
+          ]
+        }
+      ],
+      "unlocks": {
+        "zones": [],
+        "buildings": [],
+        "staff": []
+      },
+      "scriptedEvents": [
+        {
+          "id": "s6_wanjiru",
+          "when": [
+            {
+              "op": "daysInChapter",
+              "min": 3
+            }
+          ],
+          "dialogue": "ch06_wanjiru"
+        },
+        {
+          "id": "s6_kito",
+          "when": [
+            {
+              "op": "daysInChapter",
+              "min": 6
+            }
+          ],
+          "dialogue": "ch06_kito"
+        },
+        {
+          "id": "s6_species",
+          "when": [
+            {
+              "op": "speciesPresent",
+              "min": 10
+            }
+          ],
+          "dialogue": "ch06_all_species"
+        },
+        {
+          "id": "s6_quiet",
+          "when": [
+            {
+              "op": "daysSince",
+              "counter": "lastPoachDay",
+              "min": 15
+            },
+            {
+              "op": "daysInChapter",
+              "min": 15
+            }
+          ],
+          "dialogue": "ch06_quiet"
+        },
+        {
+          "id": "s6_hint_species",
+          "when": [
+            {
+              "op": "daysInChapter",
+              "min": 12
+            },
+            {
+              "op": "not",
+              "condition": {
+                "op": "speciesPresent",
+                "min": 10
+              }
+            }
+          ],
+          "dialogue": "ch06_hint_species"
+        },
+        {
+          "id": "s6_hint_zones",
+          "when": [
+            {
+              "op": "daysInChapter",
+              "min": 10
+            },
+            {
+              "op": "not",
+              "condition": {
+                "op": "zonesOpen",
+                "min": 7
+              }
+            }
+          ],
+          "dialogue": "ch06_hint_zones"
+        },
+        {
+          "id": "s6_hint_eco",
+          "when": [
+            {
+              "op": "daysInChapter",
+              "min": 20
+            },
+            {
+              "op": "not",
+              "condition": {
+                "op": "goalDone",
+                "goalId": "g6_eco"
+              }
+            },
+            {
+              "op": "not",
+              "condition": {
+                "op": "scoreAtLeast",
+                "score": "ecosystem",
+                "min": 80
+              }
+            }
+          ],
+          "dialogue": "ch06_hint_eco"
+        }
+      ],
+      "clues": [],
+      "completionDialogue": "ch06_complete"
     }
   ]
 }

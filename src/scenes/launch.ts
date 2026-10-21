@@ -8,7 +8,7 @@ import type { TiledMap } from '../core/TiledFormat';
 import { readWorldLayout } from '../core/WorldLayout';
 import { getSession, setSession } from './session';
 
-const GAME_SCENES = ['GameScene', 'UIScene', 'DialogueScene'] as const;
+const GAME_SCENES = ['GameScene', 'UIScene', 'DialogueScene', 'EpilogueScene'] as const;
 
 function now(): string {
   return new Date().toISOString();
@@ -32,6 +32,7 @@ function run(scene: Phaser.Scene, state: GameState, fresh: boolean): void {
   scene.scene.start('GameScene');
   scene.scene.launch('UIScene');
   scene.scene.launch('DialogueScene');
+  scene.scene.launch('EpilogueScene');
 }
 
 function worldOf(scene: Phaser.Scene): ReturnType<typeof readWorldLayout> {

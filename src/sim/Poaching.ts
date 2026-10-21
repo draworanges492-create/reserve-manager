@@ -111,6 +111,7 @@ export const runPoaching: SimStep = (input, rng) => {
     const killed = Math.min(n, rng.int(1, 2));
     state = setCount(state, zoneId, speciesId, n - killed);
     state = bump(state, 'poached', killed);
+    state = { ...state, counters: { ...state.counters, lastPoachDay: state.clock.day } };
     if (cameras) state = bump(state, 'evidence'); // the cameras caught the truck
     state = { ...state, flags: { ...state.flags, poaching_happened: true } };
     poachedToday += killed;

@@ -15,9 +15,9 @@ const strategies: Record<string, Strategy> = {
   alternate: (o, step) => o[step % o.length],
 };
 const DAY_MS = 120_000;
-const MAX_DAYS = 400;
+const MAX_DAYS = 600;
 /** The chapter whose completion ends the run. */
-const LAST = 5;
+const LAST = 6;
 
 function play(strategy: Strategy): GameState {
   const session = new GameSession({ ...newGame(7), playerName: 'Sam' });
@@ -53,6 +53,7 @@ function play(strategy: Strategy): GameState {
     if (session.state.chapter.current >= 3) playChapter3(session);
     if (session.state.chapter.current >= 4) playChapter4(session);
     if (session.state.chapter.current >= 5) playChapter5(session);
+    if (session.state.chapter.current >= 6) playChapter6(session);
     // A day passes (if a conversation is waiting it starts instead; the loop above plays it).
     session.update(DAY_MS);
   }
@@ -124,6 +125,38 @@ function playChapter5(session: GameSession): void {
       session.dispatch({ type: 'repairFence', segmentId: id });
 }
 
+/** Chapter 6: open every zone, bring back any missing species, guard every zone. */
+function playChapter6(session: GameSession): void {
+  const st = () => session.state;
+  if (st().resources.money > 100)
+    for (const zoneId of Object.keys(st().zones))
+      for (const id of fencesBlocking(st(), zoneId))
+        session.dispatch({ type: 'repairFence', segmentId: id });
+  for (const speciesId of [
+    'rhino',
+    'leopard',
+    'lion',
+    'elephant',
+    'giraffe',
+    'wildebeest',
+    'hyena',
+    'vulture',
+    'zebra',
+    'impala',
+  ])
+    session.dispatch({ type: 'reintroduce', speciesId });
+  for (const zoneId of ['plains', 'north', 'woodland', 'outcrop', 'east_border', 'river']) {
+    if (!st().zones[zoneId]?.unlocked) continue;
+    const want = zoneId === 'north' ? 2 : 1;
+    while (st().staff.filter((m) => m.role === 'ranger' && m.zoneId === zoneId).length < want) {
+      if (!session.dispatch({ type: 'hire', role: 'ranger' }).ok) break;
+      const fresh = st().staff.find((m) => m.role === 'ranger' && m.zoneId === null);
+      if (!fresh) break;
+      session.dispatch({ type: 'assignStaff', staffId: fresh.id, zoneId });
+    }
+  }
+}
+
 function summary(state: GameState): string {
   return JSON.stringify({
     chapter: state.chapter.current,
@@ -155,6 +188,11 @@ describe('playthrough: start to end of the last written chapter (Phase 7/10 acce
       expect(state.flags.chapter_4_complete, summary(state)).toBe(true);
       expect(state.flags.chapter_5_complete, summary(state)).toBe(true);
       expect(state.flags.hale_resolved).toBe(true);
+      expect(state.flags.chapter_6_complete, summary(state)).toBe(true);
+      expect(state.flags.epilogue_ready).toBe(true);
+      expect(
+        ['ending_thriving', 'ending_profitable', 'ending_fortress'].some((f) => state.flags[f]),
+      ).toBe(true);
       expect(state.flags.ch2_mystery_solved).toBe(true);
       // Nothing left waiting: every scene that was queued got played.
       expect(state.story.pendingDialogues).toEqual([]);
@@ -179,6 +217,8 @@ describe('playthrough: start to end of the last written chapter (Phase 7/10 acce
           'ch5_kito',
           'ch5_hale',
           'chapter_5_end',
+          'ch6_legacy',
+          'chapter_6_end',
         ]),
       );
     });

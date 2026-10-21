@@ -277,7 +277,6 @@
   "alert.planDone.contraception": "Contraception worked: the {species} in {zone} are at your target.",
   "money.tooltip.tourism": "Visitors: +{n} ({visitors} yesterday)",
   "command.cannotReintroduce": "This species can't be brought in.",
-  "command.alreadyReintroduced": "You've already brought them in.",
   "command.needsVet": "Needs a vet (Staff, H).",
   "species.bringIn": "Bring in ({cost})",
   "species.canBringIn": "{name} · could come from another reserve",
@@ -295,5 +294,10 @@
   "building.deepen": "Deepen borehole ({cost})",
   "building.truck": "Truck in water ({cost})",
   "building.deepened": "Borehole deepened: full output in the drought.",
-  "building.halfOutput": "Drought: this pump is at half output until the borehole is deepened."
+  "building.halfOutput": "Drought: this pump is at half output until the borehole is deepened.",
+  "command.alreadyPresent": "They already live here.",
+  "story.legacy": "Free play: the reserve is yours. Keep it thriving.",
+  "epilogue.next": "{n}/{total} · Click or press Space",
+  "epilogue.keepPlaying": "Keep playing",
+  "epilogue.menu": "Main menu"
 }

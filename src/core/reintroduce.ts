@@ -9,7 +9,9 @@ export function reintroduceBlocker(state: GameState, speciesId: string) {
   const r = speciesDef(speciesId)?.reintroduce;
   if (!r) return 'command.cannotReintroduce' as const;
   if (state.chapter.current < r.chapter) return 'command.notYetAvailable' as const;
-  if (state.flags[`reintroduced_${speciesId}`]) return 'command.alreadyReintroduced' as const;
+  // Once a species lives here again it can't be bought twice; if it dies out, it can.
+  const present = Object.values(state.populations).some((h) => (h[speciesId] ?? 0) > 0);
+  if (present) return 'command.alreadyPresent' as const;
   if (!state.zones[r.zone]?.unlocked || !zoneDef(r.zone)) return 'command.zoneLocked' as const;
   if (staffOf(state, 'vet') === 0) return 'command.needsVet' as const;
   if (state.resources.money < r.cost) return 'command.notEnoughMoney' as const;

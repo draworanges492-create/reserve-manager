@@ -1,0 +1,222 @@
+{
+  "groups": [
+    {
+      "id": "impala",
+      "options": [
+        {
+          "when": [
+            {
+              "op": "flag",
+              "flag": "plan_cull"
+            }
+          ],
+          "title": "The impala",
+          "text": "The cull was hard and quick. The meat fed the village through a lean season, and the plains grew back. Nobody at the reserve ever spoke of it as easy."
+        },
+        {
+          "when": [
+            {
+              "op": "flag",
+              "flag": "plan_relocate"
+            }
+          ],
+          "title": "The impala",
+          "text": "Truckloads of impala went north to new land. Years later, a ranger there wrote to say their herd had a name for the newcomers: “Ruth’s lot”."
+        },
+        {
+          "when": [
+            {
+              "op": "flag",
+              "flag": "plan_contraception"
+            }
+          ],
+          "title": "The impala",
+          "text": "The contraception programme was slow, and Amara published a paper on it. Other reserves still call to ask how it was done."
+        }
+      ]
+    },
+    {
+      "id": "village",
+      "options": [
+        {
+          "when": [
+            {
+              "op": "flag",
+              "flag": "border_beehive"
+            }
+          ],
+          "title": "The village",
+          "text": "The beehive fence still hums along the east boundary. The village sells its honey in town under a label with an elephant on it."
+        },
+        {
+          "when": [
+            {
+              "op": "flag",
+              "flag": "policy_compensation"
+            }
+          ],
+          "title": "The village",
+          "text": "Every raid was paid for, every time. The payments got smaller as the elephants found the grass on their own side of the fence."
+        },
+        {
+          "when": [
+            {
+              "op": "flag",
+              "flag": "border_fence"
+            }
+          ],
+          "title": "The village",
+          "text": "The east fence was mended again and again. Wanjiru never stopped reminding you how many times."
+        }
+      ]
+    },
+    {
+      "id": "lodge",
+      "options": [
+        {
+          "when": [
+            {
+              "op": "flag",
+              "flag": "victor_lodge"
+            },
+            {
+              "op": "flag",
+              "flag": "hale_exposed"
+            }
+          ],
+          "title": "The lodge",
+          "text": "When Hale & Partners collapsed, the lodge passed to the reserve. Its staff all come from the village now."
+        },
+        {
+          "when": [
+            {
+              "op": "flag",
+              "flag": "victor_lodge"
+            }
+          ],
+          "title": "The lodge",
+          "text": "Hale’s lodge stayed full and loud. Every season its share of the ticket money went somewhere far away."
+        },
+        {
+          "when": [
+            {
+              "op": "flag",
+              "flag": "victor_declined"
+            }
+          ],
+          "title": "The lodge",
+          "text": "You built the reserve slowly, with your own money and your own hands. Nothing on the plains belongs to anyone else."
+        },
+        {
+          "when": [
+            {
+              "op": "flag",
+              "flag": "victor_cold"
+            }
+          ],
+          "title": "The lodge",
+          "text": "One question about a broken pump changed everything. Victor Hale never smiled at you again."
+        }
+      ]
+    },
+    {
+      "id": "kito",
+      "options": [
+        {
+          "when": [
+            {
+              "op": "flag",
+              "flag": "kito_talked"
+            }
+          ],
+          "title": "Kito",
+          "text": "Kito works at the clinic in town and visits once a year, always with terrible tea for Tendai."
+        },
+        {
+          "when": [
+            {
+              "op": "flag",
+              "flag": "kito_police"
+            }
+          ],
+          "title": "Kito",
+          "text": "Kito testified at the trial. He moved to the city afterwards, and nobody heard from him again."
+        }
+      ]
+    },
+    {
+      "id": "rhino",
+      "options": [
+        {
+          "when": [
+            {
+              "op": "populationAtLeast",
+              "species": "rhino",
+              "min": 1
+            }
+          ],
+          "title": "The rhinos",
+          "text": "The rhino mother and her calf are still in the north. The calf has a calf of her own now."
+        },
+        {
+          "when": [],
+          "title": "The rhinos",
+          "text": "The north has no rhinos. Amara keeps a camera trap on the old path, just in case one walks in again."
+        }
+      ]
+    },
+    {
+      "id": "hale",
+      "options": [
+        {
+          "when": [
+            {
+              "op": "flag",
+              "flag": "hale_exposed"
+            }
+          ],
+          "title": "Victor Hale",
+          "text": "Victor Hale was convicted of running the poaching ring and of the sabotage that nearly killed the reserve. The east road is quiet at night now."
+        },
+        {
+          "when": [
+            {
+              "op": "flag",
+              "flag": "hale_deal"
+            }
+          ],
+          "title": "Victor Hale",
+          "text": "Hale built his luxury camp on the northern land. The trucks on the east road never quite stopped."
+        },
+        {
+          "when": [
+            {
+              "op": "flag",
+              "flag": "hale_lockdown"
+            }
+          ],
+          "title": "Victor Hale",
+          "text": "Hale never got the north. He never got past the new wire either. Nor did anyone else."
+        }
+      ]
+    }
+  ],
+  "endings": {
+    "thriving": {
+      "title": "Thriving Wilderness",
+      "text": "Ruth’s reserve is wild, healthy and loved by the people around it. Children from the village grow up wanting to be rangers. {player}, this is the place she dreamed of."
+    },
+    "profitable": {
+      "title": "Profitable but Compromised",
+      "text": "The reserve makes money, the visitors keep coming, and the accounts have never looked better. But some nights, on the east road, there are still trucks with no lights."
+    },
+    "fortress": {
+      "title": "Fortress Reserve",
+      "text": "Inside the wire the animals are safe and the grass is green. Outside it, the village has learned to live without you. Ruth’s reserve survived, but it stands alone."
+    }
+  },
+  "credits": {
+    "title": "Thank you for playing",
+    "text": "Reserve Manager. Story, art and music made for this game. Built with Phaser; font: Inter.\n\nThe reserve is still yours: keep playing as long as you like."
+  }
+}

@@ -24,7 +24,13 @@
           "text": "TODO: verify",
           "verified": false
         }
-      ]
+      ],
+      "reintroduce": {
+        "chapter": 6,
+        "zone": "plains",
+        "count": 20,
+        "cost": 300
+      }
     },
     {
       "id": "zebra",
@@ -50,7 +56,13 @@
           "text": "TODO: verify",
           "verified": false
         }
-      ]
+      ],
+      "reintroduce": {
+        "chapter": 6,
+        "zone": "plains",
+        "count": 12,
+        "cost": 400
+      }
     },
     {
       "id": "lion",
@@ -83,7 +95,13 @@
         "wildebeest": 0.03
       },
       "huntHalfSaturation": 20,
-      "predationEfficiency": 0.04
+      "predationEfficiency": 0.04,
+      "reintroduce": {
+        "chapter": 6,
+        "zone": "plains",
+        "count": 3,
+        "cost": 1200
+      }
     },
     {
       "id": "elephant",
@@ -113,7 +131,13 @@
           "text": "TODO: verify — elephants dig for water in dry riverbeds, and other animals drink from the holes.",
           "verified": false
         }
-      ]
+      ],
+      "reintroduce": {
+        "chapter": 6,
+        "zone": "plains",
+        "count": 4,
+        "cost": 2000
+      }
     },
     {
       "id": "hyena",
@@ -150,7 +174,13 @@
           "text": "TODO: verify — their strong jaws crush bone, so they eat parts of a carcass other animals leave.",
           "verified": false
         }
-      ]
+      ],
+      "reintroduce": {
+        "chapter": 6,
+        "zone": "plains",
+        "count": 4,
+        "cost": 600
+      }
     },
     {
       "id": "vulture",
@@ -181,7 +211,13 @@
           "text": "TODO: verify — vultures are often poisoned when poachers lace carcasses to avoid being spotted.",
           "verified": false
         }
-      ]
+      ],
+      "reintroduce": {
+        "chapter": 6,
+        "zone": "plains",
+        "count": 6,
+        "cost": 400
+      }
     },
     {
       "id": "giraffe",
@@ -282,7 +318,13 @@
           "text": "TODO: verify — they are mostly active at night and are rarely seen.",
           "verified": false
         }
-      ]
+      ],
+      "reintroduce": {
+        "chapter": 6,
+        "zone": "plains",
+        "count": 2,
+        "cost": 1500
+      }
     },
     {
       "id": "rhino",
@@ -310,7 +352,13 @@
           "text": "TODO: verify — black rhinos are critically endangered, mainly because of poaching for their horn.",
           "verified": false
         }
-      ]
+      ],
+      "reintroduce": {
+        "chapter": 6,
+        "zone": "north",
+        "count": 2,
+        "cost": 3000
+      }
     }
   ]
 }

@@ -281,6 +281,54 @@
       "chapter": 5,
       "title": "The northern reach",
       "text": "The north fence is mended. The wildest land in the reserve is ours again."
+    },
+    {
+      "id": "chapter_6_start",
+      "chapter": 6,
+      "title": "Legacy",
+      "text": "A year since I came through the gate. Tendai wants to see Ruth's dream finished before he retires. So do I."
+    },
+    {
+      "id": "ch6_legacy",
+      "chapter": 6,
+      "title": "Ruth's list",
+      "text": "Ten species, every zone, a month without a snare. Amara wrote it on the office wall in big letters."
+    },
+    {
+      "id": "ch6_wanjiru",
+      "chapter": 6,
+      "title": "Tea with Wanjiru",
+      "text": "Wanjiru walked up the east road to talk. We are better at listening to each other than we were."
+    },
+    {
+      "id": "ch6_kito",
+      "chapter": 6,
+      "title": "A letter",
+      "text": "A letter from Kito. Tendai read it twice and pretended he hadn't."
+    },
+    {
+      "id": "ch6_all_species",
+      "chapter": 6,
+      "title": "All ten",
+      "text": "Grazers, browsers, hunters and scavengers. The whole web, back again."
+    },
+    {
+      "id": "ch6_quiet",
+      "chapter": 6,
+      "title": "Quiet",
+      "text": "Fifteen days without a snare. Tendai says he'd forgotten what quiet sounds like."
+    },
+    {
+      "id": "ch6_end",
+      "chapter": 6,
+      "title": "The hat",
+      "text": "Tendai gave me Ruth's old ranger hat. It doesn't fit. I'm keeping it."
+    },
+    {
+      "id": "chapter_6_end",
+      "chapter": 6,
+      "title": "Legacy",
+      "text": "The reserve is everything Ruth hoped. Now it's mine to keep that way."
     }
   ]
 }

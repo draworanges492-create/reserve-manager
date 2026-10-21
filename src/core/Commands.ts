@@ -33,7 +33,9 @@ export type Command =
   | { type: 'reintroduce'; speciesId: string }
   /** Chapter 5 drought. */
   | { type: 'deepenBorehole'; waterholeId: string }
-  | { type: 'truckWater'; waterholeId: string };
+  | { type: 'truckWater'; waterholeId: string }
+  /** The player closed the epilogue: the game is complete, free play continues. */
+  | { type: 'finishEpilogue' };
 
 export type CommandResult =
   { ok: true; state: GameState; events: SimEvent[] } | { ok: false; reason: StringKey };
@@ -105,5 +107,12 @@ export function applyCommand(state: GameState, command: Command): CommandResult 
       return deepenBorehole(state, command.waterholeId);
     case 'truckWater':
       return truckWater(state, command.waterholeId);
+    case 'finishEpilogue':
+      if (!state.flags.epilogue_ready) return { ok: false, reason: 'command.notYetAvailable' };
+      return {
+        ok: true,
+        state: { ...state, flags: { ...state.flags, epilogue_seen: true, game_complete: true } },
+        events: [],
+      };
   }
 }

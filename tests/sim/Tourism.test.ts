@@ -72,7 +72,7 @@ describe('reintroduction (Chapter 4)', () => {
     resources: { money: 5000 },
   });
 
-  it('needs Chapter 4 and a vet, costs money, and only happens once', () => {
+  it('needs Chapter 4 and a vet, costs money, and not while they already live here', () => {
     expect(applyCommand(newGame(), { type: 'reintroduce', speciesId: 'giraffe' })).toEqual({
       ok: false,
       reason: 'command.notYetAvailable',
@@ -89,7 +89,7 @@ describe('reintroduction (Chapter 4)', () => {
     expect(r.state.resources.money).toBe(5000 - 900);
     expect(applyCommand(r.state, { type: 'reintroduce', speciesId: 'giraffe' })).toEqual({
       ok: false,
-      reason: 'command.alreadyReintroduced',
+      reason: 'command.alreadyPresent',
     });
   });
 });
