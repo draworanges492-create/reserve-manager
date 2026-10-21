@@ -1,5 +1,5 @@
-// Content for the Species, Journal and Settings menus (pure, so it can be tested).
-import { SPECIES, speciesDef, zoneDef } from '../core/content';
+// Content for the Species and Settings menus (pure, so it can be tested).
+import { SPECIES, zoneDef } from '../core/content';
 import type { GameState } from '../core/GameState';
 import { nextVolume, type Settings } from '../core/Settings';
 import { t } from '../core/text';
@@ -102,43 +102,6 @@ export function speciesMenu(
         ],
       };
     }),
-  };
-}
-
-/** One encyclopedia page (spec §7.6): diet, status, numbers, and unverified field notes. */
-export function encyclopediaEntry(
-  state: GameState,
-  speciesId: string,
-  onBack: () => void,
-): SideContent | null {
-  const s = speciesDef(speciesId);
-  if (!s) return null;
-  return {
-    title: s.name,
-    rows: [
-      {
-        lines: [
-          { text: t('encyclopedia.diet', { diet: t(`diet.${s.diet}`) }) },
-          { text: t('encyclopedia.population', { count: Math.round(reserveTotal(state, s.id)) }) },
-          { text: t('encyclopedia.where', { where: whereText(state, s.id) }) },
-          { text: t('encyclopedia.minViable', { n: s.minViable }) },
-          { text: t('encyclopedia.status') },
-        ],
-        actions: [{ label: t('encyclopedia.back'), enabled: true, onClick: onBack }],
-      },
-      {
-        lines: [
-          { text: t('encyclopedia.factsTitle') },
-          // Spec §0 rule 8: facts stay marked until the user verifies them.
-          ...s.facts.map((f) => ({
-            text: f.verified ? f.text : t('encyclopedia.factUnverified', { text: f.text }),
-            warn: !f.verified,
-          })),
-          { text: t('encyclopedia.factsNote') },
-        ],
-        actions: [],
-      },
-    ],
   };
 }
 

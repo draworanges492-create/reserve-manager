@@ -102,6 +102,20 @@ const MIGRATIONS: Record<number, Migration> = {
     version: 6,
     tourism: s.tourism ?? { visitorsHistory: [], lastVisitors: 0, lastRevenue: 0 },
   }),
+  // v7 (journal book): species already seen are noted "before records began"; records
+  // start from now; existing entries count as read.
+  6: (s) => {
+    const seen = (s.encyclopedia ?? []) as string[];
+    const journal = (s.journal ?? []) as unknown[];
+    return {
+      ...s,
+      version: 7,
+      fieldNotes:
+        s.fieldNotes ?? Object.fromEntries(seen.map((id) => [id, { day: -1, zoneId: null }])),
+      records: s.records ?? {},
+      journalRead: s.journalRead ?? journal.length,
+    };
+  },
 };
 
 export function summarize(state: GameState, savedAt: string): SaveSummary {

@@ -428,3 +428,17 @@ free play; 0 console errors. The player's save was backed up and restored.
 
 **The story is complete.** Next (your plan): Easter eggs and a journal revamp, then
 Phase 14 release polish.
+
+## Phase 14a — Journal book ✅ (2026-10-21)
+
+**Done**
+
+- The journal opens as a book over the map with Diary, Field notes, Records and Decisions
+  tabs (D130); page turns, keyboard arrows, Esc, "Show on the map" links.
+- Records tracking and new diary moments; save v7 (D131).
+
+**Checks:** `build` ✅ · `test` ✅ · `lint` ✅ · `validate-data` ✅ · browser: all four tabs,
+page turns, Species → Read opens Field notes; 0 console errors. Test saves removed (there
+were no saves before).
+
+Next: the nine Easter eggs (EXTRAS_PLAN part 2).

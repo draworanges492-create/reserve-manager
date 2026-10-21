@@ -11,7 +11,8 @@
             }
           ],
           "title": "The impala",
-          "text": "The cull was hard and quick. The meat fed the village through a lean season, and the plains grew back. Nobody at the reserve ever spoke of it as easy."
+          "text": "The cull was hard and quick. The meat fed the village through a lean season, and the plains grew back. Nobody at the reserve ever spoke of it as easy.",
+          "decision": "You chose to cull the impala, and gave the meat to the village."
         },
         {
           "when": [
@@ -21,7 +22,8 @@
             }
           ],
           "title": "The impala",
-          "text": "Truckloads of impala went north to new land. Years later, a ranger there wrote to say their herd had a name for the newcomers: “Ruth’s lot”."
+          "text": "Truckloads of impala went north to new land. Years later, a ranger there wrote to say their herd had a name for the newcomers: “Ruth’s lot”.",
+          "decision": "You chose to move the impala to a new home up north."
         },
         {
           "when": [
@@ -31,9 +33,11 @@
             }
           ],
           "title": "The impala",
-          "text": "The contraception programme was slow, and Amara published a paper on it. Other reserves still call to ask how it was done."
+          "text": "The contraception programme was slow, and Amara published a paper on it. Other reserves still call to ask how it was done.",
+          "decision": "You chose a contraception programme for the impala."
         }
-      ]
+      ],
+      "chapter": 3
     },
     {
       "id": "village",
@@ -46,7 +50,8 @@
             }
           ],
           "title": "The village",
-          "text": "The beehive fence still hums along the east boundary. The village sells its honey in town under a label with an elephant on it."
+          "text": "The beehive fence still hums along the east boundary. The village sells its honey in town under a label with an elephant on it.",
+          "decision": "You built a beehive fence with the village beekeepers."
         },
         {
           "when": [
@@ -56,7 +61,8 @@
             }
           ],
           "title": "The village",
-          "text": "Every raid was paid for, every time. The payments got smaller as the elephants found the grass on their own side of the fence."
+          "text": "Every raid was paid for, every time. The payments got smaller as the elephants found the grass on their own side of the fence.",
+          "decision": "You promised to pay for every crop the elephants take."
         },
         {
           "when": [
@@ -66,9 +72,11 @@
             }
           ],
           "title": "The village",
-          "text": "The east fence was mended again and again. Wanjiru never stopped reminding you how many times."
+          "text": "The east fence was mended again and again. Wanjiru never stopped reminding you how many times.",
+          "decision": "You mended the east fence and hoped it would hold."
         }
-      ]
+      ],
+      "chapter": 3
     },
     {
       "id": "lodge",
@@ -95,7 +103,8 @@
             }
           ],
           "title": "The lodge",
-          "text": "Hale’s lodge stayed full and loud. Every season its share of the ticket money went somewhere far away."
+          "text": "Hale’s lodge stayed full and loud. Every season its share of the ticket money went somewhere far away.",
+          "decision": "You let Victor Hale build his lodge, for a share of the tickets."
         },
         {
           "when": [
@@ -105,7 +114,8 @@
             }
           ],
           "title": "The lodge",
-          "text": "You built the reserve slowly, with your own money and your own hands. Nothing on the plains belongs to anyone else."
+          "text": "You built the reserve slowly, with your own money and your own hands. Nothing on the plains belongs to anyone else.",
+          "decision": "You turned down Victor Hale’s lodge."
         },
         {
           "when": [
@@ -115,9 +125,11 @@
             }
           ],
           "title": "The lodge",
-          "text": "One question about a broken pump changed everything. Victor Hale never smiled at you again."
+          "text": "One question about a broken pump changed everything. Victor Hale never smiled at you again.",
+          "decision": "You asked Victor Hale about the old pump."
         }
-      ]
+      ],
+      "chapter": 4
     },
     {
       "id": "kito",
@@ -130,7 +142,8 @@
             }
           ],
           "title": "Kito",
-          "text": "Kito works at the clinic in town and visits once a year, always with terrible tea for Tendai."
+          "text": "Kito works at the clinic in town and visits once a year, always with terrible tea for Tendai.",
+          "decision": "You let Tendai talk to Kito instead of calling the police."
         },
         {
           "when": [
@@ -140,9 +153,11 @@
             }
           ],
           "title": "Kito",
-          "text": "Kito testified at the trial. He moved to the city afterwards, and nobody heard from him again."
+          "text": "Kito testified at the trial. He moved to the city afterwards, and nobody heard from him again.",
+          "decision": "You handed Kito to the police."
         }
-      ]
+      ],
+      "chapter": 4
     },
     {
       "id": "rhino",
@@ -176,7 +191,8 @@
             }
           ],
           "title": "Victor Hale",
-          "text": "Victor Hale was convicted of running the poaching ring and of the sabotage that nearly killed the reserve. The east road is quiet at night now."
+          "text": "Victor Hale was convicted of running the poaching ring and of the sabotage that nearly killed the reserve. The east road is quiet at night now.",
+          "decision": "You handed the evidence against Hale to the police."
         },
         {
           "when": [
@@ -186,7 +202,8 @@
             }
           ],
           "title": "Victor Hale",
-          "text": "Hale built his luxury camp on the northern land. The trucks on the east road never quite stopped."
+          "text": "Hale built his luxury camp on the northern land. The trucks on the east road never quite stopped.",
+          "decision": "You sold Hale the northern land and kept quiet."
         },
         {
           "when": [
@@ -196,9 +213,11 @@
             }
           ],
           "title": "Victor Hale",
-          "text": "Hale never got the north. He never got past the new wire either. Nor did anyone else."
+          "text": "Hale never got the north. He never got past the new wire either. Nor did anyone else.",
+          "decision": "You refused Hale and sealed the reserve behind new wire."
         }
-      ]
+      ],
+      "chapter": 5
     }
   ],
   "endings": {

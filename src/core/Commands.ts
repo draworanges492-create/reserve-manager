@@ -25,7 +25,9 @@ export type Command =
   | { type: 'dismissStaff'; staffId: string }
   | { type: 'repairFence'; segmentId: string }
   | { type: 'examineClue'; clueId: string }
-  | { type: 'recordSighting'; speciesId: string }
+  | { type: 'recordSighting'; speciesId: string; zoneId?: string }
+  /** The journal was opened: every entry so far counts as read. */
+  | { type: 'markJournalRead' }
   /** Spec §6.4 herd management (Chapter 3+). */
   | { type: 'setHerdPlan'; zoneId: string; speciesId: string; method: HerdMethod }
   | { type: 'cancelHerdPlan'; zoneId: string; speciesId: string }
@@ -96,7 +98,9 @@ export function applyCommand(state: GameState, command: Command): CommandResult 
     case 'examineClue':
       return examineClue(state, command.clueId);
     case 'recordSighting':
-      return recordSighting(state, command.speciesId);
+      return recordSighting(state, command.speciesId, command.zoneId ?? null);
+    case 'markJournalRead':
+      return { ok: true, state: { ...state, journalRead: state.journal.length }, events: [] };
     case 'setHerdPlan':
       return setHerdPlan(state, command.zoneId, command.speciesId, command.method);
     case 'cancelHerdPlan':

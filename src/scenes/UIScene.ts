@@ -21,8 +21,9 @@ import {
 import { hoverTipLines } from '../ui/hoverTip';
 import { InfoPanel } from '../ui/InfoPanel';
 import { GoalTracker } from '../ui/GoalTracker';
-import { encyclopediaEntry, settingsMenu, speciesMenu } from '../ui/menus';
-import { fenceTooltip, type JournalFilter, journalMenu } from '../ui/storyInfo';
+import { settingsMenu, speciesMenu } from '../ui/menus';
+import { fenceTooltip } from '../ui/storyInfo';
+import type { JournalScene } from './JournalScene';
 import { fencesBlocking } from '../story/StoryManager';
 import { SidePanel } from '../ui/SidePanel';
 import { TEXT_SIZE } from '../ui/theme';
@@ -90,9 +91,7 @@ export class UIScene extends Phaser.Scene {
     clue: string | null;
   } = { waterhole: null, animal: null, slot: null, staff: null, fence: null, clue: null };
   private goalTracker!: GoalTracker;
-  private journalFilter: JournalFilter = 'all';
   /** Species whose encyclopedia page is open in the Species panel. */
-  private encyclopediaPage: string | null = null;
   private selection: Selection | null = null;
   private menu: Menu | null = null;
   private placing: string | null = null;
@@ -325,14 +324,6 @@ export class UIScene extends Phaser.Scene {
       case 'staff':
         return staffMenu(state, dispatch);
       case 'species':
-        if (this.encyclopediaPage) {
-          const page = encyclopediaEntry(
-            state,
-            this.encyclopediaPage,
-            () => (this.encyclopediaPage = null),
-          );
-          if (page) return page;
-        }
         return speciesMenu(
           state,
           (zoneId, speciesId) => {
@@ -340,11 +331,10 @@ export class UIScene extends Phaser.Scene {
             if (r) eventBus.emit('focusRequested', { x: r.x + r.w / 2, y: r.y + r.h / 2 });
             eventBus.emit('animalSelected', { group: { zoneId, speciesId } });
           },
-          (speciesId) => (this.encyclopediaPage = speciesId),
+          // Field notes in the journal replace the old encyclopedia page (D130).
+          (speciesId) => this.journal().openAt('notes', `notes:${speciesId}`),
           (speciesId) => dispatch({ type: 'reintroduce', speciesId }),
         );
-      case 'journal':
-        return journalMenu(state, this.journalFilter, (f) => (this.journalFilter = f));
       case 'settings':
         return settingsMenu(getSettings(), updateSettings, {
           ...this.saveUi,
@@ -403,10 +393,19 @@ export class UIScene extends Phaser.Scene {
     this.refreshSlots();
   }
 
+  private journal(): JournalScene {
+    return this.scene.get('JournalScene') as JournalScene;
+  }
+
   private toggleMenu(menu: Menu): void {
     if (this.placing) eventBus.emit('buildModeChanged', { buildingId: null });
+    // The journal is a book over the map, not a side panel (D130).
+    if (menu === 'journal') {
+      this.menu = null;
+      this.journal().toggle();
+      return;
+    }
     this.menu = this.menu === menu ? null : menu;
-    this.encyclopediaPage = null;
     this.saveUi = { confirming: null, lastSaved: null, failed: null };
     if (this.menu === 'settings') this.refreshSlots();
   }

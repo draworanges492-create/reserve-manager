@@ -1,14 +1,12 @@
-// Text for the goal tracker, journal, fences and clues (pure, so it can be tested).
+// Text for the goal tracker, fences and clues (pure, so it can be tested).
 import { BALANCE } from '../config/balance';
 import { fenceRepairable } from '../core/buildCommands';
 import { zoneDef } from '../core/content';
 import type { GameState } from '../core/GameState';
 import { t } from '../core/text';
-import { chapterDef, journalTemplate } from '../story/content';
-import { fillText } from '../story/DialogueRunner';
+import { chapterDef } from '../story/content';
 import { goalProgress } from '../story/StoryManager';
 import type { Goal } from '../story/types';
-import type { SideContent } from './SidePanel';
 
 export function goalText(state: GameState, goal: Goal): string {
   const progress = goalProgress(state, goal);
@@ -51,47 +49,4 @@ export function fenceTooltip(state: GameState, segmentId: string): string[] {
     lines.push(t('fence.opens', { zone: zoneDef(fence.zoneId)?.name ?? fence.zoneId }));
   }
   return lines;
-}
-
-export type JournalFilter = 'all' | number;
-
-export function journalMenu(
-  state: GameState,
-  filter: JournalFilter,
-  onFilter: (f: JournalFilter) => void,
-): SideContent {
-  const chapters = [...new Set(state.journal.map((j) => j.chapter))].sort((a, b) => a - b);
-  const cycle: JournalFilter[] = ['all', ...chapters];
-  const next = cycle[(cycle.indexOf(filter) + 1) % cycle.length] ?? 'all';
-  const label =
-    filter === 'all' ? t('journal.filterAll') : t('journal.filterChapter', { n: filter });
-  const entries = state.journal
-    .filter((j) => filter === 'all' || j.chapter === filter)
-    .slice()
-    .reverse() // newest first
-    .flatMap((j) => {
-      const tpl = journalTemplate(j.entryId);
-      return tpl
-        ? [
-            {
-              lines: [
-                { text: t('journal.entry', { day: j.day + 1, title: tpl.title }) },
-                { text: fillText(state, tpl.text) },
-              ],
-              actions: [],
-            },
-          ]
-        : [];
-    });
-  return {
-    title: t('journal.title'),
-    intro: entries.length ? [] : [{ text: t('journal.empty') }],
-    rows: [
-      {
-        lines: [{ text: t('journal.showing') }],
-        actions: [{ label, enabled: cycle.length > 1, onClick: () => onFilter(next) }],
-      },
-      ...entries,
-    ],
-  };
 }

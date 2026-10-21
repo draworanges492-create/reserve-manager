@@ -147,4 +147,6 @@ export interface JournalTemplate {
   title: string;
   /** May use {player}. */
   text: string;
+  /** Clicking the entry in the journal pans here (tiles). */
+  focus?: { x: number; y: number };
 }

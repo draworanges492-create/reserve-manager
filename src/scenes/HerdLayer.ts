@@ -100,7 +100,7 @@ export class HerdLayer {
     for (const [key, group] of this.groups) {
       const speciesId = key.split(':')[1] ?? '';
       if (!seen.includes(speciesId) && group.visibleIn(view)) {
-        this.session.dispatch({ type: 'recordSighting', speciesId });
+        this.session.dispatch({ type: 'recordSighting', speciesId, zoneId: key.split(':')[0] });
       }
     }
   }

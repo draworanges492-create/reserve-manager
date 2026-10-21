@@ -30,12 +30,21 @@ export function examineClue(state: GameState, clueId: string): CommandResult {
 }
 
 /** Spec §7.6: a species' encyclopedia entry unlocks the first time it's seen. */
-export function recordSighting(state: GameState, speciesId: string): CommandResult {
+export function recordSighting(
+  state: GameState,
+  speciesId: string,
+  zoneId: string | null = null,
+): CommandResult {
   if (!speciesDef(speciesId)) return { ok: false, reason: 'command.unknownSpecies' };
   if (state.encyclopedia.includes(speciesId)) return { ok: false, reason: 'command.alreadySeen' };
   return {
     ok: true,
-    state: { ...state, encyclopedia: [...state.encyclopedia, speciesId] },
+    state: {
+      ...state,
+      encyclopedia: [...state.encyclopedia, speciesId],
+      // The journal's Field notes remember when and where.
+      fieldNotes: { ...state.fieldNotes, [speciesId]: { day: state.clock.day, zoneId } },
+    },
     events: [{ type: 'encyclopediaUnlocked', payload: { speciesId } }],
   };
 }

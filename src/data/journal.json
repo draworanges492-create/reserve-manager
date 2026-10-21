@@ -16,13 +16,21 @@
       "id": "gate_mended",
       "chapter": 1,
       "title": "The gate shuts",
-      "text": "Mended the main gate today. Tendai swung it open and shut three times, just to hear it."
+      "text": "Mended the main gate today. Tendai swung it open and shut three times, just to hear it.",
+      "focus": {
+        "x": 57,
+        "y": 78
+      }
     },
     {
       "id": "first_drink",
       "chapter": 1,
       "title": "They came back",
-      "text": "Impala at Waterhole A this morning. A few dozen, nervous, but there."
+      "text": "Impala at Waterhole A this morning. A few dozen, nervous, but there.",
+      "focus": {
+        "x": 53,
+        "y": 45
+      }
     },
     {
       "id": "tendai_story",
@@ -88,7 +96,11 @@
       "id": "zone_river",
       "chapter": 2,
       "title": "The river",
-      "text": "Mended the west fence. The River & Wetland is part of the reserve again. Gran called it the reserve's memory."
+      "text": "Mended the west fence. The River & Wetland is part of the reserve again. Gran called it the reserve's memory.",
+      "focus": {
+        "x": 18,
+        "y": 56
+      }
     },
     {
       "id": "chapter_2_end",
@@ -136,7 +148,11 @@
       "id": "ch3_snare",
       "chapter": 3,
       "title": "New wire",
-      "text": "Tendai found a line of snares in the woodland. New wire. Somebody is organised, and somebody is paying."
+      "text": "Tendai found a line of snares in the woodland. New wire. Somebody is organised, and somebody is paying.",
+      "focus": {
+        "x": 92,
+        "y": 20
+      }
     },
     {
       "id": "chapter_3_end",
@@ -148,13 +164,21 @@
       "id": "zone_woodland",
       "chapter": 3,
       "title": "The woodland",
-      "text": "The woodland fence is mended. Shade, birdsong, and a lot of places to hide."
+      "text": "The woodland fence is mended. Shade, birdsong, and a lot of places to hide.",
+      "focus": {
+        "x": 96,
+        "y": 16
+      }
     },
     {
       "id": "zone_east_border",
       "chapter": 3,
       "title": "The eastern border",
-      "text": "The east side of the reserve is open again, right up to the village fields."
+      "text": "The east side of the reserve is open again, right up to the village fields.",
+      "focus": {
+        "x": 102,
+        "y": 56
+      }
     },
     {
       "id": "chapter_4_start",
@@ -190,7 +214,11 @@
       "id": "ch4_leopard_tracks",
       "chapter": 4,
       "title": "Leopard country",
-      "text": "Tracks on the rocks and a kill up a fig tree. Tendai says there are two of them."
+      "text": "Tracks on the rocks and a kill up a fig tree. Tendai says there are two of them.",
+      "focus": {
+        "x": 62,
+        "y": 22
+      }
     },
     {
       "id": "ch4_leopard_seen",
@@ -208,7 +236,11 @@
       "id": "ch4_rhino",
       "chapter": 4,
       "title": "A footprint",
-      "text": "A rhino print by the north fence, wide as a plate. We have told no one."
+      "text": "A rhino print by the north fence, wide as a plate. We have told no one.",
+      "focus": {
+        "x": 42,
+        "y": 33
+      }
     },
     {
       "id": "chapter_4_end",
@@ -220,7 +252,11 @@
       "id": "zone_outcrop",
       "chapter": 4,
       "title": "The outcrop",
-      "text": "The rocks in the north are ours again. The best view in the reserve, Tendai says."
+      "text": "The rocks in the north are ours again. The best view in the reserve, Tendai says.",
+      "focus": {
+        "x": 62,
+        "y": 16
+      }
     },
     {
       "id": "chapter_5_start",
@@ -256,7 +292,11 @@
       "id": "ch5_rhino",
       "chapter": 5,
       "title": "Mother and calf",
-      "text": "A black rhino and her calf in the north. The most precious thing on this land, and the most hunted."
+      "text": "A black rhino and her calf in the north. The most precious thing on this land, and the most hunted.",
+      "focus": {
+        "x": 24,
+        "y": 16
+      }
     },
     {
       "id": "ch5_rain",
@@ -280,7 +320,11 @@
       "id": "zone_north",
       "chapter": 5,
       "title": "The northern reach",
-      "text": "The north fence is mended. The wildest land in the reserve is ours again."
+      "text": "The north fence is mended. The wildest land in the reserve is ours again.",
+      "focus": {
+        "x": 24,
+        "y": 16
+      }
     },
     {
       "id": "chapter_6_start",
@@ -329,6 +373,46 @@
       "chapter": 6,
       "title": "Legacy",
       "text": "The reserve is everything Ruth hoped. Now it's mine to keep that way."
+    },
+    {
+      "id": "first_calf_giraffe",
+      "chapter": 4,
+      "title": "A giraffe calf",
+      "text": "The first giraffe born on the reserve in years. It stood up within the hour, all legs, and fell over twice."
+    },
+    {
+      "id": "first_calf_wildebeest",
+      "chapter": 4,
+      "title": "Wildebeest calves",
+      "text": "The first wildebeest calves of the season are running with the herd already. Amara timed one: up and walking in minutes."
+    },
+    {
+      "id": "first_calf_rhino",
+      "chapter": 5,
+      "title": "A rhino calf",
+      "text": "A new rhino calf in the north. Tendai sat up all night by the fence and wouldn't say why.",
+      "focus": {
+        "x": 24,
+        "y": 16
+      }
+    },
+    {
+      "id": "first_calf_leopard",
+      "chapter": 4,
+      "title": "Leopard cubs",
+      "text": "Leopard cubs at the outcrop. We only saw them once, for a few seconds. Amara says that's more than most people ever do."
+    },
+    {
+      "id": "first_poacher_caught",
+      "chapter": 5,
+      "title": "Caught",
+      "text": "Our rangers caught their first poacher today. Wire, a rifle and a phone full of numbers."
+    },
+    {
+      "id": "record_ecosystem_90",
+      "chapter": 3,
+      "title": "Ninety",
+      "text": "Amara's reserve health score passed ninety today. She made us all stand on the tower and look at it."
     }
   ]
 }

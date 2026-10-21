@@ -1,7 +1,7 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { runDayTick } from '../../src/sim/tick';
 import { afterDialogue, startChapter } from '../../src/story/StoryManager';
-import { fenceTooltip, journalMenu, trackerContent } from '../../src/ui/storyInfo';
+import { fenceTooltip, trackerContent } from '../../src/ui/storyInfo';
 import { newGame, withLevel } from '../helpers/newGame';
 
 const begin = () => startChapter(newGame(), 1).state;
@@ -45,23 +45,5 @@ describe('fence tooltip', () => {
       'Mending this helps open River & Wetland',
     ]);
     expect(fenceTooltip(begin(), 'river_e0')).toEqual(["Broken fence: can't be reached yet"]);
-  });
-});
-
-describe('journal', () => {
-  it('shows entries newest first and filters by chapter', () => {
-    const state = chapter2();
-    const all = journalMenu(state, 'all', () => undefined);
-    const titles = all.rows.slice(1).map((r) => r.lines[0]?.text);
-    expect(titles).toEqual(['Day 1 · Foundations', 'Day 1 · Ruin, survived', 'Day 1 · Arrival']);
-    const onFilter = vi.fn();
-    all.rows[0]?.actions[0]?.onClick();
-    journalMenu(state, 'all', onFilter).rows[0]?.actions[0]?.onClick();
-    expect(onFilter).toHaveBeenCalledWith(1);
-    expect(
-      journalMenu(state, 2, () => undefined)
-        .rows.slice(1)
-        .map((r) => r.lines[0]?.text),
-    ).toEqual(['Day 1 · Foundations']);
   });
 });

@@ -3,13 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { DEFAULT_SETTINGS } from '../../src/core/Settings';
 import { dateText, dateTooltip, scoreTooltip } from '../../src/ui/hudInfo';
 import type { GameState } from '../../src/core/GameState';
-import {
-  biggestHerd,
-  encyclopediaEntry,
-  type SaveControls,
-  settingsMenu,
-  speciesMenu,
-} from '../../src/ui/menus';
+import { biggestHerd, type SaveControls, settingsMenu, speciesMenu } from '../../src/ui/menus';
 import { runDayTick } from '../../src/sim/tick';
 import { must, newGame, withPopulation } from '../helpers/newGame';
 
@@ -52,22 +46,6 @@ describe('species menu', () => {
       ...Array<string>(8).fill('??? · Not seen yet'),
     ]);
     expect(rows[1]?.actions.map((a) => a.label)).toEqual(['Show', 'Read']);
-  });
-
-  it('opens an encyclopedia page with unverified facts clearly marked', () => {
-    const onBack = vi.fn();
-    const page = encyclopediaEntry(newGame(), 'impala', onBack);
-    expect(page?.title).toBe('Impala');
-    expect(page?.rows[0]?.lines.map((l) => l.text)).toEqual([
-      'Diet: Grazer',
-      'In the reserve: 80',
-      'Where: Central Plains 80',
-      'Smallest herd that can still breed here: 6',
-      'Conservation status: to be verified',
-    ]);
-    expect(page?.rows[1]?.lines[1]).toEqual({ text: 'TODO: verify (unverified)', warn: true });
-    page?.rows[0]?.actions[0]?.onClick();
-    expect(onBack).toHaveBeenCalled();
   });
 
   it('lists every species with where they are, and finds the biggest herd', () => {

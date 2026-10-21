@@ -12,9 +12,10 @@ import type { TileRect, WorldLayout } from './WorldLayout';
  * Bump when the saved shape changes, and add a migration in core/Save.ts.
  * v1: up to Phase 7 · v2: adds meta.playTimeSeconds · v3: adds encyclopedia ·
  * v4: elephants, hyenas and vultures join the reserve (D107) ·
- * v5: chapter.startDay, herd plans and counters (Phase 10) · v6: tourism (Phase 11).
+ * v5: chapter.startDay, herd plans and counters (Phase 10) · v6: tourism (Phase 11) ·
+ * v7: field notes, records and read markers for the journal book (D130).
  */
-export const STATE_VERSION = 6;
+export const STATE_VERSION = 7;
 
 export interface ClockState {
   /** Days elapsed since the start, from 0. Calendar values derive from this (sim/Seasons). */
@@ -197,6 +198,12 @@ export interface GameState {
   counters: Record<string, number>;
   /** Spec §6.6: visitors per day for the last 30 days (newest last) and yesterday's takings. */
   tourism: { visitorsHistory: number[]; lastVisitors: number; lastRevenue: number };
+  /** Journal Field notes: when and where each species (and rarity) was first seen. Day −1 = before records began. */
+  fieldNotes: Record<string, { day: number; zoneId: string | null }>;
+  /** Journal Records: best values and the day they were set. */
+  records: Record<string, { value: number; day: number }>;
+  /** How many journal entries the player has seen (later ones are marked new). */
+  journalRead: number;
 }
 
 export interface NewGameOptions {
@@ -287,6 +294,9 @@ function baseState({ seed, world, playerName = '', speed = 1 }: NewGameOptions):
     herdPlans: {},
     counters: {},
     tourism: { visitorsHistory: [], lastVisitors: 0, lastRevenue: 0 },
+    fieldNotes: {},
+    records: {},
+    journalRead: 0,
   };
 }
 
