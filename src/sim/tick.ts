@@ -8,6 +8,7 @@ import { runHerdPlans } from './HerdPlans';
 import { runPoaching } from './Poaching';
 import { runPopulation } from './Population';
 import { runStory } from '../story/StoryManager';
+import { runRarities } from './Rarities';
 import { runRecords } from './Records';
 import { runScores } from './Scores';
 import { runSeasons } from './Seasons';
@@ -36,6 +37,7 @@ const STEPS: readonly SimStep[] = [
   runEconomy,
   runScores,
   runRecords,
+  runRarities,
   runCropRaids,
   runStory,
 ];

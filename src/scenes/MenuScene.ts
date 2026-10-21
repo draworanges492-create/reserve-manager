@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { findSecret } from '../core/Secrets';
 import { GAME_TITLE, WORLD_ART } from '../config/game';
 import {
   deleteSlot,
@@ -64,7 +65,10 @@ export class MenuScene extends Phaser.Scene {
   }
 
   private render(): void {
-    for (const p of this.parts) p.destroy();
+    for (const p of this.parts) {
+      this.tweens.killTweensOf(p);
+      p.destroy();
+    }
     this.parts = [];
     const w = viewWidth(this);
     const h = viewHeight(this);
@@ -85,14 +89,28 @@ export class MenuScene extends Phaser.Scene {
     );
     y += 18;
     // The parade stands below the subtitle (sprites are 24 px tall, drawn at 2×).
-    PARADE.forEach((key, i) => {
+    const tapped = new Set<number>();
+    const animals = PARADE.map((key, i) =>
       this.keep(
         this.add
-          .image(w / 2 + (i - 1) * 44, y + 48, key, 0)
+          .sprite(w / 2 + (i - 1) * 44, y + 48, key, 0)
           .setScale(2 * WORLD_ART)
-          .setOrigin(0.5, 1),
-      );
-    });
+          .setOrigin(0.5, 1)
+          .setInteractive({ useHandCursor: true }),
+      ),
+    );
+    // Easter egg (D132): click all three and they walk off the screen and back.
+    animals.forEach((a, i) =>
+      a.on(Phaser.Input.Events.POINTER_DOWN, () => {
+        if (this.tweens.isTweening(a)) return;
+        tapped.add(i);
+        this.tweens.add({ targets: a, y: a.y - 6, duration: 110, yoyo: true });
+        if (tapped.size === PARADE.length) {
+          tapped.clear();
+          this.parade(animals);
+        }
+      }),
+    );
     y += 60;
     if (this.view === 'main') this.renderMain(y);
     else this.renderLoad(y);
@@ -112,6 +130,36 @@ export class MenuScene extends Phaser.Scene {
         color: UI.textDim,
       }).setOrigin(0.5, 1),
     );
+  }
+
+  /** Walk the title animals off to the right and back in from the left. */
+  private parade(animals: Phaser.GameObjects.Sprite[]): void {
+    findSecret('parade');
+    const w = viewWidth(this);
+    animals.forEach((a, i) => {
+      const home = a.x;
+      const walk = this.time.addEvent({
+        delay: 180,
+        loop: true,
+        callback: () => {
+          if (!a.active)
+            walk.remove(); // the menu was redrawn mid-parade
+          else a.setFrame(String(a.frame.name) === '0' ? 1 : 0);
+        },
+      });
+      this.tweens.chain({
+        targets: a,
+        tweens: [
+          { x: w + 40, duration: 1800 + i * 150, delay: 300 + i * 200, ease: 'Sine.easeIn' },
+          { x: -40, duration: 0 },
+          { x: home, duration: 1800, ease: 'Sine.easeOut' },
+        ],
+        onComplete: () => {
+          walk.remove();
+          if (a.active) a.setFrame(0);
+        },
+      });
+    });
   }
 
   private button(

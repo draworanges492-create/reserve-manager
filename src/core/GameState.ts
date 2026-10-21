@@ -204,6 +204,8 @@ export interface GameState {
   records: Record<string, { value: number; day: number }>;
   /** How many journal entries the player has seen (later ones are marked new). */
   journalRead: number;
+  /** A rare albino animal living in one herd until `untilDay` (Easter egg, D132). */
+  albino: { zoneId: string; speciesId: string; untilDay: number } | null;
 }
 
 export interface NewGameOptions {
@@ -297,6 +299,7 @@ function baseState({ seed, world, playerName = '', speed = 1 }: NewGameOptions):
     fieldNotes: {},
     records: {},
     journalRead: 0,
+    albino: null,
   };
 }
 

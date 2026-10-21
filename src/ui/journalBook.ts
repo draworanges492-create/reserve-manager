@@ -1,7 +1,8 @@
 // Content for the journal book (D130): Diary, Field notes, Records and Decisions. Pure, so
 // it can be tested; JournalScene lays the entries out on pages.
 import epilogueData from '../data/epilogue.json';
-import { SPECIES, zoneDef } from '../core/content';
+import { SPECIES, speciesDef, zoneDef } from '../core/content';
+import { SECRET_IDS, secretsFound } from '../core/Secrets';
 import type { GameState } from '../core/GameState';
 import { t } from '../core/text';
 import { calendarOf } from '../sim/Seasons';
@@ -54,8 +55,49 @@ export function diaryEntries(state: GameState): BookEntry[] {
   });
 }
 
-/** Field notes: one page per species; unseen ones stay a mystery. */
+function placeOf(zoneId: string | null): string {
+  return zoneId ? (zoneDef(zoneId)?.name ?? zoneId) : t('notes.somewhere');
+}
+
+/** Hidden pages for rare sightings (D132): only there once found. */
+function rareEntries(state: GameState): BookEntry[] {
+  return Object.entries(state.fieldNotes).flatMap(([id, note]) => {
+    const meta = t('notes.rareMeta', {
+      date: dateOf(Math.max(0, note.day)),
+      zone: placeOf(note.zoneId),
+    });
+    if (id === 'honey_badger')
+      return [
+        {
+          key: `notes:${id}`,
+          title: t('notes.badgerTitle'),
+          meta,
+          sprite: 'badger',
+          body: [t('notes.badgerBody')],
+        },
+      ];
+    if (!id.startsWith('albino_')) return [];
+    const species = speciesDef(id.slice('albino_'.length));
+    if (!species) return [];
+    const name = species.name.replace(/^African /, '');
+    return [
+      {
+        key: `notes:${id}`,
+        title: t('notes.albinoTitle', { species: name }),
+        meta,
+        sprite: `${species.spriteKey}-albino`,
+        body: [t('notes.albinoBody', { species: name.toLowerCase() })],
+      },
+    ];
+  });
+}
+
+/** Field notes: one page per species; unseen ones stay a mystery. Rare sightings follow. */
 export function fieldNoteEntries(state: GameState): BookEntry[] {
+  return [...speciesNotes(state), ...rareEntries(state)];
+}
+
+function speciesNotes(state: GameState): BookEntry[] {
   return SPECIES.map((s) => {
     if (!state.encyclopedia.includes(s.id))
       return { key: `notes:${s.id}`, title: t('notes.unseen'), body: [t('notes.unseenHint')] };
@@ -65,7 +107,7 @@ export function fieldNoteEntries(state: GameState): BookEntry[] {
         ? t('notes.seenBefore')
         : t('notes.firstSeen', {
             date: dateOf(note.day),
-            zone: note.zoneId ? (zoneDef(note.zoneId)?.name ?? note.zoneId) : t('notes.somewhere'),
+            zone: placeOf(note.zoneId),
           });
     const now = totalOf(state, s.id);
     const peak = Math.max(now, state.records[`peak_${s.id}`]?.value ?? 0);
@@ -125,6 +167,20 @@ export function recordEntries(state: GameState): BookEntry[] {
         }),
         t('records.cropRaids', { n: c('cropRaids') }),
       ],
+    },
+    ...secretsEntry(),
+  ];
+}
+
+/** The only sign that secrets exist (D132): a line at the back, once one is found. */
+function secretsEntry(): BookEntry[] {
+  const n = secretsFound().length;
+  if (!n) return [];
+  return [
+    {
+      key: 'records:secrets',
+      title: t('secrets.title'),
+      body: [t('secrets.counter', { n, total: SECRET_IDS.length })],
     },
   ];
 }

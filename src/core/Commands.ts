@@ -28,6 +28,8 @@ export type Command =
   | { type: 'recordSighting'; speciesId: string; zoneId?: string }
   /** The journal was opened: every entry so far counts as read. */
   | { type: 'markJournalRead' }
+  /** Easter eggs: an albino animal or the honey badger was clicked (D132). */
+  | { type: 'noteRarity'; id: string; zoneId: string | null }
   /** Spec §6.4 herd management (Chapter 3+). */
   | { type: 'setHerdPlan'; zoneId: string; speciesId: string; method: HerdMethod }
   | { type: 'cancelHerdPlan'; zoneId: string; speciesId: string }
@@ -99,6 +101,20 @@ export function applyCommand(state: GameState, command: Command): CommandResult 
       return examineClue(state, command.clueId);
     case 'recordSighting':
       return recordSighting(state, command.speciesId, command.zoneId ?? null);
+    case 'noteRarity':
+      return state.fieldNotes[command.id]
+        ? { ok: true, state, events: [] }
+        : {
+            ok: true,
+            state: {
+              ...state,
+              fieldNotes: {
+                ...state.fieldNotes,
+                [command.id]: { day: state.clock.day, zoneId: command.zoneId },
+              },
+            },
+            events: [],
+          };
     case 'markJournalRead':
       return { ok: true, state: { ...state, journalRead: state.journal.length }, events: [] };
     case 'setHerdPlan':

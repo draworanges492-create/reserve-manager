@@ -200,3 +200,50 @@ export function leopard(frame: Frame): string {
     dot(21.6, 11.8, 0.32, '#3a1e14'),
   ].join('');
 }
+
+// Easter egg (D132): the honey badger, a rare visitor. Low and broad, black below with a
+// pale grey saddle from crown to tail.
+const BADGER: Ramp = { light: '#4a443e', mid: '#2e2a26', dark: '#1c1916' };
+const SADDLE: Ramp = { light: '#eeeae0', mid: '#d4cfc2', dark: '#aca697' };
+
+export function badger(frame: Frame): string {
+  const a = frame === 0;
+  const body =
+    'M4.4,17.4 C4.4,15.2 6.6,14 10,13.8 C13.4,13.6 16.4,13.8 18,15 C19.4,16.1 19.2,18.4 17.8,19.4 C15.8,20.4 11.6,20.6 8.2,20.3 C5.8,20 4.4,19.2 4.4,17.4 Z';
+  const saddle =
+    'M4.8,16.4 C5.6,14.6 8.4,13.7 11.4,13.6 C14.6,13.5 17.6,13.8 19.4,14.8 C20.6,15.4 21.6,15.6 22.2,16.2 C20.6,16.4 18.8,16.2 17,16.3 C14,16.5 10.6,16.8 8,16.9 C6.6,17 5.4,16.9 4.8,16.4 Z';
+  const head =
+    'M17.4,15.6 C18.2,14.6 20.2,14.6 21.6,15.4 C22.8,16 23.2,17.2 22.6,17.9 C21.8,18.6 20,18.6 18.8,18.2 C17.8,17.9 17.1,16.6 17.4,15.6 Z';
+  const paw = (x: number) => fill(ellipse(x, 21.6, 0.75, 0.4), BADGER.dark);
+  const stubby = (hip: [number, number], foot: [number, number], color: string) =>
+    limb(`M${hip[0]},${hip[1]} L${foot[0]},${foot[1]}`, color, 1.5, 0) + paw(foot[0]);
+  return [
+    stubby([7.6, 19], a ? [8.4, 21.4] : [6.8, 21.4], BADGER.dark),
+    stubby([16, 19], a ? [15.4, 21.4] : [16.8, 21.4], BADGER.dark),
+    limb('M4.6,16.8 C3.6,16.6 3,15.8 2.8,15', BADGER.mid, 0.9, 0),
+    shaded(body, BADGER, { light: 'M6,15.4 C9,14.4 13,14.2 16.6,14.8 C13,15 9,15.2 6,15.4 Z' }),
+    shaded(saddle, SADDLE),
+    stubby([8.6, 19.4], a ? [7.4, 21.6] : [9.6, 21.6], BADGER.mid),
+    stubby([16.8, 19.2], a ? [17.6, 21.6] : [16.2, 21.6], BADGER.mid),
+    shaded(head, BADGER, {
+      extra: fill(
+        'M17.6,15.2 C19,14.4 21,14.6 22.4,15.6 L22.2,16.2 C20.6,15.6 19,15.4 17.6,15.8 Z',
+        SADDLE.mid,
+      ),
+    }),
+    dot(21, 16.6, 0.3, '#0c0a08'),
+    dot(23, 17.3, 0.35, '#0c0a08'),
+  ].join('');
+}
+
+/** Ruth's wide-brimmed hat, worn by rangers after the ending (D132). 12×6 world px. */
+export function ruthsHat(): string {
+  const BRIM: Ramp = { light: '#b08a58', mid: '#8a6a40', dark: '#62482a' };
+  return [
+    shaded(ellipse(6, 4.4, 5.6, 1.3), BRIM),
+    shaded('M3.4,4.2 C3.4,2 4.6,0.8 6,0.8 C7.4,0.8 8.6,2 8.6,4.2 Z', BRIM, {
+      light: ellipse(5.2, 2, 1, 0.6),
+    }),
+    limb('M3.5,3.6 C5,4.1 7,4.1 8.5,3.6', '#4a2e18', 0.6, 0),
+  ].join('');
+}

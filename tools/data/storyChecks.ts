@@ -104,6 +104,7 @@ export function checkStory(content: StoryContent, refs: StoryRefs): string[] {
       case 'pumpsDeepened':
       case 'zonesOpen':
       case 'daysSince':
+      case 'playerNameIs':
         return;
       case 'buildingCount':
         if (!refs.buildings.some((b) => b.id === c.buildingId))

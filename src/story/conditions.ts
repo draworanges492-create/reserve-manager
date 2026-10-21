@@ -81,6 +81,8 @@ export function holds(state: GameState, c: Condition): boolean {
       const since = Math.max(state.counters[c.counter] ?? -Infinity, state.chapter.startDay);
       return state.clock.day - since >= c.min;
     }
+    case 'playerNameIs':
+      return c.names.some((n) => n.toLowerCase() === state.playerName.trim().toLowerCase());
     case 'not':
       return !holds(state, c.condition);
   }

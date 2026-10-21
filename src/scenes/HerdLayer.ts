@@ -6,6 +6,8 @@ import type { GameSession } from '../core/GameSession';
 import { AnimalGroupSprite } from '../entities/AnimalGroupSprite';
 import { type Rect, spriteCountFor } from '../entities/herdMath';
 import { objectProp, objectsIn, type ZoneArea } from './map/mapObjects';
+import { findSecret } from '../core/Secrets';
+import { albinoTexture } from './albinoTexture';
 
 /** How often (ms) to check which species are on screen, for encyclopedia sightings. */
 const SIGHTING_CHECK_MS = 500;
@@ -27,6 +29,8 @@ export class HerdLayer {
   private hovered: string | null = null;
   private sinceSightingCheck = 0;
   private selected: string | null = null;
+  /** Recent clicks on each lion sprite, for the lazy lion (D132). */
+  private readonly lionClicks = new WeakMap<Phaser.GameObjects.Sprite, number[]>();
 
   constructor(
     private readonly scene: Phaser.Scene,
@@ -80,11 +84,15 @@ export class HerdLayer {
     const { clock, populations } = this.session.state;
     const timeScale = clock.paused ? 0 : clock.speed;
     const max = BALANCE.render.maxAnimalSpritesPerZone;
+    const albino = this.session.state.albino;
+    const albinoKey = albino ? `${albino.zoneId}:${albino.speciesId}` : null;
     for (const [zoneId, bySpecies] of Object.entries(populations)) {
       for (const [speciesId, count] of Object.entries(bySpecies)) {
         const group =
           this.groups.get(`${zoneId}:${speciesId}`) ?? this.createGroup(zoneId, speciesId);
         group?.setCount(spriteCountFor(count, max));
+        const species = group && group.key === albinoKey ? speciesDef(speciesId) : undefined;
+        group?.setSpecial(species ? albinoTexture(this.scene, species.spriteKey) : null);
         group?.update(deltaMs, timeScale);
       }
     }
@@ -132,9 +140,32 @@ export class HerdLayer {
         );
         return hole ? { x: hole.x * this.map.tileWidth, y: hole.y * this.map.tileHeight } : null;
       },
+      onMemberClick: (sprite, special) => {
+        if (special) {
+          this.session.dispatch({ type: 'noteRarity', id: `albino_${speciesId}`, zoneId });
+          findSecret('albino');
+        }
+        if (speciesId === 'lion') this.lionClicked(group, sprite);
+      },
     });
     this.groups.set(group.key, group);
     return group;
+  }
+
+  /** Easter egg (D132): click the same lion ten times quickly and it rolls onto its back. */
+  private lionClicked(group: AnimalGroupSprite, sprite: Phaser.GameObjects.Sprite): void {
+    const cfg = BALANCE.secrets;
+    const now = this.scene.time.now;
+    const clicks = [...(this.lionClicks.get(sprite) ?? []), now].filter(
+      (at) => now - at <= cfg.lazyLionWindowMs,
+    );
+    if (clicks.length < cfg.lazyLionClicks) {
+      this.lionClicks.set(sprite, clicks);
+      return;
+    }
+    this.lionClicks.delete(sprite);
+    group.rollOver(sprite, cfg.lazyLionRollMs);
+    findSecret('lazy_lion');
   }
 
   private refreshHighlights(): void {

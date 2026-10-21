@@ -114,6 +114,7 @@ const MIGRATIONS: Record<number, Migration> = {
         s.fieldNotes ?? Object.fromEntries(seen.map((id) => [id, { day: -1, zoneId: null }])),
       records: s.records ?? {},
       journalRead: s.journalRead ?? journal.length,
+      albino: s.albino ?? null,
     };
   },
 };

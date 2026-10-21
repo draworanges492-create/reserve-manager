@@ -338,5 +338,15 @@
   "records.managed": "Culled {culled} · relocated {relocated} · species brought in {brought}",
   "records.cropRaids": "Crop raids on the village: {n}",
   "decisions.noneTitle": "No big decisions yet",
-  "decisions.none": "The choices that shape the reserve will be written down here."
+  "decisions.none": "The choices that shape the reserve will be written down here.",
+  "notes.albinoTitle": "Albino {species}",
+  "notes.albinoBody": "A pale {species} in the herd, almost white against the grass. It kept close to the others, and a few weeks later it was gone again.",
+  "notes.badgerTitle": "Honey badger",
+  "notes.badgerBody": "Something low and grey-backed trotted across the woodland as if it owned the place. It didn't look back.",
+  "notes.rareMeta": "Seen {date}, {zone}",
+  "secrets.found": "✦ Secret found ({n}/{total})",
+  "secrets.title": "Secrets",
+  "secrets.counter": "Secrets found: {n} of {total}",
+  "secrets.tea": "Tendai is brewing something terrible.",
+  "secrets.nameAlert": "Hello, {name}."
 }

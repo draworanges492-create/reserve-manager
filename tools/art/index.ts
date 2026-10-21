@@ -7,7 +7,7 @@ import { BUILDING_ART } from './buildings';
 import { bucket, clueMarker, drop, dust, shadowArt } from './fx';
 import { ranger, visitor } from './people';
 import { PORTRAIT_IDS, portraitFrames } from './portraits';
-import { hyena, leopard, lion, vulture } from './predators';
+import { badger, hyena, leopard, lion, ruthsHat, vulture } from './predators';
 import { raster, sheet } from './raster';
 import { STRUCTURE_ART } from './structures';
 import { TREE_ART, TREE_SIZES, TREE_VARIANTS, type TreeKind } from './trees';
@@ -22,6 +22,8 @@ export function drawWorldArt(): Record<string, PixelCanvas> {
     'sprites/lion.png': walk(lion, 24),
     'sprites/hyena.png': walk(hyena, 24),
     'sprites/vulture.png': walk(vulture, 24),
+    'sprites/badger.png': walk(badger, 24),
+    'sprites/hat.png': raster(ruthsHat(), '', 12, 6),
     'sprites/elephant.png': walk(elephant, 48),
     'sprites/giraffe.png': walk(giraffe, 48),
     'sprites/rhino.png': walk(rhino, 48),

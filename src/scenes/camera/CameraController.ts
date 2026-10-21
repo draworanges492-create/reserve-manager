@@ -108,6 +108,12 @@ export class CameraController {
     this.applyZoom();
   }
 
+  /** True at the closest zoom level. */
+  isFullyZoomedIn(): boolean {
+    const levels = this.levels();
+    return this.zoomStep >= (levels[levels.length - 1] ?? Infinity);
+  }
+
   /** Zoom levels in game pixels per world pixel: fit-everything first (DECISIONS D108). */
   private levels(): number[] {
     const cam = this.scene.cameras.main;

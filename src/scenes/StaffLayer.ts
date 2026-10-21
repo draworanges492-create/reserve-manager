@@ -6,6 +6,7 @@ import { pickSpot, type Rect, stepToward } from '../entities/herdMath';
 import { DEPTH } from './depth';
 import type { ZoneArea } from './map/mapObjects';
 import { WORLD_ART } from '../config/game';
+import { findSecret } from '../core/Secrets';
 
 /** Patrol pace in game px/s at 1× — brisker than grazing animals. */
 const WALK_SPEED = 12;
@@ -20,7 +21,13 @@ interface Walker {
   target: { x: number; y: number } | null;
   pauseMs: number;
   frameMs: number;
+  role: string;
+  /** Ruth's hat, once the story is over (D132). */
+  hat: Phaser.GameObjects.Image | null;
 }
+
+/** Where the ranger sprite's own hat brim sits, from its feet (world px). */
+const HAT_Y = 24 - 3.8;
 
 /**
  * Staff on the map (spec §7.3): each member walks a patrol around their assigned zone,
@@ -45,6 +52,7 @@ export class StaffLayer {
       if (!present.has(id)) {
         w.sprite.destroy();
         w.shadow.destroy();
+        w.hat?.destroy();
         this.walkers.delete(id);
       }
     }
@@ -57,7 +65,21 @@ export class StaffLayer {
         walker.pauseMs = 0;
       }
       if (timeScale > 0) this.move(walker, deltaMs * timeScale);
+      this.wearHat(walker);
     }
+  }
+
+  /** Easter egg (D132): after the ending, rangers wear Ruth's wide-brimmed hat. */
+  private wearHat(w: Walker): void {
+    if (w.role !== 'ranger' || !this.session.state.flags.game_complete) return;
+    w.hat ??= this.scene.add
+      .image(0, 0, 'hat')
+      .setOrigin(0.5, 4.4 / 6)
+      .setScale(WORLD_ART);
+    w.hat
+      .setPosition(w.sprite.x + (w.sprite.flipX ? -0.1 : 0.1), w.sprite.y - HAT_Y)
+      .setDepth(w.sprite.depth + 0.00001);
+    if (this.scene.cameras.main.worldView.contains(w.sprite.x, w.sprite.y)) findSecret('hat');
   }
 
   private areaOf(zoneId: string | null): Rect {
@@ -84,7 +106,16 @@ export class StaffLayer {
     sprite.on(Phaser.Input.Events.POINTER_OUT, () =>
       eventBus.emit('staffHover', { staffId: null }),
     );
-    const walker: Walker = { sprite, shadow, zoneId, target: null, pauseMs: 0, frameMs: 0 };
+    const walker: Walker = {
+      sprite,
+      shadow,
+      zoneId,
+      target: null,
+      pauseMs: 0,
+      frameMs: 0,
+      role: roleId,
+      hat: null,
+    };
     this.walkers.set(id, walker);
     return walker;
   }
@@ -122,7 +153,7 @@ export class StaffLayer {
     w.frameMs += scaledMs;
     if (w.frameMs >= FRAME_MS) {
       w.frameMs = 0;
-      w.sprite.setFrame(w.sprite.frame.name === '0' ? 1 : 0);
+      w.sprite.setFrame(String(w.sprite.frame.name) === '0' ? 1 : 0);
     }
     if (next.arrived) {
       w.target = null;

@@ -222,5 +222,22 @@
     "vulturesNeeded": 4,
     "chance": 0.06,
     "loss": 0.08
+  },
+  "secrets": {
+    "albinoDailyChance": 0.008,
+    "albinoDays": {
+      "min": 20,
+      "max": 30
+    },
+    "albinoSpecies": ["impala", "zebra", "giraffe", "wildebeest"],
+    "albinoMinHerd": 8,
+    "badgerFromChapter": 3,
+    "badgerChancePerSecond": 0.01,
+    "badgerCrossMs": 14000,
+    "lazyLionClicks": 10,
+    "lazyLionWindowMs": 4000,
+    "lazyLionRollMs": 4000,
+    "shootingStarChancePerSecond": 0.12,
+    "visitorMilestone": 1000
   }
 }

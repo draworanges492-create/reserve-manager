@@ -32,6 +32,8 @@ import { Tooltip } from '../ui/Tooltip';
 import { TOP_BAR_HEIGHT, TopBar } from '../ui/TopBar';
 import { waterholeTooltip } from '../ui/waterholeTooltip';
 import { bindGameAudio, updateGameAudio } from '../audio/hooks';
+import { audio } from '../audio/AudioManager';
+import { findSecret, onSecretFound, SECRET_IDS } from '../core/Secrets';
 import { placingText } from './BuildingLayer';
 import { returnToMenu, saveTo } from './launch';
 import { listSlots, type LoadResult, localSaveStore, type SlotId } from '../core/Save';
@@ -89,7 +91,16 @@ export class UIScene extends Phaser.Scene {
     staff: string | null;
     fence: string | null;
     clue: string | null;
-  } = { waterhole: null, animal: null, slot: null, staff: null, fence: null, clue: null };
+    secret: string | null;
+  } = {
+    waterhole: null,
+    animal: null,
+    slot: null,
+    staff: null,
+    fence: null,
+    clue: null,
+    secret: null,
+  };
   private goalTracker!: GoalTracker;
   /** Species whose encyclopedia page is open in the Species panel. */
   private selection: Selection | null = null;
@@ -128,6 +139,7 @@ export class UIScene extends Phaser.Scene {
       staff: null,
       fence: null,
       clue: null,
+      secret: null,
     };
     this.selection = null;
     this.timeOfDay = new TimeOfDayOverlay(this);
@@ -184,12 +196,30 @@ export class UIScene extends Phaser.Scene {
     );
 
     const offs = [
+      // Easter eggs (D132): a chime and a quiet note, nothing more.
+      onSecretFound((_id, n) => {
+        audio.sfx('secret');
+        this.alerts.apply({
+          add: {
+            key: 'secret',
+            severity: 'info',
+            text: t('secrets.found', { n, total: SECRET_IDS.length }),
+            day: this.session.state.clock.day,
+          },
+        });
+      }),
+      eventBus.on('journalAdded', ({ entryId }) => {
+        if (entryId !== 'visitor_1000') return;
+        audio.sfx('coin');
+        findSecret('visitor_1000');
+      }),
       eventBus.on('animalHover', ({ group }) => (this.hover.animal = group)),
       eventBus.on('waterholeHover', ({ id }) => (this.hover.waterhole = id)),
       eventBus.on('slotHover', ({ slotId }) => (this.hover.slot = slotId)),
       eventBus.on('staffHover', ({ staffId }) => (this.hover.staff = staffId)),
       eventBus.on('fenceHover', ({ segmentId }) => (this.hover.fence = segmentId)),
       eventBus.on('clueHover', ({ clueId }) => (this.hover.clue = clueId)),
+      eventBus.on('secretHover', ({ text }) => (this.hover.secret = text)),
       eventBus.on('animalSelected', ({ group }) =>
         this.onSelected(group && { kind: 'animal', group }),
       ),
@@ -472,7 +502,9 @@ export class UIScene extends Phaser.Scene {
                 ? animalHoverLines(state, h.animal.zoneId, h.animal.speciesId)
                 : h.slot
                   ? buildingHover(state, h.slot)
-                  : this.topBar.tooltipAt(p.x, p.y);
+                  : h.secret
+                    ? [h.secret]
+                    : this.topBar.tooltipAt(p.x, p.y);
     }
     if (lines.length) this.tooltip.show(lines, p.x, p.y);
     else this.tooltip.hide();

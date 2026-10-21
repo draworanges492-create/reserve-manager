@@ -159,6 +159,21 @@ export interface Balance {
     poisonKills: { min: number; max: number };
     maxCatchChance: number;
   };
+  /** Easter eggs (D132). Chances are per day (sim) or per real second while watching (view). */
+  secrets: {
+    albinoDailyChance: number;
+    albinoDays: { min: number; max: number };
+    albinoSpecies: string[];
+    albinoMinHerd: number;
+    badgerFromChapter: number;
+    badgerChancePerSecond: number;
+    badgerCrossMs: number;
+    lazyLionClicks: number;
+    lazyLionWindowMs: number;
+    lazyLionRollMs: number;
+    shootingStarChancePerSecond: number;
+    visitorMilestone: number;
+  };
   /** Carcass disease when vultures are too few to clean up (D122). */
   disease: {
     vulturesNeeded: number;

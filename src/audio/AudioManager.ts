@@ -4,7 +4,7 @@
 import { getSettings, onSettingsChanged } from '../core/Settings';
 import { type MusicTrack, TRACKS } from './music';
 
-export type Sfx = 'click' | 'build' | 'coin' | 'alert' | 'splash' | 'page';
+export type Sfx = 'click' | 'build' | 'coin' | 'alert' | 'splash' | 'page' | 'secret';
 export type Ambience = 'day' | 'night' | 'none';
 
 /** Seconds of crossfade between music tracks / ambiences. */
@@ -87,6 +87,12 @@ class AudioManager {
         break;
       case 'page':
         this.noiseBurst(out, t, 0.12, 3500, 0.12, 1500);
+        break;
+      case 'secret':
+        // A soft rising arpeggio, like a music box.
+        [1047, 1319, 1568, 2093].forEach((f, i) =>
+          this.tone(out, 'sine', f, t + i * 0.09, 0.3, 0.1),
+        );
         break;
     }
   }

@@ -109,7 +109,7 @@ export class VisitorLayer {
       w.frameMs += ms;
       if (w.frameMs > FRAME_MS) {
         w.frameMs = 0;
-        w.sprite.setFrame(w.sprite.frame.name === '0' ? 1 : 0);
+        w.sprite.setFrame(String(w.sprite.frame.name) === '0' ? 1 : 0);
       }
     }
     w.sprite.setDepth(DEPTH.actors + w.sprite.y / 10000);

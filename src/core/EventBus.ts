@@ -76,6 +76,8 @@ export type GameEvents = {
   /** Pointer moved onto / off a fence segment. */
   fenceHover: { segmentId: string | null };
   clueHover: { clueId: string | null };
+  /** Pointer over something with a hidden tooltip (Easter eggs, D132); null = nothing. */
+  secretHover: { text: string | null };
   /** A zone opened because its chapter came and its fences are mended. */
   zoneOpened: { zoneId: string };
   dialogueStarted: { dialogueId: string };

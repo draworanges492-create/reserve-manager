@@ -441,4 +441,17 @@ Phase 14 release polish.
 page turns, Species → Read opens Field notes; 0 console errors. Test saves removed (there
 were no saves before).
 
-Next: the nine Easter eggs (EXTRAS_PLAN part 2).
+## Phase 14b — Easter eggs ✅ (2026-10-21)
+
+**Done**
+
+- Nine hidden secrets (D132): albino animals, honey badger, name reactions, lazy lion,
+  shooting stars, title parade, Tendai's tea, Ruth's hat, the 1,000th visitor.
+- New art: honey badger, Ruth's hat; pale animal sprites made at runtime.
+- Fixed walking animation for every animal and person on the map (D133).
+
+**Checks:** `build` ✅ · `test` ✅ (229) · `lint` ✅ · `validate-data` ✅ · browser: all nine
+secrets triggered, Field notes hidden pages, secrets counter; 0 console errors. Test saves
+and secrets removed afterwards.
+
+Next: Phase 14 release polish.

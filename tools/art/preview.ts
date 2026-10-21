@@ -3,7 +3,7 @@ import { writeFileSync } from 'node:fs';
 import { hex, PixelCanvas } from '../lib/canvas';
 import { encodePng } from '../lib/png';
 import { elephant, giraffe, impala, rhino, wildebeest, zebra } from './animals';
-import { hyena, leopard, lion, vulture } from './predators';
+import { badger, hyena, leopard, lion, vulture } from './predators';
 import { BUILDING_ART } from './buildings';
 import { ranger, visitor } from './people';
 import { PORTRAIT_IDS, portraitFrames } from './portraits';
@@ -22,6 +22,7 @@ const items = [
   both(zebra, 24),
   both(lion, 24),
   both(hyena, 24),
+  both(badger, 24),
   both(vulture, 24),
   both(elephant, 48),
   both(giraffe, 48),

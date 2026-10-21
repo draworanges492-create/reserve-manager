@@ -20,6 +20,7 @@ import { SeasonTint } from './map/SeasonTint';
 import { ZoneOverlay } from './map/ZoneOverlay';
 import { TreeLayer } from './map/TreeLayer';
 import { VisitorLayer } from './VisitorLayer';
+import { SecretsLayer } from './SecretsLayer';
 import { getSession } from './session';
 import type { UIScene } from './UIScene';
 import { viewScale } from '../ui/view';
@@ -47,6 +48,7 @@ export class GameScene extends Phaser.Scene {
   private buildings!: BuildingLayer;
   private staff!: StaffLayer;
   private visitors!: VisitorLayer;
+  private secrets!: SecretsLayer;
   private placing = false;
   private fences!: FenceLayer;
   private clues!: ClueLayer;
@@ -125,6 +127,13 @@ export class GameScene extends Phaser.Scene {
       // Safe here (unlike isOverUI): it re-runs this scene's own hit test with identical results.
       (pointer) => this.input.hitTestPointer(pointer).some((o) => o.getData('blocksDrag') === true),
     );
+    this.secrets = new SecretsLayer(
+      this,
+      session,
+      this.zones,
+      () => this.cameraController.isFullyZoomedIn(),
+      map.tileWidth,
+    );
     this.cameras.main.fadeIn(FADE_MS);
     this.cameras.main.centerOn(
       START_VIEW_TILE.x * map.tileWidth,
@@ -197,6 +206,7 @@ export class GameScene extends Phaser.Scene {
     this.clues.update();
     this.staff.update(delta);
     this.visitors.update(delta);
+    this.secrets.update(delta);
     this.cameraController.update(delta);
   }
 
@@ -210,6 +220,7 @@ export class GameScene extends Phaser.Scene {
     this.smoothArt = smooth;
     const mode = smooth ? Phaser.Textures.FilterMode.LINEAR : Phaser.Textures.FilterMode.NEAREST;
     for (const key of [
+      ...this.textures.getTextureKeys().filter((k) => k.endsWith('-albino')),
       ...Object.values(ASSETS.tilesets),
       ...Object.keys(ASSETS.spritesheets),
       ...Object.keys(ASSETS.images),

@@ -23,6 +23,8 @@ export interface AnimalGroupOptions {
   blocked: (x: number, y: number) => boolean;
   /** A waterhole with water in this zone (world px), if any: herds wander toward it (spec §5). */
   waterSpot?: () => { x: number; y: number } | null;
+  /** A single animal was clicked (Easter eggs, D132). `special` = the albino member. */
+  onMemberClick?: (sprite: Phaser.GameObjects.Sprite, special: boolean) => void;
 }
 
 /** Chance a herd heads for water (when there is some) each time it picks a new spot. */
@@ -37,6 +39,8 @@ interface Member {
   pauseMs: number;
   speed: number;
   frameMs: number;
+  /** Lying on its back until this many ms of game time have passed (the lazy lion). */
+  rollMs: number;
 }
 
 const between = (r: { min: number; max: number }): number => Phaser.Math.FloatBetween(r.min, r.max);
@@ -55,6 +59,8 @@ export class AnimalGroupSprite {
   private centreTarget: { x: number; y: number } | null = null;
   private restMs = between(CFG.herdRestMs);
   private highlighted = false;
+  /** Texture of the one special (albino) member, if any. */
+  private specialKey: string | null = null;
 
   constructor(
     private readonly scene: Phaser.Scene,
@@ -75,6 +81,30 @@ export class AnimalGroupSprite {
     }
   }
 
+  /** Give the first member a special texture (null puts it back). Safe to call every frame. */
+  setSpecial(textureKey: string | null): void {
+    const first = this.members[0];
+    const want = textureKey ?? this.opts.textureKey;
+    this.specialKey = textureKey;
+    if (first && first.sprite.texture.key !== want) first.sprite.setTexture(want, 0);
+  }
+
+  /** Where the special member stands, for focusing the camera. */
+  specialPosition(): { x: number; y: number } | null {
+    const first = this.members[0];
+    return this.specialKey && first ? { x: first.sprite.x, y: first.sprite.y } : null;
+  }
+
+  /** The lazy lion (D132): roll this animal onto its back for a while. */
+  rollOver(sprite: Phaser.GameObjects.Sprite, ms: number): void {
+    const m = this.members.find((x) => x.sprite === sprite);
+    if (!m) return;
+    m.rollMs = ms;
+    m.target = null;
+    sprite.setFrame(0).setFlipY(true);
+    this.scene.tweens.add({ targets: sprite, y: sprite.y - 3, duration: 140, yoyo: true });
+  }
+
   setHighlighted(on: boolean): void {
     this.highlighted = on;
     if (!on) this.ring.clear();
@@ -83,6 +113,12 @@ export class AnimalGroupSprite {
   /** `timeScale` is the game speed (0 while paused), so herds move faster at 4×. */
   update(deltaMs: number, timeScale: number): void {
     const dt = (deltaMs / 1000) * timeScale;
+    // Rolls last in real time, so they read the same at any speed.
+    for (const m of this.members)
+      if (m.rollMs > 0) {
+        m.rollMs -= deltaMs;
+        if (m.rollMs <= 0) m.sprite.setFlipY(false);
+      }
     if (timeScale > 0) {
       this.moveHerdCentre(dt, deltaMs * timeScale);
       for (const m of this.members) this.moveMember(m, dt, deltaMs * timeScale);
@@ -125,7 +161,10 @@ export class AnimalGroupSprite {
     sprite.on(Phaser.Input.Events.POINTER_OVER, () => eventBus.emit('animalHover', { group }));
     sprite.on(Phaser.Input.Events.POINTER_OUT, () => eventBus.emit('animalHover', { group: null }));
     sprite.on(Phaser.Input.Events.POINTER_UP, (pointer: Phaser.Input.Pointer) => {
-      if (pointer.getDistance() <= CFG.clickMaxMovePx) eventBus.emit('animalSelected', { group });
+      if (pointer.getDistance() > CFG.clickMaxMovePx) return;
+      eventBus.emit('animalSelected', { group });
+      const special = !!this.specialKey && this.members[0]?.sprite === sprite;
+      opts.onMemberClick?.(sprite, special);
     });
     const member: Member = {
       sprite,
@@ -134,6 +173,7 @@ export class AnimalGroupSprite {
       pauseMs: between(CFG.grazePauseMs),
       speed: between(CFG.walkSpeed),
       frameMs: 0,
+      rollMs: 0,
     };
     this.place(member, at.x, at.y);
     return member;
@@ -185,6 +225,7 @@ export class AnimalGroupSprite {
   }
 
   private moveMember(m: Member, dt: number, scaledMs: number): void {
+    if (m.rollMs > 0) return;
     if (m.pauseMs > 0) {
       m.pauseMs -= scaledMs;
       m.sprite.setFrame(0); // standing / grazing
@@ -201,7 +242,7 @@ export class AnimalGroupSprite {
     m.frameMs += scaledMs;
     if (m.frameMs >= CFG.walkFrameMs) {
       m.frameMs = 0;
-      m.sprite.setFrame(m.sprite.frame.name === '0' ? 1 : 0);
+      m.sprite.setFrame(String(m.sprite.frame.name) === '0' ? 1 : 0);
     }
     if (next.arrived) {
       m.target = null;

@@ -1,5 +1,6 @@
 // Journal Records (D130): best values the reserve has reached and the day each was set,
 // plus a few automatic diary entries for notable moments. Runs after Scores each day.
+import { BALANCE } from '../config/balance';
 import { SPECIES } from '../core/content';
 import type { GameState } from '../core/GameState';
 import { speciesPresent, totalOf } from '../story/conditions';
@@ -54,5 +55,7 @@ export const runRecords: SimStep = (input) => {
   if ((state.counters.poachersCaught ?? 0) > 0)
     state = diary(state, 'first_poacher_caught', events);
   if (state.scores.ecosystem >= 90) state = diary(state, 'record_ecosystem_90', events);
+  if ((state.counters.visitors ?? 0) >= BALANCE.secrets.visitorMilestone)
+    state = diary(state, 'visitor_1000', events);
   return { state, events };
 };

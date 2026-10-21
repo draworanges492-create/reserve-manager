@@ -16,7 +16,7 @@
           "speaker": "tendai",
           "portrait": "worried",
           "text": "So. You're the founder's grandchild. Mind the gate—it's been rotten for years.",
-          "next": "n2"
+          "next": "name_check"
         },
         "n2": {
           "speaker": "player",
@@ -158,6 +158,96 @@
             }
           ],
           "next": null
+        },
+        "name_ruth": {
+          "speaker": "tendai",
+          "text": "Ruth? Ha! Your grandmother would have liked that. Don't expect me to call you 'boss', though.",
+          "next": "n2",
+          "effects": [
+            {
+              "op": "setFlag",
+              "flag": "secret_name"
+            }
+          ],
+          "portrait": "happy"
+        },
+        "name_tendai": {
+          "speaker": "tendai",
+          "text": "Tendai? That's my name. There's only room for one of us on this reserve, so I'll call you 'the new one'.",
+          "next": "n2",
+          "effects": [
+            {
+              "op": "setFlag",
+              "flag": "secret_name"
+            }
+          ]
+        },
+        "name_victor": {
+          "speaker": "tendai",
+          "text": "Victor? Hm. I know a Victor in the village. Let's hope you're better with fences than he is with goats.",
+          "next": "n2",
+          "effects": [
+            {
+              "op": "setFlag",
+              "flag": "secret_name"
+            }
+          ],
+          "portrait": "worried"
+        },
+        "name_hale": {
+          "speaker": "tendai",
+          "text": "Hale? Like the property people? ...No, never mind. You don't look like you're here to buy us out.",
+          "next": "n2",
+          "effects": [
+            {
+              "op": "setFlag",
+              "flag": "secret_name"
+            }
+          ],
+          "portrait": "worried"
+        },
+        "name_check": {
+          "speaker": "narrator",
+          "text": "",
+          "branch": [
+            {
+              "conditions": [
+                {
+                  "op": "playerNameIs",
+                  "names": ["ruth"]
+                }
+              ],
+              "next": "name_ruth"
+            },
+            {
+              "conditions": [
+                {
+                  "op": "playerNameIs",
+                  "names": ["tendai"]
+                }
+              ],
+              "next": "name_tendai"
+            },
+            {
+              "conditions": [
+                {
+                  "op": "playerNameIs",
+                  "names": ["victor"]
+                }
+              ],
+              "next": "name_victor"
+            },
+            {
+              "conditions": [
+                {
+                  "op": "playerNameIs",
+                  "names": ["hale"]
+                }
+              ],
+              "next": "name_hale"
+            }
+          ],
+          "next": "n2"
         }
       }
     },

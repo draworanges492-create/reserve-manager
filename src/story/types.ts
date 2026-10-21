@@ -37,6 +37,8 @@ export type Condition =
    * (or since the chapter began, if it is unset or older). */
   | { op: 'zonesOpen'; min: number }
   | { op: 'daysSince'; counter: string; min: number }
+  /** Easter egg (D132): the player's name is one of these (any case, spaces trimmed). */
+  | { op: 'playerNameIs'; names: string[] }
   | { op: 'not'; condition: Condition };
 
 /**
