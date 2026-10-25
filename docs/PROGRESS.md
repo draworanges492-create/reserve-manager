@@ -467,4 +467,18 @@ and secrets removed afterwards.
 **Checks:** `build` ✅ · `test` ✅ (229) · `lint` ✅ · `validate-data` ✅ · balance report: all
 six runs reach an ending (Thriving, Fortress and Profitable all occur).
 
-Next: Phase 14d accessibility.
+## Phase 14d — Accessibility ✅ (2026-10-25)
+
+**Done**
+
+- Reduce motion setting (D138).
+- Full keyboard play: Tab / Enter / Esc, including map objects and building placement (D139).
+- Colour-blind build spots and live text size in dialogue (D140).
+- Contrast test for all text, tooltips that wrap and stay on screen (D141).
+
+**Checks:** `build` ✅ · `test` ✅ · `lint` ✅ · `validate-data` ✅ · browser: title menu, new
+game, dialogue choices, HUD, Build → Place → spot, journal tabs and map links all by
+keyboard; large text and colour-blind mode; 0 console errors. Test saves removed and
+settings restored.
+
+Next: Phase 14e stability (browsers, old saves, crash screen, load time).

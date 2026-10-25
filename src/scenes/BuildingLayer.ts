@@ -1,4 +1,6 @@
 import Phaser from 'phaser';
+import { registerMapFocusable } from './mapFocus';
+import { getSettings, reduceMotion } from '../core/Settings';
 import { BALANCE } from '../config/balance';
 import { buildingDef } from '../core/content';
 import { eventBus } from '../core/EventBus';
@@ -11,7 +13,8 @@ import { WORLD_ART } from '../config/game';
 
 const BAR_W = 36;
 const BAR_H = 3;
-const SPOT_COLOR = 0x8fdc6a;
+/** Build spots: green on the map, sky blue in colour-blind mode (green is lost on grass). */
+const spotColor = (): number => (getSettings().colorblind ? 0x56b4e9 : 0x8fdc6a);
 
 interface SlotView {
   sprite: Phaser.GameObjects.Image;
@@ -58,15 +61,25 @@ export class BuildingLayer {
       });
 
       const spot = scene.add
-        .rectangle(px.x, px.y, px.w, px.h, SPOT_COLOR, 0.35)
+        .rectangle(px.x, px.y, px.w, px.h, spotColor(), 0.35)
         .setOrigin(0)
-        .setStrokeStyle(1, SPOT_COLOR)
+        .setStrokeStyle(1, spotColor())
         .setDepth(DEPTH.hover)
         .setVisible(false);
-      spot.on(Phaser.Input.Events.POINTER_OVER, () => spot.setFillStyle(SPOT_COLOR, 0.6));
-      spot.on(Phaser.Input.Events.POINTER_OUT, () => spot.setFillStyle(SPOT_COLOR, 0.35));
+      spot.on(Phaser.Input.Events.POINTER_OVER, () => spot.setFillStyle(spotColor(), 0.6));
+      spot.on(Phaser.Input.Events.POINTER_OUT, () => spot.setFillStyle(spotColor(), 0.35));
       spot.on(Phaser.Input.Events.POINTER_UP, (p: Phaser.Input.Pointer) => {
         if (click(p)) this.place(slotId, spot);
+      });
+
+      // Keyboard (D139): built buildings open their panel; while placing, only spots count.
+      registerMapFocusable(scene, sprite, () => eventBus.emit('slotSelected', { slotId }), {
+        available: () => !this.placing,
+        hover: (on) => eventBus.emit('slotHover', { slotId: on ? slotId : null }),
+      });
+      registerMapFocusable(scene, spot, () => this.place(slotId, spot), {
+        priority: () => 1,
+        hover: (on) => spot.setFillStyle(spotColor(), on ? 0.6 : 0.35),
       });
 
       const bar = scene.add.graphics().setDepth(DEPTH.floatingText);
@@ -105,7 +118,7 @@ export class BuildingLayer {
         view.sprite.setVisible(!!key);
         this.showRuin(slotId, !key);
         if (key) view.sprite.setTexture(key);
-        if (finished) {
+        if (finished && !reduceMotion()) {
           // A little "ta-da": the building settles into place in a puff of dust.
           dustPuff(this.scene, view.sprite.x, view.sprite.y - 2, DEPTH.effects, 16);
           view.sprite.setScale(WORLD_ART, WORLD_ART * 0.8);
@@ -137,7 +150,11 @@ export class BuildingLayer {
       const on = valid.has(slotId);
       if (on !== view.spot.visible) {
         view.spot.setVisible(on);
-        if (on) view.spot.setInteractive({ useHandCursor: true });
+        if (on)
+          view.spot
+            .setFillStyle(spotColor(), 0.35)
+            .setStrokeStyle(1, spotColor())
+            .setInteractive({ useHandCursor: true });
         else view.spot.disableInteractive();
       }
     }

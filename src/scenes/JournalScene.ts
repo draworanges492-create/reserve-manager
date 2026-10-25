@@ -1,11 +1,12 @@
 import Phaser from 'phaser';
+import { registerFocusable } from '../ui/focus';
 import { eventBus } from '../core/EventBus';
 import { t } from '../core/text';
 import { audio } from '../audio/AudioManager';
 import { Button } from '../ui/Button';
 import { crispText } from '../ui/crispText';
 import { type BookEntry, JOURNAL_TABS, type JournalTab, tabEntries } from '../ui/journalBook';
-import { TEXT_SIZE } from '../ui/theme';
+import { JOURNAL, TEXT_SIZE } from '../ui/theme';
 import { fitUiCamera, viewHeight, viewWidth } from '../ui/view';
 import { getSession } from './session';
 
@@ -17,12 +18,12 @@ const TAB_W = 74;
 const TAB_H = 18;
 const SPRITE = 26;
 const GAP = 10;
-const INK = '#3a2a1c';
-const FADED = '#7a6040';
-const NEW = '#b03a26';
-const COVER_COLOR = 0x5a3a22;
-const PAGE_COLOR = 0xefe2c4;
-const PAGE_EDGE = 0xd8c8a2;
+const INK = JOURNAL.ink;
+const FADED = JOURNAL.faded;
+const NEW = JOURNAL.new;
+const COVER_COLOR = JOURNAL.cover;
+const PAGE_COLOR = JOURNAL.page;
+const PAGE_EDGE = JOURNAL.pageEdge;
 
 interface Placed {
   entry: BookEntry;
@@ -221,6 +222,17 @@ export class JournalScene extends Phaser.Scene {
           this.close();
           eventBus.emit('focusRequested', focus);
         },
+      );
+      link.once(
+        Phaser.GameObjects.Events.DESTROY,
+        registerFocusable({
+          scene: this,
+          target: link,
+          activate: () => {
+            this.close();
+            eventBus.emit('focusRequested', focus);
+          },
+        }),
       );
       objects.push(link);
       y += link.height + 2;

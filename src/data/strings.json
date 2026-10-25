@@ -177,7 +177,7 @@
   "settings.on": "On",
   "settings.off": "Off",
   "settings.controls": "Controls",
-  "settings.controlsList": "Drag or WASD/arrows: move · Scroll or pinch: zoom · Space: pause · 1/2/3: speed · B build · H staff · K species · J journal · O settings · Esc: back",
+  "settings.controlsList": "Drag or WASD/arrows: move · Scroll or pinch: zoom · Space: pause · 1/2/3: speed · B build · H staff · K species · J journal · O settings · Tab: next control · Enter: press it · Esc: back",
   "command.unknownFence": "There's no fence there.",
   "command.fenceNotBroken": "This fence doesn't need mending.",
   "command.fenceNotYet": "This fence can't be reached yet.",
@@ -344,5 +344,7 @@
   "secrets.title": "Secrets",
   "secrets.counter": "Secrets found: {n} of {total}",
   "secrets.tea": "Tendai is brewing something terrible.",
-  "secrets.nameAlert": "Hello, {name}."
+  "secrets.nameAlert": "Hello, {name}.",
+  "settings.reduceMotion": "Reduce motion",
+  "settings.reduceMotionDetail": "The camera jumps instead of gliding, and alerts and markers stay still."
 }

@@ -1,11 +1,12 @@
 import Phaser from 'phaser';
+import { onSettingsChanged } from '../core/Settings';
 import { DIALOGUE_CHARS_PER_SECOND } from '../config/game';
 import { eventBus } from '../core/EventBus';
 import { t } from '../core/text';
 import type { DialogueView } from '../story/DialogueRunner';
 import { Button } from '../ui/Button';
 import { crispText } from '../ui/crispText';
-import { TEXT_SIZE, UI } from '../ui/theme';
+import { SPEAKER_COLOR, TEXT_SIZE, UI } from '../ui/theme';
 import { getSession } from './session';
 import { fitUiCamera, viewHeight, viewWidth } from '../ui/view';
 
@@ -55,7 +56,7 @@ export class DialogueScene extends Phaser.Scene {
     this.name = crispText(this, 0, 0, '', {
       fontSize: TEXT_SIZE.label,
       fontStyle: 'bold',
-      color: '#f0b46a',
+      color: SPEAKER_COLOR,
     });
     this.body = crispText(this, 0, 0, '', { fontSize: TEXT_SIZE.label, lineSpacing: 3 });
     this.hint = crispText(this, 0, 0, '', {
@@ -70,6 +71,14 @@ export class DialogueScene extends Phaser.Scene {
       kb?.on(`keydown-${key}`, () => this.choose(i)),
     );
     this.setOpen(false);
+    // Large text applies to the dialogue box straight away (D140).
+    const off = onSettingsChanged(() => {
+      this.name.setFontSize(TEXT_SIZE.label);
+      this.body.setFontSize(TEXT_SIZE.label);
+      this.hint.setFontSize(TEXT_SIZE.small);
+      this.lineKey = ''; // lay the current line out again
+    });
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, off);
   }
 
   override update(_time: number, deltaMs: number): void {

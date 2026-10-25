@@ -1,4 +1,6 @@
 import Phaser from 'phaser';
+import { registerMapFocusable } from '../mapFocus';
+import { reduceMotion } from '../../core/Settings';
 import { BALANCE } from '../../config/balance';
 import { eventBus } from '../../core/EventBus';
 import type { GameSession } from '../../core/GameSession';
@@ -49,9 +51,15 @@ export class ClueLayer {
           this.session.dispatch({ type: 'examineClue', clueId: clue.id });
         }
       });
+      registerMapFocusable(
+        this.scene,
+        marker,
+        () => this.session.dispatch({ type: 'examineClue', clueId: clue.id }),
+        { hover: (on) => eventBus.emit('clueHover', { clueId: on ? clue.id : null }) },
+      );
       this.scene.tweens.add({
         targets: marker,
-        y: y - BOB_PX,
+        y: reduceMotion() ? y : y - BOB_PX,
         duration: 600,
         yoyo: true,
         repeat: -1,

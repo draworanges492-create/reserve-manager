@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { DEFAULT_SETTINGS, nextVolume, sanitizeSettings } from '../../src/core/Settings';
 
 describe('settings', () => {
@@ -18,6 +18,14 @@ describe('settings', () => {
       colorblind: true,
       textSize: 'large',
     });
+  });
+
+  it('reduce motion follows the system preference until the player chooses (D138)', () => {
+    vi.stubGlobal('matchMedia', () => ({ matches: true }));
+    expect(sanitizeSettings({}).reduceMotion).toBe(true);
+    expect(sanitizeSettings({ reduceMotion: false }).reduceMotion).toBe(false);
+    vi.unstubAllGlobals();
+    expect(sanitizeSettings({}).reduceMotion).toBe(false);
   });
 
   it('steps volume by 10% and wraps', () => {

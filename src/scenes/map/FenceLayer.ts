@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { registerMapFocusable } from '../mapFocus';
 import { BALANCE } from '../../config/balance';
 import { fenceRepairable } from '../../core/buildCommands';
 import { eventBus } from '../../core/EventBus';
@@ -76,6 +77,23 @@ export class FenceLayer {
           });
         }
       });
+      registerMapFocusable(
+        scene,
+        hit,
+        () => {
+          const result = this.session.dispatch({ type: 'repairFence', segmentId: id });
+          if (!result.ok)
+            eventBus.emit('commandFailed', {
+              reason: result.reason,
+              worldX: (from.x + to.x) / 2,
+              worldY: (from.y + to.y) / 2 - 8,
+            });
+        },
+        {
+          available: () => fenceRepairable(this.session.state, id),
+          hover: (on) => eventBus.emit('fenceHover', { segmentId: on ? id : null }),
+        },
+      );
       this.segments.push({ id, from, to, hit });
     }
     this.update();

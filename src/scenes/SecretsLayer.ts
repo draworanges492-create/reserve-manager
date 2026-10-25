@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { reduceMotion } from '../core/Settings';
 import { BALANCE } from '../config/balance';
 import { eventBus } from '../core/EventBus';
 import { t } from '../core/text';
@@ -109,7 +110,7 @@ export class SecretsLayer {
     sprite.on(Phaser.Input.Events.POINTER_DOWN, () => {
       this.session.dispatch({ type: 'noteRarity', id: 'honey_badger', zoneId: 'woodland' });
       findSecret('honey_badger');
-      tween.timeScale = 3; // and off it scurries
+      if (!reduceMotion()) tween.timeScale = 3; // and off it scurries
     });
     this.badger = { sprite, shadow, tween, frameMs: 0 };
   }

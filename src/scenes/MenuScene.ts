@@ -16,14 +16,14 @@ import { crispText } from '../ui/crispText';
 import { WARN_COLOR } from '../ui/InfoPanel';
 import { askPlayerName } from '../ui/namePrompt';
 import { savedAtText, slotName, slotText, summaryText } from '../ui/saveInfo';
-import { TEXT_SIZE, UI } from '../ui/theme';
+import { MENU_BACKGROUND, TEXT_SIZE, UI } from '../ui/theme';
 import { loadGame, startNewGame } from './launch';
 import { fitUiCamera, viewHeight, viewWidth } from '../ui/view';
 
 const BUTTON_W = 170;
 const BUTTON_H = 20;
 const ROW_W = 380;
-const BACKGROUND = 0x1d2b1f;
+const BACKGROUND = MENU_BACKGROUND;
 const PARADE = ['impala', 'zebra', 'lion'];
 
 /** Title screen (spec Phase 8): Continue, New game, Load game. */

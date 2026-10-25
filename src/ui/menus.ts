@@ -152,6 +152,12 @@ export function settingsMenu(
       row(t('settings.edgeScroll'), onOff(settings.edgeScroll), () =>
         update({ edgeScroll: !settings.edgeScroll }),
       ),
+      row(
+        t('settings.reduceMotion'),
+        onOff(settings.reduceMotion),
+        () => update({ reduceMotion: !settings.reduceMotion }),
+        t('settings.reduceMotionDetail'),
+      ),
       {
         lines: [{ text: t('settings.controls') }, { text: t('settings.controlsList') }],
         actions: [],

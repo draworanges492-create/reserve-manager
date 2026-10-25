@@ -15,6 +15,8 @@ export interface Settings {
   timeOfDay: boolean;
   /** Mouse at the screen edge scrolls the map (DECISIONS D25). */
   edgeScroll: boolean;
+  /** No camera glides, sliding alerts or bobbing markers (D138). */
+  reduceMotion: boolean;
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -25,7 +27,17 @@ export const DEFAULT_SETTINGS: Settings = {
   textSize: 'normal',
   timeOfDay: true,
   edgeScroll: true,
+  reduceMotion: false,
 };
+
+/** Follows the system "reduce motion" preference until the player picks for themselves. */
+function systemPrefersReducedMotion(): boolean {
+  try {
+    return globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+  } catch {
+    return false;
+  }
+}
 
 const STORAGE_KEY = 'reserve-manager.settings.v1';
 const VOLUME_STEP = 0.1;
@@ -49,6 +61,7 @@ export function sanitizeSettings(raw: unknown): Settings {
     textSize: r.textSize === 'large' ? 'large' : 'normal',
     timeOfDay: bool(r.timeOfDay, d.timeOfDay),
     edgeScroll: bool(r.edgeScroll, d.edgeScroll),
+    reduceMotion: bool(r.reduceMotion, systemPrefersReducedMotion()),
   };
 }
 
@@ -86,4 +99,9 @@ export function onSettingsChanged(listener: Listener): () => void {
 export function nextVolume(v: number): number {
   const next = Math.round((v + VOLUME_STEP) * 10) / 10;
   return next > 1 ? 0 : next;
+}
+
+/** True when animations that move things around should be skipped (D138). */
+export function reduceMotion(): boolean {
+  return getSettings().reduceMotion;
 }

@@ -25,6 +25,8 @@ Runs in the browser. Free, no accounts, no network calls while playing; saves st
 | Journal                | Side buttons                     | J                  |
 | Settings and saves     | Side buttons                     | O                  |
 | Back / close           |                                  | Esc                |
+| Move between controls  |                                  | Tab / Shift+Tab    |
+| Press the focused one  |                                  | Enter              |
 | Dialogue               | Click to continue, pick a choice | Space / Enter, 1–3 |
 
 ## Development

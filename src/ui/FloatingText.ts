@@ -1,4 +1,5 @@
 import type Phaser from 'phaser';
+import { reduceMotion } from '../core/Settings';
 import { crispText } from './crispText';
 import { TEXT_SIZE } from './theme';
 
@@ -22,7 +23,7 @@ export function showFloatingText(
     .setDepth(depth);
   scene.tweens.add({
     targets: label,
-    y: y - RISE,
+    y: reduceMotion() ? y : y - RISE,
     alpha: { from: 1, to: 0 },
     delay: DURATION_MS / 2,
     duration: DURATION_MS / 2,

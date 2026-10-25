@@ -1,4 +1,5 @@
 import type Phaser from 'phaser';
+import { registerFocusable } from './focus';
 import type { GameState } from '../core/GameState';
 import { crispText } from './crispText';
 import { trackerContent } from './storyInfo';
@@ -30,6 +31,17 @@ export class GoalTracker {
       this.signature = '';
     });
     this.root = scene.add.container(x, y, [this.bg]);
+    this.bg.once(
+      'destroy',
+      registerFocusable({
+        scene,
+        target: this.bg,
+        activate: () => {
+          this.collapsed = !this.collapsed;
+          this.signature = '';
+        },
+      }),
+    );
   }
 
   contains(x: number, y: number): boolean {

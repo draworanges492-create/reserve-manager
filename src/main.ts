@@ -1,4 +1,5 @@
 import '@fontsource/inter/latin-400.css';
+import { installFocus } from './ui/focus';
 import '@fontsource/inter/latin-600.css';
 import '@fontsource/inter/latin-700.css';
 import Phaser from 'phaser';
@@ -66,6 +67,9 @@ window.addEventListener('resize', () => {
   game.scale.setZoom(1 / (window.devicePixelRatio || 1));
   game.scale.refresh();
 });
+
+// Keyboard: Tab between controls, Enter to press (D139).
+installFocus(game);
 
 // Browsers only allow sound after the player does something (spec §11: muted until the
 // first interaction), so the audio engine starts on the first click, tap or key press.

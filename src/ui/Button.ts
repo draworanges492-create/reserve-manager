@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { registerFocusable } from './focus';
 import { audio } from '../audio/AudioManager';
 import { crispText } from './crispText';
 import { clearHoverTip, setHoverTip } from './hoverTip';
@@ -62,6 +63,25 @@ export class Button extends Phaser.GameObjects.Container {
       audio.sfx('click');
       opts.onClick();
     });
+    // Keyboard: Tab reaches it, Enter presses it (D139).
+    const unregister = registerFocusable({
+      scene,
+      target: this.bg,
+      available: () => this.enabled,
+      activate: () => {
+        audio.sfx('click');
+        opts.onClick();
+      },
+      onFocus: () => {
+        this.setHovered(true);
+        if (tip) setHoverTip(tip);
+      },
+      onBlur: () => {
+        if (this.active) this.setHovered(false);
+        if (tip) clearHoverTip(tip);
+      },
+    });
+    this.once(Phaser.GameObjects.Events.DESTROY, unregister);
     scene.add.existing(this);
   }
 

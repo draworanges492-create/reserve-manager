@@ -1,4 +1,6 @@
 import type Phaser from 'phaser';
+import { registerFocusable } from './focus';
+import { reduceMotion } from '../core/Settings';
 import { getSettings } from '../core/Settings';
 import { t } from '../core/text';
 import type { Alert, Severity } from './alerts';
@@ -76,6 +78,14 @@ export class AlertFeed {
         .setStrokeStyle(1, UI.border)
         .setInteractive({ useHandCursor: true });
       bg.on('pointerdown', () => this.onOpen(alert));
+      bg.once(
+        'destroy',
+        registerFocusable({
+          scene: this.scene,
+          target: bg,
+          activate: () => this.onOpen(alert),
+        }),
+      );
       const strip = this.scene.add
         .rectangle(0, 0, 3, h, severityColor(alert.severity))
         .setOrigin(0);
@@ -89,7 +99,7 @@ export class AlertFeed {
       });
       const card = this.scene.add.container(0, y, [bg, strip, badge, text, close]);
       this.root.add(card);
-      if (!previous.has(alert.key)) {
+      if (!previous.has(alert.key) && !reduceMotion()) {
         // New alerts slide in from the right.
         card.setX(SLIDE_PX).setAlpha(0);
         this.scene.tweens.add({

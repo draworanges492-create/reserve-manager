@@ -13,6 +13,22 @@ export const UI = {
   shadow: '#120d09',
 } as const;
 
+/** Ruth's journal (D130): ink on cream pages. Contrast checked in tests/ui/contrast.test.ts. */
+export const JOURNAL = {
+  ink: '#3a2a1c',
+  faded: '#6a5236',
+  new: '#b03a26',
+  cover: 0x5a3a22,
+  page: 0xefe2c4,
+  pageEdge: 0xd8c8a2,
+} as const;
+
+/** Speaker names in the dialogue box. */
+export const SPEAKER_COLOR = '#f0b46a';
+
+/** Main-menu background. */
+export const MENU_BACKGROUND = 0x1d2b1f;
+
 const BASE_SIZES = { small: 9, body: 10, label: 11, title: 18 } as const;
 const LARGE_SCALE = 1.2;
 

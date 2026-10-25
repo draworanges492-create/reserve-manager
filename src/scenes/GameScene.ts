@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { reduceMotion } from '../core/Settings';
 import { ASSETS } from '../config/assets';
 import { BALANCE } from '../config/balance';
 import { eventBus } from '../core/EventBus';
@@ -168,7 +169,14 @@ export class GameScene extends Phaser.Scene {
     // Story progress (or the dev chapter jump) opened zones: widen the camera, lift the fog.
     // Alerts and the Species menu ask the camera to go somewhere (spec §7.4).
     const offFocus = eventBus.on('focusRequested', ({ x, y }) => {
-      this.cameras.main.pan(x * map.tileWidth, y * map.tileHeight, FOCUS_PAN_MS, 'Sine.easeInOut');
+      if (reduceMotion()) this.cameras.main.centerOn(x * map.tileWidth, y * map.tileHeight);
+      else
+        this.cameras.main.pan(
+          x * map.tileWidth,
+          y * map.tileHeight,
+          FOCUS_PAN_MS,
+          'Sine.easeInOut',
+        );
     });
     const offZones = eventBus.on('zonesChanged', () => {
       this.overlay.refreshLocks((id) => !!session.state.zones[id]?.unlocked);
