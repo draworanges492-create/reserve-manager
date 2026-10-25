@@ -493,4 +493,13 @@ settings restored.
 **Checks:** `build` ✅ · `test` ✅ · `lint` ✅ · `validate-data` ✅ · `browser-check` ✅ (9 of 9,
 title screen in 0.25–0.7 s) · crash screen tested in the release build.
 
-Next: Phase 14f release package (v1.0.0, store assets, itch.io zip, GitHub Pages).
+## Phase 14f — Release package (2026-10-25)
+
+**Done**
+
+- v1.0.0, changelog, credits and asset list (D146).
+- Store cover, screenshots, GIF and draft page text (D147).
+- itch.io zip, tested from a sub-folder (D148).
+
+**Waiting for you:** GitHub Pages needs a GitHub repository (your go-ahead to create and
+push it), then the itch.io upload, which you do from your itch.io account.

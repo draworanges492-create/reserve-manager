@@ -6,9 +6,9 @@ uncover what happened to the reserve along the way.
 
 Runs in the browser. Free, no accounts, no network calls while playing; saves stay on your device.
 
-![Screenshot placeholder](docs/screenshots/.gitkeep)
+![The reserve in Chapter 5: zebras, giraffes and hyenas on the plains](docs/store/screenshot-3-herds.png)
 
-<!-- TODO: add screenshots to docs/screenshots/ and replace the placeholder above. -->
+![Herds wandering the plains](docs/store/reserve.gif)
 
 ## Controls
 

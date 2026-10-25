@@ -215,7 +215,7 @@
   "menu.loadButton": "Load",
   "menu.delete": "Delete",
   "menu.sure": "Sure?",
-  "menu.footer": "Enter: continue · Saves stay in this browser",
+  "menu.footer": "Enter: continue · Saves stay in this browser · v{version}",
   "menu.loadFailed": "That save couldn't be loaded: {why}",
   "save.slot.auto": "Autosave",
   "save.slot.n": "Slot {n}",

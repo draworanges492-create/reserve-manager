@@ -1,3 +1,4 @@
+import pkg from '../../package.json';
 // Engine-level constants (spec §2, §4). Gameplay balance lives in balance.json, not here.
 export const GAME_TITLE = 'Reserve Manager';
 
@@ -48,3 +49,6 @@ export const CAMERA_PINCH_STEP = 1.25;
 
 /** Dialogue typewriter speed (characters per real second). */
 export const DIALOGUE_CHARS_PER_SECOND = 60;
+
+/** Shown on the title screen; comes from package.json. */
+export const GAME_VERSION: string = pkg.version;

@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { findSecret } from '../core/Secrets';
-import { GAME_TITLE, WORLD_ART } from '../config/game';
+import { GAME_TITLE, GAME_VERSION, WORLD_ART } from '../config/game';
 import {
   deleteSlot,
   latestSlot,
@@ -127,7 +127,7 @@ export class MenuScene extends Phaser.Scene {
       );
     }
     this.keep(
-      crispText(this, w / 2, h - 10, t('menu.footer'), {
+      crispText(this, w / 2, h - 10, t('menu.footer', { version: GAME_VERSION }), {
         fontSize: TEXT_SIZE.small,
         color: UI.textDim,
       }).setOrigin(0.5, 1),

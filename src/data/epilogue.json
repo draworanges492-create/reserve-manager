@@ -236,6 +236,6 @@
   },
   "credits": {
     "title": "Thank you for playing",
-    "text": "Reserve Manager. Story, art and music made for this game. Built with Phaser; font: Inter.\n\nThe reserve is still yours: keep playing as long as you like."
+    "text": "Reserve Manager. Story, art and music made for this game. Built with Phaser (MIT licence). Font: Inter by Rasmus Andersson (SIL Open Font Licence).\n\nThe reserve is still yours: keep playing as long as you like."
   }
 }
