@@ -107,6 +107,13 @@ async function clearAlerts(page: Page): Promise<void> {
 }
 
 /** The middle of the biggest gathering of animals on the map (world px → tiles). */
+interface MapSprite {
+  type: string;
+  texture: { key: string };
+  x: number;
+  y: number;
+}
+
 async function busiestSpot(page: Page): Promise<{ x: number; y: number }> {
   return page.evaluate((tile) => {
     const gs = (window as unknown as DevWindow).__game.scene.getScene('GameScene');
@@ -123,8 +130,8 @@ async function busiestSpot(page: Page): Promise<{ x: number; y: number }> {
       'rhino',
     ]);
     const pts: { x: number; y: number; big: boolean }[] = gs.children.list
-      .filter((o: any) => o.type === 'Sprite' && animals.has(o.texture.key))
-      .map((o: any) => ({
+      .filter((o: MapSprite) => o.type === 'Sprite' && animals.has(o.texture.key))
+      .map((o: MapSprite) => ({
         x: o.x,
         y: o.y,
         big: ['elephant', 'giraffe', 'rhino'].includes(o.texture.key),
