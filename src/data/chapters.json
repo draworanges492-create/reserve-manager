@@ -395,7 +395,7 @@
         },
         {
           "id": "g3_grass",
-          "text": "Get the plains grass back above 50%",
+          "text": "Get the plains grass back above 40%",
           "conditions": [
             {
               "op": "flag",
@@ -404,7 +404,7 @@
             {
               "op": "vegetationAtLeast",
               "zone": "plains",
-              "min": 50
+              "min": 40
             }
           ]
         },

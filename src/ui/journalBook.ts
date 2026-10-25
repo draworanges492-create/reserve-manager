@@ -119,10 +119,8 @@ function speciesNotes(state: GameState): BookEntry[] {
       body: [
         t('notes.count', { now: Math.round(now), peak: Math.round(peak) }),
         t('notes.diet', { diet: t(`diet.${s.diet}`), min: s.minViable }),
-        // A bare "TODO: verify" placeholder says nothing yet, so it's left out.
-        ...s.facts
-          .filter((f) => f.text.trim() !== 'TODO: verify')
-          .map((f) => (f.verified ? f.text : t('notes.unverified', { text: f.text }))),
+        // Only checked facts reach players (D136); unverified ones stay in the data for later.
+        ...s.facts.filter((f) => f.verified).map((f) => f.text),
       ],
     };
   });

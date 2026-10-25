@@ -15,7 +15,8 @@
     "gen:map": "tsx tools/generate-map.ts",
     "preview:art": "tsx tools/art/preview.ts",
     "sim:balance": "tsx tools/sim-balance.ts",
-    "package:itch": "npm run build && rm -rf release && mkdir -p release && cd dist && zip -qr ../release/reserve-manager-web.zip ."
+    "package:itch": "npm run build && rm -rf release && mkdir -p release && cd dist && zip -qr ../release/reserve-manager-web.zip .",
+    "balance:report": "tsx tools/balance-report.ts"
   },
   "dependencies": {
     "@fontsource/inter": "^5.3.0",

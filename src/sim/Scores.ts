@@ -2,7 +2,7 @@
 import { BALANCE } from '../config/balance';
 import { SPECIES } from '../core/content';
 import type { GameState, ScoreChange, ScoreId } from '../core/GameState';
-import { zoneHasWater } from './Water';
+import { zoneHasWater, zoneInWaterReach } from './Water';
 import type { SimEvent, SimStep } from './types';
 
 const clamp100 = (n: number): number => Math.min(100, Math.max(0, n));
@@ -13,9 +13,10 @@ export interface EcosystemBreakdown {
   /** Species at or above their minimum viable size, out of all species. */
   viableSpecies: number;
   totalSpecies: number;
-  /** Open zones with water in reach. */
+  /** Open zones a waterhole can reach, and how many of them have water now (D135). Zones
+   * no waterhole can reach don't count, since the player can't water them. */
   wateredZones: number;
-  openZones: number;
+  reachableZones: number;
   score: number;
 }
 
@@ -30,15 +31,16 @@ export function ecosystemBreakdown(state: GameState): EcosystemBreakdown {
   for (const herd of Object.values(state.populations))
     for (const [id, n] of Object.entries(herd)) totals[id] = (totals[id] ?? 0) + n;
   const viableSpecies = SPECIES.filter((s) => (totals[s.id] ?? 0) >= s.minViable).length;
-  const wateredZones = open.filter(([id]) => zoneHasWater(state, id)).length;
+  const reachable = open.filter(([id]) => zoneInWaterReach(state, id));
+  const wateredZones = reachable.filter(([id]) => zoneHasWater(state, id)).length;
   const biodiversity = SPECIES.length ? (viableSpecies / SPECIES.length) * 100 : 0;
-  const water = open.length ? (wateredZones / open.length) * 100 : 0;
+  const water = reachable.length ? (wateredZones / reachable.length) * 100 : 0;
   return {
     vegetation,
     viableSpecies,
     totalSpecies: SPECIES.length,
     wateredZones,
-    openZones: open.length,
+    reachableZones: reachable.length,
     score: clamp100(w.vegetation * vegetation + w.biodiversity * biodiversity + w.water * water),
   };
 }

@@ -177,14 +177,14 @@
     }
   },
   "tourism": {
-    "ticketPrice": 10,
-    "towerBonusPerVisitor": 5,
+    "ticketPrice": 9,
+    "towerBonusPerVisitor": 4,
     "seasonMult": {
       "dry": 1.2,
       "wet": 0.8
     },
     "rareBonus": 3,
-    "victorShare": 0.3,
+    "victorShare": 0.2,
     "historyDays": 30,
     "capacityBase": 6,
     "capacityPerTower": 4,

@@ -24,7 +24,7 @@ describe('top bar text', () => {
     const state = runDayTick(newGame()).state;
     const lines = scoreTooltip(state, 'ecosystem');
     expect(lines[0]).toMatch(/^Ecosystem health: \d+$/);
-    expect(lines.slice(1).map((l) => l.split(' ')[0])).toEqual(['Grass', 'Viable', 'Open']);
+    expect(lines.slice(1).map((l) => l.split(' ')[0])).toEqual(['Grass', 'Viable', 'Zones']);
   });
 });
 

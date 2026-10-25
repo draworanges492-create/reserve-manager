@@ -45,8 +45,8 @@ describe('journal book (D130)', () => {
     const zebra = notes.find((n) => n.key === 'notes:zebra');
     expect(zebra?.title).toBe('Zebra');
     expect(zebra?.meta).toBe(`First seen ${dateOf(0)}, Central Plains`);
-    // Bare "TODO: verify" placeholders are left out.
-    expect(zebra?.body.some((b) => b.startsWith('TODO: verify ('))).toBe(false);
+    // Unverified facts never reach players (D136).
+    expect(zebra?.body.some((b) => /verif/i.test(b))).toBe(false);
     expect(notes.find((n) => n.key === 'notes:impala')?.title).toBe('??? · not seen yet');
   });
 

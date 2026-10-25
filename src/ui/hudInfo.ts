@@ -80,8 +80,8 @@ export function scoreTooltip(state: GameState, score: ScoreId): string[] {
       }),
       t('score.ecosystem.water', {
         a: b.wateredZones,
-        b: b.openZones,
-        n: Math.round((b.wateredZones / Math.max(1, b.openZones)) * 100 * w.water),
+        b: b.reachableZones,
+        n: Math.round((b.wateredZones / Math.max(1, b.reachableZones)) * 100 * w.water),
       }),
     ];
   }

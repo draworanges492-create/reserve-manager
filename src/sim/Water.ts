@@ -79,6 +79,21 @@ function distanceToRect(x: number, y: number, r: TileRect): number {
  * Waterholes inside a locked zone don't count: that zone is still fenced off
  * (DECISIONS D36), otherwise Waterhole B would water the plains from day one.
  */
+/** True if any waterhole is close enough to ever supply this zone (D135). */
+export function zoneInWaterReach(
+  state: GameState,
+  zoneId: string,
+  cfg: WaterConfig = BALANCE.water,
+): boolean {
+  const zone = state.zones[zoneId];
+  return (
+    !!zone &&
+    Object.values(state.waterholes).some(
+      (h) => distanceToRect(h.x, h.y, zone.rect) <= cfg.rangeTiles,
+    )
+  );
+}
+
 export function zoneHasWater(
   state: GameState,
   zoneId: string,

@@ -454,4 +454,17 @@ were no saves before).
 secrets triggered, Field notes hidden pages, secrets counter; 0 console errors. Test saves
 and secrets removed afterwards.
 
-Next: Phase 14 release polish.
+## Phase 14c — Balance ✅ (2026-10-25)
+
+**Done**
+
+- Release plan decisions recorded (docs/RELEASE_PLAN.md); pumps take 3 days, solar pump
+  from Chapter 3 (D134).
+- Full-game balance report (`npm run balance:report`) and the tuning it led to (D137).
+- Fixed Ecosystem Health counting zones no waterhole can reach (D135).
+- Unverified animal facts hidden from players (D136).
+
+**Checks:** `build` ✅ · `test` ✅ (229) · `lint` ✅ · `validate-data` ✅ · balance report: all
+six runs reach an ending (Thriving, Fortress and Profitable all occur).
+
+Next: Phase 14d accessibility.
