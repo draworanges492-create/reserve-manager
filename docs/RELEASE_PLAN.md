@@ -68,7 +68,9 @@ step ends with the usual checks and a commit.
    fact that isn't verified, so nothing unchecked reaches players.
 2. **Art:** the current art is final for v1.0. More detail comes in a later update; the art
    guide gets a list of sprites worth improving.
-3. **Publishing:** itch.io, and the game as its own website (hosting to be settled).
-4. **Firefox and Safari:** to be settled (explained to you in chat).
+3. **Publishing:** itch.io, and the game as its own website on GitHub Pages (needs a
+   GitHub repository, set up together when we get there).
+4. **Firefox and Safari:** I install Playwright's test browsers (about 300 MB) and check
+   both myself with screenshots at three window sizes.
 5. **Story text:** stays as it is.
 6. **Pumps:** both take 3 days to build; the solar pump unlocks in Chapter 3 (D134).
