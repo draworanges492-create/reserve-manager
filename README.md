@@ -40,6 +40,8 @@ npm test               # Vitest
 npm run lint           # ESLint + Prettier
 npm run validate-data  # map + content checks
 npm run sim:balance    # one simulated year, no player input
+npm run balance:report # the whole story, played automatically, per chapter
+npm run browser-check  # release build in Chrome, Firefox and Safari's engine (build first)
 npm run build          # production build into dist/
 npm run package:itch   # build + zip into release/reserve-manager-web.zip
 ```

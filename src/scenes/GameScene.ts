@@ -40,6 +40,7 @@ const FADE_MS = 400;
 /** The world view: tilemap, zones, fences, waterholes and herds. Drives the sim clock. */
 export class GameScene extends Phaser.Scene {
   private smoothArt = false;
+  private textureCount = 0;
   private zones: ZoneArea[] = [];
   private hovered: ZoneArea | null = null;
   private overlay!: ZoneOverlay;
@@ -59,6 +60,8 @@ export class GameScene extends Phaser.Scene {
   }
 
   create(): void {
+    // Which screen is up, for automated browser checks (tools/browser-check.ts).
+    document.documentElement.dataset.screen = 'game';
     const session = getSession(this);
     const map = this.make.tilemap({ key: 'reserve' });
     const tilesetName = Object.keys(ASSETS.tilesets)[0] ?? '';
@@ -224,8 +227,11 @@ export class GameScene extends Phaser.Scene {
    */
   private smoothWhenZoomedOut(): void {
     const smooth = this.cameras.main.zoom < ART_SCALE;
-    if (smooth === this.smoothArt) return;
+    // Textures made at runtime (albino animals) need the current mode too (D143).
+    const count = this.textures.getTextureKeys().length;
+    if (smooth === this.smoothArt && count === this.textureCount) return;
     this.smoothArt = smooth;
+    this.textureCount = count;
     const mode = smooth ? Phaser.Textures.FilterMode.LINEAR : Phaser.Textures.FilterMode.NEAREST;
     for (const key of [
       ...this.textures.getTextureKeys().filter((k) => k.endsWith('-albino')),

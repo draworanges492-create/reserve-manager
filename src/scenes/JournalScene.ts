@@ -318,7 +318,7 @@ export class JournalScene extends Phaser.Scene {
         label: t(`journal.tab.${tab}`),
         onClick: () => this.openAt(tab),
       });
-      b.setAlpha(tab === this.tab ? 1 : 0.7);
+      b.setSelected(tab === this.tab);
       this.root.add(b);
     });
     const prev = new Button(this, x + COVER + 4, y + h - COVER - 18, {

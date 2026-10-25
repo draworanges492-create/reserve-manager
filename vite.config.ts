@@ -5,6 +5,14 @@ export default defineConfig({
   base: './',
   // Phaser alone is ~1.2 MB minified; warn only above that.
   // es2022 for top-level await (waiting for the UI font before the game starts).
-  build: { target: 'es2022', assetsInlineLimit: 0, chunkSizeWarningLimit: 1600 },
+  // Phaser gets its own file: it rarely changes, so browsers keep it cached across updates.
+  build: {
+    target: 'es2022',
+    assetsInlineLimit: 0,
+    chunkSizeWarningLimit: 1600,
+    rollupOptions: {
+      output: { manualChunks: (id) => (id.includes('node_modules/phaser') ? 'phaser' : undefined) },
+    },
+  },
   test: { include: ['tests/**/*.test.ts'] },
 });

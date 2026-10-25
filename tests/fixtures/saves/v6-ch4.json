@@ -1,0 +1,439 @@
+{
+  "format": "reserve-manager-save",
+  "version": 6,
+  "summary": {
+    "playerName": "Old Save",
+    "chapter": 4,
+    "day": 10,
+    "money": 1697,
+    "playTimeSeconds": 1800,
+    "savedAt": "2026-01-01T00:00:00.000Z"
+  },
+  "state": {
+    "version": 6,
+    "seed": 42,
+    "rngState": 744565506,
+    "playerName": "Old Save",
+    "clock": { "day": 10, "dayProgress": 0, "speed": 1, "paused": false },
+    "chapter": { "current": 4, "startDay": 0 },
+    "zones": {
+      "hq": {
+        "unlocked": true,
+        "rect": { "x": 36, "y": 68, "w": 48, "h": 12 },
+        "area": 576,
+        "vegetation": 43.50433898738727
+      },
+      "plains": {
+        "unlocked": true,
+        "rect": { "x": 36, "y": 32, "w": 48, "h": 36 },
+        "area": 1728,
+        "vegetation": 52.33895974570757
+      },
+      "river": {
+        "unlocked": true,
+        "rect": { "x": 0, "y": 32, "w": 36, "h": 48 },
+        "area": 1728,
+        "vegetation": 81.16811299579577
+      },
+      "woodland": {
+        "unlocked": true,
+        "rect": { "x": 76, "y": 0, "w": 44, "h": 32 },
+        "area": 1408,
+        "vegetation": 76.4601412447447
+      },
+      "east_border": {
+        "unlocked": true,
+        "rect": { "x": 84, "y": 32, "w": 36, "h": 48 },
+        "area": 1728,
+        "vegetation": 62.33622599159151
+      },
+      "outcrop": {
+        "unlocked": true,
+        "rect": { "x": 48, "y": 0, "w": 28, "h": 32 },
+        "area": 896,
+        "vegetation": 48.212310738438326
+      },
+      "north": {
+        "unlocked": false,
+        "rect": { "x": 0, "y": 0, "w": 48, "h": 32 },
+        "area": 1536,
+        "vegetation": 71.75216949369364
+      }
+    },
+    "waterholes": {
+      "waterhole_a": {
+        "zoneId": "plains",
+        "x": 53.5,
+        "y": 45.5,
+        "level": 62,
+        "type": "pumped",
+        "pumpState": "working",
+        "pumpKind": "borehole"
+      },
+      "waterhole_b": {
+        "zoneId": "river",
+        "x": 27.5,
+        "y": 46.5,
+        "level": 0,
+        "type": "natural",
+        "pumpState": "none",
+        "pumpKind": null
+      }
+    },
+    "populations": {
+      "plains": {
+        "impala": 82,
+        "zebra": 23,
+        "lion": 4,
+        "elephant": 6,
+        "hyena": 5,
+        "vulture": 8,
+        "leopard": 2
+      }
+    },
+    "populationLog": {
+      "plains": {
+        "impala": {
+          "births": 1,
+          "starved": 0,
+          "eatenBy": { "lion": 0, "hyena": 0, "leopard": 0 },
+          "capacity": 108.53006692869921
+        },
+        "zebra": {
+          "births": 0,
+          "starved": 0,
+          "eatenBy": { "lion": 0, "hyena": 0 },
+          "capacity": 45.22086122029134
+        },
+        "lion": { "births": 0, "starved": 0, "eatenBy": {}, "capacity": 4.16 },
+        "elephant": { "births": 0, "starved": 0, "eatenBy": {}, "capacity": 10.853006692869922 },
+        "hyena": { "births": 0, "starved": 0, "eatenBy": {}, "capacity": 8.32 },
+        "vulture": { "births": 0, "starved": 0, "eatenBy": {}, "capacity": 8.182674557770113 },
+        "leopard": { "births": 0, "starved": 0, "eatenBy": {}, "capacity": 4.859999999999999 }
+      }
+    },
+    "slots": {
+      "pump_a": {
+        "slotType": "pump",
+        "zoneId": "plains",
+        "rect": { "x": 57, "y": 42, "w": 2, "h": 2 },
+        "waterholeId": "waterhole_a",
+        "building": { "buildingId": "borehole_pump", "daysLeft": 0 }
+      },
+      "pump_b": {
+        "slotType": "pump",
+        "zoneId": "river",
+        "rect": { "x": 30, "y": 43, "w": 2, "h": 2 },
+        "waterholeId": "waterhole_b",
+        "building": null
+      },
+      "tower_plains": {
+        "slotType": "tower",
+        "zoneId": "plains",
+        "rect": { "x": 44, "y": 36, "w": 2, "h": 2 },
+        "building": { "buildingId": "observation_tower", "daysLeft": 0 }
+      },
+      "tower_outcrop": {
+        "slotType": "tower",
+        "zoneId": "outcrop",
+        "rect": { "x": 54, "y": 10, "w": 2, "h": 2 },
+        "building": null
+      },
+      "post_hq": {
+        "slotType": "post",
+        "zoneId": "hq",
+        "rect": { "x": 60, "y": 70, "w": 2, "h": 2 },
+        "building": null
+      },
+      "post_woodland": {
+        "slotType": "post",
+        "zoneId": "woodland",
+        "rect": { "x": 86, "y": 14, "w": 2, "h": 2 },
+        "building": null
+      },
+      "post_east": {
+        "slotType": "post",
+        "zoneId": "east_border",
+        "rect": { "x": 104, "y": 48, "w": 2, "h": 2 },
+        "building": null
+      },
+      "lodge_hq": {
+        "slotType": "lodge",
+        "zoneId": "hq",
+        "rect": { "x": 42, "y": 72, "w": 3, "h": 3 },
+        "building": { "buildingId": "lodge", "daysLeft": 4 }
+      },
+      "beehive_east": {
+        "slotType": "fence",
+        "zoneId": "plains",
+        "rect": { "x": 80, "y": 52, "w": 2, "h": 2 },
+        "building": null
+      }
+    },
+    "staff": [{ "id": "staff_1", "role": "ranger", "zoneId": null, "morale": 70, "unpaidDays": 0 }],
+    "nextStaffNumber": 2,
+    "resources": { "money": 1697.3333333333335 },
+    "economy": {
+      "lastDay": {
+        "grant": 40,
+        "tourism": 84,
+        "wages": 30,
+        "wagesUnpaid": 0,
+        "upkeep": 2,
+        "net": 92
+      },
+      "netHistory": [90, 90, 100, 100, 100, 68.66666666666674, 92.66666666666674, 92, 92, 92],
+      "inDebt": false
+    },
+    "flags": {
+      "ch1_water_first": true,
+      "tourism_open": true,
+      "ch4_bring_back": true,
+      "victor_lodge": true,
+      "kito_police": true,
+      "kito_met": true
+    },
+    "fences": {
+      "north_n0": {
+        "zoneId": "north",
+        "borders": null,
+        "from": { "x": 0, "y": 0 },
+        "to": { "x": 48, "y": 0 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "north_s0": {
+        "zoneId": "north",
+        "borders": "river",
+        "from": { "x": 0, "y": 32 },
+        "to": { "x": 36, "y": 32 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "north_s1": {
+        "zoneId": "north",
+        "borders": "plains",
+        "from": { "x": 36, "y": 32 },
+        "to": { "x": 48, "y": 32 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "north_w0": {
+        "zoneId": "north",
+        "borders": null,
+        "from": { "x": 0, "y": 0 },
+        "to": { "x": 0, "y": 32 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "north_e0": {
+        "zoneId": "north",
+        "borders": "outcrop",
+        "from": { "x": 48, "y": 0 },
+        "to": { "x": 48, "y": 32 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "outcrop_n0": {
+        "zoneId": "outcrop",
+        "borders": null,
+        "from": { "x": 48, "y": 0 },
+        "to": { "x": 76, "y": 0 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "outcrop_s0": {
+        "zoneId": "outcrop",
+        "borders": "plains",
+        "from": { "x": 48, "y": 32 },
+        "to": { "x": 76, "y": 32 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "outcrop_e0": {
+        "zoneId": "outcrop",
+        "borders": "woodland",
+        "from": { "x": 76, "y": 0 },
+        "to": { "x": 76, "y": 32 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "woodland_n0": {
+        "zoneId": "woodland",
+        "borders": null,
+        "from": { "x": 76, "y": 0 },
+        "to": { "x": 120, "y": 0 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "woodland_s0": {
+        "zoneId": "woodland",
+        "borders": "plains",
+        "from": { "x": 76, "y": 32 },
+        "to": { "x": 84, "y": 32 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "woodland_e0": {
+        "zoneId": "woodland",
+        "borders": null,
+        "from": { "x": 120, "y": 0 },
+        "to": { "x": 120, "y": 32 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "river_s0": {
+        "zoneId": "river",
+        "borders": null,
+        "from": { "x": 0, "y": 80 },
+        "to": { "x": 36, "y": 80 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "river_w0": {
+        "zoneId": "river",
+        "borders": null,
+        "from": { "x": 0, "y": 32 },
+        "to": { "x": 0, "y": 80 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "river_e0": {
+        "zoneId": "river",
+        "borders": "plains",
+        "from": { "x": 36, "y": 32 },
+        "to": { "x": 36, "y": 68 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "river_e1": {
+        "zoneId": "river",
+        "borders": "hq",
+        "from": { "x": 36, "y": 68 },
+        "to": { "x": 36, "y": 80 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "hq_n0": {
+        "zoneId": "hq",
+        "borders": "plains",
+        "from": { "x": 36, "y": 68 },
+        "to": { "x": 84, "y": 68 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "hq_s0": {
+        "zoneId": "hq",
+        "borders": null,
+        "from": { "x": 36, "y": 80 },
+        "to": { "x": 55, "y": 80 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "hq_gate": {
+        "zoneId": "hq",
+        "borders": null,
+        "from": { "x": 55, "y": 80 },
+        "to": { "x": 59, "y": 80 },
+        "status": "intact",
+        "daysLeft": 0
+      },
+      "hq_s1": {
+        "zoneId": "hq",
+        "borders": null,
+        "from": { "x": 59, "y": 80 },
+        "to": { "x": 84, "y": 80 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "east_border_n0": {
+        "zoneId": "east_border",
+        "borders": "woodland",
+        "from": { "x": 84, "y": 32 },
+        "to": { "x": 120, "y": 32 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "east_border_s0": {
+        "zoneId": "east_border",
+        "borders": null,
+        "from": { "x": 84, "y": 80 },
+        "to": { "x": 120, "y": 80 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "east_border_w0": {
+        "zoneId": "east_border",
+        "borders": "plains",
+        "from": { "x": 84, "y": 32 },
+        "to": { "x": 84, "y": 68 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "east_border_w1": {
+        "zoneId": "east_border",
+        "borders": "hq",
+        "from": { "x": 84, "y": 68 },
+        "to": { "x": 84, "y": 80 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "east_border_e0": {
+        "zoneId": "east_border",
+        "borders": null,
+        "from": { "x": 120, "y": 32 },
+        "to": { "x": 120, "y": 80 },
+        "status": "broken",
+        "daysLeft": 0
+      }
+    },
+    "story": {
+      "goalsDone": ["g4_tower"],
+      "goalStreaks": {},
+      "firedEvents": [
+        "s4_outcrop",
+        "s4_bring_back",
+        "s4_hint_tower",
+        "s4_first_visitors",
+        "s4_victor",
+        "s4_kito"
+      ],
+      "pendingDialogues": [],
+      "completionQueued": false
+    },
+    "relationships": { "tendai": 1, "victor": 10, "kito": -15 },
+    "journal": [
+      { "entryId": "chapter_1_start", "day": 0, "chapter": 1 },
+      { "entryId": "chapter_4_start", "day": 0, "chapter": 4 },
+      { "entryId": "ch1_arrival", "day": 0, "chapter": 4 },
+      { "entryId": "ch4_visitors", "day": 0, "chapter": 4 },
+      { "entryId": "ch4_leopard_tracks", "day": 0, "chapter": 4 },
+      { "entryId": "ch4_bring_back", "day": 4, "chapter": 4 },
+      { "entryId": "ch4_first_visitors", "day": 6, "chapter": 4 },
+      { "entryId": "ch4_victor", "day": 6, "chapter": 4 },
+      { "entryId": "ch4_kito", "day": 10, "chapter": 4 }
+    ],
+    "meta": { "playTimeSeconds": 1800 },
+    "encyclopedia": [],
+    "scores": { "ecosystem": 65.37911709135545, "trust": 51, "reputation": 36.03099224482791 },
+    "scoreHistory": [
+      { "score": "trust", "day": 5, "delta": 1, "reason": "score.reason.hired" },
+      { "score": "trust", "day": 6, "delta": -2, "reason": "score.reason.story" },
+      { "score": "trust", "day": 10, "delta": 2, "reason": "score.reason.story" }
+    ],
+    "herdPlans": {
+      "plains:impala": {
+        "zoneId": "plains",
+        "speciesId": "impala",
+        "method": "contraception",
+        "target": 0
+      }
+    },
+    "counters": { "visitors": 66 },
+    "tourism": {
+      "visitorsHistory": [5, 5, 6, 6, 6, 6, 8, 8, 8, 8],
+      "lastVisitors": 8,
+      "lastRevenue": 84
+    }
+  }
+}

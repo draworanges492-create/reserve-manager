@@ -100,6 +100,8 @@ export class DialogueScene extends Phaser.Scene {
   }
 
   private setOpen(open: boolean): void {
+    // For automated browser checks (tools/browser-check.ts).
+    document.documentElement.dataset.dialogue = open ? 'open' : 'closed';
     for (const o of [
       this.blocker,
       this.box,

@@ -1,5 +1,6 @@
 import '@fontsource/inter/latin-400.css';
 import { installFocus } from './ui/focus';
+import { installCrashScreen } from './ui/crashScreen';
 import '@fontsource/inter/latin-600.css';
 import '@fontsource/inter/latin-700.css';
 import Phaser from 'phaser';
@@ -67,6 +68,9 @@ window.addEventListener('resize', () => {
   game.scale.setZoom(1 / (window.devicePixelRatio || 1));
   game.scale.refresh();
 });
+
+// If something breaks, freeze the game (so nothing broken is autosaved) and say so (D142).
+installCrashScreen(() => game.loop.sleep());
 
 // Keyboard: Tab between controls, Enter to press (D139).
 installFocus(game);

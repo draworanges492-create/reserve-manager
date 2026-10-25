@@ -39,6 +39,8 @@ export class MenuScene extends Phaser.Scene {
   }
 
   create(): void {
+    // Which screen is up, for automated browser checks (tools/browser-check.ts).
+    document.documentElement.dataset.screen = 'menu';
     fitUiCamera(this);
     this.view = 'main';
     // The title screen gets the quiet Chapter 1 loop, without the outdoor ambience.

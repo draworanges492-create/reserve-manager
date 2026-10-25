@@ -381,8 +381,14 @@ export class UIScene extends Phaser.Scene {
     const raw = this.input.keyboard;
     // While someone is talking, Space / 1–3 / Esc belong to the dialogue box.
     const talking = (): boolean => this.session.dialogueView !== null;
+    // Panels shouldn't open behind the journal book (J still closes it).
+    const behindBook = new Set(['keydown-B', 'keydown-H', 'keydown-K', 'keydown-O']);
     const kb = raw && {
-      on: (event: string, fn: () => void) => raw.on(event, () => !talking() && fn()),
+      on: (event: string, fn: () => void) =>
+        raw.on(event, () => {
+          if (talking() || (behindBook.has(event) && this.journal().isOpen)) return;
+          fn();
+        }),
     };
     kb?.on('keydown-SPACE', () => this.session.dispatch({ type: 'togglePause' }));
     (['ONE', 'TWO', 'THREE'] as const).forEach((key, i) =>

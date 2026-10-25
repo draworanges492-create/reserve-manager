@@ -1,0 +1,407 @@
+{
+  "format": "reserve-manager-save",
+  "version": 4,
+  "summary": {
+    "playerName": "Old Save",
+    "chapter": 2,
+    "day": 19,
+    "money": 350,
+    "playTimeSeconds": 3000,
+    "savedAt": "2026-01-01T00:00:00.000Z"
+  },
+  "state": {
+    "version": 4,
+    "seed": 42,
+    "rngState": 105153536,
+    "playerName": "Old Save",
+    "clock": { "day": 19, "dayProgress": 0, "speed": 1, "paused": false },
+    "chapter": { "current": 2 },
+    "zones": {
+      "hq": {
+        "unlocked": true,
+        "rect": { "x": 36, "y": 68, "w": 48, "h": 12 },
+        "area": 576,
+        "vegetation": 46.482902192286225
+      },
+      "plains": {
+        "unlocked": true,
+        "rect": { "x": 36, "y": 32, "w": 48, "h": 36 },
+        "area": 1728,
+        "vegetation": 49.709706062479874
+      },
+      "river": {
+        "unlocked": false,
+        "rect": { "x": 0, "y": 32, "w": 36, "h": 48 },
+        "area": 1728,
+        "vegetation": 82.16096739742875
+      },
+      "woodland": {
+        "unlocked": false,
+        "rect": { "x": 76, "y": 0, "w": 44, "h": 32 },
+        "area": 1408,
+        "vegetation": 77.70120924678594
+      },
+      "east_border": {
+        "unlocked": false,
+        "rect": { "x": 84, "y": 32, "w": 36, "h": 48 },
+        "area": 1728,
+        "vegetation": 64.32193479485747
+      },
+      "outcrop": {
+        "unlocked": false,
+        "rect": { "x": 48, "y": 0, "w": 28, "h": 32 },
+        "area": 896,
+        "vegetation": 50.94266034292903
+      },
+      "north": {
+        "unlocked": false,
+        "rect": { "x": 0, "y": 0, "w": 48, "h": 32 },
+        "area": 1536,
+        "vegetation": 73.24145109614312
+      }
+    },
+    "waterholes": {
+      "waterhole_a": {
+        "zoneId": "plains",
+        "x": 53.5,
+        "y": 45.5,
+        "level": 61,
+        "type": "pumped",
+        "pumpState": "working",
+        "pumpKind": "borehole"
+      },
+      "waterhole_b": {
+        "zoneId": "river",
+        "x": 27.5,
+        "y": 46.5,
+        "level": 0,
+        "type": "natural",
+        "pumpState": "none",
+        "pumpKind": null
+      }
+    },
+    "populations": {
+      "plains": { "impala": 84, "zebra": 26, "lion": 4, "elephant": 6, "hyena": 6, "vulture": 7 }
+    },
+    "populationLog": {
+      "plains": {
+        "impala": {
+          "births": 0,
+          "starved": 0,
+          "eatenBy": { "lion": 0, "hyena": 1 },
+          "capacity": 103.07804649115826
+        },
+        "zebra": {
+          "births": 0,
+          "starved": 0,
+          "eatenBy": { "lion": 0, "hyena": 0 },
+          "capacity": 42.949186037982614
+        },
+        "lion": { "births": 0, "starved": 0, "eatenBy": {}, "capacity": 4.4399999999999995 },
+        "elephant": { "births": 0, "starved": 0, "eatenBy": {}, "capacity": 10.307804649115827 },
+        "hyena": { "births": 0, "starved": 0, "eatenBy": {}, "capacity": 8.879999999999999 },
+        "vulture": { "births": 0, "starved": 0, "eatenBy": {}, "capacity": 7.483229813664597 }
+      }
+    },
+    "slots": {
+      "pump_a": {
+        "slotType": "pump",
+        "zoneId": "plains",
+        "rect": { "x": 57, "y": 42, "w": 2, "h": 2 },
+        "waterholeId": "waterhole_a",
+        "building": { "buildingId": "borehole_pump", "daysLeft": 0 }
+      },
+      "pump_b": {
+        "slotType": "pump",
+        "zoneId": "river",
+        "rect": { "x": 30, "y": 43, "w": 2, "h": 2 },
+        "waterholeId": "waterhole_b",
+        "building": null
+      },
+      "tower_plains": {
+        "slotType": "tower",
+        "zoneId": "plains",
+        "rect": { "x": 44, "y": 36, "w": 2, "h": 2 },
+        "building": null
+      },
+      "tower_outcrop": {
+        "slotType": "tower",
+        "zoneId": "outcrop",
+        "rect": { "x": 54, "y": 10, "w": 2, "h": 2 },
+        "building": null
+      },
+      "post_hq": {
+        "slotType": "post",
+        "zoneId": "hq",
+        "rect": { "x": 60, "y": 70, "w": 2, "h": 2 },
+        "building": null
+      },
+      "post_woodland": {
+        "slotType": "post",
+        "zoneId": "woodland",
+        "rect": { "x": 86, "y": 14, "w": 2, "h": 2 },
+        "building": null
+      },
+      "post_east": {
+        "slotType": "post",
+        "zoneId": "east_border",
+        "rect": { "x": 104, "y": 48, "w": 2, "h": 2 },
+        "building": null
+      },
+      "lodge_hq": {
+        "slotType": "lodge",
+        "zoneId": "hq",
+        "rect": { "x": 42, "y": 72, "w": 3, "h": 3 },
+        "building": null
+      }
+    },
+    "staff": [{ "id": "staff_1", "role": "ranger", "zoneId": null, "morale": 70, "unpaidDays": 0 }],
+    "nextStaffNumber": 2,
+    "resources": { "money": 350.6666666666664 },
+    "economy": {
+      "lastDay": {
+        "grant": 40,
+        "wages": 30,
+        "wagesUnpaid": 0,
+        "upkeep": 0.6666666666666666,
+        "net": 9.333333333333314
+      },
+      "netHistory": [
+        40, 40, 40, 10, 10, 9.333333333333314, 9.333333333333314, 9.333333333333314,
+        9.333333333333314, 9.333333333333314, 9.333333333333314, 9.333333333333314,
+        9.333333333333314, 9.333333333333314, 9.333333333333314, 9.333333333333314,
+        9.333333333333314, 9.333333333333314, 9.333333333333314
+      ],
+      "inDebt": false
+    },
+    "flags": { "ch1_water_first": true, "ch1_first_drink": true, "chapter_1_complete": true },
+    "fences": {
+      "north_n0": {
+        "zoneId": "north",
+        "borders": null,
+        "from": { "x": 0, "y": 0 },
+        "to": { "x": 48, "y": 0 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "north_s0": {
+        "zoneId": "north",
+        "borders": "river",
+        "from": { "x": 0, "y": 32 },
+        "to": { "x": 36, "y": 32 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "north_s1": {
+        "zoneId": "north",
+        "borders": "plains",
+        "from": { "x": 36, "y": 32 },
+        "to": { "x": 48, "y": 32 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "north_w0": {
+        "zoneId": "north",
+        "borders": null,
+        "from": { "x": 0, "y": 0 },
+        "to": { "x": 0, "y": 32 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "north_e0": {
+        "zoneId": "north",
+        "borders": "outcrop",
+        "from": { "x": 48, "y": 0 },
+        "to": { "x": 48, "y": 32 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "outcrop_n0": {
+        "zoneId": "outcrop",
+        "borders": null,
+        "from": { "x": 48, "y": 0 },
+        "to": { "x": 76, "y": 0 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "outcrop_s0": {
+        "zoneId": "outcrop",
+        "borders": "plains",
+        "from": { "x": 48, "y": 32 },
+        "to": { "x": 76, "y": 32 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "outcrop_e0": {
+        "zoneId": "outcrop",
+        "borders": "woodland",
+        "from": { "x": 76, "y": 0 },
+        "to": { "x": 76, "y": 32 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "woodland_n0": {
+        "zoneId": "woodland",
+        "borders": null,
+        "from": { "x": 76, "y": 0 },
+        "to": { "x": 120, "y": 0 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "woodland_s0": {
+        "zoneId": "woodland",
+        "borders": "plains",
+        "from": { "x": 76, "y": 32 },
+        "to": { "x": 84, "y": 32 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "woodland_e0": {
+        "zoneId": "woodland",
+        "borders": null,
+        "from": { "x": 120, "y": 0 },
+        "to": { "x": 120, "y": 32 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "river_s0": {
+        "zoneId": "river",
+        "borders": null,
+        "from": { "x": 0, "y": 80 },
+        "to": { "x": 36, "y": 80 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "river_w0": {
+        "zoneId": "river",
+        "borders": null,
+        "from": { "x": 0, "y": 32 },
+        "to": { "x": 0, "y": 80 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "river_e0": {
+        "zoneId": "river",
+        "borders": "plains",
+        "from": { "x": 36, "y": 32 },
+        "to": { "x": 36, "y": 68 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "river_e1": {
+        "zoneId": "river",
+        "borders": "hq",
+        "from": { "x": 36, "y": 68 },
+        "to": { "x": 36, "y": 80 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "hq_n0": {
+        "zoneId": "hq",
+        "borders": "plains",
+        "from": { "x": 36, "y": 68 },
+        "to": { "x": 84, "y": 68 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "hq_s0": {
+        "zoneId": "hq",
+        "borders": null,
+        "from": { "x": 36, "y": 80 },
+        "to": { "x": 55, "y": 80 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "hq_gate": {
+        "zoneId": "hq",
+        "borders": null,
+        "from": { "x": 55, "y": 80 },
+        "to": { "x": 59, "y": 80 },
+        "status": "intact",
+        "daysLeft": 0
+      },
+      "hq_s1": {
+        "zoneId": "hq",
+        "borders": null,
+        "from": { "x": 59, "y": 80 },
+        "to": { "x": 84, "y": 80 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "east_border_n0": {
+        "zoneId": "east_border",
+        "borders": "woodland",
+        "from": { "x": 84, "y": 32 },
+        "to": { "x": 120, "y": 32 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "east_border_s0": {
+        "zoneId": "east_border",
+        "borders": null,
+        "from": { "x": 84, "y": 80 },
+        "to": { "x": 120, "y": 80 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "east_border_w0": {
+        "zoneId": "east_border",
+        "borders": "plains",
+        "from": { "x": 84, "y": 32 },
+        "to": { "x": 84, "y": 68 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "east_border_w1": {
+        "zoneId": "east_border",
+        "borders": "hq",
+        "from": { "x": 84, "y": 68 },
+        "to": { "x": 84, "y": 80 },
+        "status": "broken",
+        "daysLeft": 0
+      },
+      "east_border_e0": {
+        "zoneId": "east_border",
+        "borders": null,
+        "from": { "x": 120, "y": 32 },
+        "to": { "x": 120, "y": 80 },
+        "status": "broken",
+        "daysLeft": 0
+      }
+    },
+    "story": {
+      "goalsDone": ["g_gate", "g_drink", "g_water", "g_ranger", "g_pump", "g_money"],
+      "goalStreaks": { "g_money": 5 },
+      "firedEvents": [
+        "s_gate_tutorial",
+        "s_gate_done",
+        "s_first_drink",
+        "s_seasons",
+        "s_tendai_story",
+        "s_lions",
+        "s_first_ranger",
+        "s_pump_running",
+        "s_hint_clues"
+      ],
+      "pendingDialogues": [],
+      "completionQueued": false
+    },
+    "relationships": { "tendai": 15 },
+    "journal": [
+      { "entryId": "chapter_1_start", "day": 0, "chapter": 1 },
+      { "entryId": "ch1_arrival", "day": 0, "chapter": 1 },
+      { "entryId": "gate_mended", "day": 1, "chapter": 1 },
+      { "entryId": "first_drink", "day": 1, "chapter": 1 },
+      { "entryId": "tendai_story", "day": 2, "chapter": 1 },
+      { "entryId": "chapter_1_end", "day": 3, "chapter": 1 },
+      { "entryId": "chapter_2_start", "day": 3, "chapter": 2 },
+      { "entryId": "ch2_tasks", "day": 3, "chapter": 2 },
+      { "entryId": "first_ranger", "day": 3, "chapter": 2 },
+      { "entryId": "pump_running", "day": 6, "chapter": 2 }
+    ],
+    "meta": { "playTimeSeconds": 3000 },
+    "encyclopedia": [],
+    "scores": { "ecosystem": 69.23852165095322, "trust": 51, "reputation": 44.186888594414704 },
+    "scoreHistory": [{ "score": "trust", "day": 3, "delta": 1, "reason": "score.reason.hired" }]
+  }
+}

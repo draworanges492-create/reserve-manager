@@ -481,4 +481,16 @@ game, dialogue choices, HUD, Build → Place → spot, journal tabs and map link
 keyboard; large text and colour-blind mode; 0 console errors. Test saves removed and
 settings restored.
 
-Next: Phase 14e stability (browsers, old saves, crash screen, load time).
+## Phase 14e — Stability ✅ (2026-10-25)
+
+**Done**
+
+- Crash screen that protects the autosave (D142).
+- Phaser in its own cached file; production build checked; albino flicker fixed (D143).
+- Real saves from every older version as test fixtures (D144).
+- Cross-browser check in Chrome, Firefox and Safari's engine at three sizes (D145).
+
+**Checks:** `build` ✅ · `test` ✅ · `lint` ✅ · `validate-data` ✅ · `browser-check` ✅ (9 of 9,
+title screen in 0.25–0.7 s) · crash screen tested in the release build.
+
+Next: Phase 14f release package (v1.0.0, store assets, itch.io zip, GitHub Pages).

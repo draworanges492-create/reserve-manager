@@ -3,3 +3,6 @@ dist
 *.tsbuildinfo
 .DS_Store
 release
+
+# Screenshots from npm run browser-check
+browser-check/

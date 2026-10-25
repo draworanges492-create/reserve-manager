@@ -346,5 +346,8 @@
   "secrets.tea": "Tendai is brewing something terrible.",
   "secrets.nameAlert": "Hello, {name}.",
   "settings.reduceMotion": "Reduce motion",
-  "settings.reduceMotionDetail": "The camera jumps instead of gliding, and alerts and markers stay still."
+  "settings.reduceMotionDetail": "The camera jumps instead of gliding, and alerts and markers stay still.",
+  "crash.title": "Something went wrong",
+  "crash.body": "The game hit a problem it couldn't recover from. Your last autosave (from the end of the last full day) is safe. Reload to carry on from there.",
+  "crash.reload": "Reload"
 }
