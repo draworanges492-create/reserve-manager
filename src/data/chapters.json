@@ -441,7 +441,7 @@
       ],
       "unlocks": {
         "zones": ["woodland", "east_border"],
-        "buildings": ["beehive_fence"],
+        "buildings": ["beehive_fence", "solar_pump"],
         "staff": ["tracker", "vet", "culling_team"]
       },
       "scriptedEvents": [
@@ -659,7 +659,7 @@
       ],
       "unlocks": {
         "zones": ["outcrop"],
-        "buildings": ["observation_tower", "lodge", "solar_pump"],
+        "buildings": ["observation_tower", "lodge"],
         "staff": []
       },
       "scriptedEvents": [

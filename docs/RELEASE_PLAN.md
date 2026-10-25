@@ -16,8 +16,8 @@ step ends with the usual checks and a commit.
   herd declines, and money across all six chapters. Targets: no chapter makes you wait with
   nothing to do; money is tight in Chapters 1–3 and comfortable from Chapter 5.
 - Close the open questions with these defaults (decision 6 below):
-  - **D39 / D60:** the solar pump unlocks in Chapter 3. A borehole pump takes 3 days to
-    build, a solar pump 4 days. The tracker unlocks in Chapter 3.
+  - **D39 / D60:** the solar pump unlocks in Chapter 3; both pumps take 3 days to build.
+    The tracker already unlocks in Chapter 3.
   - **D107:** already answered by the poaching phase (D122): with too few vultures,
     carcasses spread disease. I'll close it.
 - Remove "TODO: verify" and "(unverified)" from the game once the facts are settled
@@ -62,18 +62,13 @@ step ends with the usual checks and a commit.
 - **Publishing:** see decision 3. Nothing goes public without your go-ahead.
 - README with real screenshots in place of the placeholder.
 
-## Decisions for you
+## Decisions (answered 2026-10-25)
 
-1. **Animal facts** (17, all marked unverified): **(a)** I look each one up, rewrite it with
-   a source link, and you approve the list; **(b)** you check them yourself; **(c)** v1 ships
-   without facts (field notes keep counts, diet and your sightings).
-2. **Art:** the spec planned for you to draw the final art. Is the current art final for
-   v1.0, or should I prepare the art guide so you can replace sprites after release?
-3. **Where to publish:** **(a)** itch.io and GitHub Pages (needs a GitHub repository; I'd
-   set it up with you); **(b)** itch.io only (I build the zip, you upload it); **(c)** just a
-   zip for now.
-4. **Firefox and Safari:** **(a)** I install Playwright's test browsers (about 300 MB) and
-   run automated checks in both; **(b)** you try them yourself with a short checklist from me.
-5. **Story text:** keep the current dialogue for v1.0, or do you want to rewrite parts
-   first (D83)?
-6. **Pump timings:** OK with the defaults above?
+1. **Animal facts:** not needed for v1.0. The facts stay in the data, but the game hides any
+   fact that isn't verified, so nothing unchecked reaches players.
+2. **Art:** the current art is final for v1.0. More detail comes in a later update; the art
+   guide gets a list of sprites worth improving.
+3. **Publishing:** itch.io, and the game as its own website (hosting to be settled).
+4. **Firefox and Safari:** to be settled (explained to you in chat).
+5. **Story text:** stays as it is.
+6. **Pumps:** both take 3 days to build; the solar pump unlocks in Chapter 3 (D134).

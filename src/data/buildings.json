@@ -21,8 +21,8 @@
       "name": "Solar pump",
       "slotType": "pump",
       "cost": 600,
-      "buildDays": 2,
-      "unlockChapter": 4,
+      "buildDays": 3,
+      "unlockChapter": 3,
       "upgradeOf": "borehole_pump",
       "description": "Pumps more, needs no fuel.",
       "effects": [
