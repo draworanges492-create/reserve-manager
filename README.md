@@ -4,6 +4,8 @@ A cosy pixel-art wildlife reserve game. You arrive at a neglected reserve and br
 to life: mend fences, restore water, keep the grass healthy and the animals thriving, and
 uncover what happened to the reserve along the way.
 
+**[Play it in your browser](https://draworanges492-create.github.io/reserve-manager/)**
+
 Runs in the browser. Free, no accounts, no network calls while playing; saves stay on your device.
 
 ![The reserve in Chapter 5: zebras, giraffes and hyenas on the plains](docs/store/screenshot-3-herds.png)

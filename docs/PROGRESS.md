@@ -501,5 +501,8 @@ title screen in 0.25–0.7 s) · crash screen tested in the release build.
 - Store cover, screenshots, GIF and draft page text (D147).
 - itch.io zip, tested from a sub-folder (D148).
 
-**Waiting for you:** GitHub Pages needs a GitHub repository (your go-ahead to create and
-push it), then the itch.io upload, which you do from your itch.io account.
+- Live on GitHub Pages: https://draworanges492-create.github.io/reserve-manager/ (D149),
+  checked in Chrome, Firefox and Safari's engine.
+
+**Waiting for you:** the itch.io upload, from your itch.io account (zip, cover, screenshots
+and page text are ready in `release/` and `docs/store/`).
