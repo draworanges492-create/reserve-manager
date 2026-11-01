@@ -1,6 +1,6 @@
 # Roadmap after 1.0: making the reserve come alive
 
-Draft for your approval, 2026-11-01. Version 1.0 is finished and live: the full story,
+Approved 2026-11-01 ("sounds good"), with the decisions recorded at the end. Version 1.0 is finished and live: the full story,
 three endings, the journal, secrets, accessibility, saves and the release pipeline. What it
 lacks is **life on screen**. The simulation is rich, but most of it happens as numbers:
 lions "hunt" in a formula, calves are a counter, rain is a tint. This plan turns those
@@ -167,3 +167,12 @@ Give the player choices and surprises outside the main story.
 4. **Feedback.** How should players reach you: itch.io comments only, an email address, or a
    simple form (e.g. Google Forms) linked from the game?
 5. **A second reserve (Phase 22).** A wetland delta, a mountain reserve, or something else?
+
+## Decisions (answered 2026-11-01)
+
+1. **Order:** as above.
+2. **Art:** I draw first versions of everything; you replace whichever sprites you care about
+   most (the art guide lists sizes and frames for each).
+3. **Sound:** free CC0 recordings are fine, each listed with its licence in `ASSETS.md`.
+4. **Feedback:** itch.io comments; the game links to the itch.io page.
+5. **Second reserve:** decided when we reach Phase 22.
