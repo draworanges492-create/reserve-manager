@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.1 — 2026-11-01
+
+- **Tips from Tendai:** short pointers the first time you open a menu or get an alert, and a
+  nudge toward your next goal if you haven't clicked for a while in the first two chapters
+  (with "Show me" for places). Each shows once; switch them off or bring them back in
+  Settings.
+- A feedback link on the title screen and in Settings, once the itch.io page is up.
+
 ## 1.0.0 — 2026-10-25
 
 The first full release.

@@ -17,6 +17,8 @@ export interface Settings {
   edgeScroll: boolean;
   /** No camera glides, sliding alerts or bobbing markers (D138). */
   reduceMotion: boolean;
+  /** Tendai's first-hour tips (D150). */
+  tips: boolean;
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -28,6 +30,7 @@ export const DEFAULT_SETTINGS: Settings = {
   timeOfDay: true,
   edgeScroll: true,
   reduceMotion: false,
+  tips: true,
 };
 
 /** Follows the system "reduce motion" preference until the player picks for themselves. */
@@ -62,6 +65,7 @@ export function sanitizeSettings(raw: unknown): Settings {
     timeOfDay: bool(r.timeOfDay, d.timeOfDay),
     edgeScroll: bool(r.edgeScroll, d.edgeScroll),
     reduceMotion: bool(r.reduceMotion, systemPrefersReducedMotion()),
+    tips: bool(r.tips, d.tips),
   };
 }
 

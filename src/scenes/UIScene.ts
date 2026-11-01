@@ -34,6 +34,8 @@ import { waterholeTooltip } from '../ui/waterholeTooltip';
 import { bindGameAudio, updateGameAudio } from '../audio/hooks';
 import { audio } from '../audio/AudioManager';
 import { findSecret, onSecretFound, SECRET_IDS } from '../core/Secrets';
+import { TipCard } from '../ui/TipCard';
+import { goalTip, IDLE_SECONDS, markSeen, type Tip, tipFor } from '../ui/tips';
 import { placingText } from './BuildingLayer';
 import { returnToMenu, saveTo } from './launch';
 import { listSlots, type LoadResult, localSaveStore, type SlotId } from '../core/Save';
@@ -102,6 +104,11 @@ export class UIScene extends Phaser.Scene {
     secret: null,
   };
   private goalTracker!: GoalTracker;
+  private tipCard!: TipCard;
+  /** Real time of the last click or key press, for "seems stuck" tips. */
+  private lastActivity = 0;
+  private hadAlerts = false;
+  private tipQueue: Tip[] = [];
   /** Species whose encyclopedia page is open in the Species panel. */
   private selection: Selection | null = null;
   private menu: Menu | null = null;
@@ -153,6 +160,24 @@ export class UIScene extends Phaser.Scene {
     );
     this.goalTracker = new GoalTracker(this, MARGIN, TOP_BAR_HEIGHT + MARGIN);
     this.tooltip = new Tooltip(this);
+    this.tipCard = new TipCard(
+      this,
+      () => undefined,
+      (tip) => tip.focus && eventBus.emit('focusRequested', tip.focus),
+    );
+    this.lastActivity = performance.now();
+    this.hadAlerts = false;
+    this.tipQueue = [];
+    const active = (): void => {
+      this.lastActivity = performance.now();
+    };
+    for (const type of ['pointerdown', 'keydown', 'wheel'] as const)
+      window.addEventListener(type, active, { capture: true, passive: true });
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+      for (const type of ['pointerdown', 'keydown', 'wheel'] as const)
+        window.removeEventListener(type, active, { capture: true });
+      this.tipCard.hide();
+    });
 
     const zoneLabel = crispText(this, 0, TOP_BAR_HEIGHT + MARGIN, '', {
       fontSize: TEXT_SIZE.label,
@@ -208,6 +233,11 @@ export class UIScene extends Phaser.Scene {
           },
         });
       }),
+      // Tendai's first-hour tips (D150).
+      eventBus.on('dialogueEnded', ({ dialogueId }) => {
+        if (dialogueId === 'ch01_arrival') this.showTip('controls');
+      }),
+      eventBus.on('debtChanged', ({ inDebt }) => inDebt && this.showTip('debt')),
       eventBus.on('journalAdded', ({ entryId }) => {
         if (entryId !== 'visitor_1000') return;
         audio.sfx('coin');
@@ -284,6 +314,7 @@ export class UIScene extends Phaser.Scene {
     return (
       this.topBar.contains(x, y) ||
       this.goalTracker.contains(x, y) ||
+      this.tipCard.contains(x, y) ||
       this.infoPanel.contains(x, y) ||
       this.sidePanel.contains(x, y) ||
       this.alertFeed.contains(x, y) ||
@@ -307,6 +338,13 @@ export class UIScene extends Phaser.Scene {
     else if (this.sidePanel.visible) this.sidePanel.hide();
 
     this.alerts.expire(state.clock.day);
+    if (!this.hadAlerts && this.alerts.all.length > 0) {
+      this.hadAlerts = true;
+      this.showTip('alerts');
+    }
+    this.maybeGoalTip(state);
+    this.nextTip();
+    this.tipCard.moveAbove(this.tipBottom());
     this.alertFeed.render(this.alerts.all, top, !this.menu);
 
     const menus: Menu[] = ['build', 'staff', 'species', 'journal', 'settings'];
@@ -315,6 +353,47 @@ export class UIScene extends Phaser.Scene {
     );
     this.banner.setVisible(!!this.placing);
     if (this.placing) this.banner.setText(placingText(this.placing));
+  }
+
+  /**
+   * Queue a tip (if tips are on and it hasn't been seen in this browser). `now` is for tips
+   * about what the player just opened: they show at once, and an interrupted tip comes back.
+   */
+  private showTip(id: string, now = false): void {
+    const tip = tipFor(id);
+    if (!tip || this.tipQueue.some((q) => q.id === id) || this.tipCard.current?.id === id) return;
+    if (!now) {
+      this.tipQueue.push(tip);
+      return;
+    }
+    const interrupted = this.tipCard.current;
+    this.tipCard.hide();
+    if (interrupted) this.tipQueue.unshift(interrupted);
+    this.tipQueue.unshift(tip);
+    this.nextTip();
+  }
+
+  /** Tips sit in the bottom-left corner, above the info panel when one is open. */
+  private tipBottom(): number {
+    return (this.infoPanel.top ?? viewHeight(this)) - MARGIN;
+  }
+
+  /** One tip at a time, and never while someone is talking or the journal is open. */
+  private nextTip(): void {
+    if (this.tipCard.current || this.session.dialogueView || this.journal().isOpen) return;
+    const tip = this.tipQueue.shift();
+    if (!tip) return;
+    markSeen(tip.id);
+    this.tipCard.show(tip, MARGIN, this.tipBottom());
+  }
+
+  /** Someone who hasn't clicked for a while gets a nudge toward their next goal. */
+  private maybeGoalTip(state: GameSession['state']): void {
+    if (performance.now() - this.lastActivity < IDLE_SECONDS * 1000) return;
+    this.lastActivity = performance.now();
+    if (this.session.dialogueView || this.journal().isOpen || this.tipCard.current) return;
+    const tip = goalTip(state);
+    if (tip) this.showTip(tip.id);
   }
 
   private createToolbar(): void {
@@ -442,6 +521,7 @@ export class UIScene extends Phaser.Scene {
       return;
     }
     this.menu = this.menu === menu ? null : menu;
+    if (this.menu) this.showTip(`menu_${this.menu}`, true);
     this.saveUi = { confirming: null, lastSaved: null, failed: null };
     if (this.menu === 'settings') this.refreshSlots();
   }

@@ -68,6 +68,11 @@ export class InfoPanel {
       .setVisible(false);
   }
 
+  /** Top edge on screen, or null when hidden. */
+  get top(): number | null {
+    return this.root.visible ? this.root.y : null;
+  }
+
   get visible(): boolean {
     return this.root.visible;
   }

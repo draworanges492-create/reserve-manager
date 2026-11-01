@@ -349,5 +349,17 @@
   "settings.reduceMotionDetail": "The camera jumps instead of gliding, and alerts and markers stay still.",
   "crash.title": "Something went wrong",
   "crash.body": "The game hit a problem it couldn't recover from. Your last autosave (from the end of the last full day) is safe. Reload to carry on from there.",
-  "crash.reload": "Reload"
+  "crash.reload": "Reload",
+  "tip.from": "Tendai",
+  "tip.gotIt": "Got it",
+  "tip.showMe": "Show me",
+  "settings.tips": "Tips from Tendai",
+  "settings.tipsDetail": "Short pointers the first time you see something.",
+  "settings.tipsAgain": "Show tips again",
+  "settings.tipsReset": "Reset",
+  "settings.tipsWereReset": "Tips will show again.",
+  "settings.feedback": "Tell us what you think",
+  "settings.feedbackDetail": "Opens the game's itch.io page, where you can leave a comment.",
+  "settings.feedbackOpen": "Open",
+  "menu.feedback": "Feedback"
 }

@@ -506,3 +506,18 @@ title screen in 0.25–0.7 s) · crash screen tested in the release build.
 
 **Waiting for you:** the itch.io upload, from your itch.io account (zip, cover, screenshots
 and page text are ready in `release/` and `docs/store/`).
+
+## Phase 15 — Listen first (in progress, 2026-11-01)
+
+**Done**
+
+- Tips from Tendai (D150) and the feedback link, waiting for the itch.io address (D151).
+- Playtest guide with questions for testers: `docs/PLAYTEST.md`.
+- v1.0.1.
+
+**Checks:** `build` ✅ · `test` ✅ (249) · `lint` ✅ · `validate-data` ✅ · `browser-check` ✅
+(9 of 9) · tips checked in a real browser: controls, alerts, Build, idle goal tip and
+"Show me".
+
+**Waiting for you:** the itch.io upload (then its address for the feedback link), and
+sending `docs/PLAYTEST.md` to 3–5 testers. Their answers become the 1.0.x fixes.

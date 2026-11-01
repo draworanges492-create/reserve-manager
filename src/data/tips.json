@@ -1,0 +1,79 @@
+{
+  "tips": [
+    {
+      "id": "controls",
+      "text": "Drag the map or use WASD to look around, and scroll to zoom. Your goals are in the list at the top left."
+    },
+    {
+      "id": "alerts",
+      "text": "News turns up on the right. Click it to jump to where it happened, or × to put it away."
+    },
+    {
+      "id": "menu_build",
+      "text": "Pick a building, then click a highlighted spot on the map to place it. Building takes a few days."
+    },
+    {
+      "id": "menu_staff",
+      "text": "Hire people here, then send each one to a zone. Wages come out every day."
+    },
+    {
+      "id": "menu_species",
+      "text": "Every animal in the reserve. Show finds them on the map; Read opens my notes on them."
+    },
+    {
+      "id": "menu_settings",
+      "text": "Sound, text size, colour-blind mode and your saves are all in here."
+    },
+    {
+      "id": "debt",
+      "text": "We're spending more than we have. Staff who aren't paid for three days leave. Cut costs or wait for money to come in."
+    },
+    {
+      "id": "goal_g_gate",
+      "goal": "g_gate",
+      "text": "The gate first. Click the broken fence across the road by the gate to mend it.",
+      "focus": {
+        "x": 57,
+        "y": 77
+      }
+    },
+    {
+      "id": "goal_g_water",
+      "goal": "g_water",
+      "text": "Click Waterhole A to pour in water. Hold the button down to keep pumping.",
+      "focus": {
+        "x": 53.5,
+        "y": 45.5
+      }
+    },
+    {
+      "id": "goal_g_drink",
+      "goal": "g_drink",
+      "text": "Keep the water up and give the animals a day or two. The 2× and 4× buttons at the top right speed time up."
+    },
+    {
+      "id": "goal_g_mystery",
+      "goal": "g_mystery",
+      "text": "Look for the little markers around the reserve and click them to see what happened to the old pump."
+    },
+    {
+      "id": "goal_g_pump",
+      "goal": "g_pump",
+      "text": "Open Build and put a borehole pump on the old pump site above Waterhole A.",
+      "focus": {
+        "x": 57,
+        "y": 42
+      }
+    },
+    {
+      "id": "goal_g_ranger",
+      "goal": "g_ranger",
+      "text": "Open Staff and hire a ranger. They'll keep an eye on the animals."
+    },
+    {
+      "id": "goal_g_money",
+      "goal": "g_money",
+      "text": "Earn more than you spend for five days. Hover the money at the top to see where it goes."
+    }
+  ]
+}

@@ -1,5 +1,7 @@
 // Content for the Species and Settings menus (pure, so it can be tested).
 import { SPECIES, zoneDef } from '../core/content';
+import { FEEDBACK_URL, openFeedback } from '../config/game';
+import { resetTips } from './tips';
 import type { GameState } from '../core/GameState';
 import { nextVolume, type Settings } from '../core/Settings';
 import { t } from '../core/text';
@@ -152,6 +154,26 @@ export function settingsMenu(
       row(t('settings.edgeScroll'), onOff(settings.edgeScroll), () =>
         update({ edgeScroll: !settings.edgeScroll }),
       ),
+      row(
+        t('settings.tips'),
+        onOff(settings.tips),
+        () => update({ tips: !settings.tips }),
+        t('settings.tipsDetail'),
+      ),
+      row(t('settings.tipsAgain'), t('settings.tipsReset'), () => {
+        resetTips();
+        update({ tips: true });
+      }),
+      ...(FEEDBACK_URL
+        ? [
+            row(
+              t('settings.feedback'),
+              t('settings.feedbackOpen'),
+              openFeedback,
+              t('settings.feedbackDetail'),
+            ),
+          ]
+        : []),
       row(
         t('settings.reduceMotion'),
         onOff(settings.reduceMotion),

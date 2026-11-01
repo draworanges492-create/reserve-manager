@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { findSecret } from '../core/Secrets';
-import { GAME_TITLE, GAME_VERSION, WORLD_ART } from '../config/game';
+import { FEEDBACK_URL, GAME_TITLE, GAME_VERSION, openFeedback, WORLD_ART } from '../config/game';
 import {
   deleteSlot,
   latestSlot,
@@ -203,6 +203,11 @@ export class MenuScene extends Phaser.Scene {
       this.message = '';
       this.render();
     });
+    // Feedback goes to the itch.io page (D151); hidden until that page exists.
+    if (FEEDBACK_URL) {
+      y += BUTTON_H + 8;
+      this.button(x, y, t('menu.feedback'), openFeedback);
+    }
   }
 
   private renderLoad(top: number): void {
