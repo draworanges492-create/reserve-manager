@@ -515,10 +515,10 @@ and page text are ready in `release/` and `docs/store/`).
 - Playtest guide with questions for testers: `docs/PLAYTEST.md`.
 - v1.0.1.
 - Renamed the game **Wild Again** (D152), v1.0.2; cover and title screenshot redone.
+- On itch.io at https://draworanges.itch.io/wild-again; feedback link set (D151), v1.0.3.
 
 **Checks:** `build` ✅ · `test` ✅ (249) · `lint` ✅ · `validate-data` ✅ · `browser-check` ✅
 (9 of 9) · tips checked in a real browser: controls, alerts, Build, idle goal tip and
 "Show me".
 
-**Waiting for you:** the itch.io upload (then its address for the feedback link), and
-sending `docs/PLAYTEST.md` to 3–5 testers. Their answers become the 1.0.x fixes.
+**Waiting for you:** sending `docs/PLAYTEST.md` to 3–5 testers. Their answers become the 1.0.x fixes.

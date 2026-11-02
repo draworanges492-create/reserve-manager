@@ -4,7 +4,7 @@ A cosy pixel-art wildlife reserve game. You arrive at a neglected reserve and br
 to life: mend fences, restore water, keep the grass healthy and the animals thriving, and
 uncover what happened to the reserve along the way.
 
-**[Play it in your browser](https://draworanges492-create.github.io/reserve-manager/)**
+**[Play it in your browser](https://draworanges492-create.github.io/reserve-manager/)** · also on [itch.io](https://draworanges.itch.io/wild-again)
 
 Runs in the browser. Free, no accounts, no network calls while playing; saves stay on your device.
 

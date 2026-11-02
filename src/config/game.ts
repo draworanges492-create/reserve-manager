@@ -57,7 +57,7 @@ export const GAME_VERSION: string = pkg.version;
  * Where players leave feedback (Phase 15, D151): the game's itch.io page. Empty until the
  * page exists; the feedback links stay hidden while it's empty.
  */
-export const FEEDBACK_URL = '';
+export const FEEDBACK_URL = 'https://draworanges.itch.io/wild-again';
 
 /** Opens the feedback page in a new tab (never replaces the game). */
 export function openFeedback(): void {

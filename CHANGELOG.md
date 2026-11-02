@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.3 — 2026-11-02
+
+- The feedback link is live: "Feedback" on the title screen and "Tell us what you think"
+  in Settings open the itch.io page (https://draworanges.itch.io/wild-again), where you can leave a comment.
+
 ## 1.0.2 — 2026-11-02
 
 - The game is now called **Wild Again** (it was Reserve Manager). Saves from earlier

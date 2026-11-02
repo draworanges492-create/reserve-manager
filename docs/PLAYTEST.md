@@ -18,6 +18,7 @@ link and the questions below; their answers decide what we build next.
 > Play it in your browser for 30–45 minutes, no need to finish it:
 > **https://draworanges492-create.github.io/reserve-manager/**
 > Your progress saves in your browser, so you can stop and come back.
+> You can also play it on itch.io, and leave a comment there: https://draworanges.itch.io/wild-again
 > Afterwards, a few quick questions (short answers are fine):
 
 1. In the first ten minutes, was there a moment you didn't know what to do? What was it?
