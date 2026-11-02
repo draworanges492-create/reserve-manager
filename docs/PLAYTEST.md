@@ -1,6 +1,6 @@
 # Playtest guide
 
-For the 3–5 people trying Reserve Manager for the first time (Phase 15). Send them the
+For the 3–5 people trying Wild Again for the first time (Phase 15). Send them the
 link and the questions below; their answers decide what we build next.
 
 ## For you (before sending)

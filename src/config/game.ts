@@ -1,6 +1,6 @@
 import pkg from '../../package.json';
 // Engine-level constants (spec §2, §4). Gameplay balance lives in balance.json, not here.
-export const GAME_TITLE = 'Reserve Manager';
+export const GAME_TITLE = 'Wild Again';
 
 /**
  * Minimum internal resolution. The canvas grows beyond this to fill the window

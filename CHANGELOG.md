@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.2 — 2026-11-02
+
+- The game is now called **Wild Again** (it was Reserve Manager). Saves from earlier
+  versions still load.
+
 ## 1.0.1 — 2026-11-01
 
 - **Tips from Tendai:** short pointers the first time you open a menu or get an alert, and a

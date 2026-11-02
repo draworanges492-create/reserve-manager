@@ -4,7 +4,7 @@ A starting point for you to rewrite in your own words.
 
 ## Settings
 
-- **Title:** Reserve Manager
+- **Title:** Wild Again
 - **Kind of project:** HTML (upload `release/reserve-manager-web.zip`, tick "This file will
   be played in the browser")
 - **Viewport:** 1280 × 720, with "Fullscreen button" and "Automatically start on page load"

@@ -226,7 +226,7 @@ try {
       .shade { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(18,13,9,0.82), rgba(18,13,9,0) 42%, rgba(18,13,9,0) 70%, rgba(18,13,9,0.75)); }
       h1 { position: absolute; top: 34px; width: 100%; margin: 0; text-align: center; color: #e8d9a8; font-size: 52px; letter-spacing: 0.5px; text-shadow: 0 2px 0 #120d09; }
       p { position: absolute; bottom: 26px; width: 100%; margin: 0; text-align: center; color: #e8d9a8; font-size: 20px; text-shadow: 0 1px 0 #120d09; }
-    </style><div class="bg"></div><div class="shade"></div><h1>Reserve Manager</h1><p>Bring a forgotten wildlife reserve back to life</p>`);
+    </style><div class="bg"></div><div class="shade"></div><h1>Wild Again</h1><p>Bring a forgotten wildlife reserve back to life</p>`);
     await page.waitForTimeout(300);
     await page.screenshot({ path: join(OUT, 'cover-630x500.png') });
     console.log('wrote cover');

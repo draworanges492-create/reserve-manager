@@ -514,6 +514,7 @@ and page text are ready in `release/` and `docs/store/`).
 - Tips from Tendai (D150) and the feedback link, waiting for the itch.io address (D151).
 - Playtest guide with questions for testers: `docs/PLAYTEST.md`.
 - v1.0.1.
+- Renamed the game **Wild Again** (D152), v1.0.2; cover and title screenshot redone.
 
 **Checks:** `build` ✅ · `test` ✅ (249) · `lint` ✅ · `validate-data` ✅ · `browser-check` ✅
 (9 of 9) · tips checked in a real browser: controls, alerts, Build, idle goal tip and
